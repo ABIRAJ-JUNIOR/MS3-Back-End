@@ -13,6 +13,6 @@ namespace MS3_Back_End.DTO.ResponseDTOs
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-        public AddressResponseDTO? Addresses { get; set; }
+        public AddressResponseDTO? address { get; set; }
     }
 }

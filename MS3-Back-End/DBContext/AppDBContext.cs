@@ -14,7 +14,7 @@ namespace MS3_Back_End.DBContext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Student>()
-                .HasOne(a => a.Address)
+                .HasOne(a => a.address)
                 .WithOne(s => s.Student)
                 .HasForeignKey<Address>(sId => sId.StudentId);
 
