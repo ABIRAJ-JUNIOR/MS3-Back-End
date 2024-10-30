@@ -1,6 +1,10 @@
 
 using Microsoft.EntityFrameworkCore;
 using MS3_Back_End.DBContext;
+using MS3_Back_End.IRepository;
+using MS3_Back_End.IService;
+using MS3_Back_End.Repository;
+using MS3_Back_End.Service;
 
 namespace MS3_Back_End
 {
@@ -18,6 +22,20 @@ namespace MS3_Back_End
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<AppDBContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
 
+            builder.Services.AddScoped<IStudentRepository,StudentRepository>();
+            builder.Services.AddScoped<IStudentService,StudentService>();
+
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    policy.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+                });
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -26,6 +44,8 @@ namespace MS3_Back_End
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors();
 
             app.UseHttpsRedirection();
 
