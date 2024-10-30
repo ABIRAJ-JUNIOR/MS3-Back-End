@@ -36,5 +36,30 @@ namespace MS3_Back_End.Service
             }
             return studentsList;
         }
+
+        public async Task<StudentResponseDTO> GetStudentByNic(string nic)
+        {
+            var student = await _studentRepository.GetStudentByNic(nic);
+
+            if (student != null)
+            {
+                var studentObj = new StudentResponseDTO()
+                {
+                    Id = student.Id,
+                    Nic = student.Nic,
+                    FirstName = student.FirstName,
+                    LastName = student.LastName,
+                    Email = student.Email,
+                    Phone = student.Phone,
+                    Password = student.Password,
+                };
+
+                return studentObj;
+            }
+            else
+            {
+                throw new Exception("Not Found");
+            }
+        }
     }
 }

@@ -20,5 +20,11 @@ namespace MS3_Back_End.Repository
             var students = await _dbContext.Students.Include(a => a.Address).ToListAsync();
             return students;
         }
+
+        public async Task<Student> GetStudentByNic(string nic)
+        {
+            var student = await _dbContext.Students.Include(a => a.Address).SingleOrDefaultAsync(s => s.Nic == nic);
+            return student;
+        }
     }
 }
