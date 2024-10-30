@@ -1,4 +1,6 @@
-﻿using MS3_Back_End.IRepository;
+﻿using MS3_Back_End.DTO.ResponseDTOs;
+using MS3_Back_End.Entities;
+using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Service
@@ -10,6 +12,29 @@ namespace MS3_Back_End.Service
         public StudentService(IStudentRepository studentRepository)
         {
             _studentRepository = studentRepository;
+        }
+
+        public async Task<ICollection<StudentResponseDTO>> GetAllStudents()
+        {
+            var students = await _studentRepository.GetAllStudents();
+
+            var studentsList = new List<StudentResponseDTO>();
+            foreach (var student in students)
+            {
+                var responseDTO = new StudentResponseDTO()
+                {
+                    Id = student.Id,
+                    Nic = student.Nic,
+                    FirstName = student.FirstName,
+                    LastName = student.LastName,
+                    Email = student.Email,
+                    Phone = student.Phone,
+                    Password = student.Password,
+                    
+                };
+                studentsList.Add(responseDTO);
+            }
+            return studentsList;
         }
     }
 }

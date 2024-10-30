@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MS3_Back_End.DBContext;
+using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
+using System.Collections;
 
 namespace MS3_Back_End.Repository
 {
@@ -11,6 +13,12 @@ namespace MS3_Back_End.Repository
         public StudentRepository(AppDBContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public async Task<ICollection<Student>> GetAllStudents()
+        {
+            var students = await _dbContext.Students.Include(a => a.Address).ToListAsync();
+            return students;
         }
     }
 }

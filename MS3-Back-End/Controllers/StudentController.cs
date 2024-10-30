@@ -15,5 +15,11 @@ namespace MS3_Back_End.Controllers
             _studentService = studentService;
         }
 
+        [HttpGet("get-all-students")]
+        public async Task<IActionResult> GetAllStudents()
+        {
+            var students = await _studentService.GetAllStudents();
+            return Ok(students);
+        }
     }
 }

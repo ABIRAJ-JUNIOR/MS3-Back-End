@@ -11,6 +11,6 @@ namespace MS3_Back_End.DTO.RequestDTOs
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-        public AddressRequestDTO? Address { get; set; }
+        public AddressRequestDTO? Addresses { get; set; }
     }
 }
