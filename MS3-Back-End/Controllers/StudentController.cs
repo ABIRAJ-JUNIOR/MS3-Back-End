@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MS3_Back_End.DTO.RequestDTOs;
 using MS3_Back_End.DTO.ResponseDTOs;
 using MS3_Back_End.IService;
 
@@ -23,7 +24,7 @@ namespace MS3_Back_End.Controllers
             return Ok(students);
         }
 
-        [HttpGet("get-student-by-nic")]
+        [HttpGet("get-student-by-nic/{nic}")]
         public async Task<IActionResult> GetStudentByNic(string nic)
         {
             try
@@ -36,6 +37,20 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
             
+        }
+
+        [HttpPost("add-student")]
+        public async Task<IActionResult> AddStudent( StudentRequestDTO studentRequest)
+        {
+            try
+            {
+                var studentDetails = await _studentService.AddStudent(studentRequest);
+                return Ok(studentDetails);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

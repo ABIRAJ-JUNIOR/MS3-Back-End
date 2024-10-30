@@ -17,14 +17,21 @@ namespace MS3_Back_End.Repository
 
         public async Task<ICollection<Student>> GetAllStudents()
         {
-            var students = await _dbContext.Students.Include(a => a.Address).ToListAsync();
+            var students = await _dbContext.Students.Include(a => a.address).ToListAsync();
             return students;
         }
 
         public async Task<Student> GetStudentByNic(string nic)
         {
-            var student = await _dbContext.Students.Include(a => a.Address).SingleOrDefaultAsync(s => s.Nic == nic);
-            return student;
+            var student = await _dbContext.Students.Include(a => a.address).SingleOrDefaultAsync(s => s.Nic.ToLower() == nic.ToLower());
+            return student!;
+        }
+
+        public async Task<Student> AddStudent(Student student)
+        {
+            var studentDetail = await _dbContext.Students.AddAsync(student);
+            await _dbContext.SaveChangesAsync();
+            return studentDetail.Entity;
         }
     }
 }

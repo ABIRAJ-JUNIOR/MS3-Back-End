@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DTO.ResponseDTOs;
+﻿using MS3_Back_End.DTO.RequestDTOs;
+using MS3_Back_End.DTO.ResponseDTOs;
 
 namespace MS3_Back_End.IService
 {
@@ -6,5 +7,6 @@ namespace MS3_Back_End.IService
     {
         Task<ICollection<StudentResponseDTO>> GetAllStudents();
         Task<StudentResponseDTO> GetStudentByNic(string nic);
+        Task<StudentResponseDTO> AddStudent(StudentRequestDTO studentRequest);
     }
 }
