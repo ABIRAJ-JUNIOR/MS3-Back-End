@@ -22,19 +22,46 @@ namespace MS3_Back_End.Service
             var studentsList = new List<StudentResponseDTO>();
             foreach (var student in students)
             {
-
-                var responseDTO = new StudentResponseDTO()
+                if (student.address != null)
                 {
-                    Id = student.Id,
-                    Nic = student.Nic,
-                    FirstName = student.FirstName,
-                    LastName = student.LastName,
-                    Email = student.Email,
-                    Phone = student.Phone,
-                    Password = student.Password,
+                    var AddressResponse = new AddressResponseDTO()
+                    {
+                        Id = student.address.Id,
+                        AddressLine1 = student.address.AddressLine1,
+                        AddressLine2 = student.address.AddressLine2,
+                        City = student.address.City,
+                        Country = student.address.Country
+                    };
 
-                };
-                studentsList.Add(responseDTO);
+                    var responseDTO = new StudentResponseDTO()
+                    {
+                        Id = student.Id,
+                        Nic = student.Nic,
+                        FirstName = student.FirstName,
+                        LastName = student.LastName,
+                        Email = student.Email,
+                        Phone = student.Phone,
+                        Password = student.Password,
+                        address = AddressResponse,
+
+                    };
+                    studentsList.Add(responseDTO);
+                }
+                else
+                {
+                    var responseDTO = new StudentResponseDTO()
+                    {
+                        Id = student.Id,
+                        Nic = student.Nic,
+                        FirstName = student.FirstName,
+                        LastName = student.LastName,
+                        Email = student.Email,
+                        Phone = student.Phone,
+                        Password = student.Password,
+
+                    };
+                    studentsList.Add(responseDTO);
+                }
             }
             return studentsList;
         }
@@ -45,19 +72,45 @@ namespace MS3_Back_End.Service
 
             if (student != null)
             {
-
-                var studentObj = new StudentResponseDTO()
+                if(student.address != null)
                 {
-                    Id = student.Id,
-                    Nic = student.Nic,
-                    FirstName = student.FirstName,
-                    LastName = student.LastName,
-                    Email = student.Email,
-                    Phone = student.Phone,
-                    Password = student.Password,
-                };
+                    var AddressResponse = new AddressResponseDTO()
+                    {
+                        Id = student.address.Id,
+                        AddressLine1 = student.address.AddressLine1,
+                        AddressLine2 = student.address.AddressLine2,
+                        City = student.address.City,
+                        Country = student.address.Country
+                    };
 
-                return studentObj;
+                    var studentObj = new StudentResponseDTO()
+                    {
+                        Id = student.Id,
+                        Nic = student.Nic,
+                        FirstName = student.FirstName,
+                        LastName = student.LastName,
+                        Email = student.Email,
+                        Phone = student.Phone,
+                        Password = student.Password,
+                        address = AddressResponse,
+                    };
+
+                    return studentObj;
+                }
+                else
+                {
+                    var studentObj = new StudentResponseDTO()
+                    {
+                        Id = student.Id,
+                        Nic = student.Nic,
+                        FirstName = student.FirstName,
+                        LastName = student.LastName,
+                        Email = student.Email,
+                        Phone = student.Phone,
+                        Password = student.Password,
+                    };
+                    return studentObj;
+                }
             }
             else
             {
@@ -70,51 +123,88 @@ namespace MS3_Back_End.Service
             var student = await _studentRepository.GetStudentByNic(studentRequest.Nic);
             if (student == null)
             {
-                //var addressObj = new Address()
-                //{
-                //    AddressLine1 = studentRequest.address.AddressLine1,
-                //    AddressLine2 = studentRequest.address.AddressLine2,
-                //    City = studentRequest.address.City,
-                //    Country = studentRequest.address.Country,
-                //};
+                var addressObj = new Address();
 
-                var studentObj = new Student()
+                if (studentRequest.address != null)
                 {
-                    Nic = studentRequest.Nic,
-                    FirstName = studentRequest.FirstName,
-                    LastName = studentRequest.LastName,
-                    Gender = studentRequest.Gender,
-                    Email = studentRequest.Email,
-                    Phone = studentRequest.Phone,
-                    Password = studentRequest.Password,
-                    //address = addressObj,
-                };
+                    addressObj = new Address()
+                    {
+                        AddressLine1 = studentRequest.address.AddressLine1,
+                        AddressLine2 = studentRequest.address.AddressLine2,
+                        City = studentRequest.address.City,
+                        Country = studentRequest.address.Country,
+                    };
 
-                var studentDetails = await _studentRepository.AddStudent(studentObj);
+                    var studentObj = new Student()
+                    {
+                        Nic = studentRequest.Nic,
+                        FirstName = studentRequest.FirstName,
+                        LastName = studentRequest.LastName,
+                        Gender = studentRequest.Gender,
+                        Email = studentRequest.Email,
+                        Phone = studentRequest.Phone,
+                        Password = studentRequest.Password,
+                        address = addressObj == null ? null : addressObj,
+                    };
 
-                //var addressResponse = new AddressResponseDTO()
-                //{
-                //    Id = studentDetails.address.Id,
-                //    AddressLine1 = studentDetails.address.AddressLine1,
-                //    AddressLine2 = studentDetails.address.AddressLine2,
-                //    City = studentDetails.address.City,
-                //    Country = studentDetails.address.Country,
-                //};
+                    var studentDetails = await _studentRepository.AddStudent(studentObj);
 
-                var studentResponseObj = new StudentResponseDTO()
+                    var addressResponse = new AddressResponseDTO()
+                    {
+                        Id = studentDetails.address.Id,
+                        AddressLine1 = studentDetails.address.AddressLine1,
+                        AddressLine2 = studentDetails.address.AddressLine2,
+                        City = studentDetails.address.City,
+                        Country = studentDetails.address.Country,
+                    };
+
+                    var studentResponseObj = new StudentResponseDTO()
+                    {
+                        Id = studentDetails.Id,
+                        Nic = studentDetails.Nic,
+                        FirstName = studentDetails.FirstName,
+                        LastName = studentDetails.LastName,
+                        Gender = studentDetails.Gender,
+                        Email = studentDetails.Email,
+                        Phone = studentDetails.Phone,
+                        Password = studentDetails.Password,
+                        address = addressResponse,
+                    };
+
+                    return studentResponseObj;
+                }
+                else
                 {
-                    Id = studentDetails.Id,
-                    Nic = studentDetails.Nic,
-                    FirstName = studentDetails.FirstName,
-                    LastName = studentDetails.LastName,
-                    Gender = studentDetails.Gender,
-                    Email = studentDetails.Email,
-                    Phone = studentDetails.Phone,
-                    Password = studentDetails.Password,
-                    //address = addressResponse,
-                };
+                    var studentObj = new Student()
+                    {
+                        Nic = studentRequest.Nic,
+                        FirstName = studentRequest.FirstName,
+                        LastName = studentRequest.LastName,
+                        Gender = studentRequest.Gender,
+                        Email = studentRequest.Email,
+                        Phone = studentRequest.Phone,
+                        Password = studentRequest.Password,
+                    };
 
-                return studentResponseObj;
+                    var studentDetails = await _studentRepository.AddStudent(studentObj);
+
+                    var studentResponseObj = new StudentResponseDTO()
+                    {
+                        Id = studentDetails.Id,
+                        Nic = studentDetails.Nic,
+                        FirstName = studentDetails.FirstName,
+                        LastName = studentDetails.LastName,
+                        Gender = studentDetails.Gender,
+                        Email = studentDetails.Email,
+                        Phone = studentDetails.Phone,
+                        Password = studentDetails.Password,
+                    };
+
+                    return studentResponseObj;
+                }
+                
+
+                
             }
             else
             {
