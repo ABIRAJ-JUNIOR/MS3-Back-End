@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MS3_Back_End.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20241030064409_initial1")]
+    [Migration("20241105174719_initial1")]
     partial class initial1
     {
         /// <inheritdoc />
@@ -46,6 +46,10 @@ namespace MS3_Back_End.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
@@ -65,6 +69,12 @@ namespace MS3_Back_End.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CteatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -75,6 +85,9 @@ namespace MS3_Back_End.Migrations
 
                     b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
@@ -91,6 +104,9 @@ namespace MS3_Back_End.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.ToTable("Students");
@@ -99,7 +115,7 @@ namespace MS3_Back_End.Migrations
             modelBuilder.Entity("MS3_Back_End.Entities.Address", b =>
                 {
                     b.HasOne("MS3_Back_End.Entities.Student", "Student")
-                        .WithOne("Address")
+                        .WithOne("address")
                         .HasForeignKey("MS3_Back_End.Entities.Address", "StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -109,7 +125,7 @@ namespace MS3_Back_End.Migrations
 
             modelBuilder.Entity("MS3_Back_End.Entities.Student", b =>
                 {
-                    b.Navigation("Address");
+                    b.Navigation("address");
                 });
 #pragma warning restore 612, 618
         }

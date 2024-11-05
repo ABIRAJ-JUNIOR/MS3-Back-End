@@ -11,6 +11,7 @@ namespace MS3_Back_End.Entities
         public string? AddressLine2 { get; set; } = string.Empty;
         [Required]
         public string City { get; set; } = string.Empty;
+        public string PostalCode {  get; set; } = string.Empty;
         [Required]
         public string Country { get; set; } = string.Empty;
 

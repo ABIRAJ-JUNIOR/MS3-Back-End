@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DTO.RequestDTOs;
+﻿using BCrypt.Net;
+using MS3_Back_End.DTO.RequestDTOs;
 using MS3_Back_End.DTO.ResponseDTOs;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
@@ -30,6 +31,7 @@ namespace MS3_Back_End.Service
                         AddressLine1 = student.address.AddressLine1,
                         AddressLine2 = student.address.AddressLine2,
                         City = student.address.City,
+                        PostalCode = student.address.PostalCode,
                         Country = student.address.Country
                     };
 
@@ -39,10 +41,10 @@ namespace MS3_Back_End.Service
                         Nic = student.Nic,
                         FirstName = student.FirstName,
                         LastName = student.LastName,
+                        DateOfBirth = student.DateOfBirth,
                         Gender = student.Gender,
                         Email = student.Email,
                         Phone = student.Phone,
-                        Password = student.Password,
                         address = AddressResponse,
 
                     };
@@ -56,10 +58,10 @@ namespace MS3_Back_End.Service
                         Nic = student.Nic,
                         FirstName = student.FirstName,
                         LastName = student.LastName,
+                        DateOfBirth = student.DateOfBirth,
                         Gender = student.Gender,
                         Email = student.Email,
                         Phone = student.Phone,
-                        Password = student.Password,
 
                     };
                     studentsList.Add(responseDTO);
@@ -82,6 +84,7 @@ namespace MS3_Back_End.Service
                         AddressLine1 = student.address.AddressLine1,
                         AddressLine2 = student.address.AddressLine2,
                         City = student.address.City,
+                        PostalCode = student.address.PostalCode,
                         Country = student.address.Country
                     };
 
@@ -91,10 +94,10 @@ namespace MS3_Back_End.Service
                         Nic = student.Nic,
                         FirstName = student.FirstName,
                         LastName = student.LastName,
+                        DateOfBirth= student.DateOfBirth,
                         Gender = student.Gender,
                         Email = student.Email,
                         Phone = student.Phone,
-                        Password = student.Password,
                         address = AddressResponse,
                     };
 
@@ -108,10 +111,10 @@ namespace MS3_Back_End.Service
                         Nic = student.Nic,
                         FirstName = student.FirstName,
                         LastName = student.LastName,
+                        DateOfBirth= student.DateOfBirth,
                         Gender = student.Gender,
                         Email = student.Email,
                         Phone = student.Phone,
-                        Password = student.Password,
                     };
                     return studentObj;
                 }
@@ -136,6 +139,7 @@ namespace MS3_Back_End.Service
                         AddressLine1 = studentRequest.address.AddressLine1,
                         AddressLine2 = studentRequest.address.AddressLine2,
                         City = studentRequest.address.City,
+                        PostalCode = studentRequest.address.PostalCode,
                         Country = studentRequest.address.Country,
                     };
 
@@ -144,11 +148,14 @@ namespace MS3_Back_End.Service
                         Nic = studentRequest.Nic,
                         FirstName = studentRequest.FirstName,
                         LastName = studentRequest.LastName,
+                        DateOfBirth = studentRequest.DateOfBirth,
                         Gender = studentRequest.Gender,
                         Email = studentRequest.Email,
                         Phone = studentRequest.Phone,
-                        Password = studentRequest.Password,
-                        address = addressObj == null ? null : addressObj,
+                        Password = BCrypt.Net.BCrypt.HashPassword(studentRequest.Password),
+                        CteatedDate = DateTime.Now,
+                        UpdatedDate = DateTime.Now,
+                        address = addressObj,
                     };
 
                     var studentDetails = await _studentRepository.AddStudent(studentObj);
@@ -159,6 +166,7 @@ namespace MS3_Back_End.Service
                         AddressLine1 = studentDetails.address.AddressLine1,
                         AddressLine2 = studentDetails.address.AddressLine2,
                         City = studentDetails.address.City,
+                        PostalCode= studentDetails.address.PostalCode,
                         Country = studentDetails.address.Country,
                     };
 
@@ -168,10 +176,10 @@ namespace MS3_Back_End.Service
                         Nic = studentDetails.Nic,
                         FirstName = studentDetails.FirstName,
                         LastName = studentDetails.LastName,
+                        DateOfBirth = studentDetails.DateOfBirth,
                         Gender = studentDetails.Gender,
                         Email = studentDetails.Email,
                         Phone = studentDetails.Phone,
-                        Password = studentDetails.Password,
                         address = addressResponse,
                     };
 
@@ -184,10 +192,13 @@ namespace MS3_Back_End.Service
                         Nic = studentRequest.Nic,
                         FirstName = studentRequest.FirstName,
                         LastName = studentRequest.LastName,
+                        DateOfBirth= studentRequest.DateOfBirth,
                         Gender = studentRequest.Gender,
                         Email = studentRequest.Email,
                         Phone = studentRequest.Phone,
-                        Password = studentRequest.Password,
+                        Password = BCrypt.Net.BCrypt.HashPassword(studentRequest.Password),
+                        CteatedDate = DateTime.Now,
+                        UpdatedDate = DateTime.Now,
                     };
 
                     var studentDetails = await _studentRepository.AddStudent(studentObj);
@@ -198,16 +209,14 @@ namespace MS3_Back_End.Service
                         Nic = studentDetails.Nic,
                         FirstName = studentDetails.FirstName,
                         LastName = studentDetails.LastName,
+                        DateOfBirth=studentDetails.DateOfBirth,
                         Gender = studentDetails.Gender,
                         Email = studentDetails.Email,
                         Phone = studentDetails.Phone,
-                        Password = studentDetails.Password,
                     };
 
                     return studentResponseObj;
                 }
-                
-
                 
             }
             else
