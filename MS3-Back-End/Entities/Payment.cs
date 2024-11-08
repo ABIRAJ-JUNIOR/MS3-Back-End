@@ -14,7 +14,7 @@ namespace MS3_Back_End.Entities
         public int InstallmentNumber { get; set; }
 
         //Reference
-        public Enrollment? enrollment { get; set; }
+        public Enrollment? Enrollment { get; set; }
     }
 
     public enum PaymentTypes

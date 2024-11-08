@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MS3_Back_End.Entities
 {
-    public class Student
+    public class User
     {
         [Key]
         public Guid Id { get; set; }
         public string Nic { get; set; } = string.Empty;
+        public Roles Role { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string? LastName { get; set; } = string.Empty;
         public DateTime DateOfBirth { get; set; } = DateTime.MinValue;
@@ -20,10 +20,18 @@ namespace MS3_Back_End.Entities
         public bool IsActive { get; set; } = true;
 
         //Reference
-        public Address? address { get; set; }
-        public ICollection<Enrollment>? enrollments { get; set; }
-        public ICollection<Notification>? notifications { get; set; }
-        public ICollection<Feedbacks>? feedbacks { get; set; }
-        public ICollection<StudentAssesment>? assesments { get; set; }
+        public Address? Address { get; set; }
+        public ICollection<Enrollment>? Enrollments { get; set; }
+        public ICollection<Notification>? Notifications { get; set; }
+        public ICollection<Feedbacks>? Feedbacks { get; set; }
+        public ICollection<StudentAssesment>? Assesments { get; set; }
+        public ICollection<AuditLog>? AuditLogs { get; set; }
+    }
+
+    public enum Roles
+    {
+        SuperAdmin = 1,
+        Admin = 2,
+        Student = 3
     }
 }

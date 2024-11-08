@@ -1,11 +1,7 @@
-﻿using MS3_Back_End.Entities;
-using System.ComponentModel.DataAnnotations;
-
-namespace MS3_Back_End.DTO.ResponseDTOs
+﻿namespace MS3_Back_End.DTO.ResponseDTOs
 {
-    public class StudentResponseDTO
+    public class SignUpResponseDTO
     {
-        public Guid Id { get; set; }
         public string Nic { get; set; } = string.Empty;
         public string FirstName { get; set; } = string.Empty;
         public string? LastName { get; set; } = string.Empty;
@@ -13,6 +9,5 @@ namespace MS3_Back_End.DTO.ResponseDTOs
         public string? Gender { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
-        public AddressResponseDTO? address { get; set; }
     }
 }

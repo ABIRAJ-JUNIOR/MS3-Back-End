@@ -1,8 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MS3_Back_End.Entities;
 
 namespace MS3_Back_End.DTO.RequestDTOs
 {
-    public class StudentRequestDTO
+    public class SignUpRequestDTO
     {
         public string Nic { get; set; } = string.Empty;
         public string FirstName { get; set; } = string.Empty;
@@ -12,6 +12,5 @@ namespace MS3_Back_End.DTO.RequestDTOs
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-        public AddressRequestDTO? address { get; set; }
     }
 }

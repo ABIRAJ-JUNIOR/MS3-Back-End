@@ -16,9 +16,9 @@ namespace MS3_Back_End.Entities
         public DateTime UpdatedDate { get; set; }
 
         //Reference
-        public CourseCategory? category { get; set; }
-        public ICollection<CourseSchedule>? courseSchedules { get; set; }
-        public ICollection<Feedbacks>? feedbacks { get; set; }
-        public ICollection<Assesment>? assesments { get; set; }
+        public CourseCategory? Category { get; set; }
+        public ICollection<CourseSchedule>? CourseSchedules { get; set; }
+        public ICollection<Feedbacks>? Feedbacks { get; set; }
+        public ICollection<Assesment>? Assesments { get; set; }
     }
 }
