@@ -7,17 +7,17 @@ namespace MS3_Back_End.Entities
     {
         [Key]
         public Guid Id { get; set; }
-        public Guid StudentId { get; set; }
+        public Guid UserId { get; set; }
         public Guid AssesmentId { get; set; }
         public int MarksObtaines { get; set; }
-        public string Grade { get; set; }
-        public string FeedBack { get; set; }
+        public string Grade { get; set; } = string.Empty;
+        public string FeedBack { get; set; } = string.Empty;
         public DateTime DateEvaluted { get; set; }
         public StudentAssesmentStatus StudentAssesmentStatus { get; set; }
 
         //Reference
-        public Student? student { get; set; }
-        public Assesment? assesment { get; set; }
+        public User? User { get; set; }
+        public Assesment? Assesment { get; set; }
 
     }
     public enum StudentAssesmentStatus

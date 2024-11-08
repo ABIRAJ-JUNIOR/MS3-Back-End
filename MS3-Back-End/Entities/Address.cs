@@ -15,10 +15,10 @@ namespace MS3_Back_End.Entities
         [Required]
         public string Country { get; set; } = string.Empty;
 
-        public Guid StudentId { get; set; }
+        public Guid UserId { get; set; }
 
         //Reference
-        public Student? student { get; set; }
+        public User? User { get; set; }
 
     }
 }

@@ -18,8 +18,8 @@ namespace MS3_Back_End.Entities
         public ScheduleStatus ScheduleStatus { get; set; }
 
         //Reference
-        public Course? course { get; set; }
-        public ICollection<Enrollment>? enrollments { get; set; }
+        public Course? Course { get; set; }
+        public ICollection<Enrollment>? Enrollments { get; set; }
 
     }
 

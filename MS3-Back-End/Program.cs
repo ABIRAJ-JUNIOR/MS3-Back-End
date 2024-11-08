@@ -22,8 +22,8 @@ namespace MS3_Back_End
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<AppDBContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
 
-            builder.Services.AddScoped<IStudentRepository,StudentRepository>();
-            builder.Services.AddScoped<IStudentService,StudentService>();
+            builder.Services.AddScoped<IUserRepository,UserRepository>();
+            builder.Services.AddScoped<IUserRepository,UserRepository>();
 
 
             builder.Services.AddCors(options =>
