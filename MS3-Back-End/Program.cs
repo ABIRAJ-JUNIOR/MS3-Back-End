@@ -23,7 +23,7 @@ namespace MS3_Back_End
             builder.Services.AddDbContext<AppDBContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
 
             builder.Services.AddScoped<IUserRepository,UserRepository>();
-            builder.Services.AddScoped<IUserRepository,UserRepository>();
+            builder.Services.AddScoped<IUserService,UserService>();
 
 
             builder.Services.AddCors(options =>
