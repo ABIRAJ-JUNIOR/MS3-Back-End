@@ -28,6 +28,7 @@ namespace MS3_Back_End.Service
                 Email = request.Email,
                 Phone = request.Phone,
                 Password = BCrypt.Net.BCrypt.HashPassword(request.Password),
+                ImagePath = null,
                 CteatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
                 IsActive = true
