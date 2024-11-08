@@ -28,7 +28,7 @@ namespace MS3_Back_End.Service
                 Email = request.Email,
                 Phone = request.Phone,
                 Password = BCrypt.Net.BCrypt.HashPassword(request.Password),
-                ImagePath = null,
+                ImagePath = "",
                 CteatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
                 IsActive = true
@@ -48,6 +48,35 @@ namespace MS3_Back_End.Service
             };
 
             return response;
+        }
+
+        public async Task<string> SignIn(SignInRequestDTO signInRequest)
+        {
+            var userData = await _userRepository.Signin(signInRequest);
+
+            if (userData == null)
+            {
+                throw new Exception("Invalid email address");
+            }
+
+            var isValidPassword = BCrypt.Net.BCrypt.Verify(signInRequest.Password, userData.Password);
+            if (isValidPassword)
+            {
+                if (userData.Role == Roles.SuperAdmin)
+                {
+                    return "SuperAdmin";
+                }
+                else if(userData.Role == Roles.Admin)
+                {
+                    return "Admin";
+                }
+                else if(userData.Role == Roles.Student)
+                {
+                    return "Student";
+                }
+            }
+
+            return null!;
         }
     }
 }

@@ -7,5 +7,6 @@ namespace MS3_Back_End.IService
     public interface IUserService
     {
         Task<SignUpResponseDTO> SignUp(SignUpRequestDTO request);
+        Task<string> SignIn(SignInRequestDTO signInRequest);
     }
 }

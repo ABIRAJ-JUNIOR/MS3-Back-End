@@ -29,5 +29,20 @@ namespace MS3_Back_End.Controller
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("signin")]
+
+        public async Task<IActionResult> SignIn(SignInRequestDTO signInRequest)
+        {
+            try
+            {
+                var returnMessage = await _userService.SignIn(signInRequest);
+                return Ok(returnMessage);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
