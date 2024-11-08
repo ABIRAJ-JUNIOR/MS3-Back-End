@@ -15,6 +15,7 @@ namespace MS3_Back_End.Entities
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
+        public string ImagePath { get; set; } = string.Empty;
         public DateTime CteatedDate { get; set; } = DateTime.MinValue;
         public DateTime? UpdatedDate { get; set; } = DateTime.MinValue;
         public bool IsActive { get; set; } = true;
