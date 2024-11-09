@@ -23,10 +23,22 @@ namespace MS3_Back_End.Repository
             return userData.Entity;
         }
 
+        public async Task<User> GetUserByNic(string nic)
+        {
+            var userData = await _dbContext.Users.FirstOrDefaultAsync(u => u.Nic.ToLower() == nic.ToLower());
+            return userData!;
+        }
+
         public async Task<User> Signin(SignInRequestDTO signInRequest)
         {
             var userData = await _dbContext.Users.SingleOrDefaultAsync(u => u.Nic == signInRequest.Nic);
             return userData!;
+        }
+
+        public async Task<ICollection<User>> GetAllStudent()
+        {
+            var userList = await _dbContext.Users.Where(u => u.Role == Roles.Student).ToListAsync();
+            return userList;
         }
     }
 }

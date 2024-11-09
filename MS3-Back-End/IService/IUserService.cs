@@ -8,5 +8,6 @@ namespace MS3_Back_End.IService
     {
         Task<SignUpResponseDTO> SignUp(SignUpRequestDTO request);
         Task<string> SignIn(SignInRequestDTO signInRequest);
+        Task<ICollection<UserResponseDTO>> GetAllStudent();
     }
 }
