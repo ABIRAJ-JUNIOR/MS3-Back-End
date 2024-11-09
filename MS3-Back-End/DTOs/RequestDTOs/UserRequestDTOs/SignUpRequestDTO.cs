@@ -1,6 +1,6 @@
 ﻿using MS3_Back_End.Entities;
 
-namespace MS3_Back_End.DTO.RequestDTOs
+namespace MS3_Back_End.DTO.RequestDTOs.UserDTOs
 {
     public class SignUpRequestDTO
     {

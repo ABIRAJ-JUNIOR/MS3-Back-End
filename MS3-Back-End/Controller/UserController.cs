@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MS3_Back_End.DTO.RequestDTOs;
+using MS3_Back_End.DTO.RequestDTOs.UserDTOs;
+using MS3_Back_End.DTO.ResponseDTOs;
 using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Controller
@@ -28,6 +29,29 @@ namespace MS3_Back_End.Controller
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpPost("signin")]
+
+        public async Task<IActionResult> SignIn(SignInRequestDTO signInRequest)
+        {
+            try
+            {
+                var returnMessage = await _userService.SignIn(signInRequest);
+                return Ok(returnMessage);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("get-all-students")]
+
+        public async Task<IActionResult> GetAllStudent()
+        {
+            var userList = await _userService.GetAllStudent();
+            return Ok(userList);
         }
     }
 }

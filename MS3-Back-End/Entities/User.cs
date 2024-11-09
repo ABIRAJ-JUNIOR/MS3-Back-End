@@ -31,8 +31,8 @@ namespace MS3_Back_End.Entities
 
     public enum Roles
     {
-        SuperAdmin = 1,
-        Admin = 2,
+        Admin = 1,
+        Instructor = 2,
         Student = 3
     }
 }
