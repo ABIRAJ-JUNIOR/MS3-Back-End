@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MS3_Back_End.DTO.RequestDTOs;
+using MS3_Back_End.DTO.RequestDTOs.UserDTOs;
 using MS3_Back_End.DTO.ResponseDTOs;
 using MS3_Back_End.IService;
 

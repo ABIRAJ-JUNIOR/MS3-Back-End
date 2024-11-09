@@ -1,11 +1,9 @@
-﻿using MS3_Back_End.Entities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace MS3_Back_End.DTO.ResponseDTOs
+namespace MS3_Back_End.DTO.RequestDTOs.UserDTOs
 {
-    public class AddressResponseDTO
+    public class AddressRequestDTO
     {
-        public Guid Id { get; set; }
         public string AddressLine1 { get; set; } = string.Empty;
         public string? AddressLine2 { get; set; } = string.Empty;
         public string City { get; set; } = string.Empty;

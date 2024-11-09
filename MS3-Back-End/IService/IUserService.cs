@@ -1,6 +1,6 @@
 ﻿using MS3_Back_End.DBContext;
-using MS3_Back_End.DTO.RequestDTOs;
-using MS3_Back_End.DTO.ResponseDTOs;
+using MS3_Back_End.DTO.RequestDTOs.UserDTOs;
+using MS3_Back_End.DTO.ResponseDTOs.UserResponseDTOs;
 
 namespace MS3_Back_End.IService
 {

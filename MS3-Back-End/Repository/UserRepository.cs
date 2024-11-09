@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MS3_Back_End.DBContext;
-using MS3_Back_End.DTO.RequestDTOs;
+using MS3_Back_End.DTO.RequestDTOs.UserDTOs;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 

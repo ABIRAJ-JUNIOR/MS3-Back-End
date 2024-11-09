@@ -1,4 +1,4 @@
-﻿namespace MS3_Back_End.DTO.ResponseDTOs
+﻿namespace MS3_Back_End.DTO.ResponseDTOs.UserResponseDTOs
 {
     public class SignUpResponseDTO
     {

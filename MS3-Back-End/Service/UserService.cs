@@ -1,5 +1,5 @@
-﻿using MS3_Back_End.DTO.RequestDTOs;
-using MS3_Back_End.DTO.ResponseDTOs;
+﻿using MS3_Back_End.DTO.RequestDTOs.UserDTOs;
+using MS3_Back_End.DTO.ResponseDTOs.UserResponseDTOs;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;

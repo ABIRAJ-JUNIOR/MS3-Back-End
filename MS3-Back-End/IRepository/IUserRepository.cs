@@ -1,4 +1,4 @@
-﻿using MS3_Back_End.DTO.RequestDTOs;
+﻿using MS3_Back_End.DTO.RequestDTOs.UserDTOs;
 using MS3_Back_End.Entities;
 
 namespace MS3_Back_End.IRepository
