@@ -37,6 +37,12 @@ namespace MS3_Back_End.Repository
             await _Db.SaveChangesAsync();   
             return data.Entity;
         }
+        public async Task<string> DeleteCourse(Course course)
+        {
+            _Db.Courses.Remove(course);
+            await _Db.SaveChangesAsync();
+            return "Course Deleted Successfull";
+        }
        
     }
 }
