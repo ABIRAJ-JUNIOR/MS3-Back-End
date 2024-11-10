@@ -184,7 +184,17 @@ namespace MS3_Back_End.Service
         }
 
 
-       
+        public async Task<string> DeleteCourse(Guid Id)
+        {
+            var GetData = await _courseRepository.GetCourseById(Id);
+            if(GetData == null)
+            {
+                throw new Exception("Course Id not Found");
+            }
+            var data = await _courseRepository.DeleteCourse(GetData);
+            return data;
+        }
+
     }
 
 
