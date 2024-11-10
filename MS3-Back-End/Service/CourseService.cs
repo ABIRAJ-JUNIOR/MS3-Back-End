@@ -2,10 +2,11 @@
 using MS3_Back_End.DTOs.ResponseDTOs;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
+using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Service
 {
-    public class CourseService
+    public class CourseService : ICourseService
     {
         private readonly ICourseRepository _courseRepository;
         public CourseService(ICourseRepository courseRepository)
