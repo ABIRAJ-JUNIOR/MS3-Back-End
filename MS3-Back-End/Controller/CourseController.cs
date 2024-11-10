@@ -10,6 +10,13 @@ namespace MS3_Back_End.Controller
     [ApiController]
     public class CourseController : ControllerBase
     {
+        private readonly ICourseService _courseService;
+
+        public CourseController(ICourseService courseService)
+        {
+           _courseService = courseService;
+        }
+
        
 
     }
