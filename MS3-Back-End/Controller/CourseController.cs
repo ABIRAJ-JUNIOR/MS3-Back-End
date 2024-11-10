@@ -65,8 +65,8 @@ namespace MS3_Back_End.Controller
         {
             try
             {
-                var data = await _courseService.GetCourseById(CourseId);
-                return Ok(data);
+                var result = await _courseService.GetCourseById(CourseId);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -74,6 +74,21 @@ namespace MS3_Back_End.Controller
             }
         }
 
+
+        [HttpPut("course")]
+        public async Task<IActionResult> UpdateCourse(UpdateCourseRequestDTO courseRequest)
+        {
+            try
+            {
+                var result = await _courseService.UpdateCourse(courseRequest);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+           
+        }
 
 
     }
