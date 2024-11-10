@@ -17,7 +17,20 @@ namespace MS3_Back_End.Controller
            _courseService = courseService;
         }
 
-       
+        [HttpPost("course")]
+        public async Task<IActionResult> AddCourse(CourseRequestDTO courseRequest)
+        {
+            try
+            {
+                var data = await _courseService.AddCourse(courseRequest);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
     }
 }
