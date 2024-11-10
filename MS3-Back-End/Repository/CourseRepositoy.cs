@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MS3_Back_End.DBContext;
 using MS3_Back_End.Entities;
+using MS3_Back_End.IRepository;
 
 namespace MS3_Back_End.Repository
 {
-    public class CourseRepositoy
+    public class CourseRepositoy : ICourseRepository
     {
         private readonly AppDBContext _Db;
         public CourseRepositoy(AppDBContext db)
