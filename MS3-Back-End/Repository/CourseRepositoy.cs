@@ -19,7 +19,11 @@ namespace MS3_Back_End.Repository
             await _Db.SaveChangesAsync();
             return data.Entity;
         }
-
+        public async Task<List<Course>> SearchCourse(string SearchText)
+        {
+            var data = await _Db.Courses.Where(n=>n.CourseName.Contains(SearchText) || n.Description.Contains(SearchText)).ToListAsync();
+            return data;
+        }
         public async Task<List<Course>> GetAllCourse()
         {
             var data = await _Db.Courses.ToListAsync();
