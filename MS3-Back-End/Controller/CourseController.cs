@@ -31,6 +31,20 @@ namespace MS3_Back_End.Controller
             }
         }
 
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchCourse(string searchText)
+        {
+            try
+            {
+                var data = await _courseService.SearchCourse(searchText);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
     }
 }
