@@ -97,21 +97,18 @@ namespace MS3_Back_End.Service
         {
             var userList = await _userRepository.GetAllStudent();
 
-            var response = new List<UserResponseDTO>();
-            foreach (var user in userList)
+            var response = userList.Select(I => new UserResponseDTO()
             {
-                response.Add(new UserResponseDTO() { 
-                    Id = user.Id,
-                    Nic = user.Nic,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    DateOfBirth = user.DateOfBirth,
-                    Gender = user.Gender,
-                    Email = user.Email,
-                    Phone = user.Phone,
-                    ImagePath = user.ImagePath,
-                });
-            }
+                Id = I.Id,
+                Nic = I.Nic,
+                FirstName = I.FirstName,
+                LastName = I.LastName,
+                DateOfBirth = I.DateOfBirth,
+                Gender = I.Gender,
+                Email = I.Email,
+                Phone = I.Phone,
+                ImagePath = I.ImagePath,
+            }).ToList();
 
             return response;
         }
@@ -134,6 +131,33 @@ namespace MS3_Back_End.Service
             }).ToList();
 
             return response;
+        }
+
+        public async Task<StudentResponseDTO> GetStudentById(Guid id)
+        {
+            var studentData = await _userRepository.GetStudentById(id);
+            if (studentData != null)
+            {
+                var response = new StudentResponseDTO()
+                {
+                    Id = studentData.Id,
+                    Nic = studentData.Nic,
+                    FirstName = studentData.FirstName,
+                    LastName = studentData.LastName,
+                    DateOfBirth = studentData.DateOfBirth,
+                    Gender = studentData.Gender,
+                    Email = studentData.Email,
+                    Phone = studentData.Phone,
+                    ImagePath = studentData.ImagePath,
+                    CteatedDate = studentData.CteatedDate
+                };
+
+                return response;
+            }
+            else
+            {
+                throw new Exception("Not found");
+            } 
         }
     }
 }

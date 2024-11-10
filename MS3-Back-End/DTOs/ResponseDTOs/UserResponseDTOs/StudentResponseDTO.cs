@@ -6,7 +6,6 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.UserResponseDTOs
     {
         public Guid Id { get; set; }
         public string Nic { get; set; } = string.Empty;
-        public Roles Role { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string? LastName { get; set; } = string.Empty;
         public DateTime DateOfBirth { get; set; } = DateTime.MinValue;
