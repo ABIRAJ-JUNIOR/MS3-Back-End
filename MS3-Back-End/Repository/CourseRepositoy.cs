@@ -31,6 +31,12 @@ namespace MS3_Back_End.Repository
             var data = await _Db.Courses.SingleOrDefaultAsync(c=>c.Id==CourseId);
             return data;
         }
+        public async Task<Course> UpdateCourse(Course course)
+        {
+            var data =  _Db.Courses.Update(course);
+            await _Db.SaveChangesAsync();   
+            return data.Entity;
+        }
        
     }
 }
