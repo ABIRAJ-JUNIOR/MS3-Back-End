@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DBContext;
+﻿using Microsoft.EntityFrameworkCore;
+using MS3_Back_End.DBContext;
 using MS3_Back_End.Entities;
 
 namespace MS3_Back_End.Repository
@@ -14,10 +15,17 @@ namespace MS3_Back_End.Repository
 
         public async Task<Course> AddCourse(Course courseReq)
         {
-             var data =await _Db.AddAsync(courseReq);
+             var data =await _Db.Courses.AddAsync(courseReq);
             await _Db.SaveChangesAsync();
             return data.Entity;
         }
+
+        public async Task<List<Course>> GetAllCourse()
+        {
+            var data = await _Db.Courses.ToListAsync();
+            return data;
+        }
+
 
        
     }
