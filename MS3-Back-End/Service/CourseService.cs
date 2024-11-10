@@ -133,6 +133,58 @@ namespace MS3_Back_End.Service
         }
 
        
+        public async Task<CourseResponseDTO> UpdateCourse(UpdateCourseRequestDTO course)
+        {
+          
+
+            var GetData =await _courseRepository.GetCourseById(course.Id);
+
+            if (course.CategoryId.HasValue)
+                GetData.CategoryId = course.CategoryId.Value;
+
+            if (!string.IsNullOrEmpty(course.CourseName))
+                GetData.CourseName = course.CourseName;
+
+            if (course.Level.HasValue)
+                GetData.Level = course.Level.Value;
+
+            if (course.CourseFee.HasValue)
+                GetData.CourseFee = course.CourseFee.Value;
+
+            if (!string.IsNullOrEmpty(course.Description))
+                GetData.Description = course.Description;
+
+            if (!string.IsNullOrEmpty(course.Prerequisites))
+                GetData.Prerequisites = course.Prerequisites;
+
+            if (!string.IsNullOrEmpty(course.ImagePath))
+                GetData.ImagePath = course.ImagePath;
+
+            if (course.UpdatedDate.HasValue)
+                GetData.UpdatedDate = course.UpdatedDate.Value;
+
+            var data =await _courseRepository.UpdateCourse(GetData);
+
+            var CourseReturn = new CourseResponseDTO
+            {
+                Id = data.Id,
+                CategoryId = data.CategoryId,
+                CourseName = data.CourseName,
+                Level = data.Level,
+                CourseFee = data.CourseFee,
+                Description = data.Description,
+                Prerequisites = data.Prerequisites,
+                ImagePath = data.ImagePath,
+                UpdatedDate = data.UpdatedDate,
+                CreatedDate = data.CreatedDate,
+
+            };
+            return CourseReturn;
+
+        }
+
+
+       
     }
 
 

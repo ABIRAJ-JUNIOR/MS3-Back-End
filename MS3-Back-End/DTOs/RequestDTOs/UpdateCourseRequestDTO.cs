@@ -2,7 +2,7 @@
 {
     public class UpdateCourseRequestDTO
     {
-        public Guid? Id { get; set; }
+        public Guid Id { get; set; }
         public int? CategoryId { get; set; }
         public string? CourseName { get; set; } = string.Empty;
         public int? Level { get; set; }
