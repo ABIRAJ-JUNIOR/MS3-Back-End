@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.RequestDTOs;
 using MS3_Back_End.Entities;
@@ -22,8 +23,8 @@ namespace MS3_Back_End.Controller
         {
             try
             {
-                var data = await _courseService.AddCourse(courseRequest);
-                return Ok(data);
+                var result = await _courseService.AddCourse(courseRequest);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -36,8 +37,8 @@ namespace MS3_Back_End.Controller
         {
             try
             {
-                var data = await _courseService.SearchCourse(searchText);
-                return Ok(data);
+                var result = await _courseService.SearchCourse(searchText);
+                return Ok(result);
             }
             catch (Exception ex)
             {
