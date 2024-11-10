@@ -53,5 +53,13 @@ namespace MS3_Back_End.Controller
             var userList = await _userService.GetAllStudent();
             return Ok(userList);
         }
+
+        [HttpGet("get-all-instructors")]
+
+        public async Task<IActionResult> GetAllInstructors()
+        {
+            var userList = await _userService.GetAllInstructors();
+            return Ok(userList);
+        }
     }
 }

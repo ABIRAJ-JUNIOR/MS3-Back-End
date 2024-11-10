@@ -40,5 +40,17 @@ namespace MS3_Back_End.Repository
             var userList = await _dbContext.Users.Where(u => u.Role == Roles.Student).ToListAsync();
             return userList;
         }
+
+        public async Task<ICollection<User>> GetAllInstructors()
+        {
+            var userList = await _dbContext.Users.Where(u => u.Role == Roles.Instructor).ToListAsync();
+            return userList;
+        }
+
+        public async Task<User> GetStudentById(Guid id)
+        {
+            var userData = await _dbContext.Users.Include(s => s.Address).Include(s => s.Enrollments).Include(s => s.Assesments).Include(s => s.Notifications).Include(s => s.Feedbacks).SingleOrDefaultAsync(u => u.Id == id && u.Role == Roles.Student);
+            return userData!;
+        }
     }
 }

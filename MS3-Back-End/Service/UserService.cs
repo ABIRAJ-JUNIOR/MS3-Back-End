@@ -1,5 +1,6 @@
 ﻿using MS3_Back_End.DTO.RequestDTOs.UserDTOs;
 using MS3_Back_End.DTO.ResponseDTOs.UserResponseDTOs;
+using MS3_Back_End.DTOs.ResponseDTOs.UserResponseDTOs;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
@@ -111,6 +112,26 @@ namespace MS3_Back_End.Service
                     ImagePath = user.ImagePath,
                 });
             }
+
+            return response;
+        }
+
+        public async Task<ICollection<UserResponseDTO>> GetAllInstructors()
+        {
+            var userList = await _userRepository.GetAllInstructors();
+
+            var response = userList.Select(I => new UserResponseDTO()
+            {
+                Id = I.Id,
+                Nic = I.Nic,
+                FirstName = I.FirstName,
+                LastName = I.LastName,
+                DateOfBirth = I.DateOfBirth,
+                Gender = I.Gender,
+                Email = I.Email,
+                Phone = I.Phone,
+                ImagePath = I.ImagePath,
+            }).ToList();
 
             return response;
         }
