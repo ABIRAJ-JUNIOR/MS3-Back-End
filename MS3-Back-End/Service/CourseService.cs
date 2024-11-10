@@ -80,7 +80,59 @@ namespace MS3_Back_End.Service
 
         }
 
+        public async Task<List<CourseResponseDTO>> GetAllCourse()
+        {
+            var data = await _courseRepository.GetAllCourse();
+            if (data == null)
+            {
+                throw new Exception("Courses Not Available");
+            }
+            var CourseResponse= new List<CourseResponseDTO>();
+            foreach (var item in data)
+            {
+                var obj = new CourseResponseDTO
+                {
+                    Id = item.Id,
+                    CategoryId = item.CategoryId,
+                    CourseName = item.CourseName,
+                    Level = item.Level,
+                    CourseFee = item.CourseFee,
+                    Description = item.Description,
+                    Prerequisites = item.Prerequisites,
+                    ImagePath = item.ImagePath,
+                    CreatedDate = item.CreatedDate,
+                    UpdatedDate = item.UpdatedDate
 
+                };
+                CourseResponse.Add(obj);
+            }
+            return CourseResponse;
+        }
+
+
+        public async Task<CourseResponseDTO> GetCourseById(Guid CourseId)
+        {
+            var data = await _courseRepository.GetCourseById(CourseId);
+            if (data == null)
+            {
+                throw new Exception("Course Not Found");
+            }
+            var CourseResponse = new CourseResponseDTO
+            {
+                Id = data.Id,
+                CategoryId = data.CategoryId,
+                CourseName = data.CourseName,
+                CourseFee = data.CourseFee,
+                Description = data.Description,
+                Prerequisites = data.Prerequisites,
+                ImagePath = data.ImagePath,
+                CreatedDate = data.CreatedDate,
+                UpdatedDate = data.UpdatedDate
+            };
+            return CourseResponse;
+        }
+
+       
     }
 
 
