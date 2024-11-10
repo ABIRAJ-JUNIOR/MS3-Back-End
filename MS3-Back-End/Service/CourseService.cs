@@ -35,6 +35,7 @@ namespace MS3_Back_End.Service
 
             var CourseResponse = new CourseResponseDTO
             {
+                Id = data.Id,
                 CategoryId = data.CategoryId,
                 CourseName = data.CourseName,
                 Level = data.Level,
@@ -161,8 +162,8 @@ namespace MS3_Back_End.Service
             if (!string.IsNullOrEmpty(course.ImagePath))
                 GetData.ImagePath = course.ImagePath;
 
-            if (course.UpdatedDate.HasValue)
-                GetData.UpdatedDate = course.UpdatedDate.Value;
+
+            GetData.UpdatedDate=DateTime.Now;
 
             var data =await _courseRepository.UpdateCourse(GetData);
 
