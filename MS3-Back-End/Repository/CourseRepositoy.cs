@@ -26,7 +26,11 @@ namespace MS3_Back_End.Repository
             return data;
         }
 
-
+        public async Task<Course> GetCourseById(Guid CourseId)
+        {
+            var data = await _Db.Courses.SingleOrDefaultAsync(c=>c.Id==CourseId);
+            return data;
+        }
        
     }
 }
