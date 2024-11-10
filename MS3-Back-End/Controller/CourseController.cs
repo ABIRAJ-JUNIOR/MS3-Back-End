@@ -91,5 +91,20 @@ namespace MS3_Back_End.Controller
         }
 
 
+        [HttpDelete("course/{CourseId}")]
+        public async Task<IActionResult> DeleteCourse(Guid CourseId)
+        {
+            try
+            {
+                var result = await _courseService.DeleteCourse(CourseId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
+        }
+
     }
 }
