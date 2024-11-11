@@ -16,5 +16,24 @@ namespace MS3_Back_End.Controllers
             _courseScheduleService = courseScheduleService;
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddCourseSchedule(CourseSheduleRequestDTO courseReq)
+        {
+            if (courseReq == null)
+            {
+                return BadRequest("Course schedule data is required.");
+            }
+            try
+            {
+
+                var response = await _courseScheduleService.AddCourseShedule(courseReq);
+                return Ok(response);
+
+            }catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
