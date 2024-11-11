@@ -46,6 +46,21 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [HttpGet("Enrollments")]
+        public async Task<ActionResult<List<EnrollmentResponseDTO>>> GetAllEnrollments()
+        {
+            try
+            {
+                var enrollments = await _enrollmentService.GetAllEnrollements();
+                return Ok(enrollments);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+
 
 
 
