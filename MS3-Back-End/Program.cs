@@ -38,6 +38,10 @@ namespace MS3_Back_End
             builder.Services.AddScoped<ICourseSheduleRepository,CourseSheduleRepository>();
             builder.Services.AddScoped<ICourseSheduleService,CourseSheduleService>();
 
+            //Assessment
+            builder.Services.AddScoped<IAssessmentRepository,AssessmentRepository>();
+            builder.Services.AddScoped<IAssessmentService,AssessmentService>();
+
 
             builder.Services.AddCors(options =>
             {
