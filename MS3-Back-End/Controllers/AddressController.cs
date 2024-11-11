@@ -34,8 +34,15 @@ namespace MS3_Back_End.Controllers
         [HttpGet("GetAddressbyStudentID")]
         public async Task<IActionResult> GetAddressbyStuID(Guid stuID) 
         {
-            var data= await  _addressService.GetAddressbyStuID(stuID);
-            return Ok(data);
+            try
+            {
+                var data = await _addressService.GetAddressbyStuID(stuID);
+                return Ok(data);
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
