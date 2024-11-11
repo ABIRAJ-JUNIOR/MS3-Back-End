@@ -13,6 +13,22 @@ namespace MS3_Back_End.Repository
 
         }
 
-      
+        public async Task<CourseSchedule> AddCourseShedule(CourseSchedule courseReq)
+        {
+            var name = await _Db.CourseSchedules.SingleOrDefaultAsync(c=>c.CourseId == courseReq.CourseId);
+            if (name == null)
+            {
+                var data = await _Db.CourseSchedules.AddAsync(courseReq);
+                await _Db.SaveChangesAsync();
+                return data.Entity;
+            }
+            else
+            {
+                throw new Exception("Your CourseShedule Already Added");
+            }
+
+        }
+
+
     }
 }
