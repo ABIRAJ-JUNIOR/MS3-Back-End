@@ -45,7 +45,33 @@ namespace MS3_Back_End.Service
         }
 
 
+        public async Task<List<EnrollmentResponseDTO>> SearchCourseByUserId(Guid SearchUserId)
+        {
+            var data = await _enrollmentRepository.SearchEnrollments(SearchUserId);
+            if (data == null)
+            {
+                throw new Exception("Search Not Found");
+            }
 
+            var ListEnrollment = new List<EnrollmentResponseDTO>();
+            foreach (var item in data)
+            {
+                var EnrollmentResponse = new EnrollmentResponseDTO
+                {
+                    Id = item.Id,
+                    StudentId = item.StudentId,
+                    CourseSheduleId = item.CourseSheduleId,
+                    EnrollmentDate = item.EnrollmentDate,
+                    PaymentStatus = item.PaymentStatus,
+                    IsActive = item.IsActive
+                };
+                ListEnrollment.Add(EnrollmentResponse);
+
+            }
+
+            return ListEnrollment;
+
+        }
 
 
     }
