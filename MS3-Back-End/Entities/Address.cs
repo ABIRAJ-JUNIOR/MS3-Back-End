@@ -12,10 +12,10 @@ namespace MS3_Back_End.Entities
         public string PostalCode {  get; set; } = string.Empty;
         public string Country { get; set; } = string.Empty;
 
-        public Guid UserId { get; set; }
+        public Guid StudentId { get; set; }
 
         //Reference
-        public User? User { get; set; }
+        public Student? Student { get; set; }
 
     }
 }

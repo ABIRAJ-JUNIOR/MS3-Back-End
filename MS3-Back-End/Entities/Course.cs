@@ -15,6 +15,7 @@ namespace MS3_Back_End.Entities
         public string ImagePath { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
+        public bool IsDeleted { get; set; } 
 
         //Reference
         public CourseCategory? Category { get; set; }

@@ -1,5 +1,5 @@
-﻿using MS3_Back_End.DTOs.RequestDTOs;
-using MS3_Back_End.DTOs.ResponseDTOs;
+﻿using MS3_Back_End.DTOs.RequestDTOs.Course;
+using MS3_Back_End.DTOs.ResponseDTOs.Course;
 
 namespace MS3_Back_End.IService
 {

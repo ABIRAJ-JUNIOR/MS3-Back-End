@@ -1,4 +1,4 @@
-﻿namespace MS3_Back_End.DTOs.RequestDTOs
+﻿namespace MS3_Back_End.DTOs.RequestDTOs.Course
 {
     public class UpdateCourseRequestDTO
     {
