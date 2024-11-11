@@ -42,7 +42,7 @@ namespace MS3_Back_End.Repository
 
         public async Task<Course> GetCourseById(Guid CourseId)
         {
-            var data = await _Db.Courses.SingleOrDefaultAsync(c=>c.Id==CourseId);
+            var data = await _Db.Courses.SingleOrDefaultAsync(c=>c.Id==CourseId && c.IsDeleted==false);
             return data;
         }
         public async Task<Course> UpdateCourse(Course course)
