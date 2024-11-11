@@ -74,6 +74,24 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public async Task<ActionResult<EnrollmentResponseDTO>> UpdateEnrollment(Guid id, [FromBody] EnrollmentUpdateDTO enrollment)
+        {
+            if (id != enrollment.Id)
+            {
+                return BadRequest("ID mismatch");
+            }
+
+            try
+            {
+                var updatedEnrollment = await _enrollmentService.UpdateEnrollment(enrollment);
+                return Ok(updatedEnrollment);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
 
 
 
