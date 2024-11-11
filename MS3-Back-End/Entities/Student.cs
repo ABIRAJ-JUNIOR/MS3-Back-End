@@ -17,10 +17,8 @@ namespace MS3_Back_End.Entities
         public DateTime? UpdatedDate { get; set; } = DateTime.MinValue;
         public bool IsActive { get; set; } = true;
 
-        public Guid UserRoleId { get; set; }
 
         //Reference
-        public UserRole? UserRole { get; set; }
         public Address? Address { get; set; }
         public ICollection<Enrollment>? Enrollments { get; set; }
         public ICollection<Notification>? Notifications { get; set; }

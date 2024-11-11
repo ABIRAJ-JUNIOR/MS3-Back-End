@@ -39,7 +39,7 @@ namespace MS3_Back_End.Service
                     };
 
                     var userData = await _authRepository.AddUser(user);
-                    var roleData = await _authRepository.GetRole();
+                    var roleData = await _authRepository.GetStudentRole();
 
                     var userRole = new UserRole()
                     {
@@ -51,6 +51,7 @@ namespace MS3_Back_End.Service
 
                     var student = new Student()
                     {
+                        Id = userData.Id,
                         Nic = request.Nic,
                         FirstName = request.FirstName,
                         LastName = request.LastName,
@@ -61,7 +62,6 @@ namespace MS3_Back_End.Service
                         CteatedDate = DateTime.Now,
                         UpdatedDate = DateTime.Now,
                         IsActive = true,
-                        UserRoleId = userRoleData.Id
                     };
 
                     var studentData = await _authRepository.SignUp(student);
