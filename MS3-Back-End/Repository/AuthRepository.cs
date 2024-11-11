@@ -14,7 +14,6 @@ namespace MS3_Back_End.Repository
             _dbContext = dbContext;
         }
 
-        //SignUP 
         public async Task<Student> SignUp(Student student)
         {
             var studentData = await _dbContext.Students.AddAsync(student);
