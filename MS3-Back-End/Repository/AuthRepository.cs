@@ -32,6 +32,12 @@ namespace MS3_Back_End.Repository
             return roleData!;
         }
 
+        public async Task<UserRole> AddUserRole(UserRole userRole)
+        {
+            var userRoleData = await _dbContext.UserRoles.AddAsync(userRole);
+            return userRoleData.Entity;
+        }
+
         public async Task<Student> GetStudentByNic(string nic)
         {
             var studentData = await _dbContext.Students.SingleOrDefaultAsync(s => s.Nic.ToLower() == nic.ToLower());
