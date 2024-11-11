@@ -22,6 +22,9 @@ namespace MS3_Back_End
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<AppDBContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
 
+            //Authentication
+            builder.Services.AddScoped<IAuthRepository,AuthRepository>();
+            builder.Services.AddScoped<IAuthService,AuthService>();
 
             //course
             builder.Services.AddScoped<ICourseRepository, CourseRepositoy>();
