@@ -20,7 +20,7 @@ namespace MS3_Back_End.Service
 
             var Course = new Course
             {
-                CategoryId = courseReq.CategoryId,
+                CourseCategoryId = courseReq.CourseCategoryId,
                 CourseName = courseReq.CourseName,
                 Level = courseReq.Level,
                 CourseFee = courseReq.CourseFee,
@@ -36,7 +36,7 @@ namespace MS3_Back_End.Service
             var CourseResponse = new CourseResponseDTO
             {
                 Id = data.Id,
-                CategoryId = data.CategoryId,
+                CourseCategoryId = data.CourseCategoryId,
                 CourseName = data.CourseName,
                 Level = data.Level,
                 CourseFee = data.CourseFee,
@@ -65,7 +65,7 @@ namespace MS3_Back_End.Service
                 var obj = new CourseResponseDTO
                 {
                     Id = item.Id,
-                    CategoryId = item.CategoryId,
+                    CourseCategoryId = item.CourseCategoryId,
                     CourseName = item.CourseName,
                     Level = item.Level,
                     CourseFee = item.CourseFee,
@@ -95,7 +95,7 @@ namespace MS3_Back_End.Service
                 var obj = new CourseResponseDTO
                 {
                     Id = item.Id,
-                    CategoryId = item.CategoryId,
+                    CourseCategoryId = item.CourseCategoryId,
                     CourseName = item.CourseName,
                     Level = item.Level,
                     CourseFee = item.CourseFee,
@@ -122,7 +122,7 @@ namespace MS3_Back_End.Service
             var CourseResponse = new CourseResponseDTO
             {
                 Id = data.Id,
-                CategoryId = data.CategoryId,
+                CourseCategoryId = data.CourseCategoryId,
                 CourseName = data.CourseName,
                 CourseFee = data.CourseFee,
                 Description = data.Description,
@@ -142,7 +142,7 @@ namespace MS3_Back_End.Service
             var GetData =await _courseRepository.GetCourseById(course.Id);
 
             if (course.CategoryId.HasValue)
-                GetData.CategoryId = course.CategoryId.Value;
+                GetData.CourseCategoryId = course.CategoryId.Value;
 
             if (!string.IsNullOrEmpty(course.CourseName))
                 GetData.CourseName = course.CourseName;
@@ -170,7 +170,7 @@ namespace MS3_Back_End.Service
             var CourseReturn = new CourseResponseDTO
             {
                 Id = data.Id,
-                CategoryId = data.CategoryId,
+                CourseCategoryId = data.CourseCategoryId,
                 CourseName = data.CourseName,
                 Level = data.Level,
                 CourseFee = data.CourseFee,

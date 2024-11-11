@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MS3_Back_End.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20241111092900_initial2")]
-    partial class initial2
+    [Migration("20241111161052_initial1")]
+    partial class initial1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,12 +91,7 @@ namespace MS3_Back_End.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserRoleId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserRoleId");
 
                     b.ToTable("Admins");
                 });
@@ -128,13 +123,13 @@ namespace MS3_Back_End.Migrations
                     b.ToTable("Announcements");
                 });
 
-            modelBuilder.Entity("MS3_Back_End.Entities.Assesment", b =>
+            modelBuilder.Entity("MS3_Back_End.Entities.Assessment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("AssesmentType")
+                    b.Property<int>("AssessmentType")
                         .HasColumnType("int");
 
                     b.Property<Guid>("CourseId")
@@ -145,6 +140,9 @@ namespace MS3_Back_End.Migrations
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<int>("PassMarks")
                         .HasColumnType("int");
@@ -162,7 +160,7 @@ namespace MS3_Back_End.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Assesments");
+                    b.ToTable("Assessments");
                 });
 
             modelBuilder.Entity("MS3_Back_End.Entities.AuditLog", b =>
@@ -231,10 +229,7 @@ namespace MS3_Back_End.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("CategoryId1")
+                    b.Property<Guid>("CourseCategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("CourseFee")
@@ -270,7 +265,7 @@ namespace MS3_Back_End.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId1");
+                    b.HasIndex("CourseCategoryId");
 
                     b.ToTable("Courses");
                 });
@@ -502,8 +497,8 @@ namespace MS3_Back_End.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Gender")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<string>("ImagePath")
                         .IsRequired()
@@ -526,23 +521,21 @@ namespace MS3_Back_End.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserRoleId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserRoleId");
 
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("MS3_Back_End.Entities.StudentAssesment", b =>
+            modelBuilder.Entity("MS3_Back_End.Entities.StudentAssessment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AssesmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AssessmentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateEvaluted")
@@ -559,7 +552,7 @@ namespace MS3_Back_End.Migrations
                     b.Property<int>("MarksObtaines")
                         .HasColumnType("int");
 
-                    b.Property<int>("StudentAssesmentStatus")
+                    b.Property<int>("StudentAssessmentStatus")
                         .HasColumnType("int");
 
                     b.Property<Guid>("StudentId")
@@ -567,11 +560,11 @@ namespace MS3_Back_End.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssesmentId");
+                    b.HasIndex("AssessmentId");
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("StudentAssesments");
+                    b.ToTable("StudentAssessments");
                 });
 
             modelBuilder.Entity("MS3_Back_End.Entities.User", b =>
@@ -629,21 +622,10 @@ namespace MS3_Back_End.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("MS3_Back_End.Entities.Admin", b =>
-                {
-                    b.HasOne("MS3_Back_End.Entities.UserRole", "UserRole")
-                        .WithMany()
-                        .HasForeignKey("UserRoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserRole");
-                });
-
-            modelBuilder.Entity("MS3_Back_End.Entities.Assesment", b =>
+            modelBuilder.Entity("MS3_Back_End.Entities.Assessment", b =>
                 {
                     b.HasOne("MS3_Back_End.Entities.Course", "Course")
-                        .WithMany("Assesments")
+                        .WithMany("Assessments")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -664,11 +646,13 @@ namespace MS3_Back_End.Migrations
 
             modelBuilder.Entity("MS3_Back_End.Entities.Course", b =>
                 {
-                    b.HasOne("MS3_Back_End.Entities.CourseCategory", "Category")
+                    b.HasOne("MS3_Back_End.Entities.CourseCategory", "CourseCategory")
                         .WithMany("Courses")
-                        .HasForeignKey("CategoryId1");
+                        .HasForeignKey("CourseCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("CourseCategory");
                 });
 
             modelBuilder.Entity("MS3_Back_End.Entities.CourseSchedule", b =>
@@ -738,32 +722,19 @@ namespace MS3_Back_End.Migrations
                     b.Navigation("Enrollment");
                 });
 
-            modelBuilder.Entity("MS3_Back_End.Entities.Student", b =>
+            modelBuilder.Entity("MS3_Back_End.Entities.StudentAssessment", b =>
                 {
-                    b.HasOne("MS3_Back_End.Entities.UserRole", "UserRole")
-                        .WithMany()
-                        .HasForeignKey("UserRoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserRole");
-                });
-
-            modelBuilder.Entity("MS3_Back_End.Entities.StudentAssesment", b =>
-                {
-                    b.HasOne("MS3_Back_End.Entities.Assesment", "Assesment")
-                        .WithMany("StudentAssesments")
-                        .HasForeignKey("AssesmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("MS3_Back_End.Entities.Assessment", "Assessment")
+                        .WithMany("StudentAssessments")
+                        .HasForeignKey("AssessmentId");
 
                     b.HasOne("MS3_Back_End.Entities.Student", "Student")
-                        .WithMany("Assesments")
+                        .WithMany("Assessments")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Assesment");
+                    b.Navigation("Assessment");
 
                     b.Navigation("Student");
                 });
@@ -792,14 +763,14 @@ namespace MS3_Back_End.Migrations
                     b.Navigation("AuditLogs");
                 });
 
-            modelBuilder.Entity("MS3_Back_End.Entities.Assesment", b =>
+            modelBuilder.Entity("MS3_Back_End.Entities.Assessment", b =>
                 {
-                    b.Navigation("StudentAssesments");
+                    b.Navigation("StudentAssessments");
                 });
 
             modelBuilder.Entity("MS3_Back_End.Entities.Course", b =>
                 {
-                    b.Navigation("Assesments");
+                    b.Navigation("Assessments");
 
                     b.Navigation("CourseSchedules");
 
@@ -830,7 +801,7 @@ namespace MS3_Back_End.Migrations
                 {
                     b.Navigation("Address");
 
-                    b.Navigation("Assesments");
+                    b.Navigation("Assessments");
 
                     b.Navigation("Enrollments");
 

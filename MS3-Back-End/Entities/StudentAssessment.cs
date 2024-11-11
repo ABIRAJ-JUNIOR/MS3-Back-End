@@ -6,7 +6,6 @@ namespace MS3_Back_End.Entities
     {
         [Key]
         public Guid Id { get; set; }
-        public Guid AssesmentId { get; set; }
         public int MarksObtaines { get; set; }
         public string Grade { get; set; } = string.Empty;
         public string FeedBack { get; set; } = string.Empty;
@@ -14,6 +13,7 @@ namespace MS3_Back_End.Entities
         public StudentAssessmentStatus StudentAssessmentStatus { get; set; }
 
         public Guid StudentId { get; set; }
+        public Guid AssesmentId { get; set; }
 
         //Reference
         public Student? Student { get; set; }

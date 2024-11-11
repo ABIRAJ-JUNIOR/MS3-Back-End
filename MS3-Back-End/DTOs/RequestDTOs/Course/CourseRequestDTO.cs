@@ -2,7 +2,7 @@
 {
     public class CourseRequestDTO
     {
-        public Guid CategoryId { get; set; }
+        public Guid CourseCategoryId { get; set; }
         public string CourseName { get; set; } = string.Empty;
         public int Level { get; set; }
         public decimal CourseFee { get; set; }

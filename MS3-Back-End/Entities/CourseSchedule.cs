@@ -6,7 +6,6 @@ namespace MS3_Back_End.Entities
     {
         [Key]
         public Guid Id { get; set; }
-        public Guid CourseId { get; set; }
         public DateTime StartDate { get; set; } = DateTime.MinValue;
         public DateTime EndDate { get; set; } = DateTime.MinValue;
         public int Duration { get; set; }
@@ -16,6 +15,8 @@ namespace MS3_Back_End.Entities
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public ScheduleStatus ScheduleStatus { get; set; }
+
+        public Guid CourseId { get; set; }
 
         //Reference
         public Course? Course { get; set; }
