@@ -1,6 +1,6 @@
-﻿namespace MS3_Back_End.DTOs.RequestDTOs.Course
+﻿namespace MS3_Back_End.DTOs.ResponseDTOs.Address
 {
-    public class AddressRequestDTO
+    public class AddressResponseDTO
     {
         public string AddressLine1 { get; set; } = string.Empty;
         public string? AddressLine2 { get; set; } = string.Empty;
