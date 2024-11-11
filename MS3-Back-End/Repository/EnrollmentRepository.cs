@@ -30,6 +30,12 @@ namespace MS3_Back_End.Repository
             var data = await _Db.Enrollments.ToListAsync();
             return data;
         }
+        public async Task<Enrollment> GetEnrollmentById(Guid EnrollmentId)
+        {
+            var data = await _Db.Enrollments.SingleOrDefaultAsync(c => c.Id == EnrollmentId);
+            return data;
+        }
+
 
 
 
