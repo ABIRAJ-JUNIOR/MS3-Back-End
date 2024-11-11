@@ -60,6 +60,20 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<ActionResult<EnrollmentResponseDTO>> AddEnrollment([FromBody] EnrollmentRequestDTO enrollmentReq)
+        {
+            try
+            {
+                var enrollment = await _enrollmentService.AddEnrollment(enrollmentReq);
+                return Ok(enrollment);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
 
 
