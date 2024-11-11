@@ -35,5 +35,19 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [HttpGet("getCourseById")]
+        public async Task<IActionResult> GetCourseById(Guid CourseId)
+        {
+            try
+            {
+                var response = await _courseScheduleService.GetCourseById(CourseId);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
     }
 }
