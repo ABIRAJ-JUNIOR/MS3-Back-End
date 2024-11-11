@@ -93,6 +93,20 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<string>> DeleteEnrollment(Guid id)
+        {
+            try
+            {
+                var result = await _enrollmentService.DeleteEnrollment(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
 
 
 
