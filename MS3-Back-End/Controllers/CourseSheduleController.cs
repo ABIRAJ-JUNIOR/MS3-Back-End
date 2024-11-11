@@ -49,5 +49,19 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllCourses()
+        {
+            try
+            {
+                var response = await _courseScheduleService.GetAllCourse();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
     }
 }
