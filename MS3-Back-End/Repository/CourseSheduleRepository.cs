@@ -30,5 +30,12 @@ namespace MS3_Back_End.Repository
         }
 
 
+        public  Task<List<CourseSchedule>> SearchSheduleLocation(string SearchText)
+        {
+            var data =  _Db.CourseSchedules.Where(n => n.Location.Contains(SearchText)).ToListAsync();
+            return data;
+        }
+
+
     }
 }
