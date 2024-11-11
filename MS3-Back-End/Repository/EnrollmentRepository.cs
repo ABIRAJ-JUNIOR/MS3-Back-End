@@ -19,6 +19,12 @@ namespace MS3_Back_End.Repository
                 await _Db.SaveChangesAsync();
                 return data.Entity;
         }
+        public async Task<List<Enrollment>> SearchEnrollments(Guid SearchId)
+        {
+            var data = await _Db.Enrollments.Where(x=>x.StudentId == SearchId).ToListAsync();
+            return data;
+        }
+        
 
 
 
