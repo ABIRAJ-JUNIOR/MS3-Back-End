@@ -47,8 +47,15 @@ namespace MS3_Back_End.Controllers
         [HttpGet("GetAllAddresses")]
         public async Task<IActionResult> GetAllAddress()
         {
-            var data= await _addressService.GetAllAddress();
-            return Ok(data);
+            try
+            {
+                var data = await _addressService.GetAllAddress();
+                return Ok(data);
+            }
+            catch (Exception ex) 
+            {
+               return BadRequest(ex.Message);
+            }
         }
 
 
