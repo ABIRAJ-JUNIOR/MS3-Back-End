@@ -86,8 +86,15 @@ namespace MS3_Back_End.Controllers
         }
         public async Task<IActionResult> SearchbyCity(string searchText)
         {
-           var data= await _addressService.SearchbyCity(searchText);    
-            return Ok(data);
+            try
+            {
+                var data = await _addressService.SearchbyCity(searchText);
+                return Ok(data);
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
