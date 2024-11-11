@@ -10,6 +10,8 @@ namespace MS3_Back_End.IService
         Task<List<AddressResponseDTO>> GetAllAddress();
         Task<AddressResponseDTO> DeleteAddress(Guid id);
         Task<AddressResponseDTO> UpdateAddress(AddressUpdateRequestDTO Updateaddress, Guid StuId);
+        Task<List<AddressResponseDTO>> SearchbyCity(string searchText);
+
 
 
 
