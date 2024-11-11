@@ -73,6 +73,30 @@ namespace MS3_Back_End.Service
               return Returndata;
         }
 
+        public async Task<AddressResponseDTO> DeleteAddress(Guid id)
+        {
+            var address = await _addressRepository.GetAddressbyStuID(id);
+            if (address != null) 
+            {
+                var data=await _addressRepository.DeleteAddress(address);
+                var Returndata = new AddressResponseDTO() 
+                {
+                  AddressLine1= data.AddressLine1,
+                  AddressLine2 = data.AddressLine2,
+                  City = data.City,
+                  PostalCode = data.PostalCode,
+                  Country = data.Country,
+                  StudentId=data.StudentId,
+                };
+                return Returndata;
+            }
+            else
+            {
+                throw new Exception("Address not Found");
+            }
+        }
+
+
 
 
     }
