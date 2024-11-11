@@ -146,6 +146,81 @@ namespace MS3_Back_End.Service
         }
 
 
+        public async Task<CourseSheduleResponseDTO> UpdateCourse(UpdateCourseSheduleDTO courseReq)
+        {
+
+
+
+            var getData = await _courseSheduleRepository.GetCourseSheduleById(courseReq.Id);
+
+            if (courseReq.CourseId.HasValue)
+            {
+                getData.CourseId = courseReq.CourseId.Value;
+            }
+
+            if (courseReq.StartDate.HasValue)
+            {
+                getData.StartDate = courseReq.StartDate.Value;
+            }
+
+            if (courseReq.EndDate.HasValue)
+            {
+                getData.EndDate = courseReq.EndDate.Value;
+            }
+
+            if (courseReq.Duration.HasValue)
+            {
+                getData.Duration = courseReq.Duration.Value;
+            }
+
+            if (!string.IsNullOrEmpty(courseReq.Time))
+            {
+                getData.Time = courseReq.Time;
+            }
+
+            if (!string.IsNullOrEmpty(courseReq.Location))
+            {
+                getData.Location = courseReq.Location;
+
+            }
+
+            if (courseReq.MaxStudents.HasValue)
+            {
+                getData.MaxStudents = courseReq.MaxStudents.Value;
+
+            }
+
+            if (courseReq.ScheduleStatus.HasValue)
+            {
+                getData.ScheduleStatus = courseReq.ScheduleStatus.Value;
+            }
+
+            getData.UpdatedDate = DateTime.Now;
+
+
+            var data = await _courseSheduleRepository.UpdateCourse(getData);
+
+            var CourseResponse = new CourseSheduleResponseDTO
+            {
+                Id = data.Id,
+                CourseId = data.CourseId,
+                StartDate = data.StartDate,
+                EndDate = data.EndDate,
+                Time = data.Time,
+                Location = data.Location,
+                MaxStudents = data.MaxStudents,
+                CreatedDate = data.CreatedDate,
+                UpdatedDate = data.UpdatedDate,
+                ScheduleStatus = data.ScheduleStatus,
+
+
+            };
+
+            return CourseResponse;
+
+        }
+
+
 
     }
 }
