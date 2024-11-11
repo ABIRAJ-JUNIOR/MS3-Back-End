@@ -55,5 +55,12 @@ namespace MS3_Back_End.Repository
             return data.Entity;
         }
 
+        public async Task<Address> UpdateAddress(Address address)
+        {
+            var data=  _dbContext.Addresses.Update(address);
+            _dbContext.SaveChanges();
+            return data.Entity;
+        }
+
     }
 }
