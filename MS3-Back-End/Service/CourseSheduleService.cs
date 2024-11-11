@@ -15,6 +15,44 @@ namespace MS3_Back_End.Service
         }
 
 
+        public async Task<CourseSheduleResponseDTO> AddCourseShedule(CourseSheduleRequestDTO courseReq)
+        {
+            var CourseShedule = new CourseSchedule
+            {
+                CourseId = courseReq.CourseId,
+                StartDate = courseReq.StartDate,
+                EndDate = courseReq.EndDate,
+                Time = courseReq.Time,
+                Location = courseReq.Location,
+                MaxStudents = courseReq.MaxStudents,
+                CreatedDate = DateTime.Now,
+                UpdatedDate = DateTime.Now,
+                ScheduleStatus = courseReq.ScheduleStatus,
+
+            };
+
+            var data = await _courseSheduleRepository.AddCourseShedule(CourseShedule);
+
+            var CourseResponse = new CourseSheduleResponseDTO
+            {
+                Id = data.Id,
+                CourseId = data.CourseId,
+                StartDate = data.StartDate,
+                EndDate = data.EndDate,
+                Time = data.Time,
+                Location = data.Location,
+                MaxStudents = data.MaxStudents,
+                CreatedDate = data.CreatedDate,
+                UpdatedDate = data.UpdatedDate,
+                ScheduleStatus = data.ScheduleStatus,
+
+
+            };
+
+            return CourseResponse;
+
+        }
+
 
     }
 }
