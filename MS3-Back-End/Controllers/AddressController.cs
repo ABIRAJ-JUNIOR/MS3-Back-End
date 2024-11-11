@@ -61,8 +61,15 @@ namespace MS3_Back_End.Controllers
         [HttpDelete("Delete-Address")]
         public async Task<IActionResult> DeleteAddress(Guid stuid)
         {
-           var data=await _addressService.DeleteAddress(stuid);
-             return Ok(data); 
+            try
+            {
+                var data = await _addressService.DeleteAddress(stuid);
+                return Ok(data);
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
