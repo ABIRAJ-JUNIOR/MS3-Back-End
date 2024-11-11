@@ -53,7 +53,7 @@ namespace MS3_Back_End.Service
 
         }
 
-        public async Task<List<CourseSheduleResponseDTO>> SearchCourseShedule(string SearchText)
+        public async Task<List<CourseSheduleResponseDTO>> SearchCourse(string SearchText)
         {
             var data = await _courseSheduleRepository.SearchSheduleLocation(SearchText);
             if (data == null)
@@ -116,6 +116,33 @@ namespace MS3_Back_End.Service
                 CourseResponseList.Add(CourseResponse);
             }
             return CourseResponseList;
+        }
+
+
+        public async Task<CourseSheduleResponseDTO> GetCourseById(Guid CourseId)
+        {
+            var data = await _courseSheduleRepository.GetCourseSheduleById(CourseId);
+            if (data == null)
+            {
+                throw new Exception("Course Not Found");
+            }
+            var CourseResponse = new CourseSheduleResponseDTO
+            {
+                Id = data.Id,
+                CourseId = data.CourseId,
+                StartDate = data.StartDate,
+                EndDate = data.EndDate,
+                Time = data.Time,
+                Location = data.Location,
+                MaxStudents = data.MaxStudents,
+                CreatedDate = data.CreatedDate,
+                UpdatedDate = data.UpdatedDate,
+                ScheduleStatus = data.ScheduleStatus,
+
+
+            };
+
+            return CourseResponse;
         }
 
 
