@@ -6,6 +6,8 @@ namespace MS3_Back_End.IService
     public interface IAddressService
     {
         Task<AddressResponseDTO> AddAddress(AddressRequestDTO address);
+        Task<AddressResponseDTO> GetAddressbyStuID(Guid id);
+
 
     }
 }
