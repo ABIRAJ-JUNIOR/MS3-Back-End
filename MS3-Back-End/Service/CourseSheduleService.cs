@@ -87,6 +87,38 @@ namespace MS3_Back_End.Service
 
         }
 
+        public async Task<List<CourseSheduleResponseDTO>> GetAllCourse()
+        {
+            var data = await _courseSheduleRepository.GetAllCourseShedule();
+            if (data == null)
+            {
+                throw new Exception("Courses Not Available");
+            }
+            var CourseResponseList = new List<CourseSheduleResponseDTO>();
+            foreach (var item in data)
+            {
+                var CourseResponse = new CourseSheduleResponseDTO
+                {
+                    Id = item.Id,
+                    CourseId = item.CourseId,
+                    StartDate = item.StartDate,
+                    EndDate = item.EndDate,
+                    Time = item.Time,
+                    Location = item.Location,
+                    MaxStudents = item.MaxStudents,
+                    CreatedDate = item.CreatedDate,
+                    UpdatedDate = item.UpdatedDate,
+                    ScheduleStatus = item.ScheduleStatus,
+
+
+                };
+
+                CourseResponseList.Add(CourseResponse);
+            }
+            return CourseResponseList;
+        }
+
+
 
     }
 }
