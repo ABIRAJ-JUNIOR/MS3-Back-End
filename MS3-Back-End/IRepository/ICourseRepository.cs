@@ -9,6 +9,6 @@ namespace MS3_Back_End.IRepository
         Task<List<Course>> GetAllCourse();
         Task<Course> GetCourseById(Guid CourseId);
         Task<Course> UpdateCourse(Course course);
-        Task<string> DeleteCourse(Course course);
+        Task<string> DeleteCourse(Guid id);
     }
 }
