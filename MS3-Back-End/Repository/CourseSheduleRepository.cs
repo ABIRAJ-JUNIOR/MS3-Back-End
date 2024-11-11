@@ -37,5 +37,11 @@ namespace MS3_Back_End.Repository
         }
 
 
+        public async Task<List<CourseSchedule>> GetAllCourseShedule()
+        {
+            var data = await _Db.CourseSchedules.ToListAsync();
+            return data;
+        }
+
     }
 }
