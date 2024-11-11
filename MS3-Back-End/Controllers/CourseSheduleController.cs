@@ -63,5 +63,24 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [HttpGet("searchByLocation")]
+        public async Task<IActionResult> SearchCourse( string searchText)
+        {
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                return BadRequest("Search text is required.");
+            }
+
+            try
+            {
+                var response = await _courseScheduleService.SearchCourse(searchText);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
     }
 }
