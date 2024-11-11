@@ -11,10 +11,7 @@
         public DateTime? UpdatedDate { get; set; } = DateTime.MinValue;
         public bool IsActive { get; set; } = true;
 
-        public Guid UserRoleId { get; set; }
-
         //Reference
-        public UserRole? UserRole { get; set; }
         public ICollection<AuditLog>? AuditLogs { get; set; }
 
     }

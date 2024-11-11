@@ -8,9 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DTOs\ResponseDTOs\Auth\**" />
     <Compile Remove="TestingControllers\**" />
+    <Content Remove="DTOs\ResponseDTOs\Auth\**" />
     <Content Remove="TestingControllers\**" />
+    <EmbeddedResource Remove="DTOs\ResponseDTOs\Auth\**" />
     <EmbeddedResource Remove="TestingControllers\**" />
+    <None Remove="DTOs\ResponseDTOs\Auth\**" />
     <None Remove="TestingControllers\**" />
   </ItemGroup>
 
@@ -28,7 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\ResponseDTOs\Auth\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

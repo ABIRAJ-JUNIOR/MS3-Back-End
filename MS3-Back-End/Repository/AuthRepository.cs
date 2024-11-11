@@ -29,7 +29,7 @@ namespace MS3_Back_End.Repository
             return userData.Entity;
         }
 
-        public async Task<Role> GetRole()
+        public async Task<Role> GetStudentRole()
         {
             var roleData = await _dbContext.Roles.SingleOrDefaultAsync(r => r.Name == "Student");
             return roleData!;
