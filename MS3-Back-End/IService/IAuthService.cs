@@ -1,5 +1,4 @@
 ﻿using MS3_Back_End.DTOs.RequestDTOs.Auth;
-using MS3_Back_End.DTOs.ResponseDTOs.Auth;
 using MS3_Back_End.Entities;
 
 namespace MS3_Back_End.IService
