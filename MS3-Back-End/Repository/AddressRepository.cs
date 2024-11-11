@@ -25,9 +25,23 @@ namespace MS3_Back_End.Repository
             }
             else 
             {
-                throw new Exception("Addres Already Added");
+                throw new Exception("Address Already Added");
             }
         }
-        
+        public async Task<Address> GetAddressbyStuID(Address address)
+        {
+            var Address = await _dbContext.Addresses.SingleOrDefaultAsync(f => f.StudentId == address.StudentId);
+            if (Address != null)
+            {
+                return Address;
+            }
+            else 
+            {
+                throw new Exception("Address not found");
+               
+            }
+
+        }
+
     }
 }
