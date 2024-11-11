@@ -36,7 +36,7 @@ namespace MS3_Back_End.Repository
         }
         public async Task<List<Course>> GetAllCourse()
         {
-            var data = await _Db.Courses.ToListAsync();
+            var data = await _Db.Courses.Where(c=>c.IsDeleted==false).ToListAsync();
             return data;
         }
 
