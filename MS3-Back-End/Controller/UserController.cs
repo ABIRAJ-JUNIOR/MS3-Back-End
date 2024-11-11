@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTO.RequestDTOs.UserDTOs;
 using MS3_Back_End.DTO.ResponseDTOs;
+using MS3_Back_End.DTOs.ResponseDTOs.UserResponseDTOs;
 using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Controller
@@ -52,6 +53,29 @@ namespace MS3_Back_End.Controller
         {
             var userList = await _userService.GetAllStudent();
             return Ok(userList);
+        }
+
+        [HttpGet("get-all-instructors")]
+
+        public async Task<IActionResult> GetAllInstructors()
+        {
+            var userList = await _userService.GetAllInstructors();
+            return Ok(userList);
+        }
+
+        [HttpGet("get-student-by-id/{id}")]
+
+        public async Task<IActionResult> GetStudentById(Guid id)
+        {
+            try
+            {
+                var studentData = await _userService.GetStudentById(id);
+                return Ok(studentData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
