@@ -32,15 +32,11 @@ namespace MS3_Back_End.Repository
         public async Task<Address> GetAddressbyStuID(Guid id)
         {
             var Address = await _dbContext.Addresses.SingleOrDefaultAsync(f => f.StudentId == id);
-            if (Address != null)
-            {
-                return Address;
-            }
-            else 
-            {
-                throw new Exception("Address not found");
-               
-            }
+      
+            
+            return Address;
+            
+           
 
         }
         public async Task<List<Address>> GetAllAddress()
