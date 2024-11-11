@@ -100,6 +100,33 @@ namespace MS3_Back_End.Service
             return ListEnrollment;
         }
 
+        public async Task<EnrollmentResponseDTO> GetEnrollmentId(Guid EnrollmentId)
+        {
+            var data = await _enrollmentRepository.GetEnrollmentById(EnrollmentId);
+            if (data == null)
+            {
+                throw new Exception("Enrollment Not Found");
+            }
+            var EnrollmentResponse = new EnrollmentResponseDTO
+            {
+                Id = data.Id,
+                StudentId = data.StudentId,
+                CourseSheduleId = data.CourseSheduleId,
+                EnrollmentDate = data.EnrollmentDate,
+                PaymentStatus = data.PaymentStatus,
+                IsActive = data.IsActive
+            };
+
+            return EnrollmentResponse;
+        }
+
+
+
+
+
+
+
+
 
     }
 }
