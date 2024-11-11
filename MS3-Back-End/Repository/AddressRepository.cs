@@ -42,6 +42,11 @@ namespace MS3_Back_End.Repository
             }
 
         }
+        public async Task<List<Address>> GetAllAddress()
+        {
+            var addresses=await _dbContext.Addresses.ToListAsync();
+            return addresses;
+        }
 
     }
 }
