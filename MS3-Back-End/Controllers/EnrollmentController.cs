@@ -18,6 +18,20 @@ namespace MS3_Back_End.Controllers
         }
 
 
+        [HttpGet("Enrollment/{id}")]
+        public async Task<ActionResult<EnrollmentResponseDTO>> GetEnrollmentById(Guid id)
+        {
+            try
+            {
+                var enrollment = await _enrollmentService.GetEnrollmentId(id);
+                return Ok(enrollment);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
 
 
 
