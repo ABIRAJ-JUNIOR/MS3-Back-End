@@ -44,7 +44,7 @@ namespace MS3_Back_End.Repository
             return data;
         }
 
-        public async Task<CourseSchedule> GetCourseById(Guid CourseId)
+        public async Task<CourseSchedule> GetCourseSheduleById(Guid CourseId)
         {
             var data = await _Db.CourseSchedules.SingleOrDefaultAsync(c => c.Id == CourseId);
             return data;

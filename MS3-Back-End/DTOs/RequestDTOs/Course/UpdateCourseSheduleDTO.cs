@@ -4,8 +4,8 @@ namespace MS3_Back_End.DTOs.RequestDTOs.Course
 {
     public class UpdateCourseSheduleDTO
     {
-        public Guid? Id { get; set; }
-        public Guid? CourseId { get; private set; }
+        public Guid Id { get; set; }
+        public Guid? CourseId { get;  set; }
         public DateTime? StartDate { get; set; } = DateTime.MinValue;
         public DateTime? EndDate { get; set; } = DateTime.MinValue;
         public int? Duration { get; set; }
