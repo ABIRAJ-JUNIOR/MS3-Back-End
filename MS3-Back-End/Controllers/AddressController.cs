@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.RequestDTOs.Address;
 using MS3_Back_End.DTOs.ResponseDTOs.Address;
 using MS3_Back_End.IService;
+using System.Runtime.InteropServices;
 
 namespace MS3_Back_End.Controllers
 {
@@ -56,6 +57,12 @@ namespace MS3_Back_End.Controllers
             {
                return BadRequest(ex.Message);
             }
+        }
+        [HttpDelete("Delete-Address")]
+        public async Task<IActionResult> DeleteAddress(Guid stuid)
+        {
+           var data=await _addressService.DeleteAddress(stuid);
+             return Ok(data); 
         }
 
 
