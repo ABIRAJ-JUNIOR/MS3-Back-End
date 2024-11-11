@@ -6,18 +6,16 @@ namespace MS3_Back_End.Entities
     {
         [Key]
         public Guid Id { get; set; }
-        [Required]
         public string AddressLine1 { get; set; } = string.Empty;
         public string? AddressLine2 { get; set; } = string.Empty;
-        [Required]
         public string City { get; set; } = string.Empty;
-        [Required]
+        public string PostalCode {  get; set; } = string.Empty;
         public string Country { get; set; } = string.Empty;
 
-        public int StudentId { get; set; }
+        public Guid UserId { get; set; }
 
         //Reference
-        public Student? Student { get; set; }
+        public User? User { get; set; }
 
     }
 }

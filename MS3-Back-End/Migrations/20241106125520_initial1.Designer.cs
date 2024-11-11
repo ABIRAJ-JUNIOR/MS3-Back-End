@@ -4,6 +4,7 @@ using MS3_Back_End.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MS3_Back_End.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241106125520_initial1")]
+    partial class initial1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,15 +50,49 @@ namespace MS3_Back_End.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("StudentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
+                    b.HasIndex("StudentId")
                         .IsUnique();
 
                     b.ToTable("Addresses");
+                });
+
+            modelBuilder.Entity("MS3_Back_End.Entities.Admin", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CteatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastLogin")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Admins");
                 });
 
             modelBuilder.Entity("MS3_Back_End.Entities.Assesment", b =>
@@ -108,16 +145,16 @@ namespace MS3_Back_End.Migrations
                     b.Property<DateOnly>("ActionDate")
                         .HasColumnType("date");
 
+                    b.Property<Guid>("AdminId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Details")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("AdminId");
 
                     b.ToTable("AuditLogs");
                 });
@@ -175,10 +212,6 @@ namespace MS3_Back_End.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImagePath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -271,9 +304,6 @@ namespace MS3_Back_End.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CourseSchedulesId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("CourseSheduleId")
                         .HasColumnType("uniqueidentifier");
 
@@ -286,14 +316,17 @@ namespace MS3_Back_End.Migrations
                     b.Property<int>("PaymentStatus")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("courseSchedulesId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseSchedulesId");
+                    b.HasIndex("StudentId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("courseSchedulesId");
 
                     b.ToTable("Enrollments");
                 });
@@ -318,14 +351,14 @@ namespace MS3_Back_End.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("StudentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("StudentId");
 
                     b.ToTable("Feedbacks");
                 });
@@ -349,12 +382,12 @@ namespace MS3_Back_End.Migrations
                     b.Property<int>("NotificationType")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("StudentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("StudentId");
 
                     b.ToTable("Notifications");
                 });
@@ -371,9 +404,6 @@ namespace MS3_Back_End.Migrations
                     b.Property<Guid>("EnrollementId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("EnrollmentId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("InstallmentNumber")
                         .HasColumnType("int");
 
@@ -386,11 +416,63 @@ namespace MS3_Back_End.Migrations
                     b.Property<int>("PaymentType")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("enrollmentId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("EnrollmentId");
+                    b.HasIndex("enrollmentId");
 
                     b.ToTable("Payments");
+                });
+
+            modelBuilder.Entity("MS3_Back_End.Entities.Student", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CteatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nic")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("MS3_Back_End.Entities.StudentAssesment", b =>
@@ -419,246 +501,193 @@ namespace MS3_Back_End.Migrations
                     b.Property<int>("StudentAssesmentStatus")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("StudentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AssesmentId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("StudentId");
 
                     b.ToTable("StudentAssesments");
                 });
 
-            modelBuilder.Entity("MS3_Back_End.Entities.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CteatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Gender")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Nic")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
             modelBuilder.Entity("MS3_Back_End.Entities.Address", b =>
                 {
-                    b.HasOne("MS3_Back_End.Entities.User", "User")
-                        .WithOne("Address")
-                        .HasForeignKey("MS3_Back_End.Entities.Address", "UserId")
+                    b.HasOne("MS3_Back_End.Entities.Student", "student")
+                        .WithOne("address")
+                        .HasForeignKey("MS3_Back_End.Entities.Address", "StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("student");
                 });
 
             modelBuilder.Entity("MS3_Back_End.Entities.Assesment", b =>
                 {
-                    b.HasOne("MS3_Back_End.Entities.Course", "Course")
-                        .WithMany("Assesments")
+                    b.HasOne("MS3_Back_End.Entities.Course", "course")
+                        .WithMany("assesments")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Course");
+                    b.Navigation("course");
                 });
 
             modelBuilder.Entity("MS3_Back_End.Entities.AuditLog", b =>
                 {
-                    b.HasOne("MS3_Back_End.Entities.User", "User")
-                        .WithMany("AuditLogs")
-                        .HasForeignKey("UserId")
+                    b.HasOne("MS3_Back_End.Entities.Admin", "admins")
+                        .WithMany("auditLogs")
+                        .HasForeignKey("AdminId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("admins");
                 });
 
             modelBuilder.Entity("MS3_Back_End.Entities.Course", b =>
                 {
-                    b.HasOne("MS3_Back_End.Entities.CourseCategory", "Category")
-                        .WithMany("Courses")
+                    b.HasOne("MS3_Back_End.Entities.CourseCategory", "category")
+                        .WithMany("courses")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("category");
                 });
 
             modelBuilder.Entity("MS3_Back_End.Entities.CourseSchedule", b =>
                 {
-                    b.HasOne("MS3_Back_End.Entities.Course", "Course")
-                        .WithMany("CourseSchedules")
+                    b.HasOne("MS3_Back_End.Entities.Course", "course")
+                        .WithMany("courseSchedules")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Course");
+                    b.Navigation("course");
                 });
 
             modelBuilder.Entity("MS3_Back_End.Entities.Enrollment", b =>
                 {
-                    b.HasOne("MS3_Back_End.Entities.CourseSchedule", "CourseSchedules")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("CourseSchedulesId");
-
-                    b.HasOne("MS3_Back_End.Entities.User", "User")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("UserId")
+                    b.HasOne("MS3_Back_End.Entities.Student", "student")
+                        .WithMany("enrollments")
+                        .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CourseSchedules");
+                    b.HasOne("MS3_Back_End.Entities.CourseSchedule", "courseSchedules")
+                        .WithMany("enrollments")
+                        .HasForeignKey("courseSchedulesId");
 
-                    b.Navigation("User");
+                    b.Navigation("courseSchedules");
+
+                    b.Navigation("student");
                 });
 
             modelBuilder.Entity("MS3_Back_End.Entities.Feedbacks", b =>
                 {
-                    b.HasOne("MS3_Back_End.Entities.Course", "Course")
-                        .WithMany("Feedbacks")
+                    b.HasOne("MS3_Back_End.Entities.Course", "course")
+                        .WithMany("feedbacks")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MS3_Back_End.Entities.User", "User")
-                        .WithMany("Feedbacks")
-                        .HasForeignKey("UserId")
+                    b.HasOne("MS3_Back_End.Entities.Student", "student")
+                        .WithMany("feedbacks")
+                        .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Course");
+                    b.Navigation("course");
 
-                    b.Navigation("User");
+                    b.Navigation("student");
                 });
 
             modelBuilder.Entity("MS3_Back_End.Entities.Notification", b =>
                 {
-                    b.HasOne("MS3_Back_End.Entities.User", "User")
-                        .WithMany("Notifications")
-                        .HasForeignKey("UserId")
+                    b.HasOne("MS3_Back_End.Entities.Student", "student")
+                        .WithMany("notifications")
+                        .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("student");
                 });
 
             modelBuilder.Entity("MS3_Back_End.Entities.Payment", b =>
                 {
-                    b.HasOne("MS3_Back_End.Entities.Enrollment", "Enrollment")
-                        .WithMany("Payments")
-                        .HasForeignKey("EnrollmentId");
+                    b.HasOne("MS3_Back_End.Entities.Enrollment", "enrollment")
+                        .WithMany("payments")
+                        .HasForeignKey("enrollmentId");
 
-                    b.Navigation("Enrollment");
+                    b.Navigation("enrollment");
                 });
 
             modelBuilder.Entity("MS3_Back_End.Entities.StudentAssesment", b =>
                 {
-                    b.HasOne("MS3_Back_End.Entities.Assesment", "Assesment")
-                        .WithMany("StudentAssesments")
+                    b.HasOne("MS3_Back_End.Entities.Assesment", "assesment")
+                        .WithMany("studentAssesments")
                         .HasForeignKey("AssesmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MS3_Back_End.Entities.User", "User")
-                        .WithMany("Assesments")
-                        .HasForeignKey("UserId")
+                    b.HasOne("MS3_Back_End.Entities.Student", "student")
+                        .WithMany("assesments")
+                        .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Assesment");
+                    b.Navigation("assesment");
 
-                    b.Navigation("User");
+                    b.Navigation("student");
+                });
+
+            modelBuilder.Entity("MS3_Back_End.Entities.Admin", b =>
+                {
+                    b.Navigation("auditLogs");
                 });
 
             modelBuilder.Entity("MS3_Back_End.Entities.Assesment", b =>
                 {
-                    b.Navigation("StudentAssesments");
+                    b.Navigation("studentAssesments");
                 });
 
             modelBuilder.Entity("MS3_Back_End.Entities.Course", b =>
                 {
-                    b.Navigation("Assesments");
+                    b.Navigation("assesments");
 
-                    b.Navigation("CourseSchedules");
+                    b.Navigation("courseSchedules");
 
-                    b.Navigation("Feedbacks");
+                    b.Navigation("feedbacks");
                 });
 
             modelBuilder.Entity("MS3_Back_End.Entities.CourseCategory", b =>
                 {
-                    b.Navigation("Courses");
+                    b.Navigation("courses");
                 });
 
             modelBuilder.Entity("MS3_Back_End.Entities.CourseSchedule", b =>
                 {
-                    b.Navigation("Enrollments");
+                    b.Navigation("enrollments");
                 });
 
             modelBuilder.Entity("MS3_Back_End.Entities.Enrollment", b =>
                 {
-                    b.Navigation("Payments");
+                    b.Navigation("payments");
                 });
 
-            modelBuilder.Entity("MS3_Back_End.Entities.User", b =>
+            modelBuilder.Entity("MS3_Back_End.Entities.Student", b =>
                 {
-                    b.Navigation("Address");
+                    b.Navigation("address");
 
-                    b.Navigation("Assesments");
+                    b.Navigation("assesments");
 
-                    b.Navigation("AuditLogs");
+                    b.Navigation("enrollments");
 
-                    b.Navigation("Enrollments");
+                    b.Navigation("feedbacks");
 
-                    b.Navigation("Feedbacks");
-
-                    b.Navigation("Notifications");
+                    b.Navigation("notifications");
                 });
 #pragma warning restore 612, 618
         }
