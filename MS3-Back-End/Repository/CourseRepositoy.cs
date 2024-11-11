@@ -36,13 +36,13 @@ namespace MS3_Back_End.Repository
         }
         public async Task<List<Course>> GetAllCourse()
         {
-            var data = await _Db.Courses.ToListAsync();
+            var data = await _Db.Courses.Where(c=>c.IsDeleted==false).ToListAsync();
             return data;
         }
 
         public async Task<Course> GetCourseById(Guid CourseId)
         {
-            var data = await _Db.Courses.SingleOrDefaultAsync(c=>c.Id==CourseId);
+            var data = await _Db.Courses.SingleOrDefaultAsync(c=>c.Id==CourseId && c.IsDeleted==false);
             return data;
         }
         public async Task<Course> UpdateCourse(Course course)
@@ -53,7 +53,7 @@ namespace MS3_Back_End.Repository
         }
         public async Task<string> DeleteCourse(Course course)
         {
-            _Db.Courses.Remove(course);
+            _Db.Courses.Update(course);
             await _Db.SaveChangesAsync();
             return "Course Deleted Successfull";
         }
