@@ -11,7 +11,13 @@ namespace MS3_Back_End.Controllers
     [ApiController]
     public class EnrollmentController : ControllerBase
     {
-        
+        private readonly IEnrollementService _enrollmentService;
+        public EnrollmentController(IEnrollementService enrollement)
+        {
+            _enrollmentService = enrollement;
+        }
+
+
 
 
 
