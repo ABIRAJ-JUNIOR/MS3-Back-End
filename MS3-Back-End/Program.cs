@@ -25,6 +25,10 @@ namespace MS3_Back_End
             builder.Services.AddScoped<IUserRepository,UserRepository>();
             builder.Services.AddScoped<IUserService,UserService>();
 
+            //course
+            builder.Services.AddScoped<ICourseRepository, CourseRepositoy>();
+            builder.Services.AddScoped<ICourseService,CourseService>();
+
 
             builder.Services.AddCors(options =>
             {
