@@ -51,9 +51,10 @@ namespace MS3_Back_End.Repository
             await _Db.SaveChangesAsync();   
             return data.Entity;
         }
-        public async Task<string> DeleteCourse(Course course)
+        public async Task<string> DeleteCourse(Guid id)
         {
-            _Db.Courses.Remove(course);
+           var data = await _Db.Courses.SingleOrDefaultAsync(c=>c.Id==id);
+            data.IsDeleted=true;
             await _Db.SaveChangesAsync();
             return "Course Deleted Successfull";
         }
