@@ -9,6 +9,8 @@ namespace MS3_Back_End.IService
         Task<AddressResponseDTO> GetAddressbyStuID(Guid id);
         Task<List<AddressResponseDTO>> GetAllAddress();
         Task<AddressResponseDTO> DeleteAddress(Guid id);
+        Task<AddressResponseDTO> UpdateAddress(AddressUpdateRequestDTO Updateaddress, Guid StuId);
+
 
 
 
