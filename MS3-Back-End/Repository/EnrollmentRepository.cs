@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MS3_Back_End.DBContext;
 using MS3_Back_End.Entities;
+using MS3_Back_End.IRepository;
 
 namespace MS3_Back_End.Repository
 {
-    public class EnrollmentRepository
+    public class EnrollmentRepository:IEnrollmentRepository
     {
         private readonly AppDBContext _Db;
         public EnrollmentRepository(AppDBContext db)
@@ -42,9 +43,9 @@ namespace MS3_Back_End.Repository
             await _Db.SaveChangesAsync();
             return data.Entity;
         }
-        public async Task<string> DeleteEnrollment(Course course)
+        public async Task<string> DeleteEnrollment(Enrollment course)
         {
-            _Db.Courses.Update(course);
+            _Db.Enrollments.Update(course);
             await _Db.SaveChangesAsync();
             return "Enrollment IsActivate Successfull";
         }
