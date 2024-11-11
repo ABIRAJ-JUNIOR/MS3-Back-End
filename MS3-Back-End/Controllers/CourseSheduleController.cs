@@ -82,5 +82,18 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [HttpPut("courseId/{CourseId}")]
+        public async Task<IActionResult> UpdateCourse(UpdateCourseSheduleDTO courseReq)
+        {
+            try
+            {
+                var response = await _courseScheduleService.UpdateCourse(courseReq);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
     }
 }
