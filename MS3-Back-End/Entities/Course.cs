@@ -6,7 +6,7 @@ namespace MS3_Back_End.Entities
     {
         [Key]
         public Guid Id { get; set; }
-        public int CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
         public string CourseName { get; set; } = string.Empty;
         public int Level { get; set; }
         public decimal CourseFee { get; set; }
