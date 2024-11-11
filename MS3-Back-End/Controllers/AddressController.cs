@@ -19,8 +19,17 @@ namespace MS3_Back_End.Controllers
         [HttpPost("Add-Addrees")]
         public async Task<IActionResult> AddAddress(AddressRequestDTO address)
         {
-            var data = await _addressService.AddAddress(address);
-            return Ok(data);
+            try
+            {
+
+                var data = await _addressService.AddAddress(address);
+                return Ok(data);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
