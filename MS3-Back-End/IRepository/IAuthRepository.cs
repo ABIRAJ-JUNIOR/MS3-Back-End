@@ -11,5 +11,7 @@ namespace MS3_Back_End.IRepository
         Task<Student> GetStudentByNic(string nic);
         Task<User> GetUserByEmail(string email);
 
+
+        Task<UserRole> GetUserRoleByUserId(Guid userId);
     }
 }

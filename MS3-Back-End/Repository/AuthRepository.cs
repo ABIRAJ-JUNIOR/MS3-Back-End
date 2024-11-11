@@ -54,5 +54,15 @@ namespace MS3_Back_End.Repository
             return userData!;
         }
 
+
+
+
+        public async Task<UserRole> GetUserRoleByUserId(Guid userId)
+        {
+            var userRoleData = await _dbContext.UserRoles.SingleOrDefaultAsync(ur => ur.UserId == userId);
+            return userRoleData!;
+        }
+
+        
     }
 }
