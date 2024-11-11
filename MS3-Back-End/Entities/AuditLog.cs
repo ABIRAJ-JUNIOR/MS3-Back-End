@@ -7,7 +7,7 @@ namespace MS3_Back_End.Entities
         [Key]
         public Guid Id { get; set; }
         public string Action { get; set; } = string.Empty;
-        public DateOnly ActionDate { get; set; }
+        public DateTime ActionDate { get; set; }
         public string Details { get; set; } = string.Empty;
 
         public Guid AdminId { get; set; }

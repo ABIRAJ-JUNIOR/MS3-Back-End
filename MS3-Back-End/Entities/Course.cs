@@ -7,7 +7,7 @@ namespace MS3_Back_End.Entities
         [Key]
         public Guid Id { get; set; }
         public string CourseName { get; set; } = string.Empty;
-        public int Level { get; set; }
+        public CourseLevel Level { get; set; }
         public decimal CourseFee { get; set; }
         public string Description { get; set; } = string.Empty;
         public string Prerequisites { get; set; } = string.Empty;
@@ -23,5 +23,12 @@ namespace MS3_Back_End.Entities
         public ICollection<CourseSchedule>? CourseSchedules { get; set; }
         public ICollection<Feedbacks>? Feedbacks { get; set; }
         public ICollection<Assessment>? Assessments { get; set; }
+    }
+
+    public enum CourseLevel
+    {
+        Beginner,
+        Intermediate,   
+        Advanced,
     }
 }
