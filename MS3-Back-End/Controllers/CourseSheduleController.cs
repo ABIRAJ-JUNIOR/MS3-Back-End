@@ -9,6 +9,12 @@ namespace MS3_Back_End.Controllers
     [ApiController]
     public class CourseSheduleController : ControllerBase
     {
-       
+        private readonly ICourseSheduleService _courseScheduleService;
+
+        public CourseSheduleController(ICourseSheduleService courseScheduleService)
+        {
+            _courseScheduleService = courseScheduleService;
+        }
+
     }
 }
