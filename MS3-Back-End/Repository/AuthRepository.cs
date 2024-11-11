@@ -17,12 +17,14 @@ namespace MS3_Back_End.Repository
         public async Task<Student> SignUp(Student student)
         {
             var studentData = await _dbContext.Students.AddAsync(student);
+            await _dbContext.SaveChangesAsync();
             return studentData.Entity;
         }
 
         public async Task<User> AddUser(User user)
         {
             var userData = await _dbContext.Users.AddAsync(user);
+            await _dbContext.SaveChangesAsync();
             return userData.Entity;
         }
 
@@ -35,6 +37,7 @@ namespace MS3_Back_End.Repository
         public async Task<UserRole> AddUserRole(UserRole userRole)
         {
             var userRoleData = await _dbContext.UserRoles.AddAsync(userRole);
+            await _dbContext.SaveChangesAsync();
             return userRoleData.Entity;
         }
 
