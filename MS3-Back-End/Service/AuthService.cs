@@ -73,5 +73,22 @@ namespace MS3_Back_End.Service
             }
 
         }
+
+        public async Task<string> SignIn(SignInRequestDTO request)
+        {
+            var userData = await _authRepository.GetUserByEmail(request.email);
+
+            if(userData == null)
+            {
+                throw new Exception("User Not Found");
+            }
+
+            if(!BCrypt.Net.BCrypt.Verify(request.password, userData.Password))
+            {
+                throw new Exception("Wrong password.");
+            }
+
+            return "Sign In Successfully";
+        }
     }
 }

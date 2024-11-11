@@ -54,12 +54,5 @@ namespace MS3_Back_End.Repository
             return userData!;
         }
 
-
-        //SignIn
-        public async Task<User> SignIn(string email)
-        {
-            var userData = await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email);
-            return userData!;
-        }
     }
 }

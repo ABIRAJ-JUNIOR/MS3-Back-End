@@ -6,5 +6,6 @@ namespace MS3_Back_End.IService
     public interface IAuthService
     {
         Task<string> SignUp(SignUpRequestDTO request);
+        Task<string> SignIn(SignInRequestDTO request);
     }
 }
