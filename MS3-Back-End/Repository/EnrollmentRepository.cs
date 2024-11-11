@@ -24,7 +24,13 @@ namespace MS3_Back_End.Repository
             var data = await _Db.Enrollments.Where(x=>x.StudentId == SearchId).ToListAsync();
             return data;
         }
-        
+
+        public async Task<List<Enrollment>> GetEnrollments()
+        {
+            var data = await _Db.Enrollments.ToListAsync();
+            return data;
+        }
+
 
 
 
