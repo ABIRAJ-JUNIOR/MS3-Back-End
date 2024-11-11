@@ -7,6 +7,8 @@ namespace MS3_Back_End.IService
     {
         Task<AddressResponseDTO> AddAddress(AddressRequestDTO address);
         Task<AddressResponseDTO> GetAddressbyStuID(Guid id);
+        Task<List<AddressResponseDTO>> GetAllAddress();
+
 
 
     }
