@@ -14,6 +14,7 @@ namespace MS3_Back_End.Repository
             _dbContext = dbContext;
         }
 
+        //SignUP 
         public async Task<Student> SignUp(Student student)
         {
             var studentData = await _dbContext.Students.AddAsync(student);
@@ -48,6 +49,14 @@ namespace MS3_Back_End.Repository
         }
 
         public async Task<User> GetUserByEmail(string email)
+        {
+            var userData = await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email);
+            return userData!;
+        }
+
+
+        //SignIn
+        public async Task<User> SignIn(string email)
         {
             var userData = await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email);
             return userData!;

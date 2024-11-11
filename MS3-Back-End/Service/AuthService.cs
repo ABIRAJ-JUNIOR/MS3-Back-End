@@ -1,5 +1,4 @@
 ﻿using MS3_Back_End.DTOs.RequestDTOs.Auth;
-using MS3_Back_End.DTOs.ResponseDTOs.Auth;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
