@@ -84,6 +84,12 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        public async Task<IActionResult> SearchbyCity(string searchText)
+        {
+           var data= await _addressService.SearchbyCity(searchText);    
+            return Ok(data);
+        }
+
 
 
 
