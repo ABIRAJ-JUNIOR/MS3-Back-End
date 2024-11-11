@@ -6,12 +6,12 @@ namespace MS3_Back_End.Entities
     {
         [Key]
         public Guid Id { get; set; }
-        public Guid CourseId { get; set; }
         public string FeedBackText { get; set; } = string.Empty;
         public int Rating { get; set; }
         public string FeedBackDate { get; set; } = string.Empty;
 
         public Guid StudentId { get; set; }
+        public Guid CourseId { get; set; }
 
         //Reference
         public Student? Student { get; set; }

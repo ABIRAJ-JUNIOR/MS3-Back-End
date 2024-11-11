@@ -26,6 +26,10 @@ namespace MS3_Back_End
             builder.Services.AddScoped<IAuthRepository,AuthRepository>();
             builder.Services.AddScoped<IAuthService,AuthService>();
 
+            //Address
+            builder.Services.AddScoped<IAddressRepository,AddressRepository>();
+            builder.Services.AddScoped<IAddressService,AddressServise>();
+
             //course
             builder.Services.AddScoped<ICourseRepository, CourseRepositoy>();
             builder.Services.AddScoped<ICourseService,CourseService>();

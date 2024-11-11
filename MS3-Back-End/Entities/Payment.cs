@@ -6,13 +6,14 @@ namespace MS3_Back_End.Entities
     {
         [Key]
         public Guid Id { get; set; }
-        public Guid EnrollementId { get; set; }
         public PaymentTypes PaymentType { get; set; }
         public PaymentMethots PaymentMethod { get; set; }
         public decimal AmmountPaid { get; set; }
         public DateOnly PaymentDate { get; set; }
         public string ImagePath { get; set; } = string.Empty;
         public int InstallmentNumber { get; set; }
+
+        public Guid EnrollementId { get; set; }
 
         //Reference
         public Enrollment? Enrollment { get; set; }

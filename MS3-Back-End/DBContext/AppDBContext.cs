@@ -25,8 +25,8 @@ namespace MS3_Back_End.DBContext
         public DbSet<Feedbacks> Feedbacks { get; set; }
         public DbSet<ContactUs> ContactUs { get; set; }
         public DbSet<AuditLog> AuditLogs { get; set; }
-        public DbSet<Assessment> Assesments { get; set; }
-        public DbSet<StudentAssessment> StudentAssesments { get; set; }
+        public DbSet<Assessment> Assessments { get; set; }
+        public DbSet<StudentAssessment> StudentAssessments { get; set; }
 
     }
 }
