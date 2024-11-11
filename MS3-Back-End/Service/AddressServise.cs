@@ -55,6 +55,24 @@ namespace MS3_Back_End.Service
             };
             return Returndata;
         }
+        public async Task<List<AddressResponseDTO>> GetAllAddress()
+        {
+              var data= await _addressRepository.GetAllAddress();
+               var Returndata = data.Select(x => new AddressResponseDTO()
+               {
+                   AddressLine1 = x.AddressLine1,
+                   AddressLine2 = x.AddressLine2,
+                   City = x.City,
+                   PostalCode = x.PostalCode,
+                   Country = x.Country,
+                   StudentId=x.StudentId,
+                   
+
+               }).ToList();
+
+              return Returndata;
+        }
+
 
 
     }
