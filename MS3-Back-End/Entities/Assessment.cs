@@ -11,9 +11,9 @@ namespace MS3_Back_End.Entities
         public DateTime EndDate { get; set; }
         public int TotalMarks { get; set; }
         public int PassMarks { get; set; }
-        public DateOnly CreatedDate { get; set; }
-        public DateOnly UpdateDate { get; set; }
-        public bool IsActive { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime UpdateDate { get; set; }
+        public AssessmentStatus Status { get; set; }
 
         public Guid CourseId { get; set; }
 
@@ -26,5 +26,12 @@ namespace MS3_Back_End.Entities
     {
         Quiz = 1,
         Exam = 2
+    }
+
+    public enum AssessmentStatus
+    {
+        NotStarted = 1,   
+        InProgress = 2,
+        Completed = 3
     }
 }
