@@ -21,8 +21,23 @@ namespace MS3_Back_End.Controllers
         {
             try
             {
-                var response = await _authService.SignUp(request);
-                return Ok(response);
+                var data = await _authService.SignUp(request);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPatch("signin")]
+
+        public async Task<IActionResult> SignIn(SignInRequestDTO request)
+        {
+            try
+            {
+                var data = await _authService.SignIn(request);
+                return Ok(data);
             }
             catch (Exception ex)
             {

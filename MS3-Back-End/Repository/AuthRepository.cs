@@ -54,7 +54,11 @@ namespace MS3_Back_End.Repository
             return userData!;
         }
 
-
+        public async Task<Role> GetRoleById(Guid id)
+        {
+            var roleData = await _dbContext.Roles.SingleOrDefaultAsync(r => r.Id == id);
+            return roleData!;
+        }
 
 
         public async Task<UserRole> GetUserRoleByUserId(Guid userId)
@@ -63,6 +67,17 @@ namespace MS3_Back_End.Repository
             return userRoleData!;
         }
 
-        
+
+        public async Task<Student> GetStudentById(Guid id)
+        {
+            var studentData = await _dbContext.Students.SingleOrDefaultAsync(s => s.Id == id);
+            return studentData!;
+        }
+
+        public async Task<Admin> GetAdminById(Guid id)
+        {
+            var adminData = await _dbContext.Admins.SingleOrDefaultAsync(s => s.Id == id);
+            return adminData!;
+        }
     }
 }

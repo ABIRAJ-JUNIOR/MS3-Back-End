@@ -95,18 +95,44 @@ namespace MS3_Back_End.Service
             }
 
             var userRoleData = await _authRepository.GetUserRoleByUserId(userData.Id);
+            var roleData = await _authRepository.GetRoleById(userRoleData.RoleId);
             
+            if(roleData.Name == "Student")
+            {
+                var studentData = await _authRepository.GetStudentById(userData.Id);
+                var tokenRequest = new TokenRequestDTO()
+                {
+                    Id = studentData.Id,
+                    Name = studentData.FirstName,
+                    Email = userData.Email,
+                    Role = roleData.Name
+                };
 
-            return "Sign In Successfully";
+                return CreateToken(tokenRequest);
+            }
+            else if(roleData.Name == "Administrator" || roleData.Name == "Instructor")
+            {
+                var adminData = await _authRepository.GetAdminById(userData.Id);
+                var tokenRequest = new TokenRequestDTO()
+                {
+                    Id = adminData.Id,
+                    Name = adminData.FirstName,
+                    Email = userData.Email,
+                    Role = roleData.Name
+                };
+                return CreateToken(tokenRequest);
+            }
+
+            return null!;
         }
 
         private string CreateToken(TokenRequestDTO request)
         {
             var claimsList = new List<Claim>();
-            //claimsList.Add(new Claim("Id", user.Id.ToString()));
-            //claimsList.Add(new Claim("Name", user.Name));
-            //claimsList.Add(new Claim("Email", user.Email));
-            //claimsList.Add(new Claim("Role", user.Role.ToString()));
+            claimsList.Add(new Claim("Id", request.Id.ToString()));
+            claimsList.Add(new Claim("Name", request.Name));
+            claimsList.Add(new Claim("Email", request.Email));
+            claimsList.Add(new Claim("Role", request.Role.ToString()));
 
 
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]!));
