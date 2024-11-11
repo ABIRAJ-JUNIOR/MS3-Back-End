@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using MS3_Back_End.DTOs.RequestDTOs;
+using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IService;
 

@@ -7,7 +7,6 @@ namespace MS3_Back_End.Entities
     {
         [Key]
         public Guid Id { get; set; }
-        public Guid UserId { get; set; }
         public Guid AssesmentId { get; set; }
         public int MarksObtaines { get; set; }
         public string Grade { get; set; } = string.Empty;
@@ -15,8 +14,10 @@ namespace MS3_Back_End.Entities
         public DateTime DateEvaluted { get; set; }
         public StudentAssesmentStatus StudentAssesmentStatus { get; set; }
 
+        public Guid StudentId { get; set; }
+
         //Reference
-        public User? User { get; set; }
+        public Student? Student { get; set; }
         public Assesment? Assesment { get; set; }
 
     }

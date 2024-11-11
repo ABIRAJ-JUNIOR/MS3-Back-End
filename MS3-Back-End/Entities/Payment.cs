@@ -11,6 +11,7 @@ namespace MS3_Back_End.Entities
         public PaymentMethots PaymentMethod { get; set; }
         public decimal AmmountPaid { get; set; }
         public DateOnly PaymentDate { get; set; }
+        public string ImagePath { get; set; } = string.Empty;
         public int InstallmentNumber { get; set; }
 
         //Reference
@@ -19,15 +20,15 @@ namespace MS3_Back_End.Entities
 
     public enum PaymentTypes
     {
-        FullPayment=1,
-        Installment=2
+        FullPayment = 1,
+        Installment = 2
     }
 
     public enum PaymentMethots
     {
-        Card=1,
-        Online=2,
-        Bank=3,
-        Paypal=4
+        Card = 1,
+        BankTransfer = 2,
+        OnlineBanking = 3,
+        Cash = 4
     }
 }
