@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MS3_Back_End.Controllers;
 using MS3_Back_End.DBContext;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
@@ -46,6 +47,12 @@ namespace MS3_Back_End.Repository
         {
             var addresses=await _dbContext.Addresses.ToListAsync();
             return addresses;
+        }
+        public async Task<Address> DeleteAddress(Address address)
+        {
+            var data=  _dbContext.Addresses.Remove(address);
+            _dbContext.SaveChanges();
+            return data.Entity;
         }
 
     }
