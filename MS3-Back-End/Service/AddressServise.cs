@@ -41,6 +41,21 @@ namespace MS3_Back_End.Service
             return Returndata;
 
         }
+        public async Task<AddressResponseDTO> GetAddressbyStuID(Guid  id)
+        {
+            var data = await _addressRepository.GetAddressbyStuID(id);
+            var Returndata = new AddressResponseDTO()
+            {
+                AddressLine1 = data.AddressLine1,
+                AddressLine2 = data.AddressLine2,
+                City = data.City,
+                PostalCode = data.PostalCode,
+                Country = data.Country,
+                StudentId = data.StudentId,
+            };
+            return Returndata;
+        }
+
 
     }
 }
