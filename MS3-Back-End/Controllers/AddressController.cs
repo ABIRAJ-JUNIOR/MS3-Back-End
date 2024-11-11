@@ -74,8 +74,15 @@ namespace MS3_Back_End.Controllers
         [HttpPut("Update-Address")]
         public async  Task<IActionResult> UpdateAddress(AddressUpdateRequestDTO addressUpdate,Guid stuID)
         {
-            var data= await _addressService.UpdateAddress(addressUpdate,stuID);
-            return Ok(data);
+            try
+            {
+                var data = await _addressService.UpdateAddress(addressUpdate, stuID);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
