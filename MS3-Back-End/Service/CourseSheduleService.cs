@@ -6,7 +6,7 @@ using MS3_Back_End.IRepository;
 
 namespace MS3_Back_End.Service
 {
-    public class CourseSheduleService
+    public class CourseSheduleService : ICourseSheduleService
     {
         private readonly ICourseSheduleRepository _courseSheduleRepository;
         public CourseSheduleService(ICourseSheduleRepository courseSheduleRepository)
