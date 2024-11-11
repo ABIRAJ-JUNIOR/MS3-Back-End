@@ -167,6 +167,17 @@ namespace MS3_Back_End.Service
         }
 
 
+        public async Task<string> DeleteEnrollment(Guid Id)
+        {
+            var GetData = await _enrollmentRepository.GetEnrollmentById(Id);
+            GetData.IsActive = false;
+            if (GetData == null)
+            {
+                throw new Exception("Course Id not Found");
+            }
+            var data = await _enrollmentRepository.DeleteEnrollment(GetData);
+            return data;
+        }
 
 
 
