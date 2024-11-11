@@ -4,11 +4,12 @@ using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Enrollment;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
+using MS3_Back_End.IService;
 using MS3_Back_End.Repository;
 
 namespace MS3_Back_End.Service
 {
-    public class EnrollmentService
+    public class EnrollmentService :IEnrollementService
     {
         private readonly IEnrollmentRepository _enrollmentRepository;
         public EnrollmentService(IEnrollmentRepository enrollmentRepository)
@@ -45,7 +46,7 @@ namespace MS3_Back_End.Service
         }
 
 
-        public async Task<List<EnrollmentResponseDTO>> SearchCourseByUserId(Guid SearchUserId)
+        public async Task<List<EnrollmentResponseDTO>> SearchEnrollmentByUserId(Guid SearchUserId)
         {
             var data = await _enrollmentRepository.SearchEnrollments(SearchUserId);
             if (data == null)
