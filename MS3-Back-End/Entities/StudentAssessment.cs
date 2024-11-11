@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MS3_Back_End.Entities
 {
-    public class StudentAssesment
+    public class StudentAssessment
     {
         [Key]
         public Guid Id { get; set; }
@@ -12,19 +11,19 @@ namespace MS3_Back_End.Entities
         public string Grade { get; set; } = string.Empty;
         public string FeedBack { get; set; } = string.Empty;
         public DateTime DateEvaluted { get; set; }
-        public StudentAssesmentStatus StudentAssesmentStatus { get; set; }
+        public StudentAssessmentStatus StudentAssessmentStatus { get; set; }
 
         public Guid StudentId { get; set; }
 
         //Reference
         public Student? Student { get; set; }
-        public Assesment? Assesment { get; set; }
+        public Assessment? Assessment { get; set; }
 
     }
-    public enum StudentAssesmentStatus
+    public enum StudentAssessmentStatus
     {
-        Absent=1,
-        Completed=2,
-        Reviewed=3
+        Absent = 1,
+        Completed = 2,
+        Reviewed = 3
     }
 }

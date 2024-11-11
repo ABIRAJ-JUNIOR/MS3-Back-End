@@ -21,6 +21,6 @@ namespace MS3_Back_End.Entities
         public CourseCategory? Category { get; set; }
         public ICollection<CourseSchedule>? CourseSchedules { get; set; }
         public ICollection<Feedbacks>? Feedbacks { get; set; }
-        public ICollection<Assesment>? Assesments { get; set; }
+        public ICollection<Assessment>? Assessments { get; set; }
     }
 }

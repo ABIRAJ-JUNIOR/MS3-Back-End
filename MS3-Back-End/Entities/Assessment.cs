@@ -2,12 +2,12 @@
 
 namespace MS3_Back_End.Entities
 {
-    public class Assesment
+    public class Assessment
     {
         [Key]
         public Guid Id { get; set; }
         public Guid CourseId { get; set; }
-        public AssesmentType AssesmentType { get; set; }
+        public AssessmentType AssessmentType { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int TotalMarks { get; set; }
@@ -17,12 +17,12 @@ namespace MS3_Back_End.Entities
 
         //Reference
         public Course? Course { get; set; }
-        public ICollection<StudentAssesment>? StudentAssesments { get; set; }
+        public ICollection<StudentAssessment>? StudentAssessments { get; set; }
     }
 
-    public enum AssesmentType
+    public enum AssessmentType
     {
-        Quiz=1,
-        Exam=2
+        Quiz = 1,
+        Exam = 2
     }
 }

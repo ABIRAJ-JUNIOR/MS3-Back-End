@@ -13,5 +13,8 @@ namespace MS3_Back_End.IRepository
 
 
         Task<UserRole> GetUserRoleByUserId(Guid userId);
+        Task<Student> GetStudentById(Guid id);
+        Task<Role> GetRoleById(Guid id);
+        Task<Admin> GetAdminById(Guid id);
     }
 }
