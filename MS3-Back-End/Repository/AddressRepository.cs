@@ -3,6 +3,7 @@ using MS3_Back_End.Controllers;
 using MS3_Back_End.DBContext;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
+using System.Runtime.InteropServices;
 
 namespace MS3_Back_End.Repository
 {
@@ -56,6 +57,12 @@ namespace MS3_Back_End.Repository
             var data=  _dbContext.Addresses.Update(address);
             _dbContext.SaveChanges();
             return data.Entity;
+        }
+
+        public async Task<List<Address>>  SearchbyCity(string searchText)
+        {
+            var data=  _dbContext.Addresses.Where(a=>a.City.Contains(searchText)).ToList();
+            return data;
         }
 
     }
