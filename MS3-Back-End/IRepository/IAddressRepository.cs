@@ -8,6 +8,8 @@ namespace MS3_Back_End.IRepository
         Task<Address> GetAddressbyStuID(Guid id);
         Task<List<Address>> GetAllAddress();
         Task<Address> DeleteAddress(Address address);
+         Task<Address> UpdateAddress(Address address);
+
 
 
 
