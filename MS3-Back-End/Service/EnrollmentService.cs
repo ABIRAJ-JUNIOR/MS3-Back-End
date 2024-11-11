@@ -122,6 +122,53 @@ namespace MS3_Back_End.Service
 
 
 
+        public async Task<EnrollmentResponseDTO> UpdateEnrollment(EnrollmentUpdateDTO enrollment)
+        {
+            var getData = await _enrollmentRepository.GetEnrollmentById(enrollment.Id);
+
+            if (enrollment.EnrollmentDate.HasValue)
+            {
+                getData.EnrollmentDate = enrollment.EnrollmentDate.Value;
+            }
+
+            if (enrollment.PaymentStatus.HasValue)
+            {
+                getData.PaymentStatus = enrollment.PaymentStatus.Value;
+            }
+
+            if (enrollment.IsActive.HasValue)
+                getData.IsActive = enrollment.IsActive.Value;
+
+            if (enrollment.StudentId.HasValue)
+            {
+                getData.StudentId = enrollment.StudentId.Value;
+            }
+
+            if (enrollment.CourseSheduleId.HasValue)
+            {
+                getData.CourseSheduleId = enrollment.CourseSheduleId.Value;
+            }
+
+
+            var updatedData = await _enrollmentRepository.UpdateEnrollment(getData);
+
+            var enrollmentResponse = new EnrollmentResponseDTO
+            {
+                Id = updatedData.Id,
+                EnrollmentDate = updatedData.EnrollmentDate,
+                PaymentStatus = updatedData.PaymentStatus,
+                IsActive = updatedData.IsActive,
+                StudentId = updatedData.StudentId,
+                CourseSheduleId = updatedData.CourseSheduleId,
+
+            };
+
+            return enrollmentResponse;
+        }
+
+
+
+
 
 
 
