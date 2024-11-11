@@ -114,6 +114,23 @@ namespace MS3_Back_End.Service
             return returndata;
 
         }
+        public async Task<List<AddressResponseDTO>> SearchbyCity(string searchText)
+        {
+            var datalist= await _addressRepository.SearchbyCity(searchText);
+            var returndatalist=datalist.Select(d => new AddressResponseDTO()
+            {
+                AddressLine1 =d.AddressLine1,
+                AddressLine2 = d.AddressLine2,
+                City = d.City,   
+                PostalCode = d.PostalCode,
+                Country = d.Country,
+                StudentId = d.StudentId,
+
+            }).ToList();
+
+            return returndatalist;
+        }
+
 
 
 
