@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MS3_Back_End.DTOs.RequestDTOs.Address;
+using MS3_Back_End.DTOs.ResponseDTOs.Address;
 using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Controllers
@@ -14,7 +16,14 @@ namespace MS3_Back_End.Controllers
         {
             _addressService = addressService;
         }
+        [HttpPost("Add-Addrees")]
+        public async Task<IActionResult> AddAddress(AddressRequestDTO address)
+        {
+            var data = await _addressService.AddAddress(address);
+            return Ok(data);
+        }
 
-        
+
+
     }
 }
