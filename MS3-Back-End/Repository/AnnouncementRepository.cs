@@ -32,11 +32,17 @@ namespace MS3_Back_End.Repository
             var data = await _Db.Announcements.Where(n => n.Title.Contains(SearchText)).ToListAsync();
             return data;
         }
-        public async Task<List<Announcement>> GetAllCourse()
+        public async Task<List<Announcement>> GetAllAnnouncement()
         {
             var data = await _Db.Announcements.Where(c => c.IsActive == true).ToListAsync();
             return data;
         }
+        public async Task<Announcement> GetAnnouncemenntByID(Guid AnnouncementId)
+        {
+            var data = await _Db.Announcements.SingleOrDefaultAsync(c => c.Id == AnnouncementId && c.IsActive == true);
+            return data;
+        }
+
 
 
 
