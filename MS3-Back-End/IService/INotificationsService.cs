@@ -12,7 +12,7 @@ namespace MS3_Back_End.IService
 
          Task<NotificationResponceDTO> updateIsread(Guid Id);
 
-        Task<NotificationResponceDTO> DeleteNotification(Guid id);
+         Task<NotificationResponceDTO> DeleteNotification(Guid id);
 
 
 
