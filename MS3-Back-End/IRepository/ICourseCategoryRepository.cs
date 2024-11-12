@@ -6,6 +6,6 @@ namespace MS3_Back_End.IRepository
     {
         Task<CourseCategory> AddCategory(CourseCategory categoryReq);
         Task<CourseCategory> GetCourseCategoryById(Guid Id);
-
+        Task<CourseCategory> UpdateCourseCategory(CourseCategory courseCategory);
     }
 }
