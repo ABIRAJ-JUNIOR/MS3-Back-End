@@ -32,6 +32,11 @@ namespace MS3_Back_End.Repository
             var data = await _Db.Announcements.Where(n => n.Title.Contains(SearchText)).ToListAsync();
             return data;
         }
+        public async Task<List<Announcement>> GetAllCourse()
+        {
+            var data = await _Db.Announcements.Where(c => c.IsActive == true).ToListAsync();
+            return data;
+        }
 
 
 
