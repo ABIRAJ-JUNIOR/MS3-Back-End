@@ -6,5 +6,7 @@ namespace MS3_Back_End.IRepository
     {
         Task<Assessment> AddAssessment(Assessment assessment);
         Task<ICollection<Assessment>> GetAllAssessment();
+        Task<Assessment> UpdateAssessment(Assessment assessment);
+        Task<Assessment> GetAssessmentById(Guid id);
     }
 }

@@ -26,5 +26,18 @@ namespace MS3_Back_End.Repository
             var assessmentList = await _dbContext.Assessments.ToListAsync();
             return assessmentList!;
         }
+
+        public async Task<Assessment> UpdateAssessment(Assessment assessment)
+        {
+            var assessmentData = _dbContext.Assessments.Update(assessment);
+            await _dbContext.SaveChangesAsync();
+            return assessmentData.Entity;
+        }
+
+        public  async Task<Assessment> GetAssessmentById(Guid id)
+        {
+            var assessmentData = await _dbContext.Assessments.SingleOrDefaultAsync(a => a.Id == id);
+            return assessmentData!;
+        }
     }
 }
