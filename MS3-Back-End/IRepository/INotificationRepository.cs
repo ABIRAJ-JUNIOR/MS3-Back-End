@@ -5,6 +5,8 @@ namespace MS3_Back_End.IRepository
     public interface INotificationRepository
     {
          Task<Notification> AddNotification(Notification notification);
+         Task<List<Notification>> GetNotificationBYStuID(Guid Id);
+
 
     }
 }
