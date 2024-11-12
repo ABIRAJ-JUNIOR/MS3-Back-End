@@ -32,6 +32,12 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [HttpGet("Assessments")]
 
+        public async Task<IActionResult> GetAllAssessment()
+        {
+            var assessmentList = await _service.GetAllAssessment();
+            return Ok(assessmentList);
+        }
     }
 }
