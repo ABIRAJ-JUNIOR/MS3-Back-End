@@ -32,8 +32,15 @@ namespace MS3_Back_End.Controllers
         [HttpGet]
         public async Task<IActionResult> GetallAuditlogs()
         {
-            var data= await _auditLogService.GetAllAuditlogs();
-            return Ok(data);
+            try
+            {
+                var data = await _auditLogService.GetAllAuditlogs();
+                return Ok(data);
+            }
+            catch (Exception ex) 
+            {
+              return Ok(ex.Message);
+            }
         
         }
     }
