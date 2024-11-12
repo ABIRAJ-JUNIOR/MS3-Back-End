@@ -7,7 +7,7 @@ namespace MS3_Back_End.Entities
         [Key]
         public Guid Id { get; set; }
         public int MarksObtaines { get; set; }
-        public string Grade { get; set; } = string.Empty;
+        public Grade Grade { get; set; }
         public string FeedBack { get; set; } = string.Empty;
         public DateTime DateSubmitted { get; set; }
         public DateTime DateEvaluated { get; set; }
@@ -25,5 +25,11 @@ namespace MS3_Back_End.Entities
     {
         Completed = 1,
         Reviewed = 2
+    }
+
+    public enum Grade
+    {
+        Pass = 1,
+        Fail = 2
     }
 }

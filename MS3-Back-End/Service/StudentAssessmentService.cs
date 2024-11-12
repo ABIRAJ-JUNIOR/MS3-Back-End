@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DTOs.RequestDTOs.StudentAssessment;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using MS3_Back_End.DTOs.RequestDTOs.StudentAssessment;
 using MS3_Back_End.DTOs.ResponseDTOs.StudentAssessment;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
@@ -89,6 +90,30 @@ namespace MS3_Back_End.Service
         public async Task<string> EvaluateStudentAssessment(Guid id , EvaluationRequestDTO request)
         {
             var studentAssessmentData = await _repository.StudentAssessmentGetById(id);
+            if(studentAssessmentData == null)
+            {
+                throw new Exception("Student Assessment not found");
+            }
+            var assessmentData = await _assessmentRepository.GetAssessmentById(studentAssessmentData.AssesmentId);
+            if(assessmentData == null)
+            {
+                throw new Exception("Assessment not found");
+            }
+
+            if (request.MarksObtaines < 0 || request.MarksObtaines > assessmentData.TotalMarks)
+            {
+                throw new Exception("Invalid Marks");
+            }
+
+            studentAssessmentData.MarksObtaines = request.MarksObtaines;
+            studentAssessmentData.Grade = request.MarksObtaines < assessmentData.PassMarks ? Grade.Fail : Grade.Pass;
+            studentAssessmentData.FeedBack = request.FeedBack;
+            studentAssessmentData.DateEvaluated = DateTime.Now;
+            studentAssessmentData.StudentAssessmentStatus = StudentAssessmentStatus.Reviewed;
+
+            var updatedData = await _repository.EvaluateStudentAssessment(studentAssessmentData);
+
+            return "Assessment Evaluated Successfully";
         }
     }
 }
