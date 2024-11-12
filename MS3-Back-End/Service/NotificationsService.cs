@@ -75,6 +75,23 @@ namespace MS3_Back_End.Service
             return returndata;
 
         }
+        public async Task<NotificationResponceDTO> updateIsread(Guid Id)
+        {
+            var notification = await _notificationRepository.GetNotificationbyID(Id);
+            notification.IsRead = true;
+            var data= await _notificationRepository.updatenotification(notification);
+
+            var returndata = new NotificationResponceDTO()
+            {
+                Id = data.Id,
+                DateSent = data.DateSent,
+                IsRead = data.IsRead,
+                Message = data.Message,
+                NotificationType = data.NotificationType,
+                StudentId = data.StudentId,
+            };
+            return returndata;
+        }
 
     }
 }
