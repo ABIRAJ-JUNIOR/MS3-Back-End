@@ -35,7 +35,16 @@ namespace MS3_Back_End.Repository
         public async Task<StudentAssessment> AddStudentAssessment(StudentAssessment studentAssessment)
         {
             var assessmentData = await _dbcontext.StudentAssessments.AddAsync(studentAssessment);
+            await _dbcontext.SaveChangesAsync();
             return assessmentData.Entity;
         }
+
+        public async Task<StudentAssessment> EvaluateStudentAssessment(StudentAssessment studentAssessment)
+        {
+            var updatedData =  _dbcontext.StudentAssessments.Update(studentAssessment);
+            await _dbcontext.SaveChangesAsync();
+            return updatedData.Entity;
+        }
+
     }
 }
