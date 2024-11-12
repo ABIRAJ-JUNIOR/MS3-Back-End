@@ -38,5 +38,11 @@ namespace MS3_Back_End.Repository
             _dbContext.SaveChanges();
             return notification;
         }
+        public async Task<Notification> DeleteNotification(Notification notification)
+        {
+            var data= _dbContext.Notifications.Remove(notification);
+            _dbContext.SaveChanges();
+            return notification;
+        }
     }
 }
