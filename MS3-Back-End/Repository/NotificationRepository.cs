@@ -19,5 +19,10 @@ namespace MS3_Back_End.Repository
                   _dbContext.SaveChanges(); 
                     return notification;
         }
+        public async Task<List<Notification>> GetNotificationBYStuID(Guid Id)
+        {
+            var datas= _dbContext.Notifications.Where(a=>a.StudentId==Id).ToList();
+            return datas;
+        }
     }
 }
