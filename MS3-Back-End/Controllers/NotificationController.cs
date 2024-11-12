@@ -74,8 +74,15 @@ namespace MS3_Back_End.Controllers
         [HttpDelete("dellete- notification")]
         public async Task<IActionResult> DeleteNotification(Guid id)
         {
-            var data=await _notificationsService.DeleteNotification(id);
-            return Ok(data);
+            try
+            {
+                 await _notificationsService.DeleteNotification(id);
+                return Ok("delleted");
+            }
+            catch (Exception ex) 
+            { 
+              return BadRequest(ex.Message);
+            }
         }
 
 
