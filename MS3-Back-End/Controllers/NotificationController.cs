@@ -20,8 +20,15 @@ namespace MS3_Back_End.Controllers
         [HttpPost("Add-Notification")]
         public async Task<IActionResult> AddNotification(NotificationRequestDTO notificationRequestDTO) 
         {
-            var data = await _notificationsService.AddNotification(notificationRequestDTO);
-            return Ok(data);
+            try
+            {
+                var data = await _notificationsService.AddNotification(notificationRequestDTO);
+                return Ok(data);
+            }
+            catch (Exception ex) 
+            {
+              return BadRequest(ex.Message);
+            }
         
         }
     }
