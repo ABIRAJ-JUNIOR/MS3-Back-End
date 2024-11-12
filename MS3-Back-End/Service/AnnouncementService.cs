@@ -10,7 +10,13 @@ namespace MS3_Back_End.Service
 {
     public class AnnouncementService 
     {
-      
+        private readonly IAnnouncementRepository _AnnouncentRepo;
+        public AnnouncementService(IAnnouncementRepository Announcement)
+        {
+            _AnnouncentRepo = Announcement;
+        }
+
+
 
 
 
