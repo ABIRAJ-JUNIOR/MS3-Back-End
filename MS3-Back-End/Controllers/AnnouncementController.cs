@@ -81,6 +81,19 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAnnouncement(Guid id)
+        {
+            try
+            {
+                var result = await _announcementService.DeleteAnnouncement(id);
+                return Ok(result); 
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
 
     }
