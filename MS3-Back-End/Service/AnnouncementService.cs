@@ -19,7 +19,7 @@ namespace MS3_Back_End.Service
         }
 
 
-        public async Task<AnnouncementResponseDTO> AddCourse(AnnouncementRequestDTO AnnouncementReq)
+        public async Task<AnnouncementResponseDTO> AddAnnouncement(AnnouncementRequestDTO AnnouncementReq)
         {
 
             var Announcement = new Announcement

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MS3_Back_End.DTOs.RequestDTOs;
 using MS3_Back_End.DTOs.RequestDTOs.Announcement;
 using MS3_Back_End.IService;
 
@@ -25,7 +26,7 @@ namespace MS3_Back_End.Controllers
 
             try
             {
-                var announcement = await _announcementService.AddCourse(announcementRequest);
+                var announcement = await _announcementService.AddAnnouncement(announcementRequest);
                 return Ok(announcement);
             }
             catch (Exception ex)
@@ -33,7 +34,19 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [HttpGet]
+        public async Task<IActionResult> GetAllAnnouncements()
+        {
+            try
+            {
+                var announcements = await _announcementService.GetAllAnnouncement();
+                return Ok(announcements);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
 
 
 

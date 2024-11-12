@@ -9,7 +9,7 @@ namespace MS3_Back_End.Entities
         public DateTime DatePosted { get; set; }
         public DateTime ExpirationDate { get; set; }
         public AudienceType AudienceType { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 
     public enum AudienceType

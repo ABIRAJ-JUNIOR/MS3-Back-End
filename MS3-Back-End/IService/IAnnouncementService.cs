@@ -6,7 +6,7 @@ namespace MS3_Back_End.IService
 {
     public interface IAnnouncementService
     {
-        Task<AnnouncementResponseDTO> AddCourse(AnnouncementRequestDTO AnnouncementReq);
+        Task<AnnouncementResponseDTO> AddAnnouncement(AnnouncementRequestDTO AnnouncementReq);
         Task<List<AnnouncementResponseDTO>> SearchAnnouncement(string SearchText);
         Task<List<AnnouncementResponseDTO>> GetAllAnnouncement();
         Task<AnnouncementResponseDTO> GetAnnouncementById(Guid CourseId);
