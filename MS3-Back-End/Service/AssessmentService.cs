@@ -49,6 +49,31 @@ namespace MS3_Back_End.Service
             return response;
         }
 
+        public async Task<ICollection<AssessmentResponseDTO>> GetAllAssessment()
+        {
+            var assessmentList = await _repository.GetAllAssessment();
 
+            var responseList = new List<AssessmentResponseDTO>();
+
+            foreach (var item in assessmentList)
+            {
+                var responseObj = new AssessmentResponseDTO()
+                {
+                    Id = item.Id,
+                    CourseId = item.CourseId,
+                    AssessmentType = item.AssessmentType,
+                    StartDate = item.StartDate,
+                    EndDate = item.EndDate,
+                    TotalMarks = item.TotalMarks,
+                    PassMarks = item.PassMarks,
+                    CreatedDate = item.CreatedDate,
+                    UpdateDate = item.UpdateDate,
+                    Status = item.Status,
+                };
+                responseList.Add(responseObj);
+            }
+
+            return responseList;
+        }
     }
 }
