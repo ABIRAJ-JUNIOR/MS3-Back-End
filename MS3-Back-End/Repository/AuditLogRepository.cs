@@ -18,7 +18,7 @@ namespace MS3_Back_End.Repository
             var data=await _dbContext.AuditLogs.AddAsync(auditLog);
             return data.Entity;
         }   
-        public async Task<List<AuditLog>> GetAllAuditlogs(List<AuditLog> auditLogs)
+        public async Task<List<AuditLog>> GetAllAuditlogs()
         {
             var data= await _dbContext.AuditLogs.ToListAsync();
             return data;
