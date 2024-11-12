@@ -32,7 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\RequestDTOs\CourseCategory\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 
