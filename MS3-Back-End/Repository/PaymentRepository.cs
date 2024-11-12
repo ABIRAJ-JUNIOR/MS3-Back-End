@@ -1,4 +1,5 @@
 ﻿using MS3_Back_End.DBContext;
+using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 
 namespace MS3_Back_End.Repository
@@ -10,6 +11,13 @@ namespace MS3_Back_End.Repository
         public PaymentRepository(AppDBContext context)
         {
             _context = context;
+        }
+
+        public async Task<Payment> CreatePaymentAsync(Payment payment)
+        {
+            var paymentData = await _context.Payments.AddAsync(payment);
+            await _context.SaveChangesAsync();
+            return paymentData.Entity;
         }
     }
 }
