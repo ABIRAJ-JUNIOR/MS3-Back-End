@@ -28,5 +28,11 @@ namespace MS3_Back_End.Repository
             var data= await _dbContext.AuditLogs.Where(a=>a.AdminId == id).ToListAsync();
             return data;
         }
+
+        public async Task<AuditLog> GetAuditLogByID(Guid id)
+        {
+            var data=_dbContext.AuditLogs.SingleOrDefault(a=> a.Id == id);
+            return data;
+        }
     }
 }
