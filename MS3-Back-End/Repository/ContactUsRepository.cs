@@ -13,5 +13,11 @@ namespace MS3_Back_End.Repository
             _dbContext = dbContext;
         }
 
+        public async Task<ContactUs> AddMessage(ContactUs contactUs)
+        {
+            var message = await _dbContext.ContactUs.AddAsync(contactUs);
+            await _dbContext.SaveChangesAsync();
+            return message.Entity;
+        }
     }
 }

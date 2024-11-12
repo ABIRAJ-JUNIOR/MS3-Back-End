@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MS3_Back_End.DTOs.RequestDTOs.ContactUs;
+using MS3_Back_End.Entities;
 using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Controllers
@@ -16,7 +18,22 @@ namespace MS3_Back_End.Controllers
             _contactUsService = contactUsService;
         }
 
-        
+        [HttpPost("Add-Message")]
+
+        public async Task<IActionResult> AddMessage(ContactUsRequestDTO contactUsRequestDTO)
+        {
+            try
+            {
+                var message = await _contactUsService.AddMessage(contactUsRequestDTO);
+                return Ok(message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
 
     }
 }

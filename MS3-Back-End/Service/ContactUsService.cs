@@ -15,6 +15,28 @@ namespace MS3_Back_End.Service
             _contactUsRepository = contactUsRepository;
         }
 
+        public async Task<ContactUsResponseDTO> AddMessage(ContactUsRequestDTO requestDTO)
+        {
+            var Message = new ContactUs
+            {
+                Name = requestDTO.Name,
+                Email = requestDTO.Email,
+                Message = requestDTO.Message,
+                IsRead = false
+            };
+
+            var data = await _contactUsRepository.AddMessage(Message);
+
+            var newContactUs = new ContactUsResponseDTO
+            {
+                Name = data.Name,
+                Email = data.Email,
+                Message = data.Message,
+                DateSubmited = data.DateSubmited,
+                IsRead = data.IsRead
+            };
+            return newContactUs;
+        }
 
     }
 }
