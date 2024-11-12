@@ -22,5 +22,14 @@ namespace MS3_Back_End.Controllers
             var assessmentList = await _service.GetAllAssessments();
             return Ok(assessmentList);
         }
+
+        [HttpGet("Non-Evaluate-Assessments")]
+        public async Task<IActionResult> GetAllNonEvaluateAssessments()
+        {
+            var assessmentList = await _service.GetAllNonEvaluateAssessments();
+            return Ok(assessmentList);
+        }
+
+
     }
 }
