@@ -85,11 +85,18 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpDelete("")]
+        [HttpDelete("Delete-Audit-log")]
         public async Task<IActionResult> DeleteAuditlog(Guid id)
         {
-            var data= await _auditLogService.DeleteAuditlog(id);
-            return Ok(data);
+            try
+            {
+                var data = await _auditLogService.DeleteAuditlog(id);
+                return Ok("deleted");
+            }
+            catch (Exception ex) 
+            {
+             return BadRequest(ex.Message);   
+            }
         }
 
 
