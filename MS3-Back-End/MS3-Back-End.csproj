@@ -8,14 +8,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DTOs\ResponseDTOs\Auth\**" />
     <Compile Remove="TestingControllers\**" />
+    <Content Remove="DTOs\ResponseDTOs\Auth\**" />
     <Content Remove="TestingControllers\**" />
+    <EmbeddedResource Remove="DTOs\ResponseDTOs\Auth\**" />
     <EmbeddedResource Remove="TestingControllers\**" />
+    <None Remove="DTOs\ResponseDTOs\Auth\**" />
     <None Remove="TestingControllers\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="BCrypt.Net" Version="0.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
@@ -24,6 +29,10 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.6" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

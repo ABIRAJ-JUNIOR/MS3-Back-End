@@ -6,13 +6,14 @@ namespace MS3_Back_End.Entities
     {
         [Key]
         public Guid Id { get; set; }
-        public Guid UserId { get; set; }
-        public string Action { get; set; }
+        public string Action { get; set; } = string.Empty;
         public DateOnly ActionDate { get; set; }
-        public string Details { get; set; }
+        public string Details { get; set; } = string.Empty;
+
+        public Guid AdminId { get; set; }
 
         //Reference
-        public User? User { get; set; }
+        public Admin? Admin { get; set; }
     }
 
 }

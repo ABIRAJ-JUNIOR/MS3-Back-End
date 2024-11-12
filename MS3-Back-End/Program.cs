@@ -22,8 +22,21 @@ namespace MS3_Back_End
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<AppDBContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
 
-            builder.Services.AddScoped<IUserRepository,UserRepository>();
-            builder.Services.AddScoped<IUserService,UserService>();
+            //Authentication
+            builder.Services.AddScoped<IAuthRepository,AuthRepository>();
+            builder.Services.AddScoped<IAuthService,AuthService>();
+
+            //Address
+            builder.Services.AddScoped<IAddressRepository,AddressRepository>();
+            builder.Services.AddScoped<IAddressService,AddressServise>();
+
+            //course
+            builder.Services.AddScoped<ICourseRepository, CourseRepositoy>();
+            builder.Services.AddScoped<ICourseService,CourseService>();
+
+            //CourseShedule
+            builder.Services.AddScoped<ICourseSheduleRepository,CourseSheduleRepository>();
+            builder.Services.AddScoped<ICourseSheduleService,CourseSheduleService>();
 
 
             builder.Services.AddCors(options =>

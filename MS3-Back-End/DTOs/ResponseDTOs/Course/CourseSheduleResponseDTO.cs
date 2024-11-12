@@ -1,11 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MS3_Back_End.Entities;
 
-namespace MS3_Back_End.Entities
+namespace MS3_Back_End.DTOs.ResponseDTOs.Course
 {
-    public class CourseSchedule
+    public class CourseSheduleResponseDTO
     {
-        [Key]
         public Guid Id { get; set; }
+        public Guid CourseId { get;  set; }
         public DateTime StartDate { get; set; } = DateTime.MinValue;
         public DateTime EndDate { get; set; } = DateTime.MinValue;
         public int Duration { get; set; }
@@ -16,18 +16,5 @@ namespace MS3_Back_End.Entities
         public DateTime UpdatedDate { get; set; }
         public ScheduleStatus ScheduleStatus { get; set; }
 
-        public Guid CourseId { get; set; }
-
-        //Reference
-        public Course? Course { get; set; }
-        public ICollection<Enrollment>? Enrollments { get; set; }
-
-    }
-
-    public enum ScheduleStatus
-    {
-        Open = 1,
-        Closed = 2,
-        Completed = 3
     }
 }
