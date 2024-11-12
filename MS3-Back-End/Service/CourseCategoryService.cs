@@ -50,5 +50,26 @@ namespace MS3_Back_End.Service
             return CourseCategoryResponse;
         }
 
+        public async Task<CourseCategoryResponseDTO> UpdateCourseCategory(CourseCategoryRequestDTO courseCategoryRequestDTO)
+        {
+            var GetData = await _courseCategoryRepository.GetCourseCategoryById(courseCategoryRequestDTO.Id);
+
+            var data = await _courseCategoryRepository.UpdateCourseCategory(GetData);
+            data.CategoryName = courseCategoryRequestDTO.CategoryName;
+            data.Description = courseCategoryRequestDTO.Description;
+
+            var UpdatedData = await _courseCategoryRepository.UpdateCourseCategory(data);
+
+            var CourseCategoryResponse = new CourseCategoryResponseDTO
+            {
+                Id = data.Id,
+                CategoryName = data.CategoryName,
+                Description = data.Description
+
+            };
+            return CourseCategoryResponse;
+        }
     }
+
+}
 }
