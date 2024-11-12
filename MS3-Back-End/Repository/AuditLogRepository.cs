@@ -16,6 +16,7 @@ namespace MS3_Back_End.Repository
         public async Task<AuditLog> AddAuditLog(AuditLog auditLog)
         {
             var data=await _dbContext.AuditLogs.AddAsync(auditLog);
+            await _dbContext.SaveChangesAsync();
             return data.Entity;
         }   
         public async Task<List<AuditLog>> GetAllAuditlogs()
@@ -38,6 +39,13 @@ namespace MS3_Back_End.Repository
         public async Task<AuditLog> UpdateAuditLog(AuditLog auditLog)
         {
             var data =  _dbContext.AuditLogs.Update(auditLog);
+            await _dbContext.SaveChangesAsync();
+            return data.Entity;
+        }
+        public async Task<AuditLog> DeleteAuditlog (AuditLog auditLog)
+        {
+            var data=  _dbContext.AuditLogs.Remove(auditLog);
+            await _dbContext.SaveChangesAsync();
             return data.Entity;
         }
     }
