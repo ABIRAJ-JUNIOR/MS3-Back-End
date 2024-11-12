@@ -48,6 +48,19 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [HttpGet("Get-Messages-By-Id")]
+        public async Task<IActionResult> GetMessageById(Guid Id)
+        {
+            try
+            {
+                var result = await _contactUsService.GetMessageById(Id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }
