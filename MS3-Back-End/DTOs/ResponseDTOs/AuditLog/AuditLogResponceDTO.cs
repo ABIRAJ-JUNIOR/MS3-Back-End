@@ -1,9 +1,11 @@
 ﻿using MS3_Back_End.Entities;
 
-namespace MS3_Back_End.DTOs.RequestDTOs.Address
+namespace MS3_Back_End.DTOs.ResponseDTOs.AuditLog
 {
-    public class AuditLogRequestDTO
+    public class AuditLogResponceDTO
     {
+
+        public Guid Id { get; set; }
         public string Action { get; set; } = string.Empty;
         public DateOnly ActionDate { get; set; }
         public string Details { get; set; } = string.Empty;
@@ -12,5 +14,6 @@ namespace MS3_Back_End.DTOs.RequestDTOs.Address
 
         //Reference
         public Admin? Admin { get; set; }
+
     }
 }
