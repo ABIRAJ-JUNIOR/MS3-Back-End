@@ -8,6 +8,8 @@ namespace MS3_Back_End.IRepository
          Task<List<Notification>> GetNotificationBYStuID(Guid Id);
 
         Task<Notification> GetNotificationbyID(Guid Id);
+         Task<Notification> updatenotification(Notification notification);
+
 
 
 
