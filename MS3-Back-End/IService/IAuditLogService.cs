@@ -8,6 +8,9 @@ namespace MS3_Back_End.IService
         Task<AuditLogResponceDTO> AddAuditLog(AuditLogRequestDTO auditLog);
         Task<List<AuditLogResponceDTO>> GetAllAuditlogs();
 
+        Task<List<AuditLogResponceDTO>> GetAuditLogsbyAdminId(Guid id);
+
+
 
     }
 }
