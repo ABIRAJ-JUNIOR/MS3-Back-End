@@ -31,7 +31,7 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet]
+        [HttpGet("Get-all-Auditlogs")]
         public async Task<IActionResult> GetallAuditlogs()
         {
             try
@@ -45,6 +45,7 @@ namespace MS3_Back_End.Controllers
             }
         
         }
+        [HttpGet("Get-AuditLogsby-AdminId")]
         public async Task<IActionResult> GetAuditLogsbyAdminId(Guid id)
         {
             try
@@ -57,6 +58,7 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("Get-AuditLogBy-ID")]
 
         public async Task<IActionResult> GetAuditLogByID(Guid id)
         {
@@ -70,6 +72,13 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut]
+        public async Task<IActionResult> UpdateAuditLog(Guid auditlogid, AuditLogUpdateRequest auditLogService)
+        {
+            var data= await _auditLogService.UpdateAuditLog(auditlogid, auditLogService);
+            return Ok(data);
+        }
+
 
 
     }
