@@ -109,6 +109,26 @@ namespace MS3_Back_End.Service
             return returndata;
         }
 
+        public async Task<AuditLogResponceDTO> DeleteAuditlog(Guid id)
+        {
+            var auditlog= await _auditLogRepository.GetAuditLogByID(id);
+
+            var data = await _auditLogRepository.DeleteAuditlog(auditlog);
+
+            var returndata = new AuditLogResponceDTO()
+            {
+                Action = data.Action,
+                Details = data.Details,
+                Id = data.Id,
+                ActionDate = data.ActionDate,
+                AdminId = data.AdminId,
+
+            };
+            return returndata;
+
+        }
+
+
 
 
     }
