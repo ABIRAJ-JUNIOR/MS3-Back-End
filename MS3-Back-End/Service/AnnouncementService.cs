@@ -5,11 +5,12 @@ using MS3_Back_End.DTOs.ResponseDTOs.Announcement;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
+using MS3_Back_End.IService;
 using MS3_Back_End.Repository;
 
 namespace MS3_Back_End.Service
 {
-    public class AnnouncementService 
+    public class AnnouncementService : IAnnouncementService
     {
         private readonly IAnnouncementRepository _AnnouncentRepo;
         public AnnouncementService(IAnnouncementRepository Announcement)
@@ -157,8 +158,6 @@ namespace MS3_Back_End.Service
             return AnnouncementReturn;
 
         }
-
-
 
 
         public async Task<string> DeleteAnnouncement(Guid Id)
