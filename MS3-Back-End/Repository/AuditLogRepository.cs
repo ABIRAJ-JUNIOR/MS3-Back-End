@@ -34,5 +34,11 @@ namespace MS3_Back_End.Repository
             var data=_dbContext.AuditLogs.SingleOrDefault(a=> a.Id == id);
             return data;
         }
+
+        public async Task<AuditLog> UpdateAuditLog(AuditLog auditLog)
+        {
+            var data =  _dbContext.AuditLogs.Update(auditLog);
+            return data.Entity;
+        }
     }
 }
