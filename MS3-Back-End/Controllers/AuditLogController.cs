@@ -46,8 +46,15 @@ namespace MS3_Back_End.Controllers
         }
         public async Task<IActionResult> GetAuditLogsbyAdminId(Guid id)
         {
-            var data= await _auditLogService.GetAuditLogsbyAdminId(id);
-            return Ok(data);
+            try
+            {
+                var data = await _auditLogService.GetAuditLogsbyAdminId(id);
+                return Ok(data);
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
     }
