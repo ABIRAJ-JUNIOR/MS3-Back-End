@@ -92,6 +92,23 @@ namespace MS3_Back_End.Service
             };
             return returndata;
         }
+        public async Task<NotificationResponceDTO> DeleteNotification(Guid id)
+        {
+            var notification = await _notificationRepository.GetNotificationbyID(id);
+
+            var data=await _notificationRepository.DeleteNotification(notification);
+
+            var returndata = new NotificationResponceDTO()
+            {
+                Id = data.Id,
+                DateSent = data.DateSent,
+                IsRead = data.IsRead,
+                Message = data.Message,
+                NotificationType = data.NotificationType,
+                StudentId = data.StudentId,
+            };
+            return returndata;
+        }
 
     }
 }
