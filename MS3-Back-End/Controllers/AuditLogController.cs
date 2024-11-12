@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.RequestDTOs.AuditLog;
+using MS3_Back_End.Entities;
 using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Controllers
@@ -43,5 +44,11 @@ namespace MS3_Back_End.Controllers
             }
         
         }
+        public async Task<IActionResult> GetAuditLogsbyAdminId(Guid id)
+        {
+            var data= await _auditLogService.GetAuditLogsbyAdminId(id);
+            return Ok(data);
+        }
+
     }
 }
