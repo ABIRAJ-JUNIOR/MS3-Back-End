@@ -10,10 +10,12 @@ namespace MS3_Back_End.Service
     public class StudentAssessmentService : IStudentAssessmentService
     {
         private readonly IStudentAssessmentRepository _repository;
+        private readonly IAssessmentRepository _assessmentRepository;
 
-        public StudentAssessmentService(IStudentAssessmentRepository studentAssessmentRepository)
+        public StudentAssessmentService(IStudentAssessmentRepository repository, IAssessmentRepository assessmentRepository)
         {
-            _repository = studentAssessmentRepository;
+            _repository = repository;
+            _assessmentRepository = assessmentRepository;
         }
 
         public async Task<ICollection<StudentAssessmentResponseDTO>> GetAllAssessments()
@@ -84,6 +86,9 @@ namespace MS3_Back_End.Service
             return "Completed Assessment Successfully";
         }
 
-
+        public async Task<string> EvaluateStudentAssessment(Guid id , EvaluationRequestDTO request)
+        {
+            var studentAssessmentData = await _repository.StudentAssessmentGetById(id);
+        }
     }
 }

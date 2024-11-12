@@ -9,5 +9,6 @@ namespace MS3_Back_End.IRepository
         Task<ICollection<StudentAssessment>> GetAllNonEvaluateAssessments();
         Task<StudentAssessment> AddStudentAssessment(StudentAssessment studentAssessment);
         Task<StudentAssessment> EvaluateStudentAssessment(StudentAssessment studentAssessment);
+        Task<StudentAssessment> StudentAssessmentGetById(Guid id);
     }
 }

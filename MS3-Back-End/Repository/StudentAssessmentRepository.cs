@@ -46,5 +46,11 @@ namespace MS3_Back_End.Repository
             return updatedData.Entity;
         }
 
+        public async Task<StudentAssessment> StudentAssessmentGetById(Guid id)
+        {
+            var stusentAssessmentData = await _dbcontext.StudentAssessments.SingleOrDefaultAsync(sa => sa.Id == id);
+            return stusentAssessmentData!;
+        }
+
     }
 }
