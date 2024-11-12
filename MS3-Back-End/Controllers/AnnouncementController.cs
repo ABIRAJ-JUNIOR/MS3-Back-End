@@ -15,6 +15,24 @@ namespace MS3_Back_End.Controllers
             _announcementService = announcementService;
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddAnnouncement(AnnouncementRequestDTO announcementRequest)
+        {
+            if (announcementRequest == null)
+            {
+                return BadRequest("Announcement data is required.");
+            }
+
+            try
+            {
+                var announcement = await _announcementService.AddCourse(announcementRequest);
+                return Ok(announcement);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
 
 
