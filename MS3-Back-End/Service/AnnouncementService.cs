@@ -117,7 +117,7 @@ namespace MS3_Back_End.Service
 
 
 
-        public async Task<AnnouncementResponseDTO> UpdateCourse(AnnounceUpdateDTO announcement)
+        public async Task<AnnouncementResponseDTO> UpdateAnnouncement(AnnounceUpdateDTO announcement)
         {
 
             var GetData = await _AnnouncentRepo.GetAnnouncemenntByID(announcement.Id);
@@ -160,5 +160,22 @@ namespace MS3_Back_End.Service
 
 
 
+
+        public async Task<string> DeleteAnnouncement(Guid Id)
+        {
+            var GetData = await _AnnouncentRepo.GetAnnouncemenntByID(Id);
+            GetData.IsActive = false;
+            if (GetData == null)
+            {
+                throw new Exception("Enrollment Id not Found");
+            }
+            var data = await _AnnouncentRepo.DeleteAnnouncement(GetData);
+            return data;
+        }
+
+
+
     }
+
+
 }

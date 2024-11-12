@@ -50,11 +50,11 @@ namespace MS3_Back_End.Repository
             return data.Entity;
         }
 
-        public async Task<Announcement> DeleteAnnouncement(Announcement announcement)
+        public async Task<string> DeleteAnnouncement(Announcement announcement)
         {
             var data = _Db.Announcements.Update(announcement);
             await _Db.SaveChangesAsync();
-            return data.Entity;
+            return "Delete Announcement SucessFully";
         }
 
 
