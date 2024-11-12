@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DTOs.ResponseDTOs.StudentAssessment;
+﻿using MS3_Back_End.DTOs.RequestDTOs.StudentAssessment;
+using MS3_Back_End.DTOs.ResponseDTOs.StudentAssessment;
 
 namespace MS3_Back_End.IService
 {
@@ -7,5 +8,6 @@ namespace MS3_Back_End.IService
         Task<ICollection<StudentAssessmentResponseDTO>> GetAllAssessments();
         Task<ICollection<StudentAssessmentResponseDTO>> GetAllEvaluatedAssessments();
         Task<ICollection<StudentAssessmentResponseDTO>> GetAllNonEvaluateAssessments();
+        Task<string> AddStudentAssessment(StudentAssessmentRequestDTO request);
     }
 }

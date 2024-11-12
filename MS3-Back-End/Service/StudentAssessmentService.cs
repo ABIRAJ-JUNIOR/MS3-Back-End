@@ -69,5 +69,19 @@ namespace MS3_Back_End.Service
 
             return response;
         }
+
+        public async Task<string> AddStudentAssessment(StudentAssessmentRequestDTO request)
+        {
+            var studentAssessment = new StudentAssessment
+            {
+                DateSubmitted = request.DateSubmitted,
+                StudentAssessmentStatus = request.StudentAssessmentStatus,
+                StudentId = request.StudentId,
+                AssesmentId = request.AssessmentId
+            };
+            var studentAssessmentData = await _repository.AddStudentAssessment(studentAssessment);
+
+            return "Completed Assessment Successfully";
+        }
     }
 }
