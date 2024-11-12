@@ -41,10 +41,14 @@ namespace MS3_Back_End.Service
                 EndDate = assessmentData.EndDate,
                 TotalMarks = assessmentData.TotalMarks,
                 PassMarks = assessmentData.PassMarks,
+                CreatedDate = assessmentData.CreatedDate,
+                UpdateDate = assessmentData.UpdateDate,
                 Status = assessmentData.Status,
             };
 
             return response;
         }
+
+
     }
 }

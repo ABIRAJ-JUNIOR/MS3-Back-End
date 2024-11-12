@@ -18,7 +18,7 @@ namespace MS3_Back_End.Controllers
         }
 
 
-        [HttpPost("create-assessment")]
+        [HttpPost("Assessment")]
         public async Task<IActionResult> AddAssessment(AssessmentRequestDTO request)
         {
             try
@@ -31,5 +31,7 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
     }
 }

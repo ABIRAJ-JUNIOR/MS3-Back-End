@@ -31,6 +31,7 @@ namespace MS3_Back_End.Entities
     {
         NotStarted = 1,   
         InProgress = 2,
-        Completed = 3
+        Completed = 3,
+        Closed = 4
     }
 }

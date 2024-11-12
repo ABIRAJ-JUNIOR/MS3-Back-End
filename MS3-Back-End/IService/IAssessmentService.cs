@@ -6,5 +6,6 @@ namespace MS3_Back_End.IService
     public interface IAssessmentService
     {
         Task<AssessmentResponseDTO> AddAssessment(AssessmentRequestDTO request);
+        Task<ICollection<AssessmentResponseDTO>> GetAllAssessment();
     }
 }
