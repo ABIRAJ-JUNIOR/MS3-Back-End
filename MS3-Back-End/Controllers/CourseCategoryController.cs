@@ -44,5 +44,19 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [HttpPut("Edit-Course-category")]
+        public async Task<IActionResult> UpdateCourseCategory(CourseCategoryRequestDTO courseCategoryRequestDTO)
+        {
+            try
+            {
+                var result = await _courseCategoryService.UpdateCourseCategory(courseCategoryRequestDTO);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
