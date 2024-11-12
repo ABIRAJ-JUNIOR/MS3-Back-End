@@ -8,7 +8,9 @@ namespace MS3_Back_End.IService
     {
          Task<NotificationResponceDTO> AddNotification(NotificationRequestDTO notificationDTO);
          Task<List<NotificationResponceDTO>> GetNotificationBYStuID(Guid Id);
-        Task<NotificationResponceDTO> GetNotificationbyID(Guid Id);
+         Task<NotificationResponceDTO> GetNotificationbyID(Guid Id);
+
+         Task<NotificationResponceDTO> updateIsread(Guid Id);
 
 
 

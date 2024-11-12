@@ -57,6 +57,13 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPost("update-Isread")]
+        public async Task<IActionResult> updateIsread(Guid Id)
+        {
+            var data=await _notificationsService.updateIsread(Id);
+            return Ok(data);
+        }
+
 
     }
 }
