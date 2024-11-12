@@ -6,6 +6,8 @@ namespace MS3_Back_End.IService
     public interface IAuditLogService
     {
         Task<AuditLogResponceDTO> AddAuditLog(AuditLogRequestDTO auditLog);
+        Task<List<AuditLogResponceDTO>> GetAllAuditlogs();
+
 
     }
 }
