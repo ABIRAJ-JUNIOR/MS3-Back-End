@@ -25,7 +25,7 @@ namespace MS3_Back_End.Service
                 MarksObtaines = sa.MarksObtaines,
                 Grade = sa.Grade,
                 FeedBack = sa.FeedBack,
-                DateEvaluted = sa.DateEvaluted,
+                DateEvaluated = sa.DateEvaluated,
                 StudentAssessmentStatus = sa.StudentAssessmentStatus,
                 StudentId = sa.StudentId,
                 AssesmentId = sa.AssesmentId

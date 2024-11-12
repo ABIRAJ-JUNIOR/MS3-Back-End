@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MS3_Back_End.DTOs.ResponseDTOs.StudentAssessment;
 using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Controllers
@@ -15,5 +16,11 @@ namespace MS3_Back_End.Controllers
             _service = studentAssessmentService;
         }
 
+        [HttpGet("StudentAssessments")]
+        public async  Task<IActionResult> GetAllAssessments()
+        {
+            var assessmentList = await _service.GetAllAssessments();
+            return Ok(assessmentList);
+        }
     }
 }
