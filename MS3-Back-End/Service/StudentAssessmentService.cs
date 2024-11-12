@@ -78,7 +78,7 @@ namespace MS3_Back_End.Service
             var studentAssessment = new StudentAssessment
             {
                 DateSubmitted = DateTime.Now,
-                StudentAssessmentStatus = request.StudentAssessmentStatus,
+                StudentAssessmentStatus = StudentAssessmentStatus.Completed,
                 StudentId = request.StudentId,
                 AssesmentId = request.AssessmentId
             };
