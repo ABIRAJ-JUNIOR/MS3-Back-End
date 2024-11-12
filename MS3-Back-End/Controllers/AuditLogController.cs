@@ -19,8 +19,15 @@ namespace MS3_Back_End.Controllers
         [HttpPost("Audit log")]
         public async Task<IActionResult> AddAuditLog(AuditLogRequestDTO auditLogRequestDTO) 
         {
-          var data= await _auditLogService.AddAuditLog(auditLogRequestDTO);
-            return Ok(data);
+            try
+            {
+                var data = await _auditLogService.AddAuditLog(auditLogRequestDTO);
+                return Ok(data);
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
