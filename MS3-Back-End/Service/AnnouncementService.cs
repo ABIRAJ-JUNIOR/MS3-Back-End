@@ -71,6 +71,30 @@ namespace MS3_Back_End.Service
         }
 
 
+        public async Task<List<AnnouncementResponseDTO>> GetAllCourse()
+        {
+            var data = await _AnnouncentRepo.GetAllAnnouncement();
+            if (data == null)
+            {
+                throw new Exception("Courses Not Available");
+            }
+            var CourseResponse = new List<AnnouncementResponseDTO>();
+            foreach (var item in data)
+            {
+                var obj = new AnnouncementResponseDTO
+                {
+                    Id = item.Id,
+                    Title = item.Title,
+                    DatePosted = item.DatePosted,
+                    AudienceType = item.AudienceType,
+                    IsActive = item.IsActive
+
+                };
+                CourseResponse.Add(obj);
+            }
+            return CourseResponse;
+        }
+
 
 
 
