@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MS3_Back_End.DTOs.RequestDTOs.CourseCategory;
 using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Controllers
@@ -13,6 +14,21 @@ namespace MS3_Back_End.Controllers
         public CourseCategoryController(ICourseCategoryService courseCategoryService)
         {
             _courseCategoryService = courseCategoryService;
+        }
+
+        HttpPost("Add-Category")]
+
+        public async Task<IActionResult> AddCategory(CourseCategoryRequestDTO courseCategoryRequestDTO)
+        {
+            try
+            {
+                var addCategory = await _courseCategoryService.AddCategory(courseCategoryRequestDTO);
+                return Ok(addCategory);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
     }
