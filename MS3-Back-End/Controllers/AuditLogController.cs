@@ -29,5 +29,12 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> GetallAuditlogs()
+        {
+            var data= await _auditLogService.GetAllAuditlogs();
+            return Ok(data);
+        
+        }
     }
 }
