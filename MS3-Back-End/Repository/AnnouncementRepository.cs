@@ -42,6 +42,12 @@ namespace MS3_Back_End.Repository
             var data = await _Db.Announcements.SingleOrDefaultAsync(c => c.Id == AnnouncementId && c.IsActive == true);
             return data;
         }
+        public async Task<Announcement> UpdateAnnouncement(Announcement announcement)
+        {
+            var data = _Db.Announcements.Update(announcement);
+            await _Db.SaveChangesAsync();
+            return data.Entity;
+        }
 
 
 
