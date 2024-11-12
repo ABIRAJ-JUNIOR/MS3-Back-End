@@ -37,7 +37,7 @@ namespace MS3_Back_End.Service
                NotificationType=data.NotificationType,
                StudentId=data.StudentId,
             };
-
+            return returndata;
 
 
         }
