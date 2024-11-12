@@ -75,10 +75,16 @@ namespace MS3_Back_End.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateAuditLog(Guid auditlogid, AuditLogUpdateRequest auditLogService)
         {
-            var data= await _auditLogService.UpdateAuditLog(auditlogid, auditLogService);
-            return Ok(data);
+            try
+            {
+                var data = await _auditLogService.UpdateAuditLog(auditlogid, auditLogService);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-
 
 
     }
