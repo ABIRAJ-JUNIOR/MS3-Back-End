@@ -9,7 +9,12 @@ namespace MS3_Back_End.Controllers
     [ApiController]
     public class AnnouncementController : ControllerBase
     {
-     
+        private readonly IAnnouncementService _announcementService;
+        public AnnouncementController(IAnnouncementService announcementService)
+        {
+            _announcementService = announcementService;
+        }
+
 
 
 
