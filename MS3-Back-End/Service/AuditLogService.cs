@@ -86,6 +86,29 @@ namespace MS3_Back_End.Service
             return returndata;
         }
 
+        public async Task<AuditLogResponceDTO> UpdateAuditLog(Guid auditlogid,AuditLogUpdateRequest auditLogService) 
+        {
+             var data= await _auditLogRepository.GetAuditLogByID(auditlogid);
+         
+            data.ActionDate= auditLogService.ActionDate;
+            data.Action = auditLogService.Action;
+            data.Details = auditLogService.Details;
+
+            var updatedata=await  _auditLogRepository.UpdateAuditLog(data);
+
+            var returndata = new AuditLogResponceDTO()
+            {
+                Action = data.Action,
+                Details = data.Details,
+                Id = data.Id,
+                ActionDate = data.ActionDate,
+                AdminId = data.AdminId,
+
+            };
+
+            return returndata;
+        }
+
 
 
     }
