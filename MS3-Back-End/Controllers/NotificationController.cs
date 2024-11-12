@@ -47,8 +47,15 @@ namespace MS3_Back_End.Controllers
         [HttpGet("GetNotificationby-ID")]
         public async Task<IActionResult> GetNotificationbyID(Guid Id)
         {
-           var data=_notificationsService.GetNotificationbyID(Id);
-            return Ok(data);
+            try
+            {
+                var data = _notificationsService.GetNotificationbyID(Id);
+                return Ok(data);
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
     }
