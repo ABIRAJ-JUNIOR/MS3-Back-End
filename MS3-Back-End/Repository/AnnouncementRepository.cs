@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MS3_Back_End.DBContext;
 using MS3_Back_End.Entities;
+using MS3_Back_End.IRepository;
 
 namespace MS3_Back_End.Repository
 {
-    public class AnnouncementRepository
+    public class AnnouncementRepository : IAnnouncementRepository
     {
         private readonly AppDBContext _Db;
         public AnnouncementRepository(AppDBContext db)
