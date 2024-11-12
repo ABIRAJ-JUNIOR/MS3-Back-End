@@ -27,6 +27,12 @@ namespace MS3_Back_End.Repository
             }
 
         }
+        public async Task<List<Announcement>> SearchAnnouncements(string SearchText)
+        {
+            var data = await _Db.Announcements.Where(n => n.Title.Contains(SearchText)).ToListAsync();
+            return data;
+        }
+
 
 
 
