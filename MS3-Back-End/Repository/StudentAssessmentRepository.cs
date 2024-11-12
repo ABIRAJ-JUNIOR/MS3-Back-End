@@ -22,15 +22,20 @@ namespace MS3_Back_End.Repository
 
         public async Task<ICollection<StudentAssessment>> GetAllEvaluatedAssessments()
         {
-            var assessmentList = await _dbcontext.StudentAssessments.Where(sa => sa.StudentAssessmentStatus == StudentAssessmentStatus.Reviewed && sa.StudentAssessmentStatus != StudentAssessmentStatus.Absent).ToListAsync();
+            var assessmentList = await _dbcontext.StudentAssessments.Where(sa => sa.StudentAssessmentStatus == StudentAssessmentStatus.Reviewed).ToListAsync();
             return assessmentList;
         }
 
         public async Task<ICollection<StudentAssessment>> GetAllNonEvaluateAssessments()
         {
-            var assessmentList = await _dbcontext.StudentAssessments.Where(sa => sa.StudentAssessmentStatus != StudentAssessmentStatus.Reviewed && sa.StudentAssessmentStatus != StudentAssessmentStatus.Absent).ToListAsync();
+            var assessmentList = await _dbcontext.StudentAssessments.Where(sa => sa.StudentAssessmentStatus != StudentAssessmentStatus.Reviewed).ToListAsync();
             return assessmentList;
         }
 
+        public async Task<StudentAssessment> AddStudentAssessment(StudentAssessment studentAssessment)
+        {
+            var assessmentData = await _dbcontext.StudentAssessments.AddAsync(studentAssessment);
+            return assessmentData.Entity;
+        }
     }
 }

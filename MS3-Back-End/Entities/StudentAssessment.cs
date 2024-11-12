@@ -23,7 +23,6 @@ namespace MS3_Back_End.Entities
     }
     public enum StudentAssessmentStatus
     {
-        Absent = 1,
         Completed = 2,
         Reviewed = 3
     }
