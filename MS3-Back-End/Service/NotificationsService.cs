@@ -3,6 +3,7 @@ using MS3_Back_End.DTOs.ResponseDTOs.Notification;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
+using System.Runtime.InteropServices;
 
 namespace MS3_Back_End.Service
 {
@@ -57,6 +58,22 @@ namespace MS3_Back_End.Service
             }).ToList();
 
             return retutndata;
+        }
+        public async Task<NotificationResponceDTO> GetNotificationbyID(Guid Id)
+        {
+            var data= await _notificationRepository.GetNotificationbyID(Id);
+
+            var returndata = new NotificationResponceDTO()
+            {
+                Id = data.Id,
+                DateSent = data.DateSent,
+                IsRead = data.IsRead,
+                Message = data.Message,
+                NotificationType = data.NotificationType,
+                StudentId = data.StudentId,
+            };
+            return returndata;
+
         }
 
     }
