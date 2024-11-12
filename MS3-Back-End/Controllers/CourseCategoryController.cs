@@ -30,5 +30,19 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [HttpGet("course-Category-By-Id")]
+        public async Task<IActionResult> GetCourseCategoryById(Guid Id)
+        {
+            try
+            {
+                var result = await _courseCategoryService.GetCourseCategoryById(Id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
