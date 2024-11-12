@@ -14,7 +14,7 @@ namespace MS3_Back_End.Repository
             _dbcontext = context;
         }
 
-        public async Task<ICollection<StudentAssessment>> GetAllAsync()
+        public async Task<ICollection<StudentAssessment>> GetAllAssessments()
         {
            var assessmentList =  await _dbcontext.StudentAssessments.ToListAsync();
            return assessmentList;

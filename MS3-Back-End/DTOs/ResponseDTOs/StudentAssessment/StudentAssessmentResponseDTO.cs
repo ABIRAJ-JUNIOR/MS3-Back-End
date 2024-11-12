@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MS3_Back_End.Entities;
 
-namespace MS3_Back_End.Entities
+namespace MS3_Back_End.DTOs.ResponseDTOs.StudentAssessment
 {
-    public class StudentAssessment
+    public class StudentAssessmentResponseDTO
     {
-        [Key]
         public Guid Id { get; set; }
         public int MarksObtaines { get; set; }
         public string Grade { get; set; } = string.Empty;
@@ -15,16 +14,5 @@ namespace MS3_Back_End.Entities
 
         public Guid StudentId { get; set; }
         public Guid AssesmentId { get; set; }
-
-        //Reference
-        public Student? Student { get; set; }
-        public Assessment? Assessment { get; set; }
-
-    }
-    public enum StudentAssessmentStatus
-    {
-        Absent = 1,
-        Completed = 2,
-        Reviewed = 3
     }
 }
