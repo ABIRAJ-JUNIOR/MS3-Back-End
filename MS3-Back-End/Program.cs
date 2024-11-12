@@ -50,6 +50,11 @@ namespace MS3_Back_End
             builder.Services.AddScoped<IStudentAssessmentRepository, StudentAssessmentRepository>();
             builder.Services.AddScoped<IStudentAssessmentService, StudentAssessmentService>();
 
+            //Announcement
+            builder.Services.AddScoped<IAnnouncementRepository,AnnouncementRepository>();   
+            builder.Services.AddScoped<IAnnouncementService,AnnouncementService>();
+
+
 
             builder.Services.AddCors(options =>
             {
