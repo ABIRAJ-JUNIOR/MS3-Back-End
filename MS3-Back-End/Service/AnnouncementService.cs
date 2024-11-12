@@ -17,6 +17,33 @@ namespace MS3_Back_End.Service
         }
 
 
+        public async Task<AnnouncementResponseDTO> AddCourse(AnnouncementRequestDTO AnnouncementReq)
+        {
+
+            var Announcement = new Announcement
+            {
+                Title = AnnouncementReq.Title,
+                DatePosted = AnnouncementReq.DatePosted,
+                AudienceType = AnnouncementReq.AudienceType
+
+            };
+
+            var data = await _AnnouncentRepo.AddAnnouncement(Announcement);
+
+
+            var AnnouncementReponse = new AnnouncementResponseDTO
+            {
+                Id=data.Id,
+                Title = data.Title,
+                DatePosted = data.DatePosted,
+                AudienceType = data.AudienceType,
+                IsActive = data.IsActive
+            };
+
+            return AnnouncementReponse;
+
+        }
+
 
 
 
