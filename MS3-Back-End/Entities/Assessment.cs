@@ -14,7 +14,6 @@ namespace MS3_Back_End.Entities
         public DateTime CreatedDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public AssessmentStatus Status { get; set; }
-
         public Guid CourseId { get; set; }
 
         //Reference
