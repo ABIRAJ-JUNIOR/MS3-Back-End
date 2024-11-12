@@ -62,6 +62,25 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [HttpPut("Announcement")]
+        public async Task<IActionResult> UpdateAnnouncement(AnnounceUpdateDTO announcementUpdate)
+        {
+            if (announcementUpdate == null)
+            {
+                return BadRequest("Announcement update data is required.");
+            }
+
+            try
+            {
+                var updatedAnnouncement = await _announcementService.UpdateAnnouncement(announcementUpdate);
+                return Ok(updatedAnnouncement);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);  
+            }
+        }
+
 
 
     }
