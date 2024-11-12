@@ -91,6 +91,36 @@ namespace MS3_Back_End.Service
             return responseList;
         }
 
+        public async Task<AssessmentResponseDTO> UpdateAssessment(Guid id , UpdateAssessmentRequestDTO request)
+        {
+            var assessment = await _repository.GetAssessmentById(id);
 
+            assessment.AssessmentType = request.AssessmentType;
+            assessment.StartDate = request.StartDate;
+            assessment.EndDate = request.EndDate;
+            assessment.TotalMarks = request.TotalMarks;
+            assessment.PassMarks = request.PassMarks;
+            assessment.UpdateDate = DateTime.Now;
+            assessment.Status = request.Status;
+            assessment.CourseId = request.CourseId;
+
+            var updatedData = await _repository.UpdateAssessment(assessment);
+
+            var response = new AssessmentResponseDTO()
+            {
+                Id = updatedData.Id,
+                CourseId = updatedData.CourseId,
+                AssessmentType = updatedData.AssessmentType,
+                StartDate = updatedData.StartDate,
+                EndDate = updatedData.EndDate,
+                TotalMarks = updatedData.TotalMarks,
+                PassMarks = updatedData.PassMarks,
+                CreatedDate = updatedData.CreatedDate,
+                UpdateDate = updatedData.UpdateDate,
+                Status = updatedData.Status,
+            };
+
+            return response;
+        }
     }
 }
