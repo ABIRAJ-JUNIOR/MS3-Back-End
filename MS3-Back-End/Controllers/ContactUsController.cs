@@ -33,6 +33,20 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [HttpGet("Get-All-Messages")]
+
+        public async Task<IActionResult> GetAllMessages()
+        {
+            try
+            {
+                var result = await _contactUsService.GetAllMessages();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
 
     }
