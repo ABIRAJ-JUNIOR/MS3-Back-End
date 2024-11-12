@@ -95,6 +95,29 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchAnnouncement(string searchText)
+        {
+            if (string.IsNullOrEmpty(searchText))
+            {
+                return BadRequest("Search text is required.");
+            }
+
+            try
+            {
+                var searchResults = await _announcementService.SearchAnnouncement(searchText);
+                return Ok(searchResults);
+            }
+            catch (Exception ex)
+            {
+               return BadRequest(ex.Message);
+            }
+        }
+
+
+
+
+
 
     }
 }
