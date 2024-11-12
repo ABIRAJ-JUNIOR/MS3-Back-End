@@ -7,5 +7,6 @@ namespace MS3_Back_End.IService
     {
         Task<ContactUsResponseDTO> AddMessage(ContactUsRequestDTO requestDTO);
         Task<List<ContactUsResponseDTO>> GetAllMessages();
+        Task<ContactUsResponseDTO> GetMessageById(Guid Id);
     }
 }
