@@ -9,7 +9,7 @@ namespace MS3_Back_End.Entities
         public PaymentTypes PaymentType { get; set; }
         public PaymentMethots PaymentMethod { get; set; }
         public decimal AmmountPaid { get; set; }
-        public DateOnly PaymentDate { get; set; }
+        public DateTime PaymentDate { get; set; }
         public string ImagePath { get; set; } = string.Empty;
         public int InstallmentNumber { get; set; }
 

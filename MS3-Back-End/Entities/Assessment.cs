@@ -11,8 +11,8 @@ namespace MS3_Back_End.Entities
         public DateTime EndDate { get; set; }
         public int TotalMarks { get; set; }
         public int PassMarks { get; set; }
-        public DateOnly CreatedDate { get; set; }
-        public DateOnly UpdateDate { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime UpdateDate { get; set; }
         public bool IsActive { get; set; }
 
         public Guid CourseId { get; set; }
