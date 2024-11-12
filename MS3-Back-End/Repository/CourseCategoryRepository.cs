@@ -1,4 +1,6 @@
-﻿using MS3_Back_End.DBContext;
+﻿using Microsoft.EntityFrameworkCore;
+using MS3_Back_End.DBContext;
+using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 
 namespace MS3_Back_End.Repository
@@ -10,6 +12,21 @@ namespace MS3_Back_End.Repository
         public CourseCategoryRepository(AppDBContext appDBContext)
         {
             _appDBContext = appDBContext;
+        }
+
+        public async Task<CourseCategory> AddCategory(CourseCategory categoryReq)
+        {
+            var categoryName = await _appDBContext.CourseCategories.SingleOrDefaultAsync(n => n.CategoryName == categoryReq.CategoryName);
+            if (categoryName == null)
+            {
+                var data = await _appDBContext.CourseCategories.AddAsync(categoryReq);
+                await _appDBContext.SaveChangesAsync();
+                return data.Entity;
+            }
+            else
+            {
+                throw new Exception("Your Course Category Already Added");
+            }
         }
 
     }
