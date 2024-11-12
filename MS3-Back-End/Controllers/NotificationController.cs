@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using MS3_Back_End.DTOs.RequestDTOs.Notification;
 using MS3_Back_End.DTOs.ResponseDTOs.Notification;
 using MS3_Back_End.IService;
@@ -70,6 +71,13 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpDelete("dellete- notification")]
+        public async Task<IActionResult> DeleteNotification(Guid id)
+        {
+            var data=await _notificationsService.DeleteNotification(id);
+            return Ok(data);
+        }
+
 
 
     }
