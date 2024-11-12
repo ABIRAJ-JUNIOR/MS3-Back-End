@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DTOs.RequestDTOs.Announcement;
+﻿using MS3_Back_End.DTOs.RequestDTOs;
+using MS3_Back_End.DTOs.RequestDTOs.Announcement;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Announcement;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
@@ -114,6 +115,48 @@ namespace MS3_Back_End.Service
             return AnnouncementReponse;
         }
 
+
+
+        public async Task<AnnouncementResponseDTO> UpdateCourse(AnnounceUpdateDTO announcement)
+        {
+
+            var GetData = await _AnnouncentRepo.GetAnnouncemenntByID(announcement.Id);
+
+            if (announcement.Title != null)
+            {
+                GetData.Title = announcement.Title;
+            }
+
+            if (announcement.ExpirationDate!=null)
+            {
+                GetData.ExpirationDate = announcement.ExpirationDate;
+            }
+            if (announcement.IsActive != null)
+            {
+                GetData.IsActive = announcement.IsActive;
+            }
+            if (announcement.AudienceType != null)
+            {
+                GetData.AudienceType = announcement.AudienceType;
+            }
+
+            GetData.DatePosted = DateTime.Now;
+
+            var data = await _AnnouncentRepo.UpdateAnnouncement(GetData);
+
+            var AnnouncementReturn = new AnnouncementResponseDTO
+            {
+                Id = data.Id,
+                Title = data.Title,
+                DatePosted = data.DatePosted,
+                ExpirationDate = data.ExpirationDate,
+                AudienceType = data.AudienceType,
+                IsActive = data.IsActive
+            };
+
+            return AnnouncementReturn;
+
+        }
 
 
 
