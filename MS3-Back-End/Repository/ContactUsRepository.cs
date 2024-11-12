@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DBContext;
+﻿using Microsoft.EntityFrameworkCore;
+using MS3_Back_End.DBContext;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 
@@ -19,5 +20,12 @@ namespace MS3_Back_End.Repository
             await _dbContext.SaveChangesAsync();
             return message.Entity;
          }
+
+        public async Task<List<ContactUs>> GetAllMessages()
+        {
+            var getMessage = await _dbContext.ContactUs.ToListAsync();
+            return getMessage;
+        }
+
     }
 }
