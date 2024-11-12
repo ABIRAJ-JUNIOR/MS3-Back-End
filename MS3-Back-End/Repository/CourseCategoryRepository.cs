@@ -5,7 +5,7 @@ using MS3_Back_End.IRepository;
 
 namespace MS3_Back_End.Repository
 {
-    public class CourseCategoryRepository: ICourseCategoryRepository
+    public class CourseCategoryRepository : ICourseCategoryRepository
     {
         private readonly AppDBContext _appDBContext;
 
@@ -35,8 +35,12 @@ namespace MS3_Back_End.Repository
             return data;
         }
 
+        public async Task<CourseCategory> UpdateCourseCategory(CourseCategory courseCategory)
+        {
+            var data = _appDBContext.CourseCategories.Update(courseCategory);
+            await _appDBContext.SaveChangesAsync();
+            return data.Entity;
+        }
 
     }
-
-}
 }
