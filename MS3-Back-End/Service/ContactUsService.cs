@@ -1,4 +1,7 @@
-﻿using MS3_Back_End.IRepository;
+﻿using MS3_Back_End.DTOs.RequestDTOs.ContactUs;
+using MS3_Back_End.DTOs.ResponseDTOs.ContactUs;
+using MS3_Back_End.Entities;
+using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Service
@@ -11,5 +14,7 @@ namespace MS3_Back_End.Service
         {
             _contactUsRepository = contactUsRepository;
         }
+
+
     }
 }

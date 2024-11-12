@@ -1,4 +1,5 @@
 ﻿using MS3_Back_End.DBContext;
+using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 
 namespace MS3_Back_End.Repository
@@ -11,5 +12,6 @@ namespace MS3_Back_End.Repository
         {
             _dbContext = dbContext;
         }
+
     }
 }
