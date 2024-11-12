@@ -71,14 +71,14 @@ namespace MS3_Back_End.Service
         }
 
 
-        public async Task<List<AnnouncementResponseDTO>> GetAllCourse()
+        public async Task<List<AnnouncementResponseDTO>> GetAllAnnouncement()
         {
             var data = await _AnnouncentRepo.GetAllAnnouncement();
             if (data == null)
             {
-                throw new Exception("Courses Not Available");
+                throw new Exception("Announcement Not Available");
             }
-            var CourseResponse = new List<AnnouncementResponseDTO>();
+            var AnnouncementReponse = new List<AnnouncementResponseDTO>();
             foreach (var item in data)
             {
                 var obj = new AnnouncementResponseDTO
@@ -90,11 +90,29 @@ namespace MS3_Back_End.Service
                     IsActive = item.IsActive
 
                 };
-                CourseResponse.Add(obj);
+                AnnouncementReponse.Add(obj);
             }
-            return CourseResponse;
+            return AnnouncementReponse;
         }
 
+
+        public async Task<AnnouncementResponseDTO> GetAnnouncementById(Guid CourseId)
+        {
+            var data = await _AnnouncentRepo.GetAnnouncemenntByID(CourseId);
+            if (data == null)
+            {
+                throw new Exception("Announcement Not Found");
+            }
+            var AnnouncementReponse = new AnnouncementResponseDTO
+            {
+                Id = data.Id,
+                Title = data.Title,
+                DatePosted = data.DatePosted,
+                AudienceType = data.AudienceType,
+                IsActive = data.IsActive
+            };
+            return AnnouncementReponse;
+        }
 
 
 
