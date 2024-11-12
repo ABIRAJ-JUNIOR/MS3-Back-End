@@ -44,6 +44,32 @@ namespace MS3_Back_End.Service
 
         }
 
+        public async Task<List<AnnouncementResponseDTO>> SearchAnnouncement(string SearchText)
+        {
+            var data = await _AnnouncentRepo.SearchAnnouncements(SearchText);
+            if (data == null)
+            {
+                throw new Exception("Search Not Found");
+            }
+
+            var AnnouncementReponse = new List<AnnouncementResponseDTO>();
+            foreach (var item in data)
+            {
+                var obj = new AnnouncementResponseDTO
+                {
+                    Id = item.Id,
+                    Title = item.Title,
+                    DatePosted = item.DatePosted,
+                    AudienceType = item.AudienceType,
+                    IsActive = item.IsActive
+                };
+                AnnouncementReponse.Add(obj);
+
+            }
+            return AnnouncementReponse;
+
+        }
+
 
 
 
