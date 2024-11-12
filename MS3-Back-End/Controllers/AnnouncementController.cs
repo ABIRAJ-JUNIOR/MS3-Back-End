@@ -48,6 +48,20 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [HttpGet("Announcement{id}")]
+        public async Task<IActionResult> GetAnnouncementById(Guid id)
+        {
+            try
+            {
+                var announcement = await _announcementService.GetAnnouncementById(id);
+                return Ok(announcement);
+            }
+            catch (Exception ex)
+            {
+                return NotFound($"Announcement with id {id} not found: {ex.Message}");
+            }
+        }
+
 
 
     }
