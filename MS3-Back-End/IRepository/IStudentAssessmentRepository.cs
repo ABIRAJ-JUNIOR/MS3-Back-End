@@ -5,6 +5,7 @@ namespace MS3_Back_End.IRepository
     public interface IStudentAssessmentRepository
     {
         Task<ICollection<StudentAssessment>> GetAllAssessments();
+        Task<ICollection<StudentAssessment>> GetAllEvaluatedAssessments();
         Task<ICollection<StudentAssessment>> GetAllNonEvaluateAssessments();
     }
 }

@@ -20,6 +20,12 @@ namespace MS3_Back_End.Repository
            return assessmentList;
         }
 
+        public async Task<ICollection<StudentAssessment>> GetAllEvaluatedAssessments()
+        {
+            var assessmentList = await _dbcontext.StudentAssessments.Where(sa => sa.StudentAssessmentStatus == StudentAssessmentStatus.Reviewed && sa.StudentAssessmentStatus != StudentAssessmentStatus.Absent).ToListAsync();
+            return assessmentList;
+        }
+
         public async Task<ICollection<StudentAssessment>> GetAllNonEvaluateAssessments()
         {
             var assessmentList = await _dbcontext.StudentAssessments.Where(sa => sa.StudentAssessmentStatus != StudentAssessmentStatus.Reviewed && sa.StudentAssessmentStatus != StudentAssessmentStatus.Absent).ToListAsync();
