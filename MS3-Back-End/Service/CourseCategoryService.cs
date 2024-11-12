@@ -34,5 +34,21 @@ namespace MS3_Back_End.Service
             return CourseCategoryResponse;
         }
 
+        public async Task<CourseCategoryResponseDTO> GetCourseCategoryById(Guid Id)
+        {
+            var data = await _courseCategoryRepository.GetCourseCategoryById(Id);
+            if (data == null)
+            {
+                throw new Exception("Course Category Not Found");
+            }
+            var CourseCategoryResponse = new CourseCategoryResponseDTO
+            {
+                Id = data.Id,
+                CategoryName = data.CategoryName,
+                Description = data.Description
+            };
+            return CourseCategoryResponse;
+        }
+
     }
 }

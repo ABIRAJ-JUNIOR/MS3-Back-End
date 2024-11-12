@@ -35,12 +35,7 @@ namespace MS3_Back_End.Repository
             return data;
         }
 
-        public async Task<CourseCategory> UpdateCourseCategory(CourseCategory courseCategory)
-        {
-            var data = _appDBContext.CourseCategories.Update(courseCategory);
-            await _appDBContext.SaveChangesAsync();
-            return data.Entity;
-        }
+
     }
 
 }
