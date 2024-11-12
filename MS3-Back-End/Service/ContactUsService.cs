@@ -60,6 +60,22 @@ namespace MS3_Back_End.Service
             return ContactUsResponse;
         }
 
+        public async Task<ContactUsResponseDTO> GetMessageById(Guid Id)
+        {
+            var data = await _contactUsRepository.GetMessageById(Id);
+            if (data == null)
+            {
+                throw new Exception("Messages not found or Invalid Id");
+            }
+            var contactResponse = new ContactUsResponseDTO
+            {
+                Id = data.Id,
+                Name = data.Name,
+                Email = data.Email,
+                Message = data.Message,
+            };
+            return contactResponse;
+        }
 
     }
 }
