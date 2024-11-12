@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.IRepository;
+﻿using MS3_Back_End.Entities;
+using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Service
@@ -10,6 +11,11 @@ namespace MS3_Back_End.Service
         public NotificationsService(INotificationRepository notificationRepository)
         {
             _notificationRepository = notificationRepository;
+        }
+
+        public async Task<Notification> AddNotification(Notification notification)
+        {
+
         }
     }
 }
