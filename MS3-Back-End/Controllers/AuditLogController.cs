@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using MS3_Back_End.DTOs.RequestDTOs.AuditLog;
 using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Controllers
@@ -13,6 +15,12 @@ namespace MS3_Back_End.Controllers
         public AuditLogController(IAuditLogService auditLogService)
         {
             _auditLogService = auditLogService;
+        }
+        [HttpPost("Audit log")]
+        public async Task<IActionResult> AddAuditLog(AuditLogRequestDTO auditLogRequestDTO) 
+        {
+          var data= await _auditLogService.AddAuditLog(auditLogRequestDTO);
+            return Ok(data);
         }
     }
 }
