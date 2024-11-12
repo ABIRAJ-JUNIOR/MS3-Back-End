@@ -6,5 +6,7 @@ namespace MS3_Back_End.IService
     public interface ICourseCategoryService
     {
         Task<CourseCategoryResponseDTO> AddCategory(CourseCategoryRequestDTO courseCategoryRequestDTO);
+        Task<CourseCategoryResponseDTO> GetCourseCategoryById(Guid Id);
+
     }
 }
