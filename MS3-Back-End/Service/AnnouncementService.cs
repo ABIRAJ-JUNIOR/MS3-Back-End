@@ -26,7 +26,9 @@ namespace MS3_Back_End.Service
             {
                 Title = AnnouncementReq.Title,
                 DatePosted = AnnouncementReq.DatePosted,
+                ExpirationDate = AnnouncementReq.ExpirationDate,
                 AudienceType = AnnouncementReq.AudienceType
+                
 
             };
 
@@ -38,6 +40,7 @@ namespace MS3_Back_End.Service
                 Id=data.Id,
                 Title = data.Title,
                 DatePosted = data.DatePosted,
+                ExpirationDate = data.ExpirationDate,
                 AudienceType = data.AudienceType,
                 IsActive = data.IsActive
             };
@@ -89,6 +92,7 @@ namespace MS3_Back_End.Service
                     Title = item.Title,
                     DatePosted = item.DatePosted,
                     AudienceType = item.AudienceType,
+                    ExpirationDate = item.ExpirationDate,
                     IsActive = item.IsActive
 
                 };
@@ -111,6 +115,7 @@ namespace MS3_Back_End.Service
                 Title = data.Title,
                 DatePosted = data.DatePosted,
                 AudienceType = data.AudienceType,
+                ExpirationDate = data.ExpirationDate,
                 IsActive = data.IsActive
             };
             return AnnouncementReponse;
@@ -128,18 +133,15 @@ namespace MS3_Back_End.Service
                 GetData.Title = announcement.Title;
             }
 
-            if (announcement.ExpirationDate!=null)
+            if (announcement.ExpirationDate.HasValue)
             {
-                GetData.ExpirationDate = announcement.ExpirationDate;
+                GetData.ExpirationDate = announcement.ExpirationDate.Value;
             }
-            if (announcement.IsActive != null)
-            {
-                GetData.IsActive = announcement.IsActive;
-            }
+
             if (announcement.AudienceType != null)
             {
-                GetData.AudienceType = announcement.AudienceType;
-            }
+                GetData.AudienceType = announcement.AudienceType.Value;
+            };
 
             GetData.DatePosted = DateTime.Now;
 
