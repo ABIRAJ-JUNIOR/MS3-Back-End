@@ -23,7 +23,7 @@ namespace MS3_Back_End.Entities
     }
     public enum StudentAssessmentStatus
     {
-        Completed = 2,
-        Reviewed = 3
+        Completed = 1,
+        Reviewed = 2
     }
 }

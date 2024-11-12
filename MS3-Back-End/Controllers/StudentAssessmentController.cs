@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MS3_Back_End.DTOs.RequestDTOs.StudentAssessment;
 using MS3_Back_End.DTOs.ResponseDTOs.StudentAssessment;
 using MS3_Back_End.IService;
 
@@ -35,6 +36,14 @@ namespace MS3_Back_End.Controllers
         {
             var assessmentList = await _service.GetAllNonEvaluateAssessments();
             return Ok(assessmentList);
+        }
+
+        [HttpPost("StudentAssessment")]
+
+        public async Task<IActionResult> AddStudentAssessment(StudentAssessmentRequestDTO request)
+        {
+            var studentAssessmentData = await _service.AddStudentAssessment(request);
+            return Ok(studentAssessmentData);
         }
 
 
