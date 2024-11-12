@@ -29,5 +29,19 @@ namespace MS3_Back_End.Repository
             }
         }
 
+        public async Task<CourseCategory> GetCourseCategoryById(Guid Id)
+        {
+            var data = await _appDBContext.CourseCategories.SingleOrDefaultAsync(c => c.Id == Id);
+            return data;
+        }
+
+        public async Task<CourseCategory> UpdateCourseCategory(CourseCategory courseCategory)
+        {
+            var data = _appDBContext.CourseCategories.Update(courseCategory);
+            await _appDBContext.SaveChangesAsync();
+            return data.Entity;
+        }
     }
+
+}
 }
