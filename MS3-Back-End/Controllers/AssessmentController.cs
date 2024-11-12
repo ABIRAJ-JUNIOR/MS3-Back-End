@@ -39,5 +39,21 @@ namespace MS3_Back_End.Controllers
             var assessmentList = await _service.GetAllAssessment();
             return Ok(assessmentList);
         }
+
+        [HttpPut("Assessment/{id}")]
+
+        public async Task<IActionResult> UpdateAssessment(Guid id, UpdateAssessmentRequestDTO request)
+        {
+            try
+            {
+                var updatedData = await _service.UpdateAssessment(id, request);
+                return Ok(updatedData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
+
 }
