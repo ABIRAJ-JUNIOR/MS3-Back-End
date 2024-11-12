@@ -41,5 +41,23 @@ namespace MS3_Back_End.Service
 
 
         }
+        public async Task<List<NotificationResponceDTO>> GetNotificationBYStuID(Guid Id)
+        {
+            var datas = await _notificationRepository.GetNotificationBYStuID(Id);
+            var retutndata = datas.Select(x => new NotificationResponceDTO()
+            {
+                StudentId = x.StudentId,
+                Message = x.Message,
+                NotificationType = x.NotificationType,
+                DateSent = x.DateSent,
+                IsRead = x.IsRead,
+                Id = x.Id
+
+
+            }).ToList();
+
+            return retutndata;
+        }
+
     }
 }
