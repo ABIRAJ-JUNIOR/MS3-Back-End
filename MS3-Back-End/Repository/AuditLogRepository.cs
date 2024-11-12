@@ -1,9 +1,10 @@
 ﻿using MS3_Back_End.DBContext;
+using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 
 namespace MS3_Back_End.Repository
 {
-    public class AuditLogRepository: IAuditLogRepository
+    public class AuditLogRepository : IAuditLogRepository
     {
         private readonly AppDBContext _dbContext;
 
@@ -11,5 +12,10 @@ namespace MS3_Back_End.Repository
         {
             _dbContext = dbContext;
         }
+        public async Task<AuditLog> AddAuditLog(AuditLog auditLog)
+        {
+            var data=await _dbContext.AuditLogs.AddAsync(auditLog);
+            return data.Entity;
+        }    
     }
 }
