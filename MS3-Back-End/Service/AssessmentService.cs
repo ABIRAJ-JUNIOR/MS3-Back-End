@@ -94,6 +94,10 @@ namespace MS3_Back_End.Service
         public async Task<AssessmentResponseDTO> UpdateAssessment(Guid id , UpdateAssessmentRequestDTO request)
         {
             var assessment = await _repository.GetAssessmentById(id);
+            if(assessment == null)
+            {
+                throw new Exception("Assessment not found");
+            }
 
             assessment.AssessmentType = request.AssessmentType;
             assessment.StartDate = request.StartDate;
