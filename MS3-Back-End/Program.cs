@@ -42,6 +42,8 @@ namespace MS3_Back_End
             builder.Services.AddScoped<IContactUsRepository, ContactUsRepository>();
             builder.Services.AddScoped<IContactUsService, ContactUsService>();
 
+
+
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policy =>
