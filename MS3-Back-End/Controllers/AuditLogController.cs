@@ -72,7 +72,7 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut]
+        [HttpPut("Update-Audit-Log")]
         public async Task<IActionResult> UpdateAuditLog(Guid auditlogid, AuditLogUpdateRequest auditLogService)
         {
             try
@@ -85,6 +85,13 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpDelete("")]
+        public async Task<IActionResult> DeleteAuditlog(Guid id)
+        {
+            var data= await _auditLogService.DeleteAuditlog(id);
+            return Ok(data);
+        }
+
 
 
     }
