@@ -46,6 +46,10 @@ namespace MS3_Back_End
             builder.Services.AddScoped<IEnrollmentRepository,EnrollmentRepository>();
             builder.Services.AddScoped<IEnrollementService, EnrollmentService>();
 
+            //Announcement
+            builder.Services.AddScoped<IAnnouncementRepository,AnnouncementRepository>();   
+            builder.Services.AddScoped<IAnnouncementService,AnnouncementService>();
+
 
 
             builder.Services.AddCors(options =>
