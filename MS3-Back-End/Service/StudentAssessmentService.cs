@@ -34,6 +34,24 @@ namespace MS3_Back_End.Service
             return response;
         }
 
+        public async Task<ICollection<StudentAssessmentResponseDTO>> GetAllEvaluatedAssessments()
+        {
+            var nonEvaluateAssessments = await _repository.GetAllEvaluatedAssessments();
+            var response = nonEvaluateAssessments.Select(sa => new StudentAssessmentResponseDTO()
+            {
+                Id = sa.Id,
+                MarksObtaines = sa.MarksObtaines,
+                Grade = sa.Grade,
+                FeedBack = sa.FeedBack,
+                DateEvaluated = sa.DateEvaluated,
+                StudentAssessmentStatus = sa.StudentAssessmentStatus,
+                StudentId = sa.StudentId,
+                AssesmentId = sa.AssesmentId
+            }).ToList();
+
+            return response;
+        }
+
         public async Task<ICollection<StudentAssessmentResponseDTO>> GetAllNonEvaluateAssessments()
         {
             var nonEvaluateAssessments = await _repository.GetAllNonEvaluateAssessments();

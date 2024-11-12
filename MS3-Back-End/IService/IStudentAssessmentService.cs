@@ -5,6 +5,7 @@ namespace MS3_Back_End.IService
     public interface IStudentAssessmentService
     {
         Task<ICollection<StudentAssessmentResponseDTO>> GetAllAssessments();
+        Task<ICollection<StudentAssessmentResponseDTO>> GetAllEvaluatedAssessments();
         Task<ICollection<StudentAssessmentResponseDTO>> GetAllNonEvaluateAssessments();
     }
 }
