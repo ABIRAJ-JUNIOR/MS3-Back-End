@@ -18,7 +18,7 @@ namespace MS3_Back_End.Controllers
         }
 
 
-        [HttpPost("create-assessment")]
+        [HttpPost("Assessment")]
         public async Task<IActionResult> AddAssessment(AssessmentRequestDTO request)
         {
             try
@@ -31,5 +31,29 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("Assessments")]
+
+        public async Task<IActionResult> GetAllAssessment()
+        {
+            var assessmentList = await _service.GetAllAssessment();
+            return Ok(assessmentList);
+        }
+
+        [HttpPut("Assessment/{id}")]
+
+        public async Task<IActionResult> UpdateAssessment(Guid id, UpdateAssessmentRequestDTO request)
+        {
+            try
+            {
+                var updatedData = await _service.UpdateAssessment(id, request);
+                return Ok(updatedData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
+
 }
