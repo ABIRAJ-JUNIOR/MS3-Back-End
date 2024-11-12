@@ -46,6 +46,21 @@ namespace MS3_Back_End.Controllers
             return Ok(studentAssessmentData);
         }
 
+        [HttpPut("Evaluate-Assessment/{id}")]
+
+        public async Task<IActionResult> EvaluateStudentAssessment(Guid id, EvaluationRequestDTO request)
+        {
+            try
+            {
+                var evaluateAssessment = await _service.EvaluateStudentAssessment(id, request);
+                return Ok(evaluateAssessment);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
     }
 }
