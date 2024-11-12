@@ -16,8 +16,7 @@ namespace MS3_Back_End.Controllers
             _courseCategoryService = courseCategoryService;
         }
 
-        HttpPost("Add-Category")]
-
+        [HttpPost("Add-Category")]
         public async Task<IActionResult> AddCategory(CourseCategoryRequestDTO courseCategoryRequestDTO)
         {
             try
