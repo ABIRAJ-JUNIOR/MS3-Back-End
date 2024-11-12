@@ -70,6 +70,23 @@ namespace MS3_Back_End.Service
             return returndata;  
         }
 
+        public async Task<AuditLogResponceDTO> GetAuditLogByID(Guid id)
+        {
+             var data= await _auditLogRepository.GetAuditLogByID(id);
+            var returndata = new AuditLogResponceDTO()
+            {
+                Action =data.Action,
+                Details = data.Details,
+                Id = data.Id,
+                ActionDate = data.ActionDate,
+                AdminId = data.AdminId,
+
+            };
+
+            return returndata;
+        }
+
+
 
     }
 }
