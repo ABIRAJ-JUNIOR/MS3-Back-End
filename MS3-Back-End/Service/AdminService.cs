@@ -59,6 +59,7 @@ namespace MS3_Back_End.Service
 
             var admin = new Admin()
             {
+                Id = userData.Id,
                 Nic = request.Nic,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
@@ -77,6 +78,9 @@ namespace MS3_Back_End.Service
                 FirstName = adminData.FirstName,
                 LastName = adminData.LastName,
                 Phone = adminData.Phone,
+                ImagePath = adminData.ImagePath,
+                CteatedDate = adminData.CteatedDate,
+                UpdatedDate = adminData.UpdatedDate,
                 IsActive = adminData.IsActive,
             };
 
