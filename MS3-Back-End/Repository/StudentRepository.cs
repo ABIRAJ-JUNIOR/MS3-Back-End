@@ -43,13 +43,13 @@ namespace MS3_Back_End.Repository
             var data = await _Db.Students.Where(c => c.IsActive == true).Include(a => a.Address).ToListAsync();
             return data;
         }
-        public async Task<Course> GetAllSrudentById(Guid CourseId)
+       
+        public async Task<Student> GetEnrollmentById(Guid EnrollmentId)
         {
-            var data = await _Db.Courses.SingleOrDefaultAsync(c => c.Id == CourseId && c.IsDeleted == false);
+            var data = await _Db.Students.SingleOrDefaultAsync(c => c.Id == EnrollmentId && c.IsActive == true);
             return data;
         }
        
-
 
 
     }
