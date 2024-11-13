@@ -27,6 +27,11 @@ namespace MS3_Back_End.Repository
             return adminData!;
         }
         
+        public async Task<ICollection<Admin>> GetAllAdmins()
+        {
+            var adminsList = await _dbContext.Admins.ToListAsync();
+            return adminsList;
+        }
 
     }
 }
