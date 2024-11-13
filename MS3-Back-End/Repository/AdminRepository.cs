@@ -54,5 +54,11 @@ namespace MS3_Back_End.Repository
             return updatedData.Entity;
         }
 
+        public async Task<User> GetUserById(Guid id)
+        {
+            var userData = await _dbContext.Users.SingleOrDefaultAsync(u => u.Id == id);
+            return userData!;
+        }
+
     }
 }

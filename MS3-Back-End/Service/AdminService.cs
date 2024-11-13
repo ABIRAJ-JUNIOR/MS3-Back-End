@@ -137,5 +137,10 @@ namespace MS3_Back_End.Service
 
             return response;
         }
+
+        public async Task<string> UpdateEmail(string email)
+        {
+            var userData = await _adminRepository
+        }
     }
 }
