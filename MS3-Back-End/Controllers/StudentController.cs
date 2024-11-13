@@ -48,7 +48,20 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-      
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetStudentById(Guid id)
+        {
+            try
+            {
+                var student = await _studentService.GetStudentById(id);
+                return Ok(student);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
     }
 }
