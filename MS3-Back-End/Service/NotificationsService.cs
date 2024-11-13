@@ -23,7 +23,7 @@ namespace MS3_Back_End.Service
                 StudentId = notificationDTO.StudentId,
                 Message = notificationDTO.Message,
                 NotificationType = notificationDTO.NotificationType,
-                DateSent=  DateOnly.FromDateTime(DateTime.Now),
+                DateSent=  DateTime.Now,
                 IsRead=false,
                 
             };
