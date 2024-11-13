@@ -46,6 +46,10 @@ namespace MS3_Back_End
             builder.Services.AddScoped<ICourseCategoryRepository, CourseCategoryRepository>();
             builder.Services.AddScoped<ICourseCategoryService, CourseCategoryService>();
 
+            //Notification
+            builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+            builder.Services.AddScoped<INotificationService, NotificationService>();
+
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policy =>
