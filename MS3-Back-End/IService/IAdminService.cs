@@ -7,5 +7,6 @@ namespace MS3_Back_End.IService
     {
         Task<AdminResponseDTO> AddAdmin(AdminRequestDTO request);
         Task<ICollection<AdminResponseDTO>> GetAllAdmins();
+        Task<AdminResponseDTO> UpdateAdmin(Guid id, AdminRequestDTO request);
     }
 }
