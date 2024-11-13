@@ -25,6 +25,7 @@ namespace MS3_Back_End.Service
             {
                 Message = requestDTO.Message,
                 NotificationType = requestDTO.NotificationType,
+                StudentId = requestDTO.StudentId,
                 IsRead = false
             };
 

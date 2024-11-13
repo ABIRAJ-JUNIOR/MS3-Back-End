@@ -20,5 +20,12 @@ namespace MS3_Back_End.Repository
             await appDBContext.SaveChangesAsync();
             return notification.Entity;
         }
+
+        public async Task<List<Notification>> GetAllNotification (Notification notification)
+        {
+            var getAllNotification = await appDBContext.Notifications.ToListAsync();
+            return getAllNotification;
+        }
+      
     }
 }
