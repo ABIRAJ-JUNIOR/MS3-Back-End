@@ -84,6 +84,53 @@ namespace MS3_Back_End.Service
 
 
 
+        public async Task<List<StudentResponseDTO>> SearchStudent(string SearchText)
+        {
+            var data = await _StudentRepo.SearchStudent(SearchText);
+            if (data == null)
+            {
+                throw new Exception("Search Not Found");
+            }
+
+            var CourseResponse = new List<StudentResponseDTO>();
+           
+            foreach (var item in data)
+            {
+                var AddressResponse = new AddressResponseDTO
+                {
+
+                    AddressLine1 = item.Address.AddressLine1,
+                    AddressLine2 = item.Address.AddressLine2,
+                    PostalCode = item.Address.PostalCode,
+                    City = item.Address.City,
+                    Country = item.Address.Country,
+                };
+                var obj = new StudentResponseDTO
+                {
+                    Id = item.Id,
+                    Nic = item.Nic,
+                    FirstName = item.FirstName,
+                    LastName = item.LastName,
+                    DateOfBirth = item.DateOfBirth,
+                    Gender = item.Gender,
+                    Phone = item.Phone,
+                    ImagePath = item.ImagePath,
+                    CteatedDate = item.CteatedDate,
+                    UpdatedDate = item.UpdatedDate,
+                    Address = AddressResponse,
+
+                };
+
+                CourseResponse.Add(obj);
+
+            }
+            return CourseResponse;
+
+        }
+
+
+
+
 
 
     }
