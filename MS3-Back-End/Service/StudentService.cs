@@ -261,6 +261,18 @@ namespace MS3_Back_End.Service
 
         }
 
+        public async Task<string> DeleteStudent(Guid Id)
+        {
+            var GetData = await _StudentRepo.GetStudentById(Id);
+            GetData.IsActive = false;
+            if (GetData == null)
+            {
+                throw new Exception("Student Id not Found");
+            }
+            var data = await _StudentRepo.DeleteStudent(GetData);
+            return data;
+        }
+
 
 
 
