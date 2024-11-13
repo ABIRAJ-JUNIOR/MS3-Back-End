@@ -58,6 +58,10 @@ namespace MS3_Back_End
             //Payment
             builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
+          
+            //Student
+            builder.Services.AddScoped<IStudentRepository,StudentRepository>();
+            builder.Services.AddScoped<IStudentService,StudentService>();
 
             //Admin
             builder.Services.AddScoped<IAdminRepository, AdminRepository>();
