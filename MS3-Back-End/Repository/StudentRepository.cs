@@ -2,8 +2,13 @@
 
 namespace MS3_Back_End.Repository
 {
-    public class StudentRepository
+    public class StudentRepository 
     {
-        
+        private readonly AppDBContext _db;
+        public StudentRepository(AppDBContext db)
+        {
+            _db = db;
+        }
+
     }
 }
