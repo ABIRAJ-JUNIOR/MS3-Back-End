@@ -80,6 +80,19 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
-       
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteStudent(Guid id)
+        {
+            try
+            {
+                var result = await _studentService.DeleteStudent(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
