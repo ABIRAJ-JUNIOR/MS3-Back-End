@@ -47,5 +47,12 @@ namespace MS3_Back_End.Repository
             return updatedData.Entity;
         }
 
+        public async Task<User> UpdateEmail(User user)
+        {
+            var updatedData = _dbContext.Users.Update(user);
+            await _dbContext.SaveChangesAsync();
+            return updatedData.Entity;
+        }
+
     }
 }

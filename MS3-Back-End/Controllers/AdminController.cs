@@ -18,7 +18,6 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPost]
-
         public async Task<IActionResult> AddAdmin(AdminRequestDTO request)
         {
             try
@@ -33,14 +32,13 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpGet]
-
         public async Task<IActionResult> GetAllAdmins()
         {
             var adminsList = await _adminService.GetAllAdmins();
             return Ok(adminsList);
         }
 
-        [HttpPut]
+        [HttpPut("update-personal-details")]
         public async Task<IActionResult> UpdateAdmin(Guid id, AdminUpdateRequestDTO request)
         {
             try
