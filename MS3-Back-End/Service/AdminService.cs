@@ -107,7 +107,7 @@ namespace MS3_Back_End.Service
             return response;
         }
 
-        public async Task<AdminResponseDTO> UpdateAdmin(Guid id , AdminRequestDTO request)
+        public async Task<AdminResponseDTO> UpdateAdmin(Guid id , AdminUpdateRequestDTO request)
         {
             var adminData = await _adminRepository.GetAdminById(id);
             if(adminData == null)
@@ -115,15 +115,12 @@ namespace MS3_Back_End.Service
                 throw new Exception("Admin not found");
             }
 
-            var admin = new Admin()
-            {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                Phone = request.Phone,
-                UpdatedDate = DateTime.Now,
-            };
+            adminData.FirstName = request.FirstName;
+            adminData.LastName = request.LastName;
+            adminData.Phone = request.Phone;
+            adminData.UpdatedDate = DateTime.Now;
 
-            var updatedData = await _adminRepository.UpdateAdmin(admin);
+            var updatedData = await _adminRepository.UpdateAdmin(adminData);
 
             var response = new AdminResponseDTO()
             {

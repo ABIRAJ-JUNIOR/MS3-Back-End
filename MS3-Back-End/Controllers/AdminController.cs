@@ -39,5 +39,19 @@ namespace MS3_Back_End.Controllers
             var adminsList = await _adminService.GetAllAdmins();
             return Ok(adminsList);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateAdmin(Guid id, AdminUpdateRequestDTO request)
+        {
+            try
+            {
+                var updatedData = await _adminService.UpdateAdmin(id, request);
+                return Ok(updatedData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
