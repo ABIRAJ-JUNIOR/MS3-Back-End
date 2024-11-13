@@ -17,9 +17,12 @@ namespace MS3_Back_End.Service
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public async Task<PaymentResponseDTO> CreatePaymentAsync(PaymentRequestDTO paymentRequest)
+        public async Task<PaymentResponseDTO> CreatePayment(PaymentRequestDTO paymentRequest)
         {
-           
+            if(paymentRequest.AmountPaid < 0)
+            {
+                throw new Exception("Amount Should be positive");
+            }
 
             var payment = new Payment
             {

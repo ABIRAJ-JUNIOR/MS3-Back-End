@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MS3_Back_End.DTOs.RequestDTOs.Payment;
 using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Controllers
@@ -15,6 +16,18 @@ namespace MS3_Back_End.Controllers
             _paymentService = paymentService;
         }
 
-
+        [HttpPost]
+        public async Task<IActionResult> CreatePayment([FromForm] PaymentRequestDTO paymentRequest)
+        {
+            try
+            {
+                var paymentResponse = await _paymentService.CreatePayment(paymentRequest);
+                return Ok(paymentResponse);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

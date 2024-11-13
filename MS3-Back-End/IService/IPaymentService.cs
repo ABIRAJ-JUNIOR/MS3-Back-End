@@ -5,6 +5,6 @@ namespace MS3_Back_End.IService
 {
     public interface IPaymentService
     {
-        Task<PaymentResponseDTO> CreatePaymentAsync(PaymentRequestDTO paymentRequest);
+        Task<PaymentResponseDTO> CreatePayment(PaymentRequestDTO paymentRequest);
     }
 }
