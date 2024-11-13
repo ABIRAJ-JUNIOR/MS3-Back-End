@@ -31,5 +31,19 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("Get-All-Notifications")]
+        public async Task<IActionResult> GetAllNotification()
+        {
+            try
+            {
+                var result = await _notificationService.GetAllNotification();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
