@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MS3_Back_End.DTOs.RequestDTOs.ContactUs;
+using MS3_Back_End.DTOs.RequestDTOs.Notification;
 using MS3_Back_End.IService;
+using MS3_Back_End.Service;
 
 namespace MS3_Back_End.Controllers
 {
@@ -13,6 +16,20 @@ namespace MS3_Back_End.Controllers
         public NotificationController(INotificationService notificationService)
         {
             _notificationService = notificationService;
+        }
+
+        [HttpPost("Add-Notification")]
+        public async Task<IActionResult> AddNotification(NOtificationRequestDTO requestDTO)
+        {
+            try
+            {
+                var message = await _notificationService.AddNotification(requestDTO);
+                return Ok(message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

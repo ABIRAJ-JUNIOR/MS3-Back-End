@@ -19,7 +19,6 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPost("Add-Message")]
-
         public async Task<IActionResult> AddMessage(ContactUsRequestDTO contactUsRequestDTO)
         {
             try
