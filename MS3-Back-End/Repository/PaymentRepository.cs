@@ -13,7 +13,7 @@ namespace MS3_Back_End.Repository
             _context = context;
         }
 
-        public async Task<Payment> CreatePaymentAsync(Payment payment)
+        public async Task<Payment> CreatePayment(Payment payment)
         {
             var paymentData = await _context.Payments.AddAsync(payment);
             await _context.SaveChangesAsync();
