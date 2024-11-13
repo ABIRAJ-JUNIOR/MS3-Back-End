@@ -18,8 +18,8 @@ namespace MS3_Back_End.Repository
             var Address =await _dbContext.Addresses.SingleOrDefaultAsync(f=>f.StudentId == address.StudentId);
             if (Address == null)
             {
-                var data = await _dbContext.Addresses.AddAsync(Address);
-                _dbContext.SaveChangesAsync();
+                var data = await _dbContext.Addresses.AddAsync(address);
+                await _dbContext.SaveChangesAsync();
                 return data.Entity;
 
             }
