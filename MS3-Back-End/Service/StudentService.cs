@@ -92,7 +92,7 @@ namespace MS3_Back_End.Service
                 throw new Exception("Search Not Found");
             }
 
-            var CourseResponse = new List<StudentResponseDTO>();
+            var StudentRes = new List<StudentResponseDTO>();
            
             foreach (var item in data)
             {
@@ -121,13 +121,51 @@ namespace MS3_Back_End.Service
 
                 };
 
-                CourseResponse.Add(obj);
+                StudentRes.Add(obj);
 
             }
-            return CourseResponse;
+            return StudentRes;
 
         }
 
+        public async Task<List<StudentResponseDTO>> GetAllStudent()
+        {
+            var data = await _StudentRepo.GetAllStudente();
+            if (data == null)
+            {
+                throw new Exception("Students data is Not Available");
+            }
+            var StudentRes = new List<StudentResponseDTO>();
+            foreach (var item in data)
+            {
+                var AddressResponse = new AddressResponseDTO
+                {
+
+                    AddressLine1 = item.Address.AddressLine1,
+                    AddressLine2 = item.Address.AddressLine2,
+                    PostalCode = item.Address.PostalCode,
+                    City = item.Address.City,
+                    Country = item.Address.Country,
+                };
+                var obj = new StudentResponseDTO
+                {
+                    Id = item.Id,
+                    Nic = item.Nic,
+                    FirstName = item.FirstName,
+                    LastName = item.LastName,
+                    DateOfBirth = item.DateOfBirth,
+                    Gender = item.Gender,
+                    Phone = item.Phone,
+                    ImagePath = item.ImagePath,
+                    CteatedDate = item.CteatedDate,
+                    UpdatedDate = item.UpdatedDate,
+                    Address = AddressResponse,
+
+                };
+                StudentRes.Add(obj);
+            }
+            return StudentRes;
+        }
 
 
 

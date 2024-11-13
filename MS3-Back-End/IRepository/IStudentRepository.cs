@@ -7,7 +7,7 @@ namespace MS3_Back_End.IRepository
         Task<Student> AddStudent(Student StudentReq);
         Task<List<Student>> SearchStudent(string SearchText);
         Task<List<Student>> GetAllStudente();
-        Task<Student> GetEnrollmentById(Guid StudentId);
+        Task<Student> GetStudentById(Guid StudentId);
         Task<Student> UpdateStudent(Student Students);
         Task<string> DeleteStudent(Student Student);
     }

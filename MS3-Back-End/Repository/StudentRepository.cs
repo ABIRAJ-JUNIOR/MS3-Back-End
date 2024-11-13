@@ -44,7 +44,7 @@ namespace MS3_Back_End.Repository
             return data;
         }
        
-        public async Task<Student> GetEnrollmentById(Guid StudentId)
+        public async Task<Student> GetStudentById(Guid StudentId)
         {
             var data = await _Db.Students.SingleOrDefaultAsync(c => c.Id == StudentId && c.IsActive == true);
             return data;
