@@ -21,11 +21,16 @@ namespace MS3_Back_End.Repository
             return notification.Entity;
         }
 
-        public async Task<List<Notification>> GetAllNotification (Notification notification)
+        public async Task<List<Notification>> GetAllNotification()
         {
             var getAllNotification = await appDBContext.Notifications.ToListAsync();
             return getAllNotification;
         }
-      
+
+        public async Task<Notification> GetNotificationById(Guid Id)
+        {
+            var getNotificationById = await appDBContext.Notifications.SingleOrDefaultAsync(C => C.Id == Id);
+            return getNotificationById;
+        }
     }
 }
