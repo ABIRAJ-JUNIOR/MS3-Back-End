@@ -67,6 +67,23 @@ namespace MS3_Back_End.Service
             return NotificationResponse;
         }
 
-
+        public async Task<NotificationResponseDTO> GetNotificationById(Guid Id)
+        {
+            var data = await _notificationRepository.GetNotificationById(Id);
+            if (data == null)
+            {
+                throw new Exception("Messages not found or Invalid Id");
+            }
+            var notiResponse = new NotificationResponseDTO
+            {
+                Id = data.Id,
+                Message = data.Message,
+                NotificationType = data.NotificationType,
+                DateSent = data.DateSent,
+                StudentId = data.StudentId,
+                IsRead = data.IsRead
+            };
+            return notiResponse;
+        }
     }
 }
