@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DBContext;
+﻿using Microsoft.EntityFrameworkCore;
+using MS3_Back_End.DBContext;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 
@@ -18,6 +19,12 @@ namespace MS3_Back_End.Repository
             var paymentData = await _context.Payments.AddAsync(payment);
             await _context.SaveChangesAsync();
             return paymentData.Entity;
+        }
+
+        public async Task<ICollection<Payment>> GetAllPayments()
+        {
+            var paymentLists = await _context.Payments.ToListAsync();
+            return paymentLists;
         }
     }
 }
