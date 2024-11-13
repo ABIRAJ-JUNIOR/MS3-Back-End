@@ -202,6 +202,70 @@ namespace MS3_Back_End.Service
             return obj;
         }
 
+        public async Task<StudentResponseDTO> UpdateStudent(StudentUpdateDTO studentUpdate)
+        {
+
+
+            var studentData = await _StudentRepo.GetStudentById(studentUpdate.Id);
+
+            if (!string.IsNullOrEmpty(studentUpdate.Nic))
+                studentData.Nic = studentUpdate.Nic;
+
+            if (!string.IsNullOrEmpty(studentUpdate.FirstName))
+                studentData.FirstName = studentUpdate.FirstName;
+
+            if (!string.IsNullOrEmpty(studentUpdate.LastName))
+                studentData.LastName = studentUpdate.LastName;
+
+            if (studentUpdate.DateOfBirth.HasValue && studentUpdate.DateOfBirth != DateTime.MinValue)
+                studentData.DateOfBirth = studentUpdate.DateOfBirth.Value;
+
+            if (studentUpdate.Gender.HasValue)
+                studentData.Gender = studentUpdate.Gender.Value;
+
+            if (!string.IsNullOrEmpty(studentUpdate.Phone))
+                studentData.Phone = studentUpdate.Phone;
+
+            if (!string.IsNullOrEmpty(studentUpdate.ImagePath))
+                studentData.ImagePath = studentUpdate.ImagePath;
+
+            studentData.UpdatedDate = DateTime.Now;
+
+            var item = await _StudentRepo.UpdateStudent(studentData);
+
+            var AddressResponse = new AddressResponseDTO
+            {
+
+                AddressLine1 = item.Address.AddressLine1,
+                AddressLine2 = item.Address.AddressLine2,
+                PostalCode = item.Address.PostalCode,
+                City = item.Address.City,
+                Country = item.Address.Country,
+            };
+            var obj = new StudentResponseDTO
+            {
+                Id = item.Id,
+                Nic = item.Nic,
+                FirstName = item.FirstName,
+                LastName = item.LastName,
+                DateOfBirth = item.DateOfBirth,
+                Gender = item.Gender,
+                Phone = item.Phone,
+                ImagePath = item.ImagePath,
+                CteatedDate = item.CteatedDate,
+                UpdatedDate = item.UpdatedDate,
+                Address = AddressResponse,
+
+            };
+            return obj;
+
+        }
+
+
+
+
+
+
 
 
 
