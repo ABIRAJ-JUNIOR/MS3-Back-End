@@ -40,6 +40,10 @@ namespace MS3_Back_End.Service
 
                     var userData = await _authRepository.AddUser(user);
                     var roleData = await _authRepository.GetStudentRole();
+                    if(roleData == null)
+                    {
+                        throw new Exception("Role not found");
+                    }
 
                     var userRole = new UserRole()
                     {
