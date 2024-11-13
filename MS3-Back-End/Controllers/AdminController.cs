@@ -31,5 +31,13 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet]
+
+        public async Task<IActionResult> GetAllAdmins()
+        {
+            var adminsList = await _adminService.GetAllAdmins();
+            return Ok(adminsList);
+        }
     }
 }
