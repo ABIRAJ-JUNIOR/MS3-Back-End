@@ -30,14 +30,16 @@ namespace MS3_Back_End.Service
 
             var data = await _notificationRepository.AddNotification(Message);
 
-            var newContactUs = new NotificationResponseDTO
+            var newNotification = new NotificationResponseDTO
             {
+                Id = data.Id,
                 Message = data.Message,
                 NotificationType = data.NotificationType,
-                
+                DateSent = data.DateSent,
+                StudentId = data.StudentId,
                 IsRead = data.IsRead
             };
-            return newContactUs;
+            return newNotification;
         }
     }
 }
