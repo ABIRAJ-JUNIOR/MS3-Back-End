@@ -29,5 +29,14 @@ namespace MS3_Back_End.Repository
         }
 
 
+        public async Task<List<Student>> SearchStudent(string SearchText)
+        {
+            var data = await _Db.Students.Where(n => n.FirstName.Contains(SearchText) || n.LastName.Contains(SearchText) || n.Nic.Contains(SearchText).ToListAsync();
+            return data;
+        }
+
+
+
+
     }
 }
