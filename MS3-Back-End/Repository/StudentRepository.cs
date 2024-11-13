@@ -44,13 +44,12 @@ namespace MS3_Back_End.Repository
             return data;
         }
        
-        public async Task<Student> GetEnrollmentById(Guid EnrollmentId)
+        public async Task<Student> GetEnrollmentById(Guid StudentId)
         {
-            var data = await _Db.Students.SingleOrDefaultAsync(c => c.Id == EnrollmentId && c.IsActive == true);
+            var data = await _Db.Students.SingleOrDefaultAsync(c => c.Id == StudentId && c.IsActive == true);
             return data;
         }
        
-
 
     }
 }
