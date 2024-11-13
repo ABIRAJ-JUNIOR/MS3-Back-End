@@ -138,15 +138,20 @@ namespace MS3_Back_End.Service
             var StudentRes = new List<StudentResponseDTO>();
             foreach (var item in data)
             {
-                var AddressResponse = new AddressResponseDTO
-                {
 
-                    AddressLine1 = item.Address.AddressLine1,
-                    AddressLine2 = item.Address.AddressLine2,
-                    PostalCode = item.Address.PostalCode,
-                    City = item.Address.City,
-                    Country = item.Address.Country,
-                };
+                AddressResponseDTO AddressResponse = null;
+
+                if (item.Address != null)
+                {
+                    AddressResponse = new AddressResponseDTO
+                    {
+                        AddressLine1 = item.Address.AddressLine1,
+                        AddressLine2 = item.Address.AddressLine2,
+                        PostalCode = item.Address.PostalCode,
+                        City = item.Address.City,
+                        Country = item.Address.Country,
+                    };
+                }
                 var obj = new StudentResponseDTO
                 {
                     Id = item.Id,
@@ -175,15 +180,19 @@ namespace MS3_Back_End.Service
             {
                 throw new Exception("Student Not Found");
             }
-            var AddressResponse = new AddressResponseDTO
-            {
+            AddressResponseDTO AddressResponse = null;
 
-                AddressLine1 = item.Address.AddressLine1,
-                AddressLine2 = item.Address.AddressLine2,
-                PostalCode = item.Address.PostalCode,
-                City = item.Address.City,
-                Country = item.Address.Country,
-            };
+            if (item.Address != null)
+            {
+                AddressResponse = new AddressResponseDTO
+                {
+                    AddressLine1 = item.Address.AddressLine1,
+                    AddressLine2 = item.Address.AddressLine2,
+                    PostalCode = item.Address.PostalCode,
+                    City = item.Address.City,
+                    Country = item.Address.Country,
+                };
+            }
             var obj = new StudentResponseDTO
             {
                 Id = item.Id,
@@ -233,15 +242,19 @@ namespace MS3_Back_End.Service
 
             var item = await _StudentRepo.UpdateStudent(studentData);
 
-            var AddressResponse = new AddressResponseDTO
-            {
+            AddressResponseDTO AddressResponse = null;
 
-                AddressLine1 = item.Address.AddressLine1,
-                AddressLine2 = item.Address.AddressLine2,
-                PostalCode = item.Address.PostalCode,
-                City = item.Address.City,
-                Country = item.Address.Country,
-            };
+            if (item.Address != null)
+            {
+                AddressResponse = new AddressResponseDTO
+                {
+                    AddressLine1 = item.Address.AddressLine1,
+                    AddressLine2 = item.Address.AddressLine2,
+                    PostalCode = item.Address.PostalCode,
+                    City = item.Address.City,
+                    Country = item.Address.Country,
+                };
+            }
             var obj = new StudentResponseDTO
             {
                 Id = item.Id,

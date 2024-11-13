@@ -17,7 +17,7 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Student
         public DateTime? UpdatedDate { get; set; } = DateTime.MinValue;
         public bool IsActive { get; set; } = true;
 
-        public AddressResponseDTO Address { get; set; }
+        public AddressResponseDTO? Address { get; set; }
 
 
 
