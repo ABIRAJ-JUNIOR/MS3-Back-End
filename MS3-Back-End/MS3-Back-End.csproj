@@ -32,7 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\RequestDTOs\Notification\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 
