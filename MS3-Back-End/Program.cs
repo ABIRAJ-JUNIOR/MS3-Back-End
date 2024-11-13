@@ -59,6 +59,10 @@ namespace MS3_Back_End
             builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
 
+            //Admin
+            builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+            builder.Services.AddScoped<IAdminService, AdminService>();
+
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policy =>
