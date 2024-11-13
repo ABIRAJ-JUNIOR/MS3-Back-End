@@ -86,5 +86,25 @@ namespace MS3_Back_End.Service
 
             return response;
         }
+
+        public async Task<ICollection<AdminResponseDTO>> GetAllAdmins()
+        {
+            var adminsList = await _adminRepository.GetAllAdmins();
+
+            var response = adminsList.Select(a => new AdminResponseDTO()
+            {
+                Id = a.Id,
+                Nic = a.Nic,
+                FirstName = a.FirstName,
+                LastName = a.LastName,
+                Phone = a.Phone,
+                ImagePath = a.ImagePath,
+                CteatedDate = a.CteatedDate,
+                UpdatedDate = a.UpdatedDate,
+                IsActive = a.IsActive,
+            }).ToList();
+
+            return response;
+        }
     }
 }

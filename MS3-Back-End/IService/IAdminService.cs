@@ -6,5 +6,6 @@ namespace MS3_Back_End.IService
     public interface IAdminService
     {
         Task<AdminResponseDTO> AddAdmin(AdminRequestDTO request);
+        Task<ICollection<AdminResponseDTO>> GetAllAdmins();
     }
 }
