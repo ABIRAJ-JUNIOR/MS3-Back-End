@@ -70,6 +70,4 @@ namespace MS3_Back_End.Service
             return CourseCategoryResponse;
         }
     }
-
-}
 }
