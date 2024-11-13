@@ -34,6 +34,21 @@ namespace MS3_Back_End.Controllers
         }
 
 
+        [HttpGet("getall")]
+        public async Task<IActionResult> GetAllStudents()
+        {
+            try
+            {
+                var students = await _studentService.GetAllStudent();
+                return Ok(students);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+      
 
     }
 }
