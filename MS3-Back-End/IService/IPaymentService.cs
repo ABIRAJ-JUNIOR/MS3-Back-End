@@ -6,5 +6,6 @@ namespace MS3_Back_End.IService
     public interface IPaymentService
     {
         Task<PaymentResponseDTO> CreatePayment(PaymentRequestDTO paymentRequest);
+        Task<ICollection<PaymentResponseDTO>> GetAllPayments();
     }
 }

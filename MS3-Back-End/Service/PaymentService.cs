@@ -55,6 +55,24 @@ namespace MS3_Back_End.Service
             };
         }
 
+        public async Task<ICollection<PaymentResponseDTO>> GetAllPayments()
+        {
+            var paymentsList = await _paymentRepository.GetAllPayments();
+            var response = paymentsList.Select(p => new PaymentResponseDTO()
+            {
+                Id = p.Id,
+                PaymentType = p.PaymentType,
+                PaymentMethod = p.PaymentMethod,
+                AmountPaid = p.AmountPaid,
+                PaymentDate = p.PaymentDate,
+                ImagePath = p.ImagePath,
+                InstallmentNumber = p.InstallmentNumber,
+                EnrollmentId = p.EnrollmentId
+            }).ToList();
+
+            return response;
+        }
+
         private async Task<string> SaveImageFile(IFormFile imageFile)
         {
             if (imageFile == null || imageFile.Length == 0)
