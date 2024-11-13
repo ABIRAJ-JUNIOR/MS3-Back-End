@@ -49,7 +49,13 @@ namespace MS3_Back_End.Repository
             var data = await _Db.Students.SingleOrDefaultAsync(c => c.Id == StudentId && c.IsActive == true);
             return data;
         }
-       
+        public async Task<Student> UpdateStudent(Student Students)
+        {
+            var data = _Db.Students.Update(Students);
+            await _Db.SaveChangesAsync();
+            return data.Entity;
+        }
+
 
     }
 }
