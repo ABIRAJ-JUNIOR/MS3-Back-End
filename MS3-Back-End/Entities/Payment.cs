@@ -8,12 +8,12 @@ namespace MS3_Back_End.Entities
         public Guid Id { get; set; }
         public PaymentTypes PaymentType { get; set; }
         public PaymentMethots PaymentMethod { get; set; }
-        public decimal AmmountPaid { get; set; }
+        public decimal AmountPaid { get; set; }
         public DateTime PaymentDate { get; set; }
-        public string ImagePath { get; set; } = string.Empty;
+        public string? ImagePath { get; set; } = string.Empty;
         public int InstallmentNumber { get; set; }
 
-        public Guid EnrollementId { get; set; }
+        public Guid EnrollmentId { get; set; }
 
         //Reference
         public Enrollment? Enrollment { get; set; }

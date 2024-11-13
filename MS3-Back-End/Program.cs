@@ -13,6 +13,7 @@ namespace MS3_Back_End
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.WebHost.UseWebRoot("wwwroot");
 
             // Add services to the container.
 
@@ -54,11 +55,17 @@ namespace MS3_Back_End
             builder.Services.AddScoped<IAnnouncementRepository,AnnouncementRepository>();   
             builder.Services.AddScoped<IAnnouncementService,AnnouncementService>();
 
+            //Payment
+            builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
+          
             //Student
             builder.Services.AddScoped<IStudentRepository,StudentRepository>();
             builder.Services.AddScoped<IStudentService,StudentService>();
 
-
+            //Admin
+            builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+            builder.Services.AddScoped<IAdminService, AdminService>();
 
             builder.Services.AddCors(options =>
             {
@@ -80,6 +87,8 @@ namespace MS3_Back_End
             }
 
             app.UseCors();
+
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 

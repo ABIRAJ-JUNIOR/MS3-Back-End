@@ -1,6 +1,6 @@
-﻿namespace MS3_Back_End.Entities
+﻿namespace MS3_Back_End.DTOs.ResponseDTOs.Admin
 {
-    public class Admin
+    public class AdminResponseDTO
     {
         public Guid Id { get; set; }
         public string Nic { get; set; } = string.Empty;
@@ -11,9 +11,5 @@
         public DateTime CteatedDate { get; set; } = DateTime.MinValue;
         public DateTime? UpdatedDate { get; set; } = DateTime.MinValue;
         public bool IsActive { get; set; } = true;
-
-        //Reference
-        public ICollection<AuditLog>? AuditLogs { get; set; }
-
     }
 }
