@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DBContext;
+﻿using Microsoft.EntityFrameworkCore;
+using MS3_Back_End.DBContext;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 
@@ -18,6 +19,12 @@ namespace MS3_Back_End.Repository
             var adminData = await _dbContext.Admins.AddAsync(admin);
             await _dbContext.SaveChangesAsync();
             return adminData.Entity;
+        }
+
+        public async Task<Admin> GetAdminByNic(string nic)
+        {
+            var adminData = await _dbContext.Admins.SingleOrDefaultAsync(a => a.Nic.ToLower() == nic.ToLower());
+            return adminData!;
         }
     }
 }
