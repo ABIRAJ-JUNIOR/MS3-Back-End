@@ -33,5 +33,12 @@ namespace MS3_Back_End.Repository
             return adminsList;
         }
 
+        public async Task<Admin> UpdateAdmin(Admin admin)
+        {
+            var updatedData = _dbContext.Admins.Update(admin);
+            await _dbContext.SaveChangesAsync();
+            return updatedData.Entity;
+        }
+
     }
 }
