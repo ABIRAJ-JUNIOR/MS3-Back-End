@@ -19,6 +19,18 @@ namespace MS3_Back_End.Service
 
         public async Task<AdminResponseDTO> AddAdmin(AdminRequestDTO request)
         {
+            var nicCheck = await _adminRepository.GetAdminByNic(request.Nic);
+            var emailCheck = await _authRepository.GetUserByEmail(request.Email);
+
+            if(nicCheck != null)
+            {
+                throw new Exception("Nic already used");
+            }
+
+            if(emailCheck != null)
+            {
+                throw new Exception("Email already used");
+            }
 
             var user = new User()
             {
@@ -29,14 +41,46 @@ namespace MS3_Back_End.Service
             };
 
             var userData = await _authRepository.AddUser(user);
+            var roleData = request.Role == AdminRole.Administrator ? await _authRepository.GetRoleByName("Administrator") : await _authRepository.GetRoleByName("Instructor");
+            
+            if(roleData == null)
+            {
+                throw new Exception("Role not found");
+            }
+
+
+            var userRole = new UserRole()
+            {
+                UserId = userData.Id,
+                RoleId = roleData.Id
+            };
+
+            var userRoleData = await _authRepository.AddUserRole(userRole);
 
             var admin = new Admin()
             {
                 Nic = request.Nic,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                
+                Phone = request.Phone,
+                CteatedDate = DateTime.Now,
+                UpdatedDate = DateTime.Now,
+                IsActive = true,
             };
+
+            var adminData = await _adminRepository.AddAdmin(admin);
+
+            var response = new AdminResponseDTO()
+            {
+                Id = adminData.Id,
+                Nic = adminData.Nic,
+                FirstName = adminData.FirstName,
+                LastName = adminData.LastName,
+                Phone = adminData.Phone,
+                IsActive = adminData.IsActive,
+            };
+
+            return response;
         }
     }
 }

@@ -1,6 +1,10 @@
-﻿namespace MS3_Back_End.IService
+﻿using MS3_Back_End.DTOs.RequestDTOs.Admin;
+using MS3_Back_End.DTOs.ResponseDTOs.Admin;
+
+namespace MS3_Back_End.IService
 {
     public interface IAdminService
     {
+        Task<AdminResponseDTO> AddAdmin(AdminRequestDTO request);
     }
 }

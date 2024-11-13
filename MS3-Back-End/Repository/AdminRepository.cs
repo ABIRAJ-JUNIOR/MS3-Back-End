@@ -26,5 +26,7 @@ namespace MS3_Back_End.Repository
             var adminData = await _dbContext.Admins.SingleOrDefaultAsync(a => a.Nic.ToLower() == nic.ToLower());
             return adminData!;
         }
+        
+
     }
 }
