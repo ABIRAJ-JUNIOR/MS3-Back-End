@@ -26,7 +26,14 @@ namespace MS3_Back_End.Repository
             var adminData = await _dbContext.Admins.SingleOrDefaultAsync(a => a.Nic.ToLower() == nic.ToLower());
             return adminData!;
         }
-        
+
+        public async Task<Admin> GetAdminById(Guid id)
+        {
+            var adminData = await _dbContext.Admins.SingleOrDefaultAsync(a => a.Id == id);
+            return adminData!;
+        }
+
+
         public async Task<ICollection<Admin>> GetAllAdmins()
         {
             var adminsList = await _dbContext.Admins.ToListAsync();
