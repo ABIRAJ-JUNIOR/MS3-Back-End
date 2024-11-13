@@ -168,6 +168,40 @@ namespace MS3_Back_End.Service
         }
 
 
+        public async Task<StudentResponseDTO> GetStudentById(Guid StudentId)
+        {
+            var item = await _StudentRepo.GetStudentById(StudentId);
+            if (item == null)
+            {
+                throw new Exception("Student Not Found");
+            }
+            var AddressResponse = new AddressResponseDTO
+            {
+
+                AddressLine1 = item.Address.AddressLine1,
+                AddressLine2 = item.Address.AddressLine2,
+                PostalCode = item.Address.PostalCode,
+                City = item.Address.City,
+                Country = item.Address.Country,
+            };
+            var obj = new StudentResponseDTO
+            {
+                Id = item.Id,
+                Nic = item.Nic,
+                FirstName = item.FirstName,
+                LastName = item.LastName,
+                DateOfBirth = item.DateOfBirth,
+                Gender = item.Gender,
+                Phone = item.Phone,
+                ImagePath = item.ImagePath,
+                CteatedDate = item.CteatedDate,
+                UpdatedDate = item.UpdatedDate,
+                Address = AddressResponse,
+
+            };
+            return obj;
+        }
+
 
 
 
