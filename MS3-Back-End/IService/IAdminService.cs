@@ -8,6 +8,6 @@ namespace MS3_Back_End.IService
         Task<AdminResponseDTO> AddAdmin(AdminRequestDTO request);
         Task<ICollection<AdminResponseDTO>> GetAllAdmins();
         Task<AdminResponseDTO> UpdateAdmin(Guid id, AdminUpdateRequestDTO request);
-        Task<string> UpdateEmail(Guid studentId, string email, string password);
+        Task<string> UpdateEmail(UpdateEmailRequestDTO request);
     }
 }

@@ -38,13 +38,28 @@ namespace MS3_Back_End.Controllers
             return Ok(adminsList);
         }
 
-        [HttpPut("update-personal-details")]
+        [HttpPut("Update-Personal-Details")]
         public async Task<IActionResult> UpdateAdmin(Guid id, AdminUpdateRequestDTO request)
         {
             try
             {
                 var updatedData = await _adminService.UpdateAdmin(id, request);
                 return Ok(updatedData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("Update-Email")]
+
+        public async Task<IActionResult>  UpdateEmail(UpdateEmailRequestDTO request)
+        {
+            try
+            {
+                var updateEmail = await _adminService.UpdateEmail(request);
+                return Ok(updateEmail);
             }
             catch (Exception ex)
             {
