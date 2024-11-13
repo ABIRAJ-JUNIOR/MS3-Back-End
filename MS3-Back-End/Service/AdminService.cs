@@ -138,9 +138,23 @@ namespace MS3_Back_End.Service
             return response;
         }
 
-        public async Task<string> UpdateEmail(string email)
+        public async Task<string> UpdateEmail(Guid studentId ,string email,string password)
         {
-            var userData = await _adminRepository
+            var userData = await _adminRepository.GetUserById(studentId);
+            if(userData == null)
+            {
+                throw new Exception("User not found");
+            }
+            if (!BCrypt.Net.BCrypt.Verify(password , userData.Password))
+            {
+                throw new Exception("Wrong Password");
+            }
+
+            userData.Email = email;
+
+            var updatedData = await _adminRepository.UpdateEmail(userData);
+
+            return "Update email successfully";
         }
     }
 }
