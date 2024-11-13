@@ -62,6 +62,25 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateStudent(StudentUpdateDTO studentUpdate)
+        {
+            if (studentUpdate == null)
+            {
+                return BadRequest("Student data is required");
+            }
+
+            try
+            {
+                var updatedStudent = await _studentService.UpdateStudent(studentUpdate);
+                return Ok(updatedStudent);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
     }
 }
