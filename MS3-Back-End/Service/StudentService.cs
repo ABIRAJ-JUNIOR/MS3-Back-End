@@ -1,6 +1,7 @@
 ﻿using MS3_Back_End.DBContext;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.DTOs.RequestDTOs.Student;
+using MS3_Back_End.DTOs.ResponseDTOs.Address;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Student;
 using MS3_Back_End.Entities;
@@ -13,29 +14,75 @@ namespace MS3_Back_End.Service
     public class StudentService : IStudentService
     {
         private readonly IStudentRepository _StudentRepo;
-        public StudentService(IStudentRepository StudentRepo)
+        private readonly IAddressRepository _AddressRepo;
+        public StudentService(IStudentRepository StudentRepo, IAddressRepository addressRepo)
         {
             _StudentRepo = StudentRepo;
+            _AddressRepo = addressRepo;
         }
 
-        public async Task<StudentResponseDTO> AddStudent(StudentRequestDTO Stundent)
+        public async Task<StudentResponseDTO> AddStudent(StudentRequestDTO StudentReq)
         {
 
             var Student = new Student
             {
-               
+                Nic = StudentReq.Nic,
+                FirstName = StudentReq.FirstName,
+                LastName = StudentReq.LastName,
+                DateOfBirth = StudentReq.DateOfBirth,
+                Gender = StudentReq.Gender,
+                Phone = StudentReq.Phone,
+                ImagePath = StudentReq.ImagePath,
+                CteatedDate = DateTime.Now,
+                UpdatedDate = DateTime.Now,
+
+            };
+            var data = await _StudentRepo.AddStudent(Student);
+
+            var address = new Address
+            {
+                AddressLine1 = StudentReq.Address.AddressLine1,
+                AddressLine2 = StudentReq.Address.AddressLine2,
+                PostalCode = StudentReq.Address.PostalCode,
+                City = StudentReq.Address.City,
+                Country = StudentReq.Address.Country,
+                StudentId = data.Id
             };
 
-            var data = await _StudentRepo.AddStudent(Student);
+            var addressData =await _AddressRepo.AddAddress(address);
+
+            var AddressResponse = new AddressResponseDTO
+            {
+                StudentId = addressData.StudentId,
+                AddressLine1 = addressData.AddressLine1,
+                AddressLine2 = addressData.AddressLine2,
+                PostalCode = addressData.PostalCode,
+                City = addressData.City,
+                Country = addressData.Country,
+            };
 
             var StudentReponse = new StudentResponseDTO
             {
-               
+                Id = data.Id,
+                Nic = data.Nic,
+                FirstName = data.FirstName,
+                LastName = data.LastName,
+                DateOfBirth = data.DateOfBirth,
+                Gender = data.Gender,
+                Phone = data.Phone,
+                ImagePath = data.ImagePath,
+                CteatedDate = data.CteatedDate,
+                UpdatedDate = data.UpdatedDate,
+                Address=AddressResponse,
+
+
             };
 
             return StudentReponse;
 
         }
+
+
 
 
 

@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.Entities;
+﻿using MS3_Back_End.DTOs.RequestDTOs.Address;
+using MS3_Back_End.Entities;
 
 namespace MS3_Back_End.DTOs.RequestDTOs.Student
 {
@@ -11,9 +12,7 @@ namespace MS3_Back_End.DTOs.RequestDTOs.Student
         public Gender Gender { get; set; }
         public string Phone { get; set; } = string.Empty;
         public string ImagePath { get; set; } = string.Empty;
-        public DateTime CteatedDate { get; set; } = DateTime.MinValue;
-        public DateTime? UpdatedDate { get; set; } = DateTime.MinValue;
-        public bool IsActive { get; set; } = true;
 
+        public AddressRequestDTO? Address { get; set; }
     }
 }

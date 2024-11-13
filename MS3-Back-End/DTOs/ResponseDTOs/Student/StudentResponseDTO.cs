@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.Entities;
+﻿using MS3_Back_End.DTOs.ResponseDTOs.Address;
+using MS3_Back_End.Entities;
 
 namespace MS3_Back_End.DTOs.ResponseDTOs.Student
 {
@@ -15,6 +16,8 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Student
         public DateTime CteatedDate { get; set; } = DateTime.MinValue;
         public DateTime? UpdatedDate { get; set; } = DateTime.MinValue;
         public bool IsActive { get; set; } = true;
+
+        public AddressResponseDTO Address { get; set; }
 
 
 

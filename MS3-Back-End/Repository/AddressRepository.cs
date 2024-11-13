@@ -19,7 +19,7 @@ namespace MS3_Back_End.Repository
             if (Address == null)
             {
                 var data = await _dbContext.Addresses.AddAsync(Address);
-                _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
                 return data.Entity;
 
             }
