@@ -31,5 +31,12 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [HttpGet]
+
+        public async Task<IActionResult> GetAllPayments()
+        {
+            var paymentsList = await _paymentService.GetAllPayments();
+            return Ok(paymentsList);
+        }
     }
 }
