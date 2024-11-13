@@ -1,13 +1,10 @@
 ﻿using MS3_Back_End.DBContext;
+using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Service
 {
-    public class StudentService
+    public class StudentService : IStudentService
     {
-        private readonly AppDBContext _db;
-        public StudentService(AppDBContext db)
-        {
-            _db = db;
-        }
+     
     }
 }
