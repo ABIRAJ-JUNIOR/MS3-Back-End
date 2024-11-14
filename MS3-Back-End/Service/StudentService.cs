@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DBContext;
+﻿using Azure.Core;
+using MS3_Back_End.DBContext;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.DTOs.RequestDTOs.Student;
 using MS3_Back_End.DTOs.ResponseDTOs.Address;
@@ -15,51 +16,82 @@ namespace MS3_Back_End.Service
     {
         private readonly IStudentRepository _StudentRepo;
         private readonly IAddressRepository _AddressRepo;
-        public StudentService(IStudentRepository StudentRepo, IAddressRepository addressRepo)
+        private readonly IAuthRepository _authRepository;
+
+        public StudentService(IStudentRepository studentRepo, IAddressRepository addressRepo, IAuthRepository authRepo)
         {
-            _StudentRepo = StudentRepo;
+            _StudentRepo = studentRepo;
             _AddressRepo = addressRepo;
+            _authRepository = authRepo;
         }
 
         public async Task<StudentResponseDTO> AddStudent(StudentRequestDTO StudentReq)
         {
+            var nicCheck = await _authRepository.GetStudentByNic(StudentReq.Nic);
+            var emailCheck = await _authRepository.GetUserByEmail(StudentReq.Email);
+
+            if(nicCheck != null)
+            {
+                throw new Exception("Nic already used");
+            }
+
+            if(emailCheck != null)
+            {
+                throw new Exception("Email already used");
+            }
+
+            var user = new User()
+            {
+                Email = StudentReq.Email,
+                IsConfirmEmail = false,
+                Password = BCrypt.Net.BCrypt.HashPassword(StudentReq.Password),
+
+            };
+
+            var userData = await _authRepository.AddUser(user);
+            var roleData = await _authRepository.GetRoleByName("Student");
+            if (roleData == null)
+            {
+                throw new Exception("Role not found");
+            }
+
+            var userRole = new UserRole()
+            {
+                UserId = userData.Id,
+                RoleId = roleData.Id
+            };
+
+            var userRoleData = await _authRepository.AddUserRole(userRole);
 
             var Student = new Student
             {
+                Id = userData.Id,
                 Nic = StudentReq.Nic,
                 FirstName = StudentReq.FirstName,
                 LastName = StudentReq.LastName,
                 DateOfBirth = StudentReq.DateOfBirth,
                 Gender = StudentReq.Gender,
                 Phone = StudentReq.Phone,
-                ImagePath = StudentReq.ImagePath,
                 CteatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
 
             };
+
+            if(StudentReq.Address != null)
+            {
+                var address = new Address
+                {
+                    AddressLine1 = StudentReq.Address.AddressLine1,
+                    AddressLine2 = StudentReq.Address.AddressLine2,
+                    PostalCode = StudentReq.Address.PostalCode,
+                    City = StudentReq.Address.City,
+                    Country = StudentReq.Address.Country,
+                };
+
+                Student.Address = address;
+            }
+
             var data = await _StudentRepo.AddStudent(Student);
-
-            var address = new Address
-            {
-                AddressLine1 = StudentReq.Address.AddressLine1,
-                AddressLine2 = StudentReq.Address.AddressLine2,
-                PostalCode = StudentReq.Address.PostalCode,
-                City = StudentReq.Address.City,
-                Country = StudentReq.Address.Country,
-                StudentId = data.Id
-            };
-
-            var addressData =await _AddressRepo.AddAddress(address);
-
-            var AddressResponse = new AddressResponseDTO
-            {
-                StudentId = addressData.StudentId,
-                AddressLine1 = addressData.AddressLine1,
-                AddressLine2 = addressData.AddressLine2,
-                PostalCode = addressData.PostalCode,
-                City = addressData.City,
-                Country = addressData.Country,
-            };
 
             var StudentReponse = new StudentResponseDTO
             {
@@ -70,16 +102,27 @@ namespace MS3_Back_End.Service
                 DateOfBirth = data.DateOfBirth,
                 Gender = data.Gender,
                 Phone = data.Phone,
-                ImagePath = data.ImagePath,
+                ImagePath = data.ImagePath!,
                 CteatedDate = data.CteatedDate,
                 UpdatedDate = data.UpdatedDate,
-                Address=AddressResponse,
-
-
             };
 
-            return StudentReponse;
+            if (data.Address != null)
+            {
+                var AddressResponse = new AddressResponseDTO
+                {
+                    StudentId = data.Address.StudentId,
+                    AddressLine1 = data.Address.AddressLine1,
+                    AddressLine2 = data.Address.AddressLine2,
+                    PostalCode = data.Address.PostalCode,
+                    City = data.Address.City,
+                    Country = data.Address.Country,
+                };
 
+                StudentReponse.Address = AddressResponse;
+            }
+
+            return StudentReponse;
         }
 
 
