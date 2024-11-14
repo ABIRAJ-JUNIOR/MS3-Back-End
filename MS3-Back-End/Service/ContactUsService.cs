@@ -61,21 +61,28 @@ namespace MS3_Back_End.Service
             return ContactUsResponse;
         }
 
-        public async Task<ContactUsResponseDTO> UpdateMessage(ContactUsRequestDTO contactUsRequestDTO)
+        public async Task<ContactUsResponseDTO> UpdateMessage(UpdateResponseRequestDTO request)
         {
-            var GetData = await _contactUsRepository.GetMessageById(contactUsRequestDTO.Id);
-            GetData.Name = contactUsRequestDTO.Name;
-            GetData.Email = contactUsRequestDTO.Email;
-            GetData.Message = contactUsRequestDTO.Message;
+            var GetData = await _contactUsRepository.GetMessageById(request.Id);
+            if(GetData == null)
+            {
+                throw new Exception("Not found");
+            }
+
+            GetData.Response = request.Response;
+            GetData.IsRead = true;
 
             var UpdatedData = await _contactUsRepository.UpdateMessage(GetData);
 
             var newUpdateMessage = new ContactUsResponseDTO
             {
-                Id = contactUsRequestDTO.Id,
-                Name = contactUsRequestDTO.Name,
-                Email = contactUsRequestDTO.Email,
-                Message = contactUsRequestDTO.Message,
+                Id = UpdatedData.Id,
+                Name = UpdatedData.Name,
+                Email = UpdatedData.Email,
+                Response = UpdatedData.Response,
+                DateSubmited = DateTime.Now,
+                Message = UpdatedData.Message,
+                IsRead = UpdatedData.IsRead
             };
             return newUpdateMessage;
         }
