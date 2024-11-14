@@ -19,13 +19,14 @@ namespace MS3_Back_End.Service
             _notificationRepository = notificationRepository;
         }
 
-        public async Task<NotificationResponseDTO> AddNotification(NOtificationRequestDTO requestDTO )
+        public async Task<NotificationResponseDTO> AddNotification(NotificationRequestDTO requestDTO )
         {
             var Message = new Notification
             {
                 Message = requestDTO.Message,
                 NotificationType = requestDTO.NotificationType,
                 StudentId = requestDTO.StudentId,
+                DateSent = DateTime.Now,
                 IsRead = false
             };
 
@@ -43,47 +44,39 @@ namespace MS3_Back_End.Service
             return newNotification;
         }
 
-        public async Task<List<NotificationResponseDTO>> GetAllNotification()
+        public async Task<List<NotificationResponseDTO>> GetAllNotification(Guid id)
         {
-            var allData = await _notificationRepository.GetAllNotification();
+            var allData = await _notificationRepository.GetAllNotification(id);
             if (allData == null)
             {
                 throw new Exception("No notifications");
             }
-            var NotificationResponse = new List<NotificationResponseDTO>();
-            foreach (var message in allData)
+            
+            var NotificationResponse = allData.Select(message => new NotificationResponseDTO()
             {
-                var obj = new NotificationResponseDTO
-                {
-                    Id = message.Id,
-                    Message = message.Message,
-                    NotificationType = message.NotificationType,
-                    DateSent = message.DateSent,
-                    StudentId = message.StudentId,
-                    IsRead = message.IsRead
-                };
-                NotificationResponse.Add(obj);
-            }
+                Id = message.Id,
+                Message = message.Message,
+                NotificationType = message.NotificationType,
+                DateSent = message.DateSent,
+                StudentId = message.StudentId,
+                IsRead = message.IsRead
+            }).ToList();
+
             return NotificationResponse;
         }
-
-        public async Task<NotificationResponseDTO> GetNotificationById(Guid Id)
+        
+        public async Task<string> DeleteNotification(Guid id)
         {
-            var data = await _notificationRepository.GetNotificationById(Id);
-            if (data == null)
+            var notificationData = await _notificationRepository.GetNotificationById(id);
+            if(notificationData == null)
             {
-                throw new Exception("Messages not found or Invalid Id");
+                throw new Exception("Not found");
             }
-            var notiResponse = new NotificationResponseDTO
-            {
-                Id = data.Id,
-                Message = data.Message,
-                NotificationType = data.NotificationType,
-                DateSent = data.DateSent,
-                StudentId = data.StudentId,
-                IsRead = data.IsRead
-            };
-            return notiResponse;
+
+            notificationData.IsRead = true;
+            await _notificationRepository.DeleteNotification(notificationData);
+
+            return "Deleted Successfully";
         }
     }
 }

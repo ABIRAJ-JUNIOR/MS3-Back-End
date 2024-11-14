@@ -22,6 +22,7 @@ namespace MS3_Back_End.Service
                 Name = requestDTO.Name,
                 Email = requestDTO.Email,
                 Message = requestDTO.Message,
+                DateSubmited = DateTime.Now,
                 IsRead = false
             };
 
@@ -29,6 +30,7 @@ namespace MS3_Back_End.Service
 
             var newContactUs = new ContactUsResponseDTO
             {
+                Id = data.Id,
                 Name = data.Name,
                 Email = data.Email,
                 Message = data.Message,
@@ -45,53 +47,42 @@ namespace MS3_Back_End.Service
             {
                 throw new Exception("No messages");
             }
-            var ContactUsResponse = new List<ContactUsResponseDTO>();
-            foreach (var message in allMessages)
+            
+            var ContactUsResponse = allMessages.Select(message => new ContactUsResponseDTO()
             {
-                var obj = new ContactUsResponseDTO
-                {
-                    Id = message.Id,
-                    Name = message.Name,
-                    Email = message.Email,
-                    Message = message.Message,
-                };
-                ContactUsResponse.Add(obj);
-            }
+                Id = message.Id,
+                Name = message.Name,
+                Email = message.Email,
+                Message = message.Message,
+                DateSubmited = DateTime.Now,
+                IsRead = false
+            }).ToList();
+
             return ContactUsResponse;
         }
 
-        public async Task<ContactUsResponseDTO> GetMessageById(Guid Id)
+        public async Task<ContactUsResponseDTO> UpdateMessage(UpdateResponseRequestDTO request)
         {
-            var data = await _contactUsRepository.GetMessageById(Id);
-            if (data == null)
+            var GetData = await _contactUsRepository.GetMessageById(request.Id);
+            if(GetData == null)
             {
-                throw new Exception("Messages not found or Invalid Id");
+                throw new Exception("Not found");
             }
-            var contactResponse = new ContactUsResponseDTO
-            {
-                Id = data.Id,
-                Name = data.Name,
-                Email = data.Email,
-                Message = data.Message,
-            };
-            return contactResponse;
-        }
 
-        public async Task<ContactUsResponseDTO> UpdateMessage(ContactUsRequestDTO contactUsRequestDTO)
-        {
-            var GetData = await _contactUsRepository.GetMessageById(contactUsRequestDTO.Id);
-            GetData.Name = contactUsRequestDTO.Name;
-            GetData.Email = contactUsRequestDTO.Email;
-            GetData.Message = contactUsRequestDTO.Message;
+            GetData.Response = request.Response;
+            GetData.IsRead = true;
 
             var UpdatedData = await _contactUsRepository.UpdateMessage(GetData);
 
             var newUpdateMessage = new ContactUsResponseDTO
             {
-                Id = contactUsRequestDTO.Id,
-                Name = contactUsRequestDTO.Name,
-                Email = contactUsRequestDTO.Email,
-                Message = contactUsRequestDTO.Message,
+                Id = UpdatedData.Id,
+                Name = UpdatedData.Name,
+                Email = UpdatedData.Email,
+                Response = UpdatedData.Response,
+                DateSubmited = DateTime.Now,
+                Message = UpdatedData.Message,
+                IsRead = UpdatedData.IsRead
             };
             return newUpdateMessage;
         }

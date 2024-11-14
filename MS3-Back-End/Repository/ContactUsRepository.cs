@@ -30,7 +30,7 @@ namespace MS3_Back_End.Repository
         public async Task<ContactUs> GetMessageById(Guid Id)
         {
             var getMessageById = await _dbContext.ContactUs.SingleOrDefaultAsync(C => C.Id == Id);
-            return getMessageById;
+            return getMessageById!;
         }
 
         public async Task<ContactUs> UpdateMessage(ContactUs contactUs)

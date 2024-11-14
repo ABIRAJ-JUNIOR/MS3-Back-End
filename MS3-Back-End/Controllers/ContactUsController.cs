@@ -47,27 +47,13 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("Get-Messages-By-Id")]
-        public async Task<IActionResult> GetMessageById(Guid Id)
-        {
-            try
-            {
-                var result = await _contactUsService.GetMessageById(Id);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
         [HttpPut("Update-Message")]
 
-        public async Task<IActionResult> UpdateMessage(ContactUsRequestDTO contactUsRequestDTO)
+        public async Task<IActionResult> UpdateMessage(UpdateResponseRequestDTO request)
         {
             try
             {
-                var updateMessage = await _contactUsService.UpdateMessage(contactUsRequestDTO);
+                var updateMessage = await _contactUsService.UpdateMessage(request);
                 return Ok(updateMessage);
             }
             catch (Exception ex)
