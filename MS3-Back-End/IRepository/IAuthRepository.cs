@@ -6,7 +6,7 @@ namespace MS3_Back_End.IRepository
     {
         Task<Student> SignUp(Student student);
         Task<User> AddUser(User user);
-        Task<Role> GetStudentRole();
+        Task<Role> GetRoleByName(string name);
         Task<UserRole> AddUserRole(UserRole userRole);
         Task<Student> GetStudentByNic(string nic);
         Task<User> GetUserByEmail(string email);

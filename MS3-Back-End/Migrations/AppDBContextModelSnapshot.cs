@@ -72,7 +72,6 @@ namespace MS3_Back_End.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImagePath")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -82,6 +81,10 @@ namespace MS3_Back_End.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nic")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -132,14 +135,11 @@ namespace MS3_Back_End.Migrations
                     b.Property<Guid>("CourseId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateOnly>("CreatedDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<int>("PassMarks")
                         .HasColumnType("int");
@@ -147,11 +147,14 @@ namespace MS3_Back_End.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<int>("TotalMarks")
                         .HasColumnType("int");
 
-                    b.Property<DateOnly>("UpdateDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -170,8 +173,8 @@ namespace MS3_Back_End.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly>("ActionDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("ActionDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("AdminId")
                         .HasColumnType("uniqueidentifier");
@@ -193,8 +196,8 @@ namespace MS3_Back_End.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateOnly>("DateSubmited")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("DateSubmited")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -343,8 +346,8 @@ namespace MS3_Back_End.Migrations
                     b.Property<Guid>("CourseSheduleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateOnly>("EnrollmentDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("EnrollmentDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -402,8 +405,8 @@ namespace MS3_Back_End.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateOnly>("DateSent")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("DateSent")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
@@ -431,24 +434,20 @@ namespace MS3_Back_End.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("AmmountPaid")
+                    b.Property<decimal>("AmountPaid")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("EnrollementId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("EnrollmentId")
+                    b.Property<Guid>("EnrollmentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ImagePath")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("InstallmentNumber")
                         .HasColumnType("int");
 
-                    b.Property<DateOnly>("PaymentDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("PaymentMethod")
                         .HasColumnType("int");
@@ -498,7 +497,6 @@ namespace MS3_Back_End.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ImagePath")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -535,16 +533,18 @@ namespace MS3_Back_End.Migrations
                     b.Property<Guid?>("AssessmentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DateEvaluted")
+                    b.Property<DateTime>("DateEvaluated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSubmitted")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FeedBack")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Grade")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Grade")
+                        .HasColumnType("int");
 
                     b.Property<int>("MarksObtaines")
                         .HasColumnType("int");
@@ -714,7 +714,9 @@ namespace MS3_Back_End.Migrations
                 {
                     b.HasOne("MS3_Back_End.Entities.Enrollment", "Enrollment")
                         .WithMany("Payments")
-                        .HasForeignKey("EnrollmentId");
+                        .HasForeignKey("EnrollmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Enrollment");
                 });

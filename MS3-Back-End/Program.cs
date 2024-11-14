@@ -13,6 +13,7 @@ namespace MS3_Back_End
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.WebHost.UseWebRoot("wwwroot");
 
             // Add services to the container.
 
@@ -37,6 +38,46 @@ namespace MS3_Back_End
             //CourseShedule
             builder.Services.AddScoped<ICourseSheduleRepository,CourseSheduleRepository>();
             builder.Services.AddScoped<ICourseSheduleService,CourseSheduleService>();
+          
+            //ContactUs
+            builder.Services.AddScoped<IContactUsRepository, ContactUsRepository>();
+            builder.Services.AddScoped<IContactUsService, ContactUsService>();
+
+            //CourseCategory
+            builder.Services.AddScoped<ICourseCategoryRepository, CourseCategoryRepository>();
+            builder.Services.AddScoped<ICourseCategoryService, CourseCategoryService>();
+
+            //Notification
+            builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+            builder.Services.AddScoped<INotificationService, NotificationService>();
+
+            //Assessment
+            builder.Services.AddScoped<IAssessmentRepository,AssessmentRepository>();
+            builder.Services.AddScoped<IAssessmentService,AssessmentService>();
+          
+            //enrollements 
+            builder.Services.AddScoped<IEnrollmentRepository,EnrollmentRepository>();
+            builder.Services.AddScoped<IEnrollementService, EnrollmentService>();
+
+            //StudentAssessment
+            builder.Services.AddScoped<IStudentAssessmentRepository, StudentAssessmentRepository>();
+            builder.Services.AddScoped<IStudentAssessmentService, StudentAssessmentService>();
+
+            //Announcement
+            builder.Services.AddScoped<IAnnouncementRepository,AnnouncementRepository>();   
+            builder.Services.AddScoped<IAnnouncementService,AnnouncementService>();
+
+            //Payment
+            builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
+          
+            //Student
+            builder.Services.AddScoped<IStudentRepository,StudentRepository>();
+            builder.Services.AddScoped<IStudentService,StudentService>();
+
+            //Admin
+            builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+            builder.Services.AddScoped<IAdminService, AdminService>();
 
 
             builder.Services.AddCors(options =>
@@ -59,6 +100,8 @@ namespace MS3_Back_End
             }
 
             app.UseCors();
+
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 

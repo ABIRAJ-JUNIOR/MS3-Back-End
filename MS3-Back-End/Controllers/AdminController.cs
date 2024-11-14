@@ -1,0 +1,70 @@
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using MS3_Back_End.DTOs.RequestDTOs.Admin;
+using MS3_Back_End.DTOs.ResponseDTOs.Admin;
+using MS3_Back_End.IService;
+
+namespace MS3_Back_End.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AdminController : ControllerBase
+    {
+        private readonly IAdminService _adminService;
+
+        public AdminController(IAdminService adminService)
+        {
+            _adminService = adminService;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddAdmin(AdminRequestDTO request)
+        {
+            try
+            {
+                var adminData = await _adminService.AddAdmin(request);
+                return Ok(adminData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllAdmins()
+        {
+            var adminsList = await _adminService.GetAllAdmins();
+            return Ok(adminsList);
+        }
+
+        [HttpPut("Update-Personal-Details")]
+        public async Task<IActionResult> UpdateAdmin(Guid id, AdminUpdateRequestDTO request)
+        {
+            try
+            {
+                var updatedData = await _adminService.UpdateAdmin(id, request);
+                return Ok(updatedData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("Update-Email")]
+
+        public async Task<IActionResult>  UpdateEmail(UpdateEmailRequestDTO request)
+        {
+            try
+            {
+                var updateEmail = await _adminService.UpdateEmail(request);
+                return Ok(updateEmail);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+    }
+}
