@@ -15,14 +15,12 @@ namespace MS3_Back_End.Service
     public class StudentService : IStudentService
     {
         private readonly IStudentRepository _StudentRepo;
-        private readonly IAddressRepository _AddressRepo;
         private readonly IAuthRepository _authRepository;
 
-        public StudentService(IStudentRepository studentRepo, IAddressRepository addressRepo, IAuthRepository authRepo)
+        public StudentService(IStudentRepository studentRepo, IAuthRepository authRepository)
         {
             _StudentRepo = studentRepo;
-            _AddressRepo = addressRepo;
-            _authRepository = authRepo;
+            _authRepository = authRepository;
         }
 
         public async Task<StudentResponseDTO> AddStudent(StudentRequestDTO StudentReq)
