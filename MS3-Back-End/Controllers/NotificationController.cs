@@ -33,12 +33,12 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("Get-All-Notifications")]
-        public async Task<IActionResult> GetAllNotification()
+        [HttpGet("Notifications/{id}")]
+        public async Task<IActionResult> GetAllNotification(Guid id)
         {
             try
             {
-                var result = await _notificationService.GetAllNotification();
+                var result = await _notificationService.GetAllNotification(id);
                 return Ok(result);
             }
             catch (Exception ex)
