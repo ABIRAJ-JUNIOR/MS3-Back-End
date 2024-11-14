@@ -49,11 +49,11 @@ namespace MS3_Back_End.Controllers
 
         [HttpPut("Update-Message")]
 
-        public async Task<IActionResult> UpdateMessage(ContactUsRequestDTO contactUsRequestDTO)
+        public async Task<IActionResult> UpdateMessage(UpdateResponseRequestDTO request)
         {
             try
             {
-                var updateMessage = await _contactUsService.UpdateMessage(contactUsRequestDTO);
+                var updateMessage = await _contactUsService.UpdateMessage(request);
                 return Ok(updateMessage);
             }
             catch (Exception ex)
