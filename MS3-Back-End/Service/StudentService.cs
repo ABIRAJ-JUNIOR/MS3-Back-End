@@ -162,6 +162,7 @@ namespace MS3_Back_End.Service
                         PostalCode = item.Address.PostalCode,
                         City = item.Address.City,
                         Country = item.Address.Country,
+                        StudentId = item.Id,
                     };
 
                     obj.Address = AddressResponse;
@@ -208,6 +209,7 @@ namespace MS3_Back_End.Service
                         PostalCode = item.Address.PostalCode,
                         City = item.Address.City,
                         Country = item.Address.Country,
+                        StudentId = item.Id,
                     };
                     obj.Address = AddressResponse;
                 }
@@ -249,6 +251,7 @@ namespace MS3_Back_End.Service
                     PostalCode = item.Address.PostalCode,
                     City = item.Address.City,
                     Country = item.Address.Country,
+                    StudentId = item.Id,
                 };
 
                 obj.Address = AddressResponse;
