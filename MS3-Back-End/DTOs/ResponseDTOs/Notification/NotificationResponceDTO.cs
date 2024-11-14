@@ -6,13 +6,13 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Notification
     {
         public Guid Id { get; set; }
         public string Message { get; set; } = string.Empty;
-        public DateOnly DateSent { get; set; }
+        public DateTime DateSent { get; set; }
         public NotificationType NotificationType { get; set; }
         public bool IsRead { get; set; }
 
         public Guid StudentId { get; set; }
 
 
-        public Student? Student { get; set; }
+        //public Student? Student { get; set; }
     }
 }

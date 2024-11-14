@@ -17,6 +17,7 @@ namespace MS3_Back_End.Controllers
         {
             _addressService = addressService;
         }
+
         [HttpPost("Add-Addrees")]
         public async Task<IActionResult> AddAddress(AddressRequestDTO address)
         {
@@ -32,6 +33,7 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpGet("GetAddressbyStudentID")]
         public async Task<IActionResult> GetAddressbyStuID(Guid stuID) 
         {
@@ -45,6 +47,7 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpGet("GetAllAddresses")]
         public async Task<IActionResult> GetAllAddress()
         {
@@ -58,6 +61,7 @@ namespace MS3_Back_End.Controllers
                return BadRequest(ex.Message);
             }
         }
+
         [HttpDelete("Delete-Address")]
         public async Task<IActionResult> DeleteAddress(Guid stuid)
         {
@@ -71,6 +75,7 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpPut("Update-Address")]
         public async  Task<IActionResult> UpdateAddress(AddressUpdateRequestDTO addressUpdate,Guid stuID)
         {
@@ -84,6 +89,8 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("Search-By-City")]
         public async Task<IActionResult> SearchbyCity(string searchText)
         {
             try
