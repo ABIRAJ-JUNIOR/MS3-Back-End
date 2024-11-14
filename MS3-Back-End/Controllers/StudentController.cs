@@ -14,6 +14,8 @@ namespace MS3_Back_End.Controllers
         {
             _studentService = studentService;
         }
+
+
         [HttpPost("student")]
         public async Task<IActionResult> AddStudent(StudentRequestDTO studentRequest)
         {

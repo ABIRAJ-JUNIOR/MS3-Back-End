@@ -8,6 +8,6 @@
         public string PostalCode { get; set; } = string.Empty;
         public string Country { get; set; } = string.Empty;
 
-        public Guid StudentId { get; set; }
+        public Guid? StudentId { get; set; }
     }
 }
