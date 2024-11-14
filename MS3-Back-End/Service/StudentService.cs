@@ -184,20 +184,6 @@ namespace MS3_Back_End.Service
             var StudentRes = new List<StudentResponseDTO>();
             foreach (var item in data)
             {
-
-                AddressResponseDTO AddressResponse = null;
-
-                if (item.Address != null)
-                {
-                    AddressResponse = new AddressResponseDTO
-                    {
-                        AddressLine1 = item.Address.AddressLine1,
-                        AddressLine2 = item.Address.AddressLine2,
-                        PostalCode = item.Address.PostalCode,
-                        City = item.Address.City,
-                        Country = item.Address.Country,
-                    };
-                }
                 var obj = new StudentResponseDTO
                 {
                     Id = item.Id,
@@ -207,12 +193,25 @@ namespace MS3_Back_End.Service
                     DateOfBirth = item.DateOfBirth,
                     Gender = item.Gender,
                     Phone = item.Phone,
-                    ImagePath = item.ImagePath,
+                    ImagePath = item.ImagePath!,
                     CteatedDate = item.CteatedDate,
                     UpdatedDate = item.UpdatedDate,
-                    Address = AddressResponse,
 
                 };
+
+                if (item.Address != null)
+                {
+                    var AddressResponse = new AddressResponseDTO
+                    {
+                        AddressLine1 = item.Address.AddressLine1,
+                        AddressLine2 = item.Address.AddressLine2,
+                        PostalCode = item.Address.PostalCode,
+                        City = item.Address.City,
+                        Country = item.Address.Country,
+                    };
+                    obj.Address = AddressResponse;
+                }
+
                 StudentRes.Add(obj);
             }
             return StudentRes;
@@ -248,7 +247,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = item.DateOfBirth,
                 Gender = item.Gender,
                 Phone = item.Phone,
-                ImagePath = item.ImagePath,
+                ImagePath = item.ImagePath!,
                 CteatedDate = item.CteatedDate,
                 UpdatedDate = item.UpdatedDate,
                 Address = AddressResponse,
