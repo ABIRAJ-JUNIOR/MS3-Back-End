@@ -7,9 +7,10 @@ namespace MS3_Back_End.Entities
         [Key]
         public Guid Id { get; set; }
         public int MarksObtaines { get; set; }
-        public string Grade { get; set; } = string.Empty;
+        public Grade Grade { get; set; }
         public string FeedBack { get; set; } = string.Empty;
-        public DateTime DateEvaluted { get; set; }
+        public DateTime DateSubmitted { get; set; }
+        public DateTime DateEvaluated { get; set; }
         public StudentAssessmentStatus StudentAssessmentStatus { get; set; }
 
         public Guid StudentId { get; set; }
@@ -22,8 +23,13 @@ namespace MS3_Back_End.Entities
     }
     public enum StudentAssessmentStatus
     {
-        Absent = 1,
-        Completed = 2,
-        Reviewed = 3
+        Completed = 1,
+        Reviewed = 2
+    }
+
+    public enum Grade
+    {
+        Pass = 1,
+        Fail = 2
     }
 }
