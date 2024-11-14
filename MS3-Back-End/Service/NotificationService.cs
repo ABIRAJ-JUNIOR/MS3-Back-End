@@ -44,27 +44,24 @@ namespace MS3_Back_End.Service
             return newNotification;
         }
 
-        public async Task<List<NotificationResponseDTO>> GetAllNotification()
+        public async Task<List<NotificationResponseDTO>> GetAllNotification(Guid id)
         {
-            var allData = await _notificationRepository.GetAllNotification();
+            var allData = await _notificationRepository.GetAllNotification(id);
             if (allData == null)
             {
                 throw new Exception("No notifications");
             }
-            var NotificationResponse = new List<NotificationResponseDTO>();
-            foreach (var message in allData)
+            
+            var NotificationResponse = allData.Select(message => new NotificationResponseDTO()
             {
-                var obj = new NotificationResponseDTO
-                {
-                    Id = message.Id,
-                    Message = message.Message,
-                    NotificationType = message.NotificationType,
-                    DateSent = message.DateSent,
-                    StudentId = message.StudentId,
-                    IsRead = message.IsRead
-                };
-                NotificationResponse.Add(obj);
-            }
+                Id = message.Id,
+                Message = message.Message,
+                NotificationType = message.NotificationType,
+                DateSent = message.DateSent,
+                StudentId = message.StudentId,
+                IsRead = message.IsRead
+            }).ToList();
+
             return NotificationResponse;
         }
         
