@@ -225,19 +225,7 @@ namespace MS3_Back_End.Service
             {
                 throw new Exception("Student Not Found");
             }
-            AddressResponseDTO AddressResponse = null;
 
-            if (item.Address != null)
-            {
-                AddressResponse = new AddressResponseDTO
-                {
-                    AddressLine1 = item.Address.AddressLine1,
-                    AddressLine2 = item.Address.AddressLine2,
-                    PostalCode = item.Address.PostalCode,
-                    City = item.Address.City,
-                    Country = item.Address.Country,
-                };
-            }
             var obj = new StudentResponseDTO
             {
                 Id = item.Id,
@@ -250,9 +238,22 @@ namespace MS3_Back_End.Service
                 ImagePath = item.ImagePath!,
                 CteatedDate = item.CteatedDate,
                 UpdatedDate = item.UpdatedDate,
-                Address = AddressResponse,
-
             };
+
+            if (item.Address != null)
+            {
+                var AddressResponse = new AddressResponseDTO()
+                {
+                    AddressLine1 = item.Address.AddressLine1,
+                    AddressLine2 = item.Address.AddressLine2,
+                    PostalCode = item.Address.PostalCode,
+                    City = item.Address.City,
+                    Country = item.Address.Country,
+                };
+
+                obj.Address = AddressResponse;
+            }
+
             return obj;
         }
 
