@@ -7,5 +7,6 @@ namespace MS3_Back_End.IRepository
         Task<Notification> AddNotification(Notification _notification);
         Task<List<Notification>> GetAllNotification();
         Task<Notification> GetNotificationById(Guid Id);
+        Task<Notification> DeleteNotification(Notification notification);
     }
 }

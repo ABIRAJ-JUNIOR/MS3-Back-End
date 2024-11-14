@@ -7,30 +7,37 @@ namespace MS3_Back_End.Repository
 {
     public class NotificationRepository: INotificationRepository
     {
-        private readonly AppDBContext appDBContext;
+        private readonly AppDBContext _appDBContext;
 
         public NotificationRepository(AppDBContext _appDBContext)
         {
-            appDBContext = _appDBContext;
+           this._appDBContext = _appDBContext;
         }
 
         public async Task<Notification> AddNotification(Notification _notification)
         {
-            var notification = await appDBContext.Notifications.AddAsync(_notification);
-            await appDBContext.SaveChangesAsync();
+            var notification = await _appDBContext.Notifications.AddAsync(_notification);
+            await _appDBContext.SaveChangesAsync();
             return notification.Entity;
         }
 
         public async Task<List<Notification>> GetAllNotification()
         {
-            var getAllNotification = await appDBContext.Notifications.ToListAsync();
+            var getAllNotification = await _appDBContext.Notifications.ToListAsync();
             return getAllNotification;
         }
 
         public async Task<Notification> GetNotificationById(Guid Id)
         {
-            var getNotificationById = await appDBContext.Notifications.SingleOrDefaultAsync(C => C.Id == Id);
+            var getNotificationById = await _appDBContext.Notifications.SingleOrDefaultAsync(C => C.Id == Id);
             return getNotificationById!;
+        }
+
+        public async Task<Notification> DeleteNotification(Notification notification)
+        {
+            var data = _appDBContext.Notifications.Update(notification);
+            await _appDBContext.SaveChangesAsync();
+            return data.Entity;
         }
     }
 }
