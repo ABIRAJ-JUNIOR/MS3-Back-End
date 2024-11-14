@@ -19,7 +19,7 @@ namespace MS3_Back_End.Service
             _notificationRepository = notificationRepository;
         }
 
-        public async Task<NotificationResponseDTO> AddNotification(NOtificationRequestDTO requestDTO )
+        public async Task<NotificationResponseDTO> AddNotification(NotificationRequestDTO requestDTO )
         {
             var Message = new Notification
             {

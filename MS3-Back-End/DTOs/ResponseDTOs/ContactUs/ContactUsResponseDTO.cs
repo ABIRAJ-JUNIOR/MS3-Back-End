@@ -7,7 +7,7 @@
         public string Email { get; set; } = string.Empty;
         public string Message { get; set; } = string.Empty;
         public string Response { get; set; } = string.Empty;
-        public DateOnly DateSubmited { get; set; }
+        public DateTime DateSubmited { get; set; }
         public bool IsRead { get; set; }
 
     }

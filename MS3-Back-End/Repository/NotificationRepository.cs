@@ -30,7 +30,7 @@ namespace MS3_Back_End.Repository
         public async Task<Notification> GetNotificationById(Guid Id)
         {
             var getNotificationById = await appDBContext.Notifications.SingleOrDefaultAsync(C => C.Id == Id);
-            return getNotificationById;
+            return getNotificationById!;
         }
     }
 }
