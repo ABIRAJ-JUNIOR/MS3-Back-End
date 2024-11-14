@@ -68,7 +68,7 @@ namespace MS3_Back_End.Service
             return NotificationResponse;
         }
         
-        public async Task<string> DeleteNotification(Guid id , Notification notification)
+        public async Task<string> DeleteNotification(Guid id)
         {
             var notificationData = await _notificationRepository.GetNotificationById(id);
             if(notificationData == null)
@@ -77,7 +77,7 @@ namespace MS3_Back_End.Service
             }
 
             notificationData.IsRead = true;
-            await _notificationRepository.DeleteNotification(notification);
+            await _notificationRepository.DeleteNotification(notificationData);
 
             return "Deleted Successfully";
         }

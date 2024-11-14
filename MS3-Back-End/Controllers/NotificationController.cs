@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.RequestDTOs.ContactUs;
 using MS3_Back_End.DTOs.RequestDTOs.Notification;
+using MS3_Back_End.Entities;
 using MS3_Back_End.IService;
 using MS3_Back_End.Service;
 
@@ -46,6 +47,13 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [HttpDelete("{id}")]
+
+        public async Task<IActionResult> DeleteNotification(Guid id)
+        {
+            var response = await _notificationService.DeleteNotification(id);
+            return Ok(response);
+        }
 
     }
 }
