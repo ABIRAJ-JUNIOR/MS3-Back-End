@@ -38,6 +38,18 @@ namespace MS3_Back_End
             //CourseShedule
             builder.Services.AddScoped<ICourseSheduleRepository,CourseSheduleRepository>();
             builder.Services.AddScoped<ICourseSheduleService,CourseSheduleService>();
+          
+            //ContactUs
+            builder.Services.AddScoped<IContactUsRepository, ContactUsRepository>();
+            builder.Services.AddScoped<IContactUsService, ContactUsService>();
+
+            //CourseCategory
+            builder.Services.AddScoped<ICourseCategoryRepository, CourseCategoryRepository>();
+            builder.Services.AddScoped<ICourseCategoryService, CourseCategoryService>();
+
+            //Notification
+            builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+            builder.Services.AddScoped<INotificationService, NotificationService>();
 
             //Assessment
             builder.Services.AddScoped<IAssessmentRepository,AssessmentRepository>();
@@ -66,6 +78,7 @@ namespace MS3_Back_End
             //Admin
             builder.Services.AddScoped<IAdminRepository, AdminRepository>();
             builder.Services.AddScoped<IAdminService, AdminService>();
+
 
             builder.Services.AddCors(options =>
             {

@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
+using MS3_Back_End.DTOs.RequestDTOs.ContactUs;
 using MS3_Back_End.DTOs.RequestDTOs.Notification;
-using MS3_Back_End.DTOs.ResponseDTOs.Notification;
 using MS3_Back_End.IService;
+using MS3_Back_End.Service;
 
 namespace MS3_Back_End.Controllers
 {
@@ -11,81 +11,54 @@ namespace MS3_Back_End.Controllers
     [ApiController]
     public class NotificationController : ControllerBase
     {
-        private readonly INotificationsService _notificationsService;
+        private readonly INotificationService _notificationService;
 
-        public NotificationController(INotificationsService notificationsService)
+        public NotificationController(INotificationService notificationService)
         {
-            _notificationsService = notificationsService;
+            _notificationService = notificationService;
         }
 
         [HttpPost("Add-Notification")]
-        public async Task<IActionResult> AddNotification(NotificationRequestDTO notificationRequestDTO) 
+        public async Task<IActionResult> AddNotification(NOtificationRequestDTO requestDTO)
         {
             try
             {
-                var data = await _notificationsService.AddNotification(notificationRequestDTO);
-                return Ok(data);
+                var message = await _notificationService.AddNotification(requestDTO);
+                return Ok(message);
             }
-            catch (Exception ex) 
-            {
-              return BadRequest(ex.Message);
-            }
-        
-        }
-        [HttpGet("GetNotificationBY-StuID")]
-        public async Task<IActionResult> GetNotificationbystuID(Guid id)
-        {
-            try
-            {
-                var data = await _notificationsService.GetNotificationBYStuID(id);
-                return Ok(data);
-            }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-            }
-        }
-        [HttpGet("GetNotificationby-ID")]
-        public async Task<IActionResult> GetNotificationbyID(Guid Id)
-        {
-            try
-            {
-                var data = _notificationsService.GetNotificationbyID(Id);
-                return Ok(data);
-            }
-            catch (Exception ex) 
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpPost("update-Isread")]
-        public async Task<IActionResult> updateIsread(Guid Id)
-        {
-            try
-            {
-                var data = await _notificationsService.updateIsread(Id);
-                return Ok(data);
-            }
-            catch (Exception ex) 
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpDelete("dellete- notification")]
-        public async Task<IActionResult> DeleteNotification(Guid id)
-        {
-            try
-            {
-                 await _notificationsService.DeleteNotification(id);
-                return Ok("delleted");
-            }
-            catch (Exception ex) 
-            { 
-              return BadRequest(ex.Message);
             }
         }
 
+        [HttpGet("Get-All-Notifications")]
+        public async Task<IActionResult> GetAllNotification()
+        {
+            try
+            {
+                var result = await _notificationService.GetAllNotification();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
+        [HttpGet("Get-Notifications-By-Id")]
+        public async Task<IActionResult> GetNotificationById(Guid Id)
+        {
+            try
+            {
+                var result = await _notificationService.GetNotificationById(Id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }
