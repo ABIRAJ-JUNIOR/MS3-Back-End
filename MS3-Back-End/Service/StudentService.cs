@@ -259,12 +259,7 @@ namespace MS3_Back_End.Service
 
         public async Task<StudentResponseDTO> UpdateStudent(StudentUpdateDTO studentUpdate)
         {
-
-
             var studentData = await _StudentRepo.GetStudentById(studentUpdate.Id);
-
-            if (!string.IsNullOrEmpty(studentUpdate.Nic))
-                studentData.Nic = studentUpdate.Nic;
 
             if (!string.IsNullOrEmpty(studentUpdate.FirstName))
                 studentData.FirstName = studentUpdate.FirstName;
@@ -281,26 +276,10 @@ namespace MS3_Back_End.Service
             if (!string.IsNullOrEmpty(studentUpdate.Phone))
                 studentData.Phone = studentUpdate.Phone;
 
-            if (!string.IsNullOrEmpty(studentUpdate.ImagePath))
-                studentData.ImagePath = studentUpdate.ImagePath;
-
             studentData.UpdatedDate = DateTime.Now;
 
             var item = await _StudentRepo.UpdateStudent(studentData);
 
-            AddressResponseDTO AddressResponse = null;
-
-            if (item.Address != null)
-            {
-                AddressResponse = new AddressResponseDTO
-                {
-                    AddressLine1 = item.Address.AddressLine1,
-                    AddressLine2 = item.Address.AddressLine2,
-                    PostalCode = item.Address.PostalCode,
-                    City = item.Address.City,
-                    Country = item.Address.Country,
-                };
-            }
             var obj = new StudentResponseDTO
             {
                 Id = item.Id,
@@ -310,14 +289,12 @@ namespace MS3_Back_End.Service
                 DateOfBirth = item.DateOfBirth,
                 Gender = item.Gender,
                 Phone = item.Phone,
-                ImagePath = item.ImagePath,
+                ImagePath = item.ImagePath!,
                 CteatedDate = item.CteatedDate,
-                UpdatedDate = item.UpdatedDate,
-                Address = AddressResponse,
+                UpdatedDate = item.UpdatedDate
 
             };
             return obj;
-
         }
 
         public async Task<string> DeleteStudent(Guid Id)
@@ -331,14 +308,5 @@ namespace MS3_Back_End.Service
             var data = await _StudentRepo.DeleteStudent(GetData);
             return data;
         }
-
-
-
-
-
-
-
-
-
     }
 }
