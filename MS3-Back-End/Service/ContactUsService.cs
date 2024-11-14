@@ -22,6 +22,7 @@ namespace MS3_Back_End.Service
                 Name = requestDTO.Name,
                 Email = requestDTO.Email,
                 Message = requestDTO.Message,
+                DateSubmited = DateTime.Now,
                 IsRead = false
             };
 
@@ -29,6 +30,7 @@ namespace MS3_Back_End.Service
 
             var newContactUs = new ContactUsResponseDTO
             {
+                Id = data.Id,
                 Name = data.Name,
                 Email = data.Email,
                 Message = data.Message,
@@ -75,6 +77,25 @@ namespace MS3_Back_End.Service
                 Message = data.Message,
             };
             return contactResponse;
+        }
+
+        public async Task<ContactUsResponseDTO> UpdateMessage(ContactUsRequestDTO contactUsRequestDTO)
+        {
+            var GetData = await _contactUsRepository.GetMessageById(contactUsRequestDTO.Id);
+            GetData.Name = contactUsRequestDTO.Name;
+            GetData.Email = contactUsRequestDTO.Email;
+            GetData.Message = contactUsRequestDTO.Message;
+
+            var UpdatedData = await _contactUsRepository.UpdateMessage(GetData);
+
+            var newUpdateMessage = new ContactUsResponseDTO
+            {
+                Id = contactUsRequestDTO.Id,
+                Name = contactUsRequestDTO.Name,
+                Email = contactUsRequestDTO.Email,
+                Message = contactUsRequestDTO.Message,
+            };
+            return newUpdateMessage;
         }
 
     }
