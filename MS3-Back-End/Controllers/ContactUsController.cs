@@ -61,20 +61,5 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpPut("Update-Message")]
-
-        public async Task<IActionResult> UpdateMessage(ContactUsRequestDTO contactUsRequestDTO)
-        {
-            try
-            {
-                var updateMessage = await _contactUsService.UpdateMessage(contactUsRequestDTO);
-                return Ok(updateMessage);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
     }
 }

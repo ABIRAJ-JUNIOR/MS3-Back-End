@@ -33,12 +33,5 @@ namespace MS3_Back_End.Repository
             return getMessageById;
         }
 
-        public async Task<ContactUs> UpdateMessage(ContactUs contactUs)
-        {
-            var updateMessage = _dbContext.ContactUs.Update(contactUs);
-            await _dbContext.SaveChangesAsync();
-            return updateMessage.Entity;
-        }
-
     }
 }

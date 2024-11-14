@@ -77,24 +77,5 @@ namespace MS3_Back_End.Service
             return contactResponse;
         }
 
-        public async Task<ContactUsResponseDTO> UpdateMessage(ContactUsRequestDTO contactUsRequestDTO)
-        {
-            var GetData = await _contactUsRepository.GetMessageById(contactUsRequestDTO.Id);
-            GetData.Name = contactUsRequestDTO.Name;
-            GetData.Email = contactUsRequestDTO.Email;
-            GetData.Message = contactUsRequestDTO.Message;
-
-            var UpdatedData = await _contactUsRepository.UpdateMessage(GetData);
-
-            var newUpdateMessage = new ContactUsResponseDTO
-            {
-                Id = contactUsRequestDTO.Id,
-                Name = contactUsRequestDTO.Name,
-                Email = contactUsRequestDTO.Email,
-                Message = contactUsRequestDTO.Message,
-            };
-            return newUpdateMessage;
-        }
-
     }
 }

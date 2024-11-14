@@ -7,6 +7,5 @@ namespace MS3_Back_End.IRepository
         Task<ContactUs> AddMessage(ContactUs contactUs);
         Task<List<ContactUs>> GetAllMessages();
         Task<ContactUs> GetMessageById(Guid Id);
-        Task<ContactUs> UpdateMessage(ContactUs contactUs);
     }
 }
