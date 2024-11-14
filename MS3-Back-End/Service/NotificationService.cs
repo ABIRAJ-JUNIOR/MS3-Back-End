@@ -67,6 +67,19 @@ namespace MS3_Back_End.Service
             }
             return NotificationResponse;
         }
+        
+        public async Task<string> DeleteNotification(Guid id , Notification notification)
+        {
+            var notificationData = await _notificationRepository.GetNotificationById(id);
+            if(notificationData == null)
+            {
+                throw new Exception("Not found");
+            }
 
+            notificationData.IsRead = true;
+            await _notificationRepository.DeleteNotification(notification);
+
+            return "Deleted Successfully";
+        }
     }
 }

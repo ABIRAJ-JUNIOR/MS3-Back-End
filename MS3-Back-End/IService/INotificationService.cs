@@ -1,5 +1,6 @@
 ﻿using MS3_Back_End.DTOs.RequestDTOs.Notification;
 using MS3_Back_End.DTOs.ResponseDTOs.Notification;
+using MS3_Back_End.Entities;
 
 namespace MS3_Back_End.IService
 {
@@ -7,6 +8,6 @@ namespace MS3_Back_End.IService
     {
         Task<NotificationResponseDTO> AddNotification(NotificationRequestDTO requestDTO);
         Task<List<NotificationResponseDTO>> GetAllNotification();
-
+        Task<string> DeleteNotification(Guid id, Notification notification);
     }
 }
