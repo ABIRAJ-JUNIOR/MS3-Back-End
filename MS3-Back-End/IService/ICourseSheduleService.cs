@@ -6,10 +6,10 @@ namespace MS3_Back_End.Service
     public interface ICourseSheduleService
     {
         Task<CourseSheduleResponseDTO> AddCourseShedule(CourseSheduleRequestDTO courseReq);
-        Task<List<CourseSheduleResponseDTO>> SearchCourse(string SearchText);
+        Task<List<CourseSheduleResponseDTO>> SearchCourseShedule(string SearchText);
         Task<List<CourseSheduleResponseDTO>> GetAllCourseShedule();
         Task<CourseSheduleResponseDTO> GetCourseSheduleById(Guid CourseId);
-        Task<CourseSheduleResponseDTO> UpdateCourse(UpdateCourseSheduleDTO courseReq);
+        Task<CourseSheduleResponseDTO> UpdateCourseShedule(UpdateCourseSheduleDTO courseReq);
 
     }
 }
