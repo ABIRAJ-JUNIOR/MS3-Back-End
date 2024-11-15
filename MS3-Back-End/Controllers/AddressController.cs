@@ -34,7 +34,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpPut("Update-Address")]
+        [HttpPut("Update-Address/{id}")]
         public async  Task<IActionResult> UpdateAddress(Guid id, AddressUpdateRequestDTO Updateaddress)
         {
             try
@@ -49,12 +49,12 @@ namespace MS3_Back_End.Controllers
         }
 
 
-        [HttpDelete("Delete-Address")]
-        public async Task<IActionResult> DeleteAddress(Guid stuid)
+        [HttpDelete("Delete-Address/{id}")]
+        public async Task<IActionResult> DeleteAddress(Guid id)
         {
             try
             {
-                var data = await _addressService.DeleteAddress(stuid);
+                var data = await _addressService.DeleteAddress(id);
                 return Ok(data);
             }
             catch (Exception ex)
