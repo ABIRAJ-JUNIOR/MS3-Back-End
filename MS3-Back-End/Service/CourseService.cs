@@ -153,8 +153,8 @@ namespace MS3_Back_End.Service
             if (!string.IsNullOrEmpty(course.Prerequisites))
                 GetData.Prerequisites = course.Prerequisites;
 
-            if (!string.IsNullOrEmpty(course.ImagePath))
-                GetData.ImagePath = course.ImagePath;
+            if (course.ImageFile != null)
+                GetData.ImagePath = await SaveImageFile(course.ImageFile!);
 
 
             GetData.UpdatedDate=DateTime.Now;
