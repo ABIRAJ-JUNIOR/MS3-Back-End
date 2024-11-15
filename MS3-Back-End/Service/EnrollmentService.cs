@@ -69,21 +69,15 @@ namespace MS3_Back_End.Service
                 throw new Exception("Search Not Found");
             }
 
-            var ListEnrollment = new List<EnrollmentResponseDTO>();
-            foreach (var item in data)
+            var ListEnrollment = data.Select(item => new EnrollmentResponseDTO()
             {
-                var EnrollmentResponse = new EnrollmentResponseDTO
-                {
-                    Id = item.Id,
-                    StudentId = item.StudentId,
-                    CourseSheduleId = item.CourseSheduleId,
-                    EnrollmentDate = item.EnrollmentDate,
-                    PaymentStatus = item.PaymentStatus,
-                    IsActive = item.IsActive
-                };
-                ListEnrollment.Add(EnrollmentResponse);
-
-            }
+                Id = item.Id,
+                StudentId = item.StudentId,
+                CourseSheduleId = item.CourseSheduleId,
+                EnrollmentDate = item.EnrollmentDate,
+                PaymentStatus = item.PaymentStatus,
+                IsActive = item.IsActive
+            }).ToList();    
 
             return ListEnrollment;
         }
