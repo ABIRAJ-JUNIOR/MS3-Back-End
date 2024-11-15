@@ -19,7 +19,7 @@ namespace MS3_Back_End.Service
         public async Task<AuditLogResponceDTO> AddAuditLog(AuditLogRequestDTO auditLog)
         {
 
-            var AuditLog=new AuditLog()
+            var AuditLog = new AuditLog()
             {
                 Action= auditLog.Action,
                 Details= auditLog.Details,
