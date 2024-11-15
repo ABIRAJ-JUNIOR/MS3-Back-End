@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using MS3_Back_End.DBContext;
+using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.DTOs.RequestDTOs.Student;
 using MS3_Back_End.DTOs.ResponseDTOs.Address;
@@ -313,5 +314,8 @@ namespace MS3_Back_End.Service
             var data = await _StudentRepo.DeleteStudent(GetData);
             return data;
         }
+
+                
+       
     }
 }

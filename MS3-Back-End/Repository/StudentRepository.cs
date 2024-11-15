@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MS3_Back_End.DBContext;
-using MS3_Back_End.DTOs.RequestDTOs.Pagination;
+using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 

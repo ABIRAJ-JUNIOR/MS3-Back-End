@@ -1,4 +1,4 @@
-﻿namespace MS3_Back_End.DTOs.RequestDTOs.Pagination
+﻿namespace MS3_Back_End.DTOs.Pagination
 {
     public class PaginationParams
     {

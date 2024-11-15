@@ -1,4 +1,4 @@
-﻿using MS3_Back_End.DTOs.RequestDTOs.Pagination;
+﻿using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.Entities;
 
 namespace MS3_Back_End.IRepository
