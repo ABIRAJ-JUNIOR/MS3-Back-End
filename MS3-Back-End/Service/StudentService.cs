@@ -318,9 +318,15 @@ namespace MS3_Back_End.Service
                 
         public async Task<PaginationResponseDTO<StudentResponseDTO>> GetPaginatedCoursesAsync(PaginationParams paginationParams)
         {
-            var Students = await _StudentRepo.GetPaginatedCoursesAsync(paginationParams);
+
             var AllStudents = await _StudentRepo.GetAllStudente();
-             
+
+            if (AllStudents == null)
+            {
+                throw new Exception("Students Not Found");
+            }
+            var Students = await _StudentRepo.GetPaginatedCoursesAsync(paginationParams);
+
             var StudentResponse= new List<StudentResponseDTO>();
             foreach (var item in Students)
             {
