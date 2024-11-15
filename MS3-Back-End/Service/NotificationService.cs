@@ -23,6 +23,12 @@ namespace MS3_Back_End.Service
 
         public async Task<NotificationResponseDTO> AddNotification(NotificationRequestDTO requestDTO )
         {
+            var studentData = await _studentRepository.GetStudentById( requestDTO.StudentId );
+            if( studentData == null)
+            {
+                throw new Exception("Student not found");
+            }
+
             var Message = new Notification
             {
                 Message = requestDTO.Message,
