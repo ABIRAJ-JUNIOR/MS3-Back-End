@@ -129,11 +129,6 @@ namespace MS3_Back_End.Service
         {
             var getData = await _enrollmentRepository.GetEnrollmentById(enrollment.Id);
 
-            if (enrollment.EnrollmentDate.HasValue)
-            {
-                getData.EnrollmentDate = enrollment.EnrollmentDate.Value;
-            }
-
             if (enrollment.PaymentStatus.HasValue)
             {
                 getData.PaymentStatus = enrollment.PaymentStatus.Value;
@@ -173,11 +168,11 @@ namespace MS3_Back_End.Service
         public async Task<string> DeleteEnrollment(Guid Id)
         {
             var GetData = await _enrollmentRepository.GetEnrollmentById(Id);
-            GetData.IsActive = false;
             if (GetData == null)
             {
                 throw new Exception("Course Id not Found");
             }
+            GetData.IsActive = false;
             var data = await _enrollmentRepository.DeleteEnrollment(GetData);
             return data;
         }
