@@ -153,7 +153,7 @@ namespace MS3_Back_End.Service
             getData.UpdatedDate = DateTime.Now;
 
 
-            var data = await _courseSheduleRepository.UpdateCourse(getData);
+            var data = await _courseSheduleRepository.UpdateCourseShedule(getData);
 
             var CourseResponse = new CourseSheduleResponseDTO
             {

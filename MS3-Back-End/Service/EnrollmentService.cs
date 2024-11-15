@@ -12,21 +12,37 @@ namespace MS3_Back_End.Service
     public class EnrollmentService :IEnrollementService
     {
         private readonly IEnrollmentRepository _enrollmentRepository;
-        public EnrollmentService(IEnrollmentRepository enrollmentRepository)
+        private readonly ICourseSheduleRepository _courseSheduleRepository;
+
+        public EnrollmentService(IEnrollmentRepository enrollmentRepository, ICourseSheduleRepository courseSheduleRepository)
         {
             _enrollmentRepository = enrollmentRepository;
+            _courseSheduleRepository = courseSheduleRepository;
         }
 
         public async Task<EnrollmentResponseDTO> AddEnrollment(EnrollmentRequestDTO EnrollmentReq)
         {
+            var courseSheduleData = await _courseSheduleRepository.GetCourseSheduleById(EnrollmentReq.CourseSheduleId);
+            if(courseSheduleData == null)
+            {
+                throw new Exception("CourseShedule not found");
+            }
+
+            if(courseSheduleData.MaxStudents == 0)
+            {
+                throw new Exception("Reach limit");
+            }
+
+            courseSheduleData.MaxStudents = courseSheduleData.MaxStudents - 1;
+            await _courseSheduleRepository.UpdateCourseShedule(courseSheduleData);
 
             var Enrollment = new Enrollment
             {
                 StudentId = EnrollmentReq.StudentId,
                 CourseSheduleId = EnrollmentReq.CourseSheduleId,
-                EnrollmentDate = EnrollmentReq.EnrollmentDate,
+                EnrollmentDate = DateTime.Now,
                 PaymentStatus = EnrollmentReq.PaymentStatus,
-
+                IsActive = true,
             };
 
             var data = await _enrollmentRepository.AddEnrollment(Enrollment);
@@ -42,7 +58,6 @@ namespace MS3_Back_End.Service
             };
 
             return EnrollmentResponse;
-
         }
 
 
@@ -71,7 +86,6 @@ namespace MS3_Back_End.Service
             }
 
             return ListEnrollment;
-
         }
 
 
@@ -179,13 +193,6 @@ namespace MS3_Back_End.Service
             var data = await _enrollmentRepository.DeleteEnrollment(GetData);
             return data;
         }
-
-
-
-
-
-
-
 
     }
 }

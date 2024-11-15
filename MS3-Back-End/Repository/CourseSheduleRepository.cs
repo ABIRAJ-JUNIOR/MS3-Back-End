@@ -46,7 +46,7 @@ namespace MS3_Back_End.Repository
             return data!;
         }
 
-        public async Task<CourseSchedule> UpdateCourse(CourseSchedule course)
+        public async Task<CourseSchedule> UpdateCourseShedule(CourseSchedule course)
         {
             var data = _Db.CourseSchedules.Update(course);
             await _Db.SaveChangesAsync();
