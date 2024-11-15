@@ -45,7 +45,7 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPut("Edit-Course-category")]
-        public async Task<IActionResult> UpdateCourseCategory(CourseCategoryRequestDTO courseCategoryRequestDTO)
+        public async Task<IActionResult> UpdateCourseCategory(CategoryUpdateRequestDTO courseCategoryRequestDTO)
         {
             try
             {
