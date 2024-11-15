@@ -15,7 +15,7 @@ namespace MS3_Back_End.Repository
         }
         public async Task<AuditLog> AddAuditLog(AuditLog auditLog)
         {
-            var data=await _dbContext.AuditLogs.AddAsync(auditLog);
+            var data = await _dbContext.AuditLogs.AddAsync(auditLog);
             await _dbContext.SaveChangesAsync();
             return data.Entity;
         }   

@@ -18,7 +18,8 @@ namespace MS3_Back_End.Controllers
         {
             _auditLogService = auditLogService;
         }
-        [HttpPost("Audit log")]
+
+        [HttpPost("Audit-log")]
         public async Task<IActionResult> AddAuditLog(AuditLogRequestDTO auditLogRequestDTO) 
         {
             try

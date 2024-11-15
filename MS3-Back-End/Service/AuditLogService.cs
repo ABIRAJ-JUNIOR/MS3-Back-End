@@ -23,7 +23,7 @@ namespace MS3_Back_End.Service
             {
                 Action= auditLog.Action,
                 Details= auditLog.Details,
-                ActionDate= auditLog.ActionDate,
+                ActionDate= DateTime.Now,
                 AdminId= auditLog.AdminId,
             };
 
@@ -31,10 +31,10 @@ namespace MS3_Back_End.Service
 
             var returndata = new AuditLogResponceDTO()
             {
+                Id = data.Id,
                 AdminId = data.AdminId,
                 ActionDate = data.ActionDate,
                 Details = data.Details,
-                Id = data.Id,
                 Action = auditLog.Action,
             };
 
