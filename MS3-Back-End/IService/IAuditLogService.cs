@@ -14,11 +14,5 @@ namespace MS3_Back_End.IService
         Task<AuditLogResponceDTO> UpdateAuditLog(Guid auditlogid, AuditLogUpdateRequest auditLogService);
 
         Task<AuditLogResponceDTO> DeleteAuditlog(Guid id);
-
-
-
-
-
-
     }
 }

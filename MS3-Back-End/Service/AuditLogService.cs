@@ -10,14 +10,21 @@ namespace MS3_Back_End.Service
     public class AuditLogService: IAuditLogService
     {
         private readonly IAuditLogRepository _auditLogRepository;
+        private readonly IAdminRepository _adminRepository;
 
-        public AuditLogService(IAuditLogRepository auditLogRepository)
+        public AuditLogService(IAuditLogRepository auditLogRepository, IAdminRepository adminRepository)
         {
             _auditLogRepository = auditLogRepository;
+            _adminRepository = adminRepository;
         }
 
         public async Task<AuditLogResponceDTO> AddAuditLog(AuditLogRequestDTO auditLog)
         {
+            var adminData = await _adminRepository.GetAdminById(auditLog.AdminId);
+            if (adminData == null)
+            {
+                throw new Exception("Admin not found");
+            }
 
             var AuditLog = new AuditLog()
             {
