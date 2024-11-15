@@ -79,6 +79,9 @@ namespace MS3_Back_End
             builder.Services.AddScoped<IAdminRepository, AdminRepository>();
             builder.Services.AddScoped<IAdminService, AdminService>();
 
+            //Audit Log
+            builder.Services.AddScoped<IAuditLogRepository,AuditLogRepository>();
+            builder.Services.AddScoped<IAuditLogService,AuditLogService>();
 
             builder.Services.AddCors(options =>
             {
