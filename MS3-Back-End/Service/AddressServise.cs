@@ -42,10 +42,13 @@ namespace MS3_Back_End.Service
 
         }
 
-        public async Task<AddressResponseDTO> UpdateAddress(AddressUpdateRequestDTO Updateaddress,Guid StuId)
+        public async Task<AddressResponseDTO> UpdateAddress(Guid id,AddressUpdateRequestDTO Updateaddress)
         {
-            var address= await _addressRepository.GetAddressbyStuID(StuId);
-
+            var address= await _addressRepository.GetAddressByID(id);
+            if (address == null)
+            {
+                throw new Exception("Address not found");
+            }
             address.AddressLine1 = Updateaddress.AddressLine1;
             address.AddressLine2 = Updateaddress.AddressLine2;
             address.City = Updateaddress.City;
@@ -68,7 +71,11 @@ namespace MS3_Back_End.Service
 
         public async Task<AddressResponseDTO> DeleteAddress(Guid id)
         {
-            var address = await _addressRepository.GetAddressbyStuID(id);
+            var address = await _addressRepository.GetAddressByID(id);
+            if (address == null)
+            {
+                throw new Exception("Address not found");
+            }
 
             var data = await _addressRepository.DeleteAddress(address);
             var Returndata = new AddressResponseDTO()
