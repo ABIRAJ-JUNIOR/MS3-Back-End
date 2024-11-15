@@ -1,4 +1,6 @@
-﻿using MS3_Back_End.DTOs.RequestDTOs.Course;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
@@ -9,13 +11,15 @@ namespace MS3_Back_End.Service
     public class CourseService : ICourseService
     {
         private readonly ICourseRepository _courseRepository;
-        public CourseService(ICourseRepository courseRepository)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public CourseService(ICourseRepository courseRepository, IWebHostEnvironment webHostEnvironment)
         {
             _courseRepository = courseRepository;
+            _webHostEnvironment = webHostEnvironment;
         }
 
-
-        public async Task<CourseResponseDTO> AddCourse(CourseRequestDTO courseReq)
+        public async Task<CourseResponseDTO> AddCourse([FromForm]CourseRequestDTO courseReq)
         {
 
             var Course = new Course
@@ -26,7 +30,7 @@ namespace MS3_Back_End.Service
                 CourseFee = courseReq.CourseFee,
                 Description = courseReq.Description,
                 Prerequisites = courseReq.Prerequisites,
-                ImagePath = courseReq.ImagePath,
+                ImagePath = await SaveImageFile(courseReq.ImageFile!),
                 CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now
             };
@@ -197,9 +201,25 @@ namespace MS3_Back_End.Service
             var data = await _courseRepository.DeleteCourse(GetData);
             return data;
         }
+        private async Task<string> SaveImageFile(IFormFile imageFile)
+        {
+            if (imageFile == null || imageFile.Length == 0)
+                return string.Empty;
 
+            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "Course");
+
+            if (!Directory.Exists(uploadPath))
+                Directory.CreateDirectory(uploadPath);
+
+            string filePath = Path.Combine(uploadPath, fileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await imageFile.CopyToAsync(fileStream);
+            }
+
+            return $"/Course/{fileName}";
+        }
     }
-
-
-
 }
