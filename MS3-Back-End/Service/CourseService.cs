@@ -87,25 +87,21 @@ namespace MS3_Back_End.Service
             {
                 throw new Exception("Courses Not Available");
             }
-            var CourseResponse= new List<CourseResponseDTO>();
-            foreach (var item in data)
-            {
-                var obj = new CourseResponseDTO
-                {
-                    Id = item.Id,
-                    CourseCategoryId = item.CourseCategoryId,
-                    CourseName = item.CourseName,
-                    Level = item.Level,
-                    CourseFee = item.CourseFee,
-                    Description = item.Description,
-                    Prerequisites = item.Prerequisites,
-                    ImagePath = item.ImagePath,
-                    CreatedDate = item.CreatedDate,
-                    UpdatedDate = item.UpdatedDate
 
-                };
-                CourseResponse.Add(obj);
-            }
+            var CourseResponse = data.Select(item => new CourseResponseDTO()
+            {
+                Id = item.Id,
+                CourseCategoryId = item.CourseCategoryId,
+                CourseName = item.CourseName,
+                Level = item.Level,
+                CourseFee = item.CourseFee,
+                Description = item.Description,
+                Prerequisites = item.Prerequisites,
+                ImagePath = item.ImagePath,
+                CreatedDate = item.CreatedDate,
+                UpdatedDate = item.UpdatedDate
+            }).ToList();
+
             return CourseResponse;
         }
 
