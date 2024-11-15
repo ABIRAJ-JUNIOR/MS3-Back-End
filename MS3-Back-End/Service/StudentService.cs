@@ -316,6 +316,40 @@ namespace MS3_Back_End.Service
         }
 
                 
-       
+        public async Task<PaginationResponseDTO<StudentResponseDTO>> GetPaginatedCoursesAsync(PaginationParams paginationParams)
+        {
+            var Students = await _StudentRepo.GetPaginatedCoursesAsync(paginationParams);
+            var AllStudents = await _StudentRepo.GetAllStudente();
+             
+            var StudentResponse= new List<StudentResponseDTO>();
+            foreach (var item in Students)
+            {
+                var obj = new StudentResponseDTO
+                {
+
+                    Id = item.Id,
+                    Nic = item.Nic,
+                    FirstName = item.FirstName,
+                    LastName = item.LastName,
+                    DateOfBirth = item.DateOfBirth,
+                    Gender = item.Gender,
+                    Phone = item.Phone,
+                    ImagePath = item.ImagePath!,
+                    CteatedDate = item.CteatedDate,
+                    UpdatedDate = item.UpdatedDate
+                };
+                StudentResponse.Add(obj);
+            }
+
+            var paginationResponseDto= new PaginationResponseDTO<StudentResponseDTO>
+            {
+                Items = StudentResponse,
+                PageNumber = paginationParams.PageIndex,
+                PageSize = paginationParams.PageSize,
+                TotalPages = (int)Math.Ceiling(AllStudents.Count / (double)paginationParams.PageSize)
+            };
+
+            return paginationResponseDto;
+        }
     }
 }
