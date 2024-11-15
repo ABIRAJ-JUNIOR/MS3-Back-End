@@ -35,12 +35,12 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("getCourseById")]
-        public async Task<IActionResult> GetCourseById(Guid CourseId)
+        [HttpGet("CourseShedule/{id}")]
+        public async Task<IActionResult> GetCourseSheduleById(Guid id)
         {
             try
             {
-                var response = await _courseScheduleService.GetCourseById(CourseId);
+                var response = await _courseScheduleService.GetCourseSheduleById(id);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -50,11 +50,11 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCourses()
+        public async Task<IActionResult> GetAllCourseShedule()
         {
             try
             {
-                var response = await _courseScheduleService.GetAllCourse();
+                var response = await _courseScheduleService.GetAllCourseShedule();
                 return Ok(response);
             }
             catch (Exception ex)

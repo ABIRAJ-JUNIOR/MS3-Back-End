@@ -7,8 +7,8 @@ namespace MS3_Back_End.Service
     {
         Task<CourseSheduleResponseDTO> AddCourseShedule(CourseSheduleRequestDTO courseReq);
         Task<List<CourseSheduleResponseDTO>> SearchCourse(string SearchText);
-        Task<List<CourseSheduleResponseDTO>> GetAllCourse();
-        Task<CourseSheduleResponseDTO> GetCourseById(Guid CourseId);
+        Task<List<CourseSheduleResponseDTO>> GetAllCourseShedule();
+        Task<CourseSheduleResponseDTO> GetCourseSheduleById(Guid CourseId);
         Task<CourseSheduleResponseDTO> UpdateCourse(UpdateCourseSheduleDTO courseReq);
 
     }

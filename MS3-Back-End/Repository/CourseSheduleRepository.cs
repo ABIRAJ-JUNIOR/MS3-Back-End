@@ -16,20 +16,10 @@ namespace MS3_Back_End.Repository
 
         public async Task<CourseSchedule> AddCourseShedule(CourseSchedule courseReq)
         {
-            var name = await _Db.CourseSchedules.SingleOrDefaultAsync(c=>c.CourseId == courseReq.CourseId);
-            if (name == null)
-            {
                 var data = await _Db.CourseSchedules.AddAsync(courseReq);
                 await _Db.SaveChangesAsync();
                 return data.Entity;
-            }
-            else
-            {
-                throw new Exception("Your CourseShedule Already Added");
-            }
-
         }
-
 
         public  Task<List<CourseSchedule>> SearchSheduleLocation(string SearchText)
         {
@@ -37,18 +27,18 @@ namespace MS3_Back_End.Repository
             return data;
         }
 
-
         public async Task<List<CourseSchedule>> GetAllCourseShedule()
         {
             var data = await _Db.CourseSchedules.ToListAsync();
             return data;
         }
 
-        public async Task<CourseSchedule> GetCourseSheduleById(Guid CourseId)
+        public async Task<CourseSchedule> GetCourseSheduleById(Guid id)
         {
-            var data = await _Db.CourseSchedules.SingleOrDefaultAsync(c => c.Id == CourseId);
-            return data;
+            var data = await _Db.CourseSchedules.SingleOrDefaultAsync(c => c.Id == id);
+            return data!;
         }
+
         public async Task<CourseSchedule> UpdateCourse(CourseSchedule course)
         {
             var data = _Db.CourseSchedules.Update(course);
