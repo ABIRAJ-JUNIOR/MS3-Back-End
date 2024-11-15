@@ -63,27 +63,21 @@ namespace MS3_Back_End.Service
                 throw new Exception("Search Not Found");
             }
 
-            var CourseResponse = new List<CourseResponseDTO>();
-            foreach (var item in data)
+            var CourseResponse = data.Select(item => new CourseResponseDTO()
             {
-                var obj = new CourseResponseDTO
-                {
-                    Id = item.Id,
-                    CourseCategoryId = item.CourseCategoryId,
-                    CourseName = item.CourseName,
-                    Level = item.Level,
-                    CourseFee = item.CourseFee,
-                    Description = item.Description,
-                    Prerequisites = item.Prerequisites,
-                    ImagePath = item.ImagePath,
-                    CreatedDate = item.CreatedDate,
-                    UpdatedDate = item.UpdatedDate
-                };
-                CourseResponse.Add(obj);
+                Id = item.Id,
+                CourseCategoryId = item.CourseCategoryId,
+                CourseName = item.CourseName,
+                Level = item.Level,
+                CourseFee = item.CourseFee,
+                Description = item.Description,
+                Prerequisites = item.Prerequisites,
+                ImagePath = item.ImagePath,
+                CreatedDate = item.CreatedDate,
+                UpdatedDate = item.UpdatedDate
+            }).ToList();
 
-            }
             return CourseResponse;
-
         }
 
         public async Task<List<CourseResponseDTO>> GetAllCourse()
