@@ -9,7 +9,6 @@ namespace MS3_Back_End.IService
         Task<List<EnrollmentResponseDTO>> SearchEnrollmentByUserId(Guid SearchUserId);
         Task<List<EnrollmentResponseDTO>> GetAllEnrollements();
         Task<EnrollmentResponseDTO> GetEnrollmentId(Guid EnrollmentId);
-        Task<EnrollmentResponseDTO> UpdateEnrollment(EnrollmentUpdateDTO enrollment);
         Task<string> DeleteEnrollment(Guid Id);
     }
 }

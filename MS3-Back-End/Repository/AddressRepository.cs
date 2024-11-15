@@ -30,40 +30,23 @@ namespace MS3_Back_End.Repository
                 throw new Exception("Address Already Added");
             }
         }
-        public async Task<Address> GetAddressbyStuID(Guid id)
+        public async Task<Address> GetAddressByID(Guid id)
         {
-            var Address = await _dbContext.Addresses.SingleOrDefaultAsync(f => f.StudentId == id);
-      
-            
-            return Address;
-            
-           
-
-        }
-        public async Task<List<Address>> GetAllAddress()
-        {
-            var addresses=await _dbContext.Addresses.ToListAsync();
-            return addresses;
+            var Address = await _dbContext.Addresses.SingleOrDefaultAsync(f => f.Id == id);
+            return Address!;
         }
         public async Task<Address> DeleteAddress(Address address)
         {
             var data=  _dbContext.Addresses.Remove(address);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
             return data.Entity;
         }
 
         public async Task<Address> UpdateAddress(Address address)
         {
             var data=  _dbContext.Addresses.Update(address);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
             return data.Entity;
         }
-
-        public async Task<List<Address>>  SearchbyCity(string searchText)
-        {
-            var data=  _dbContext.Addresses.Where(a=>a.City.Contains(searchText)).ToList();
-            return data;
-        }
-
     }
 }

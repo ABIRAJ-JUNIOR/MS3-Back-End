@@ -18,7 +18,8 @@ namespace MS3_Back_End.Controllers
         {
             _auditLogService = auditLogService;
         }
-        [HttpPost("Audit log")]
+
+        [HttpPost("Audit-log")]
         public async Task<IActionResult> AddAuditLog(AuditLogRequestDTO auditLogRequestDTO) 
         {
             try
@@ -72,34 +73,5 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut("Update-Audit-Log")]
-        public async Task<IActionResult> UpdateAuditLog(Guid auditlogid, AuditLogUpdateRequest auditLogService)
-        {
-            try
-            {
-                var data = await _auditLogService.UpdateAuditLog(auditlogid, auditLogService);
-                return Ok(data);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpDelete("Delete-Audit-log")]
-        public async Task<IActionResult> DeleteAuditlog(Guid id)
-        {
-            try
-            {
-                var data = await _auditLogService.DeleteAuditlog(id);
-                return Ok("deleted");
-            }
-            catch (Exception ex) 
-            {
-             return BadRequest(ex.Message);   
-            }
-        }
-
-
-
     }
 }

@@ -22,6 +22,7 @@ namespace MS3_Back_End.Service
                 CourseId = courseReq.CourseId,
                 StartDate = courseReq.StartDate,
                 EndDate = courseReq.EndDate,
+                Duration = (courseReq.EndDate - courseReq.StartDate).Days,
                 Time = courseReq.Time,
                 Location = courseReq.Location,
                 MaxStudents = courseReq.MaxStudents,
@@ -39,6 +40,7 @@ namespace MS3_Back_End.Service
                 CourseId = data.CourseId,
                 StartDate = data.StartDate,
                 EndDate = data.EndDate,
+                Duration = data.Duration,
                 Time = data.Time,
                 Location = data.Location,
                 MaxStudents = data.MaxStudents,
@@ -46,14 +48,13 @@ namespace MS3_Back_End.Service
                 UpdatedDate = data.UpdatedDate,
                 ScheduleStatus = data.ScheduleStatus,
 
-
             };
 
             return CourseResponse;
 
         }
 
-        public async Task<List<CourseSheduleResponseDTO>> SearchCourse(string SearchText)
+        public async Task<List<CourseSheduleResponseDTO>> SearchCourseShedule(string SearchText)
         {
             var data = await _courseSheduleRepository.SearchSheduleLocation(SearchText);
             if (data == null)
@@ -61,67 +62,54 @@ namespace MS3_Back_End.Service
                 throw new Exception("Search Not Found");
             }
 
-            var CourseResponseList = new List<CourseSheduleResponseDTO>();
-            foreach (var item in data)
+            var CourseResponseList = data.Select(item => new CourseSheduleResponseDTO()
             {
-                var CourseResponse = new CourseSheduleResponseDTO
-                {
-                    Id = item.Id,
-                    CourseId = item.CourseId,
-                    StartDate = item.StartDate,
-                    EndDate = item.EndDate,
-                    Time = item.Time,
-                    Location = item.Location,
-                    MaxStudents = item.MaxStudents,
-                    CreatedDate = item.CreatedDate,
-                    UpdatedDate = item.UpdatedDate,
-                    ScheduleStatus = item.ScheduleStatus,
-
-
-                };
-
-                CourseResponseList.Add(CourseResponse);
-
-            }
+                Id = item.Id,
+                CourseId = item.CourseId,
+                StartDate = item.StartDate,
+                EndDate = item.EndDate,
+                Duration = item.Duration,
+                Time = item.Time,
+                Location = item.Location,
+                MaxStudents = item.MaxStudents,
+                CreatedDate = item.CreatedDate,
+                UpdatedDate = item.UpdatedDate,
+                ScheduleStatus = item.ScheduleStatus,
+            }).ToList();
+            
             return CourseResponseList;
 
         }
 
-        public async Task<List<CourseSheduleResponseDTO>> GetAllCourse()
+        public async Task<List<CourseSheduleResponseDTO>> GetAllCourseShedule()
         {
             var data = await _courseSheduleRepository.GetAllCourseShedule();
             if (data == null)
             {
                 throw new Exception("Courses Not Available");
             }
-            var CourseResponseList = new List<CourseSheduleResponseDTO>();
-            foreach (var item in data)
+            var CourseResponseList = data.Select(item => new CourseSheduleResponseDTO()
             {
-                var CourseResponse = new CourseSheduleResponseDTO
-                {
-                    Id = item.Id,
-                    CourseId = item.CourseId,
-                    StartDate = item.StartDate,
-                    EndDate = item.EndDate,
-                    Time = item.Time,
-                    Location = item.Location,
-                    MaxStudents = item.MaxStudents,
-                    CreatedDate = item.CreatedDate,
-                    UpdatedDate = item.UpdatedDate,
-                    ScheduleStatus = item.ScheduleStatus,
+                Id = item.Id,
+                CourseId = item.CourseId,
+                StartDate = item.StartDate,
+                EndDate = item.EndDate,
+                Duration = item.Duration,
+                Time = item.Time,
+                Location = item.Location,
+                MaxStudents = item.MaxStudents,
+                CreatedDate = item.CreatedDate,
+                UpdatedDate = item.UpdatedDate,
+                ScheduleStatus = item.ScheduleStatus,
+            }).ToList();
 
-
-                };
-
-                CourseResponseList.Add(CourseResponse);
-            }
             return CourseResponseList;
         }
 
 
-        public async Task<CourseSheduleResponseDTO> GetCourseById(Guid CourseId)
+        public async Task<CourseSheduleResponseDTO> GetCourseSheduleById(Guid id)
         {
-            var data = await _courseSheduleRepository.GetCourseSheduleById(CourseId);
+            var data = await _courseSheduleRepository.GetCourseSheduleById(id);
             if (data == null)
             {
                 throw new Exception("Course Not Found");
@@ -132,73 +120,40 @@ namespace MS3_Back_End.Service
                 CourseId = data.CourseId,
                 StartDate = data.StartDate,
                 EndDate = data.EndDate,
+                Duration = data.Duration,
                 Time = data.Time,
                 Location = data.Location,
                 MaxStudents = data.MaxStudents,
                 CreatedDate = data.CreatedDate,
                 UpdatedDate = data.UpdatedDate,
                 ScheduleStatus = data.ScheduleStatus,
-
-
             };
 
             return CourseResponse;
         }
 
 
-        public async Task<CourseSheduleResponseDTO> UpdateCourse(UpdateCourseSheduleDTO courseReq)
+        public async Task<CourseSheduleResponseDTO> UpdateCourseShedule(UpdateCourseSheduleDTO courseReq)
         {
 
-
-
             var getData = await _courseSheduleRepository.GetCourseSheduleById(courseReq.Id);
-
-            if (courseReq.CourseId.HasValue)
+            if(getData == null)
             {
-                getData.CourseId = courseReq.CourseId.Value;
+                throw new Exception("Course Shedule not found");
             }
 
-            if (courseReq.StartDate.HasValue)
-            {
-                getData.StartDate = courseReq.StartDate.Value;
-            }
-
-            if (courseReq.EndDate.HasValue)
-            {
-                getData.EndDate = courseReq.EndDate.Value;
-            }
-
-            if (courseReq.Duration.HasValue)
-            {
-                getData.Duration = courseReq.Duration.Value;
-            }
-
-            if (!string.IsNullOrEmpty(courseReq.Time))
-            {
-                getData.Time = courseReq.Time;
-            }
-
-            if (!string.IsNullOrEmpty(courseReq.Location))
-            {
-                getData.Location = courseReq.Location;
-
-            }
-
-            if (courseReq.MaxStudents.HasValue)
-            {
-                getData.MaxStudents = courseReq.MaxStudents.Value;
-
-            }
-
-            if (courseReq.ScheduleStatus.HasValue)
-            {
-                getData.ScheduleStatus = courseReq.ScheduleStatus.Value;
-            }
-
+            getData.CourseId = courseReq.CourseId;
+            getData.StartDate = courseReq.StartDate;
+            getData.EndDate = courseReq.EndDate;
+            getData.Duration = (courseReq.EndDate - courseReq.StartDate).Days;
+            getData.Time = courseReq.Time;
+            getData.Location = courseReq.Location;
+            getData.MaxStudents = courseReq.MaxStudents;
+            getData.ScheduleStatus = courseReq.ScheduleStatus;
             getData.UpdatedDate = DateTime.Now;
 
 
-            var data = await _courseSheduleRepository.UpdateCourse(getData);
+            var data = await _courseSheduleRepository.UpdateCourseShedule(getData);
 
             var CourseResponse = new CourseSheduleResponseDTO
             {
@@ -206,6 +161,7 @@ namespace MS3_Back_End.Service
                 CourseId = data.CourseId,
                 StartDate = data.StartDate,
                 EndDate = data.EndDate,
+                Duration = data.Duration,
                 Time = data.Time,
                 Location = data.Location,
                 MaxStudents = data.MaxStudents,
@@ -213,14 +169,10 @@ namespace MS3_Back_End.Service
                 UpdatedDate = data.UpdatedDate,
                 ScheduleStatus = data.ScheduleStatus,
 
-
             };
 
             return CourseResponse;
 
         }
-
-
-
     }
 }

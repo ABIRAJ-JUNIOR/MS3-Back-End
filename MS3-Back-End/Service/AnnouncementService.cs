@@ -12,10 +12,10 @@ namespace MS3_Back_End.Service
 {
     public class AnnouncementService : IAnnouncementService
     {
-        private readonly IAnnouncementRepository _AnnouncentRepo;
+        private readonly IAnnouncementRepository _AnnouncementRepo;
         public AnnouncementService(IAnnouncementRepository Announcement)
         {
-            _AnnouncentRepo = Announcement;
+            _AnnouncementRepo = Announcement;
         }
 
 
@@ -25,19 +25,17 @@ namespace MS3_Back_End.Service
             var Announcement = new Announcement
             {
                 Title = AnnouncementReq.Title,
-                DatePosted = AnnouncementReq.DatePosted,
+                DatePosted = DateTime.Now,
                 ExpirationDate = AnnouncementReq.ExpirationDate,
-                AudienceType = AnnouncementReq.AudienceType
-                
-
+                AudienceType = AnnouncementReq.AudienceType,
+                IsActive = true
             };
 
-            var data = await _AnnouncentRepo.AddAnnouncement(Announcement);
-
+            var data = await _AnnouncementRepo.AddAnnouncement(Announcement);
 
             var AnnouncementReponse = new AnnouncementResponseDTO
             {
-                Id=data.Id,
+                Id = data.Id,
                 Title = data.Title,
                 DatePosted = data.DatePosted,
                 ExpirationDate = data.ExpirationDate,
@@ -51,60 +49,50 @@ namespace MS3_Back_End.Service
 
         public async Task<List<AnnouncementResponseDTO>> SearchAnnouncement(string SearchText)
         {
-            var data = await _AnnouncentRepo.SearchAnnouncements(SearchText);
+            var data = await _AnnouncementRepo.SearchAnnouncements(SearchText);
             if (data == null)
             {
                 throw new Exception("Search Not Found");
             }
 
-            var AnnouncementReponse = new List<AnnouncementResponseDTO>();
-            foreach (var item in data)
+            var AnnouncementResponse = data.Select(item => new AnnouncementResponseDTO()
             {
-                var obj = new AnnouncementResponseDTO
-                {
-                    Id = item.Id,
-                    Title = item.Title,
-                    DatePosted = item.DatePosted,
-                    AudienceType = item.AudienceType,
-                    IsActive = item.IsActive
-                };
-                AnnouncementReponse.Add(obj);
+                Id = item.Id,
+                Title = item.Title,
+                DatePosted = item.DatePosted,
+                AudienceType = item.AudienceType,
+                ExpirationDate = item.ExpirationDate,
+                IsActive = item.IsActive
+            }).ToList();
 
-            }
-            return AnnouncementReponse;
-
+            return AnnouncementResponse;
         }
 
 
         public async Task<List<AnnouncementResponseDTO>> GetAllAnnouncement()
         {
-            var data = await _AnnouncentRepo.GetAllAnnouncement();
+            var data = await _AnnouncementRepo.GetAllAnnouncement();
             if (data == null)
             {
                 throw new Exception("Announcement Not Available");
             }
-            var AnnouncementReponse = new List<AnnouncementResponseDTO>();
-            foreach (var item in data)
+            var AnnouncementResponse = data.Select(item => new AnnouncementResponseDTO()
             {
-                var obj = new AnnouncementResponseDTO
-                {
-                    Id = item.Id,
-                    Title = item.Title,
-                    DatePosted = item.DatePosted,
-                    AudienceType = item.AudienceType,
-                    ExpirationDate = item.ExpirationDate,
-                    IsActive = item.IsActive
+                Id = item.Id,
+                Title = item.Title,
+                DatePosted = item.DatePosted,
+                AudienceType = item.AudienceType,
+                ExpirationDate = item.ExpirationDate,
+                IsActive = item.IsActive
+            }).ToList();
 
-                };
-                AnnouncementReponse.Add(obj);
-            }
-            return AnnouncementReponse;
+            return AnnouncementResponse;
         }
 
 
         public async Task<AnnouncementResponseDTO> GetAnnouncementById(Guid CourseId)
         {
-            var data = await _AnnouncentRepo.GetAnnouncemenntByID(CourseId);
+            var data = await _AnnouncementRepo.GetAnnouncemenntByID(CourseId);
             if (data == null)
             {
                 throw new Exception("Announcement Not Found");
@@ -126,7 +114,7 @@ namespace MS3_Back_End.Service
         public async Task<AnnouncementResponseDTO> UpdateAnnouncement(AnnounceUpdateDTO announcement)
         {
 
-            var GetData = await _AnnouncentRepo.GetAnnouncemenntByID(announcement.Id);
+            var GetData = await _AnnouncementRepo.GetAnnouncemenntByID(announcement.Id);
 
             if (announcement.Title != null)
             {
@@ -145,7 +133,7 @@ namespace MS3_Back_End.Service
 
             GetData.DatePosted = DateTime.Now;
 
-            var data = await _AnnouncentRepo.UpdateAnnouncement(GetData);
+            var data = await _AnnouncementRepo.UpdateAnnouncement(GetData);
 
             var AnnouncementReturn = new AnnouncementResponseDTO
             {
@@ -164,19 +152,14 @@ namespace MS3_Back_End.Service
 
         public async Task<string> DeleteAnnouncement(Guid Id)
         {
-            var GetData = await _AnnouncentRepo.GetAnnouncemenntByID(Id);
-            GetData.IsActive = false;
+            var GetData = await _AnnouncementRepo.GetAnnouncemenntByID(Id);
             if (GetData == null)
             {
-                throw new Exception("Enrollment Id not Found");
+                throw new Exception("Announcement Not Found");
             }
-            var data = await _AnnouncentRepo.DeleteAnnouncement(GetData);
+            GetData.IsActive = false;
+            var data = await _AnnouncementRepo.DeleteAnnouncement(GetData);
             return data;
         }
-
-
-
     }
-
-
 }

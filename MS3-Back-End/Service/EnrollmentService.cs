@@ -12,21 +12,37 @@ namespace MS3_Back_End.Service
     public class EnrollmentService :IEnrollementService
     {
         private readonly IEnrollmentRepository _enrollmentRepository;
-        public EnrollmentService(IEnrollmentRepository enrollmentRepository)
+        private readonly ICourseSheduleRepository _courseSheduleRepository;
+
+        public EnrollmentService(IEnrollmentRepository enrollmentRepository, ICourseSheduleRepository courseSheduleRepository)
         {
             _enrollmentRepository = enrollmentRepository;
+            _courseSheduleRepository = courseSheduleRepository;
         }
 
         public async Task<EnrollmentResponseDTO> AddEnrollment(EnrollmentRequestDTO EnrollmentReq)
         {
+            var courseSheduleData = await _courseSheduleRepository.GetCourseSheduleById(EnrollmentReq.CourseSheduleId);
+            if(courseSheduleData == null)
+            {
+                throw new Exception("CourseShedule not found");
+            }
+
+            if(courseSheduleData.MaxStudents == 0)
+            {
+                throw new Exception("Reach limit");
+            }
+
+            courseSheduleData.MaxStudents = courseSheduleData.MaxStudents - 1;
+            await _courseSheduleRepository.UpdateCourseShedule(courseSheduleData);
 
             var Enrollment = new Enrollment
             {
                 StudentId = EnrollmentReq.StudentId,
                 CourseSheduleId = EnrollmentReq.CourseSheduleId,
-                EnrollmentDate = EnrollmentReq.EnrollmentDate,
+                EnrollmentDate = DateTime.Now,
                 PaymentStatus = EnrollmentReq.PaymentStatus,
-
+                IsActive = true,
             };
 
             var data = await _enrollmentRepository.AddEnrollment(Enrollment);
@@ -42,7 +58,6 @@ namespace MS3_Back_End.Service
             };
 
             return EnrollmentResponse;
-
         }
 
 
@@ -54,24 +69,17 @@ namespace MS3_Back_End.Service
                 throw new Exception("Search Not Found");
             }
 
-            var ListEnrollment = new List<EnrollmentResponseDTO>();
-            foreach (var item in data)
+            var ListEnrollment = data.Select(item => new EnrollmentResponseDTO()
             {
-                var EnrollmentResponse = new EnrollmentResponseDTO
-                {
-                    Id = item.Id,
-                    StudentId = item.StudentId,
-                    CourseSheduleId = item.CourseSheduleId,
-                    EnrollmentDate = item.EnrollmentDate,
-                    PaymentStatus = item.PaymentStatus,
-                    IsActive = item.IsActive
-                };
-                ListEnrollment.Add(EnrollmentResponse);
-
-            }
+                Id = item.Id,
+                StudentId = item.StudentId,
+                CourseSheduleId = item.CourseSheduleId,
+                EnrollmentDate = item.EnrollmentDate,
+                PaymentStatus = item.PaymentStatus,
+                IsActive = item.IsActive
+            }).ToList();    
 
             return ListEnrollment;
-
         }
 
 
@@ -82,21 +90,15 @@ namespace MS3_Back_End.Service
             {
                 throw new Exception("Enrollment Not Available");
             }
-            var ListEnrollment = new List<EnrollmentResponseDTO>();
-            foreach (var item in data)
+            var ListEnrollment = data.Select(item => new EnrollmentResponseDTO()
             {
-                var EnrollmentResponse = new EnrollmentResponseDTO
-                {
-                    Id = item.Id,
-                    StudentId = item.StudentId,
-                    CourseSheduleId = item.CourseSheduleId,
-                    EnrollmentDate = item.EnrollmentDate,
-                    PaymentStatus = item.PaymentStatus,
-                    IsActive = item.IsActive
-                };
-                ListEnrollment.Add(EnrollmentResponse);
-
-            }
+                Id = item.Id,
+                StudentId = item.StudentId,
+                CourseSheduleId = item.CourseSheduleId,
+                EnrollmentDate = item.EnrollmentDate,
+                PaymentStatus = item.PaymentStatus,
+                IsActive = item.IsActive
+            }).ToList();
 
             return ListEnrollment;
         }
@@ -121,71 +123,17 @@ namespace MS3_Back_End.Service
             return EnrollmentResponse;
         }
 
-
-
-        public async Task<EnrollmentResponseDTO> UpdateEnrollment(EnrollmentUpdateDTO enrollment)
-        {
-            var getData = await _enrollmentRepository.GetEnrollmentById(enrollment.Id);
-
-            if (enrollment.EnrollmentDate.HasValue)
-            {
-                getData.EnrollmentDate = enrollment.EnrollmentDate.Value;
-            }
-
-            if (enrollment.PaymentStatus.HasValue)
-            {
-                getData.PaymentStatus = enrollment.PaymentStatus.Value;
-            }
-
-            if (enrollment.IsActive.HasValue)
-                getData.IsActive = enrollment.IsActive.Value;
-
-            if (enrollment.StudentId.HasValue)
-            {
-                getData.StudentId = enrollment.StudentId.Value;
-            }
-
-            if (enrollment.CourseSheduleId.HasValue)
-            {
-                getData.CourseSheduleId = enrollment.CourseSheduleId.Value;
-            }
-
-
-            var updatedData = await _enrollmentRepository.UpdateEnrollment(getData);
-
-            var enrollmentResponse = new EnrollmentResponseDTO
-            {
-                Id = updatedData.Id,
-                EnrollmentDate = updatedData.EnrollmentDate,
-                PaymentStatus = updatedData.PaymentStatus,
-                IsActive = updatedData.IsActive,
-                StudentId = updatedData.StudentId,
-                CourseSheduleId = updatedData.CourseSheduleId,
-
-            };
-
-            return enrollmentResponse;
-        }
-
-
         public async Task<string> DeleteEnrollment(Guid Id)
         {
             var GetData = await _enrollmentRepository.GetEnrollmentById(Id);
-            GetData.IsActive = false;
             if (GetData == null)
             {
                 throw new Exception("Course Id not Found");
             }
+            GetData.IsActive = false;
             var data = await _enrollmentRepository.DeleteEnrollment(GetData);
             return data;
         }
-
-
-
-
-
-
-
 
     }
 }

@@ -41,59 +41,14 @@ namespace MS3_Back_End.Service
             return Returndata;
 
         }
-        public async Task<AddressResponseDTO> GetAddressbyStuID(Guid  id)
+
+        public async Task<AddressResponseDTO> UpdateAddress(Guid id,AddressUpdateRequestDTO Updateaddress)
         {
-            var data = await _addressRepository.GetAddressbyStuID(id);
-            var Returndata = new AddressResponseDTO()
+            var address= await _addressRepository.GetAddressByID(id);
+            if (address == null)
             {
-                AddressLine1 = data.AddressLine1,
-                AddressLine2 = data.AddressLine2,
-                City = data.City,
-                PostalCode = data.PostalCode,
-                Country = data.Country,
-                StudentId = data.StudentId,
-            };
-            return Returndata;
-        }
-        public async Task<List<AddressResponseDTO>> GetAllAddress()
-        {
-              var data= await _addressRepository.GetAllAddress();
-               var Returndata = data.Select(x => new AddressResponseDTO()
-               {
-                   AddressLine1 = x.AddressLine1,
-                   AddressLine2 = x.AddressLine2,
-                   City = x.City,
-                   PostalCode = x.PostalCode,
-                   Country = x.Country,
-                   StudentId=x.StudentId,
-                   
-
-               }).ToList();
-
-              return Returndata;
-        }
-
-        public async Task<AddressResponseDTO> DeleteAddress(Guid id)
-        {
-            var address = await _addressRepository.GetAddressbyStuID(id);
-          
-                var data=await _addressRepository.DeleteAddress(address);
-                var Returndata = new AddressResponseDTO() 
-                {
-                  AddressLine1= data.AddressLine1,
-                  AddressLine2 = data.AddressLine2,
-                  City = data.City,
-                  PostalCode = data.PostalCode,
-                  Country = data.Country,
-                  StudentId=data.StudentId,
-                };
-                return Returndata;
-          
-        }
-        public async Task<AddressResponseDTO> UpdateAddress(AddressUpdateRequestDTO Updateaddress,Guid StuId)
-        {
-            var address= await _addressRepository.GetAddressbyStuID(StuId);
-
+                throw new Exception("Address not found");
+            }
             address.AddressLine1 = Updateaddress.AddressLine1;
             address.AddressLine2 = Updateaddress.AddressLine2;
             address.City = Updateaddress.City;
@@ -112,29 +67,28 @@ namespace MS3_Back_End.Service
             };
 
             return returndata;
-
         }
-        public async Task<List<AddressResponseDTO>> SearchbyCity(string searchText)
+
+        public async Task<AddressResponseDTO> DeleteAddress(Guid id)
         {
-            var datalist= await _addressRepository.SearchbyCity(searchText);
-            var returndatalist=datalist.Select(d => new AddressResponseDTO()
+            var address = await _addressRepository.GetAddressByID(id);
+            if (address == null)
             {
-                AddressLine1 =d.AddressLine1,
-                AddressLine2 = d.AddressLine2,
-                City = d.City,   
-                PostalCode = d.PostalCode,
-                Country = d.Country,
-                StudentId = d.StudentId,
+                throw new Exception("Address not found");
+            }
 
-            }).ToList();
+            var data = await _addressRepository.DeleteAddress(address);
+            var Returndata = new AddressResponseDTO()
+            {
+                AddressLine1 = data.AddressLine1,
+                AddressLine2 = data.AddressLine2,
+                City = data.City,
+                PostalCode = data.PostalCode,
+                Country = data.Country,
+                StudentId = data.StudentId,
+            };
+            return Returndata;
 
-            return returndatalist;
         }
-
-
-
-
-
-
     }
 }

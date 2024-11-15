@@ -1,4 +1,6 @@
-﻿using MS3_Back_End.DTOs.RequestDTOs.Course;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
@@ -9,13 +11,15 @@ namespace MS3_Back_End.Service
     public class CourseService : ICourseService
     {
         private readonly ICourseRepository _courseRepository;
-        public CourseService(ICourseRepository courseRepository)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public CourseService(ICourseRepository courseRepository, IWebHostEnvironment webHostEnvironment)
         {
             _courseRepository = courseRepository;
+            _webHostEnvironment = webHostEnvironment;
         }
 
-
-        public async Task<CourseResponseDTO> AddCourse(CourseRequestDTO courseReq)
+        public async Task<CourseResponseDTO> AddCourse([FromForm]CourseRequestDTO courseReq)
         {
 
             var Course = new Course
@@ -26,7 +30,7 @@ namespace MS3_Back_End.Service
                 CourseFee = courseReq.CourseFee,
                 Description = courseReq.Description,
                 Prerequisites = courseReq.Prerequisites,
-                ImagePath = courseReq.ImagePath,
+                ImagePath = await SaveImageFile(courseReq.ImageFile!),
                 CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now
             };
@@ -59,27 +63,21 @@ namespace MS3_Back_End.Service
                 throw new Exception("Search Not Found");
             }
 
-            var CourseResponse = new List<CourseResponseDTO>();
-            foreach (var item in data)
+            var CourseResponse = data.Select(item => new CourseResponseDTO()
             {
-                var obj = new CourseResponseDTO
-                {
-                    Id = item.Id,
-                    CourseCategoryId = item.CourseCategoryId,
-                    CourseName = item.CourseName,
-                    Level = item.Level,
-                    CourseFee = item.CourseFee,
-                    Description = item.Description,
-                    Prerequisites = item.Prerequisites,
-                    ImagePath = item.ImagePath,
-                    CreatedDate = item.CreatedDate,
-                    UpdatedDate = item.UpdatedDate
-                };
-                CourseResponse.Add(obj);
+                Id = item.Id,
+                CourseCategoryId = item.CourseCategoryId,
+                CourseName = item.CourseName,
+                Level = item.Level,
+                CourseFee = item.CourseFee,
+                Description = item.Description,
+                Prerequisites = item.Prerequisites,
+                ImagePath = item.ImagePath,
+                CreatedDate = item.CreatedDate,
+                UpdatedDate = item.UpdatedDate
+            }).ToList();
 
-            }
             return CourseResponse;
-
         }
 
         public async Task<List<CourseResponseDTO>> GetAllCourse()
@@ -89,25 +87,21 @@ namespace MS3_Back_End.Service
             {
                 throw new Exception("Courses Not Available");
             }
-            var CourseResponse= new List<CourseResponseDTO>();
-            foreach (var item in data)
-            {
-                var obj = new CourseResponseDTO
-                {
-                    Id = item.Id,
-                    CourseCategoryId = item.CourseCategoryId,
-                    CourseName = item.CourseName,
-                    Level = item.Level,
-                    CourseFee = item.CourseFee,
-                    Description = item.Description,
-                    Prerequisites = item.Prerequisites,
-                    ImagePath = item.ImagePath,
-                    CreatedDate = item.CreatedDate,
-                    UpdatedDate = item.UpdatedDate
 
-                };
-                CourseResponse.Add(obj);
-            }
+            var CourseResponse = data.Select(item => new CourseResponseDTO()
+            {
+                Id = item.Id,
+                CourseCategoryId = item.CourseCategoryId,
+                CourseName = item.CourseName,
+                Level = item.Level,
+                CourseFee = item.CourseFee,
+                Description = item.Description,
+                Prerequisites = item.Prerequisites,
+                ImagePath = item.ImagePath,
+                CreatedDate = item.CreatedDate,
+                UpdatedDate = item.UpdatedDate
+            }).ToList();
+
             return CourseResponse;
         }
 
@@ -159,8 +153,8 @@ namespace MS3_Back_End.Service
             if (!string.IsNullOrEmpty(course.Prerequisites))
                 GetData.Prerequisites = course.Prerequisites;
 
-            if (!string.IsNullOrEmpty(course.ImagePath))
-                GetData.ImagePath = course.ImagePath;
+            if (course.ImageFile != null)
+                GetData.ImagePath = await SaveImageFile(course.ImageFile!);
 
 
             GetData.UpdatedDate=DateTime.Now;
@@ -189,17 +183,36 @@ namespace MS3_Back_End.Service
         public async Task<string> DeleteCourse(Guid Id)
         {
             var GetData = await _courseRepository.GetCourseById(Id);
-            GetData.IsDeleted = true;
             if(GetData == null)
             {
-                throw new Exception("Course Id not Found");
+                throw new Exception("Course not Found");
             }
+
+            GetData.IsDeleted = true;
+
             var data = await _courseRepository.DeleteCourse(GetData);
             return data;
         }
 
+        private async Task<string> SaveImageFile(IFormFile imageFile)
+        {
+            if (imageFile == null || imageFile.Length == 0)
+                return string.Empty;
+
+            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "Course");
+
+            if (!Directory.Exists(uploadPath))
+                Directory.CreateDirectory(uploadPath);
+
+            string filePath = Path.Combine(uploadPath, fileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await imageFile.CopyToAsync(fileStream);
+            }
+
+            return $"/Course/{fileName}";
+        }
     }
-
-
-
 }
