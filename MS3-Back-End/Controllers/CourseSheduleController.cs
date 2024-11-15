@@ -82,7 +82,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpPut("courseId/{CourseId}")]
+        [HttpPut("Update")]
         public async Task<IActionResult> UpdateCourseShedule(UpdateCourseSheduleDTO courseReq)
         {
             try

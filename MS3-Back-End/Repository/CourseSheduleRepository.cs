@@ -16,6 +16,13 @@ namespace MS3_Back_End.Repository
 
         public async Task<CourseSchedule> AddCourseShedule(CourseSchedule courseReq)
         {
+            var courseData = await _Db.Courses.SingleOrDefaultAsync(c => c.Id == courseReq.CourseId);
+            if (courseData == null)
+            {
+                throw new Exception("Course not found");
+            }
+
+            var courseSheduleData = await _Db.CourseSchedules.SingleOrDefaultAsync(cs => cs.CourseId == courseReq.CourseId);
             var data = await _Db.CourseSchedules.AddAsync(courseReq);
             await _Db.SaveChangesAsync();
             return data.Entity;
