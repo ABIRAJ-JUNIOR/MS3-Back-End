@@ -183,14 +183,17 @@ namespace MS3_Back_End.Service
         public async Task<string> DeleteCourse(Guid Id)
         {
             var GetData = await _courseRepository.GetCourseById(Id);
-            GetData.IsDeleted = true;
             if(GetData == null)
             {
-                throw new Exception("Course Id not Found");
+                throw new Exception("Course not Found");
             }
+
+            GetData.IsDeleted = true;
+
             var data = await _courseRepository.DeleteCourse(GetData);
             return data;
         }
+
         private async Task<string> SaveImageFile(IFormFile imageFile)
         {
             if (imageFile == null || imageFile.Length == 0)
