@@ -17,6 +17,19 @@ namespace MS3_Back_End.Controllers
             _enrollmentService = enrollement;
         }
 
+        [HttpPost]
+        public async Task<ActionResult<EnrollmentResponseDTO>> AddEnrollment([FromForm] EnrollmentRequestDTO enrollmentReq)
+        {
+            try
+            {
+                var enrollment = await _enrollmentService.AddEnrollment(enrollmentReq);
+                return Ok(enrollment);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpGet("Enrollment/{id}")]
         public async Task<ActionResult<EnrollmentResponseDTO>> GetEnrollmentById(Guid id)
@@ -57,20 +70,6 @@ namespace MS3_Back_End.Controllers
             catch (Exception ex)
             {
                 return NotFound(ex.Message);
-            }
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<EnrollmentResponseDTO>> AddEnrollment([FromBody] EnrollmentRequestDTO enrollmentReq)
-        {
-            try
-            {
-                var enrollment = await _enrollmentService.AddEnrollment(enrollmentReq);
-                return Ok(enrollment);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
             }
         }
 

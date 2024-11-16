@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DTOs.RequestDTOs.Payment;
+﻿using MS3_Back_End.DTOs.RequestDTOs.Enrollment;
+using MS3_Back_End.DTOs.RequestDTOs.Payment;
 using MS3_Back_End.Entities;
 
 namespace MS3_Back_End.DTOs.RequestDTOs.Ènrollment
@@ -8,6 +9,6 @@ namespace MS3_Back_End.DTOs.RequestDTOs.Ènrollment
         public Guid StudentId { get; set; }
         public Guid CourseSheduleId { get; set; }
 
-        public PaymentRequestDTO PaymentRequest { get; set; } = new PaymentRequestDTO();
+        public EnrollmentPaymentRequestDTO PaymentRequest { get; set; } = new EnrollmentPaymentRequestDTO();
     }
 }

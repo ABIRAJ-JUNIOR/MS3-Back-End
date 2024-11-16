@@ -52,7 +52,7 @@ namespace MS3_Back_End.Service
                     PaymentMethod = EnrollmentReq.PaymentRequest.PaymentMethod,
                     AmountPaid = EnrollmentReq.PaymentRequest.AmountPaid,
                     PaymentDate = DateTime.Now,
-                    InstallmentNumber = EnrollmentReq.PaymentRequest.InstallmentNumber,
+                    InstallmentNumber = EnrollmentReq.PaymentRequest.InstallmentNumber != null ? EnrollmentReq.PaymentRequest.InstallmentNumber:null,
                     ImagePath = EnrollmentReq.PaymentRequest.ImageFile != null ? await _paymentService.SaveImageFile(EnrollmentReq.PaymentRequest.ImageFile) : string.Empty,
                 }
             };
@@ -89,7 +89,7 @@ namespace MS3_Back_End.Service
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
                     ImagePath = payment.ImagePath,
-                    InstallmentNumber = payment.InstallmentNumber,
+                    InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber:null,
                     EnrollmentId = payment.EnrollmentId
                 }).ToList();
 
