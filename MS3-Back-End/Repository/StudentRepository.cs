@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MS3_Back_End.DBContext;
+using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 
@@ -51,6 +52,14 @@ namespace MS3_Back_End.Repository
             _Db.Students.Update(Student);
             await _Db.SaveChangesAsync();
             return "Student Deleted Successfull";
+        }
+
+        public async Task<List<Student>> GetPaginatedCoursesAsync(PaginationParams paginationParams)
+        {
+            return await _Db.Students
+                .Skip((paginationParams.PageIndex - 1) * paginationParams.PageSize)
+                .Take(paginationParams.PageSize)
+                .ToListAsync();
         }
     }
 }
