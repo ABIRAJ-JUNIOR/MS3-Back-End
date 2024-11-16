@@ -56,7 +56,7 @@ namespace MS3_Back_End.Repository
 
         public async Task<List<Student>> GetPaginatedCoursesAsync(PaginationParams paginationParams)
         {
-            return await _Db.Students
+            return await _Db.Students.Include(a => a.Address)
                 .Skip((paginationParams.PageIndex - 1) * paginationParams.PageSize)
                 .Take(paginationParams.PageSize)
                 .ToListAsync();

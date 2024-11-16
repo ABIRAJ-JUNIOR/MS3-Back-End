@@ -12,6 +12,7 @@ using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
 using MS3_Back_End.Repository;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MS3_Back_End.Service
 {
@@ -136,44 +137,28 @@ namespace MS3_Back_End.Service
                 throw new Exception("Search Not Found");
             }
 
-            var StudentRes = new List<StudentResponseDTO>();
-           
-            foreach (var item in data)
+            var StudentRes = data.Select(item => new StudentResponseDTO()
             {
-
-                var obj = new StudentResponseDTO
+                Id = item.Id,
+                Nic = item.Nic,
+                FirstName = item.FirstName,
+                LastName = item.LastName,
+                DateOfBirth = item.DateOfBirth,
+                Gender = item.Gender,
+                Phone = item.Phone,
+                ImagePath = item.ImagePath!,
+                CteatedDate = item.CteatedDate,
+                UpdatedDate = item.UpdatedDate,
+                Address = item.Address != null ? new AddressResponseDTO()
                 {
-                    Id = item.Id,
-                    Nic = item.Nic,
-                    FirstName = item.FirstName,
-                    LastName = item.LastName,
-                    DateOfBirth = item.DateOfBirth,
-                    Gender = item.Gender,
-                    Phone = item.Phone,
-                    ImagePath = item.ImagePath!,
-                    CteatedDate = item.CteatedDate,
-                    UpdatedDate = item.UpdatedDate,
-
-                };
-                if (item.Address != null)
-                {
-                    var AddressResponse = new AddressResponseDTO
-                    {
-
-                        AddressLine1 = item.Address.AddressLine1,
-                        AddressLine2 = item.Address.AddressLine2,
-                        PostalCode = item.Address.PostalCode,
-                        City = item.Address.City,
-                        Country = item.Address.Country,
-                        StudentId = item.Id,
-                    };
-
-                    obj.Address = AddressResponse;
-                }
-
-                StudentRes.Add(obj);
-
-            }
+                    AddressLine1 = item.Address.AddressLine1,
+                    AddressLine2 = item.Address.AddressLine2,
+                    PostalCode = item.Address.PostalCode,
+                    City = item.Address.City,
+                    Country = item.Address.Country,
+                    StudentId = item.Id,
+                } : null,
+            }).ToList();
             return StudentRes;
 
         }
@@ -185,40 +170,28 @@ namespace MS3_Back_End.Service
             {
                 throw new Exception("Students data is Not Available");
             }
-            var StudentRes = new List<StudentResponseDTO>();
-            foreach (var item in data)
+            var StudentRes = data.Select(item => new StudentResponseDTO()
             {
-                var obj = new StudentResponseDTO
+                Id = item.Id,
+                Nic = item.Nic,
+                FirstName = item.FirstName,
+                LastName = item.LastName,
+                DateOfBirth = item.DateOfBirth,
+                Gender = item.Gender,
+                Phone = item.Phone,
+                ImagePath = item.ImagePath!,
+                CteatedDate = item.CteatedDate,
+                UpdatedDate = item.UpdatedDate,
+                Address = item.Address != null ? new AddressResponseDTO()
                 {
-                    Id = item.Id,
-                    Nic = item.Nic,
-                    FirstName = item.FirstName,
-                    LastName = item.LastName,
-                    DateOfBirth = item.DateOfBirth,
-                    Gender = item.Gender,
-                    Phone = item.Phone,
-                    ImagePath = item.ImagePath!,
-                    CteatedDate = item.CteatedDate,
-                    UpdatedDate = item.UpdatedDate,
-
-                };
-
-                if (item.Address != null)
-                {
-                    var AddressResponse = new AddressResponseDTO
-                    {
-                        AddressLine1 = item.Address.AddressLine1,
-                        AddressLine2 = item.Address.AddressLine2,
-                        PostalCode = item.Address.PostalCode,
-                        City = item.Address.City,
-                        Country = item.Address.Country,
-                        StudentId = item.Id,
-                    };
-                    obj.Address = AddressResponse;
-                }
-
-                StudentRes.Add(obj);
-            }
+                    AddressLine1 = item.Address.AddressLine1,
+                    AddressLine2 = item.Address.AddressLine2,
+                    PostalCode = item.Address.PostalCode,
+                    City = item.Address.City,
+                    Country = item.Address.Country,
+                    StudentId = item.Id,
+                } : null,
+            }).ToList();
             return StudentRes;
         }
 
@@ -329,25 +302,28 @@ namespace MS3_Back_End.Service
             }
             var Students = await _StudentRepo.GetPaginatedCoursesAsync(paginationParams);
 
-            var StudentResponse= new List<StudentResponseDTO>();
-            foreach (var item in Students)
+            var StudentResponse = Students.Select(item => new StudentResponseDTO()
             {
-                var obj = new StudentResponseDTO
+                Id = item.Id,
+                Nic = item.Nic,
+                FirstName = item.FirstName,
+                LastName = item.LastName,
+                DateOfBirth = item.DateOfBirth,
+                Gender = item.Gender,
+                Phone = item.Phone,
+                ImagePath = item.ImagePath!,
+                CteatedDate = item.CteatedDate,
+                UpdatedDate = item.UpdatedDate,
+                Address = item.Address != null ? new AddressResponseDTO()
                 {
-
-                    Id = item.Id,
-                    Nic = item.Nic,
-                    FirstName = item.FirstName,
-                    LastName = item.LastName,
-                    DateOfBirth = item.DateOfBirth,
-                    Gender = item.Gender,
-                    Phone = item.Phone,
-                    ImagePath = item.ImagePath!,
-                    CteatedDate = item.CteatedDate,
-                    UpdatedDate = item.UpdatedDate
-                };
-                StudentResponse.Add(obj);
-            }
+                    AddressLine1 = item.Address.AddressLine1,
+                    AddressLine2 = item.Address.AddressLine2,
+                    PostalCode = item.Address.PostalCode,
+                    City = item.Address.City,
+                    Country = item.Address.Country,
+                    StudentId = item.Id,
+                } : null,
+            }).ToList();
 
             var paginationResponseDto= new PaginationResponseDTO<StudentResponseDTO>
             {
