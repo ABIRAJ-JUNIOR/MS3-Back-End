@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DTOs.RequestDTOs.Admin;
+﻿using MS3_Back_End.DTOs.Image;
+using MS3_Back_End.DTOs.RequestDTOs.Admin;
 using MS3_Back_End.DTOs.ResponseDTOs.Admin;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
@@ -157,6 +158,20 @@ namespace MS3_Back_End.Service
             var updatedData = await _adminRepository.UpdateEmail(userData);
 
             return "Update email successfully";
+        }
+
+        public async Task<string> UploadImage(Guid adminId ,ImageRequestDTO request)
+        {
+            var adminData = await _adminRepository.GetAdminById(adminId);
+            if(adminData == null)
+            {
+                throw new Exception("Admin not found");
+            }
+
+            adminData.ImagePath = request.ImageFile != null ? await SaveImageFile(request.ImageFile) : null;
+            var updatedData = await _adminRepository.UpdateAdmin(adminData);
+
+            return "Image upload successfully";
         }
 
         private async Task<string> SaveImageFile(IFormFile imageFile)
