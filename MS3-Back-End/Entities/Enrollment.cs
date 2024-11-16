@@ -12,7 +12,7 @@
 
         //Reference
         public Student? Student { get; set; }
-        public CourseSchedule? CourseSchedules { get; set; }
+        public CourseSchedule? CourseShedule { get; set; }
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
     }
