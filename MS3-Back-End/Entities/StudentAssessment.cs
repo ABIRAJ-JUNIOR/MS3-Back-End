@@ -14,7 +14,7 @@ namespace MS3_Back_End.Entities
         public StudentAssessmentStatus StudentAssessmentStatus { get; set; }
 
         public Guid StudentId { get; set; }
-        public Guid AssesmentId { get; set; }
+        public Guid AssessmentId { get; set; }
 
         //Reference
         public Student? Student { get; set; }
