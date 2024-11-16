@@ -1,6 +1,7 @@
 ﻿using Azure.Core;
 using Microsoft.AspNetCore.Hosting;
 using MS3_Back_End.DBContext;
+using MS3_Back_End.DTOs.Image;
 using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.DTOs.RequestDTOs.Student;
@@ -359,6 +360,19 @@ namespace MS3_Back_End.Service
             return paginationResponseDto;
         }
 
+        public async Task<string> UploadImage(Guid studentId, ImageRequestDTO request)
+        {
+            var studentData = await _StudentRepo.GetStudentById(studentId);
+            if (studentData == null)
+            {
+                throw new Exception("Student not found");
+            }
+
+            studentData.ImagePath = request.ImageFile != null ? await SaveImageFile(request.ImageFile) : null;
+            var updatedData = await _StudentRepo.UpdateStudent(studentData);
+
+            return "Image upload successfully";
+        }
 
         private async Task<string> SaveImageFile(IFormFile imageFile)
         {
