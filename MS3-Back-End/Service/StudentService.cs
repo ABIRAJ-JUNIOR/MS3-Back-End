@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using Microsoft.AspNetCore.Hosting;
 using MS3_Back_End.DBContext;
 using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
@@ -17,11 +18,13 @@ namespace MS3_Back_End.Service
     {
         private readonly IStudentRepository _StudentRepo;
         private readonly IAuthRepository _authRepository;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public StudentService(IStudentRepository studentRepo, IAuthRepository authRepository)
+        public StudentService(IStudentRepository studentRepo, IAuthRepository authRepository, IWebHostEnvironment webHostEnvironment)
         {
             _StudentRepo = studentRepo;
             _authRepository = authRepository;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<StudentResponseDTO> AddStudent(StudentRequestDTO StudentReq)
@@ -123,8 +126,6 @@ namespace MS3_Back_End.Service
 
             return StudentReponse;
         }
-
-
 
         public async Task<List<StudentResponseDTO>> SearchStudent(string SearchText)
         {
@@ -356,6 +357,28 @@ namespace MS3_Back_End.Service
             };
 
             return paginationResponseDto;
+        }
+
+
+        private async Task<string> SaveImageFile(IFormFile imageFile)
+        {
+            if (imageFile == null || imageFile.Length == 0)
+                return string.Empty;
+
+            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "Student");
+
+            if (!Directory.Exists(uploadPath))
+                Directory.CreateDirectory(uploadPath);
+
+            string filePath = Path.Combine(uploadPath, fileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await imageFile.CopyToAsync(fileStream);
+            }
+
+            return $"/Student/{fileName}";
         }
     }
 }
