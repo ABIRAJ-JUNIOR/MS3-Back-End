@@ -62,7 +62,7 @@ namespace MS3_Back_End.Service
                 StudentId = EnrollmentReq.StudentId,
                 CourseSheduleId = EnrollmentReq.CourseSheduleId,
                 EnrollmentDate = DateTime.Now,
-                PaymentStatus = EnrollmentReq.PaymentStatus,
+                PaymentStatus = EnrollmentReq.PaymentRequest.PaymentType == PaymentTypes.FullPayment ? PaymentStatus.Paid : PaymentStatus.InProcess,
                 IsActive = true,
                 Payments = Payment
             };
