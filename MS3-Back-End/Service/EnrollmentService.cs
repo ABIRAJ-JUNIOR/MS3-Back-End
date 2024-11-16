@@ -2,6 +2,7 @@
 using MS3_Back_End.DTOs.RequestDTOs.Ènrollment;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Enrollment;
+using MS3_Back_End.DTOs.ResponseDTOs.Payment;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
@@ -12,21 +13,58 @@ namespace MS3_Back_End.Service
     public class EnrollmentService :IEnrollementService
     {
         private readonly IEnrollmentRepository _enrollmentRepository;
-        public EnrollmentService(IEnrollmentRepository enrollmentRepository)
+        private readonly ICourseSheduleRepository _courseSheduleRepository;
+        private readonly IPaymentService _paymentService;
+
+        public EnrollmentService(IEnrollmentRepository enrollmentRepository, ICourseSheduleRepository courseSheduleRepository, IPaymentService paymentService)
         {
             _enrollmentRepository = enrollmentRepository;
+            _courseSheduleRepository = courseSheduleRepository;
+            _paymentService = paymentService;
         }
 
         public async Task<EnrollmentResponseDTO> AddEnrollment(EnrollmentRequestDTO EnrollmentReq)
         {
+            var courseSheduleData = await _courseSheduleRepository.GetCourseSheduleById(EnrollmentReq.CourseSheduleId);
+            if(courseSheduleData == null)
+            {
+                throw new Exception("CourseShedule not found");
+            }
 
-            var Enrollment = new Enrollment
+            if(courseSheduleData.MaxStudents == courseSheduleData.EnrollCount)
+            {
+                throw new Exception("Reach limit");
+            }
+
+            if(EnrollmentReq.PaymentRequest == null)
+            {
+                throw new Exception("Payment required");
+            }
+
+            courseSheduleData.EnrollCount = courseSheduleData.EnrollCount + 1;
+            await _courseSheduleRepository.UpdateCourseShedule(courseSheduleData);
+
+            var Payment = new List<Payment>()
+            {
+                new Payment()
+                {
+                    PaymentType = EnrollmentReq.PaymentRequest.PaymentType,
+                    PaymentMethod = EnrollmentReq.PaymentRequest.PaymentMethod,
+                    AmountPaid = EnrollmentReq.PaymentRequest.AmountPaid,
+                    PaymentDate = DateTime.Now,
+                    InstallmentNumber = EnrollmentReq.PaymentRequest.InstallmentNumber != null ? EnrollmentReq.PaymentRequest.InstallmentNumber:null,
+                    ImagePath = EnrollmentReq.PaymentRequest.ImageFile != null ? await _paymentService.SaveImageFile(EnrollmentReq.PaymentRequest.ImageFile) : string.Empty,
+                }
+            };
+
+            var Enrollment = new Enrollment()
             {
                 StudentId = EnrollmentReq.StudentId,
                 CourseSheduleId = EnrollmentReq.CourseSheduleId,
-                EnrollmentDate = EnrollmentReq.EnrollmentDate,
-                PaymentStatus = EnrollmentReq.PaymentStatus,
-
+                EnrollmentDate = DateTime.Now,
+                PaymentStatus = EnrollmentReq.PaymentRequest.PaymentType == PaymentTypes.FullPayment ? PaymentStatus.Paid : PaymentStatus.InProcess,
+                IsActive = true,
+                Payments = Payment
             };
 
             var data = await _enrollmentRepository.AddEnrollment(Enrollment);
@@ -41,8 +79,24 @@ namespace MS3_Back_End.Service
                 IsActive = data.IsActive
             };
 
-            return EnrollmentResponse;
+            if(data.Payments != null)
+            {
+                var PaymentResponse = data.Payments.Select(payment => new PaymentResponseDTO()
+                {
+                    Id = payment.Id,
+                    PaymentType = payment.PaymentType,
+                    PaymentMethod = payment.PaymentMethod,
+                    AmountPaid = payment.AmountPaid,
+                    PaymentDate = payment.PaymentDate,
+                    ImagePath = payment.ImagePath,
+                    InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber:null,
+                    EnrollmentId = payment.EnrollmentId
+                }).ToList();
 
+                EnrollmentResponse.PaymentResponse = PaymentResponse;
+            }
+
+            return EnrollmentResponse;
         }
 
 
@@ -54,24 +108,28 @@ namespace MS3_Back_End.Service
                 throw new Exception("Search Not Found");
             }
 
-            var ListEnrollment = new List<EnrollmentResponseDTO>();
-            foreach (var item in data)
+            var ListEnrollment = data.Select(item => new EnrollmentResponseDTO()
             {
-                var EnrollmentResponse = new EnrollmentResponseDTO
+                Id = item.Id,
+                StudentId = item.StudentId,
+                CourseSheduleId = item.CourseSheduleId,
+                EnrollmentDate = item.EnrollmentDate,
+                PaymentStatus = item.PaymentStatus,
+                IsActive = item.IsActive,
+                PaymentResponse = item.Payments != null ? item.Payments.Select(payment => new PaymentResponseDTO()
                 {
-                    Id = item.Id,
-                    StudentId = item.StudentId,
-                    CourseSheduleId = item.CourseSheduleId,
-                    EnrollmentDate = item.EnrollmentDate,
-                    PaymentStatus = item.PaymentStatus,
-                    IsActive = item.IsActive
-                };
-                ListEnrollment.Add(EnrollmentResponse);
-
-            }
+                    Id = payment.Id,
+                    PaymentType = payment.PaymentType,
+                    PaymentMethod = payment.PaymentMethod,
+                    AmountPaid = payment.AmountPaid,
+                    PaymentDate = payment.PaymentDate,
+                    ImagePath = payment.ImagePath,
+                    InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber : null,
+                    EnrollmentId = payment.EnrollmentId
+                }).ToList() : []
+            }).ToList();    
 
             return ListEnrollment;
-
         }
 
 
@@ -82,21 +140,27 @@ namespace MS3_Back_End.Service
             {
                 throw new Exception("Enrollment Not Available");
             }
-            var ListEnrollment = new List<EnrollmentResponseDTO>();
-            foreach (var item in data)
+            var ListEnrollment = data.Select(item => new EnrollmentResponseDTO()
             {
-                var EnrollmentResponse = new EnrollmentResponseDTO
+                Id = item.Id,
+                StudentId = item.StudentId,
+                CourseSheduleId = item.CourseSheduleId,
+                EnrollmentDate = item.EnrollmentDate,
+                PaymentStatus = item.PaymentStatus,
+                IsActive = item.IsActive,
+                PaymentResponse = item.Payments != null ? item.Payments.Select(payment => new PaymentResponseDTO()
                 {
-                    Id = item.Id,
-                    StudentId = item.StudentId,
-                    CourseSheduleId = item.CourseSheduleId,
-                    EnrollmentDate = item.EnrollmentDate,
-                    PaymentStatus = item.PaymentStatus,
-                    IsActive = item.IsActive
-                };
-                ListEnrollment.Add(EnrollmentResponse);
+                    Id = payment.Id,
+                    PaymentType = payment.PaymentType,
+                    PaymentMethod = payment.PaymentMethod,
+                    AmountPaid = payment.AmountPaid,
+                    PaymentDate = payment.PaymentDate,
+                    ImagePath = payment.ImagePath,
+                    InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber : null,
+                    EnrollmentId = payment.EnrollmentId
+                }).ToList() : []
 
-            }
+            }).ToList();
 
             return ListEnrollment;
         }
@@ -118,74 +182,37 @@ namespace MS3_Back_End.Service
                 IsActive = data.IsActive
             };
 
+            if(data.Payments != null)
+            {
+                var PaymentResponse = data.Payments.Select(payment => new PaymentResponseDTO()
+                {
+                    Id = payment.Id,
+                    PaymentType = payment.PaymentType,
+                    PaymentMethod = payment.PaymentMethod,
+                    AmountPaid = payment.AmountPaid,
+                    PaymentDate = payment.PaymentDate,
+                    ImagePath = payment.ImagePath,
+                    InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber : null,
+                    EnrollmentId = payment.EnrollmentId
+                }).ToList();
+
+                EnrollmentResponse.PaymentResponse = PaymentResponse;
+            }
+
             return EnrollmentResponse;
         }
-
-
-
-        public async Task<EnrollmentResponseDTO> UpdateEnrollment(EnrollmentUpdateDTO enrollment)
-        {
-            var getData = await _enrollmentRepository.GetEnrollmentById(enrollment.Id);
-
-            if (enrollment.EnrollmentDate.HasValue)
-            {
-                getData.EnrollmentDate = enrollment.EnrollmentDate.Value;
-            }
-
-            if (enrollment.PaymentStatus.HasValue)
-            {
-                getData.PaymentStatus = enrollment.PaymentStatus.Value;
-            }
-
-            if (enrollment.IsActive.HasValue)
-                getData.IsActive = enrollment.IsActive.Value;
-
-            if (enrollment.StudentId.HasValue)
-            {
-                getData.StudentId = enrollment.StudentId.Value;
-            }
-
-            if (enrollment.CourseSheduleId.HasValue)
-            {
-                getData.CourseSheduleId = enrollment.CourseSheduleId.Value;
-            }
-
-
-            var updatedData = await _enrollmentRepository.UpdateEnrollment(getData);
-
-            var enrollmentResponse = new EnrollmentResponseDTO
-            {
-                Id = updatedData.Id,
-                EnrollmentDate = updatedData.EnrollmentDate,
-                PaymentStatus = updatedData.PaymentStatus,
-                IsActive = updatedData.IsActive,
-                StudentId = updatedData.StudentId,
-                CourseSheduleId = updatedData.CourseSheduleId,
-
-            };
-
-            return enrollmentResponse;
-        }
-
 
         public async Task<string> DeleteEnrollment(Guid Id)
         {
             var GetData = await _enrollmentRepository.GetEnrollmentById(Id);
-            GetData.IsActive = false;
             if (GetData == null)
             {
                 throw new Exception("Course Id not Found");
             }
+            GetData.IsActive = false;
             var data = await _enrollmentRepository.DeleteEnrollment(GetData);
             return data;
         }
-
-
-
-
-
-
-
 
     }
 }

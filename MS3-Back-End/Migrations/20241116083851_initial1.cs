@@ -19,7 +19,8 @@ namespace MS3_Back_End.Migrations
                     Nic = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CteatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
@@ -54,7 +55,7 @@ namespace MS3_Back_End.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Response = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateSubmited = table.Column<DateOnly>(type: "date", nullable: false),
+                    DateSubmited = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsRead = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -98,7 +99,7 @@ namespace MS3_Back_End.Migrations
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CteatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
@@ -128,7 +129,7 @@ namespace MS3_Back_End.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Action = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ActionDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    ActionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Details = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AdminId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -199,7 +200,7 @@ namespace MS3_Back_End.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateSent = table.Column<DateOnly>(type: "date", nullable: false),
+                    DateSent = table.Column<DateTime>(type: "datetime2", nullable: false),
                     NotificationType = table.Column<int>(type: "int", nullable: false),
                     IsRead = table.Column<bool>(type: "bit", nullable: false),
                     StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -250,9 +251,9 @@ namespace MS3_Back_End.Migrations
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TotalMarks = table.Column<int>(type: "int", nullable: false),
                     PassMarks = table.Column<int>(type: "int", nullable: false),
-                    CreatedDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    UpdateDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -277,6 +278,7 @@ namespace MS3_Back_End.Migrations
                     Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MaxStudents = table.Column<int>(type: "int", nullable: false),
+                    EnrollCount = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ScheduleStatus = table.Column<int>(type: "int", nullable: false),
@@ -327,9 +329,10 @@ namespace MS3_Back_End.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MarksObtaines = table.Column<int>(type: "int", nullable: false),
-                    Grade = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Grade = table.Column<int>(type: "int", nullable: false),
                     FeedBack = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateEvaluted = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateSubmitted = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateEvaluated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StudentAssessmentStatus = table.Column<int>(type: "int", nullable: false),
                     StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AssesmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -356,21 +359,21 @@ namespace MS3_Back_End.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EnrollmentDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    EnrollmentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PaymentStatus = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CourseSheduleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CourseSchedulesId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    CourseSheduleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Enrollments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Enrollments_CourseSchedules_CourseSchedulesId",
-                        column: x => x.CourseSchedulesId,
+                        name: "FK_Enrollments_CourseSchedules_CourseSheduleId",
+                        column: x => x.CourseSheduleId,
                         principalTable: "CourseSchedules",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Enrollments_Students_StudentId",
                         column: x => x.StudentId,
@@ -386,12 +389,11 @@ namespace MS3_Back_End.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PaymentType = table.Column<int>(type: "int", nullable: false),
                     PaymentMethod = table.Column<int>(type: "int", nullable: false),
-                    AmmountPaid = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PaymentDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InstallmentNumber = table.Column<int>(type: "int", nullable: false),
-                    EnrollementId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EnrollmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    AmountPaid = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InstallmentNumber = table.Column<int>(type: "int", nullable: true),
+                    EnrollmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -400,7 +402,8 @@ namespace MS3_Back_End.Migrations
                         name: "FK_Payments_Enrollments_EnrollmentId",
                         column: x => x.EnrollmentId,
                         principalTable: "Enrollments",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -430,9 +433,9 @@ namespace MS3_Back_End.Migrations
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollments_CourseSchedulesId",
+                name: "IX_Enrollments_CourseSheduleId",
                 table: "Enrollments",
-                column: "CourseSchedulesId");
+                column: "CourseSheduleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Enrollments_StudentId",

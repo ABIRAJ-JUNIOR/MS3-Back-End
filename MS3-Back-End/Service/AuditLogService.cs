@@ -10,20 +10,27 @@ namespace MS3_Back_End.Service
     public class AuditLogService: IAuditLogService
     {
         private readonly IAuditLogRepository _auditLogRepository;
+        private readonly IAdminRepository _adminRepository;
 
-        public AuditLogService(IAuditLogRepository auditLogRepository)
+        public AuditLogService(IAuditLogRepository auditLogRepository, IAdminRepository adminRepository)
         {
             _auditLogRepository = auditLogRepository;
+            _adminRepository = adminRepository;
         }
 
         public async Task<AuditLogResponceDTO> AddAuditLog(AuditLogRequestDTO auditLog)
         {
+            var adminData = await _adminRepository.GetAdminById(auditLog.AdminId);
+            if (adminData == null)
+            {
+                throw new Exception("Admin not found");
+            }
 
-            var AuditLog=new AuditLog()
+            var AuditLog = new AuditLog()
             {
                 Action= auditLog.Action,
                 Details= auditLog.Details,
-                ActionDate= auditLog.ActionDate,
+                ActionDate= DateTime.Now,
                 AdminId= auditLog.AdminId,
             };
 
@@ -31,10 +38,10 @@ namespace MS3_Back_End.Service
 
             var returndata = new AuditLogResponceDTO()
             {
+                Id = data.Id,
                 AdminId = data.AdminId,
                 ActionDate = data.ActionDate,
                 Details = data.Details,
-                Id = data.Id,
                 Action = auditLog.Action,
             };
 
@@ -85,51 +92,5 @@ namespace MS3_Back_End.Service
 
             return returndata;
         }
-
-        public async Task<AuditLogResponceDTO> UpdateAuditLog(Guid auditlogid,AuditLogUpdateRequest auditLogService) 
-        {
-             var data= await _auditLogRepository.GetAuditLogByID(auditlogid);
-         
-            data.ActionDate= auditLogService.ActionDate;
-            data.Action = auditLogService.Action;
-            data.Details = auditLogService.Details;
-
-            var updatedata=await  _auditLogRepository.UpdateAuditLog(data);
-
-            var returndata = new AuditLogResponceDTO()
-            {
-                Action = data.Action,
-                Details = data.Details,
-                Id = data.Id,
-                ActionDate = data.ActionDate,
-                AdminId = data.AdminId,
-
-            };
-
-            return returndata;
-        }
-
-        public async Task<AuditLogResponceDTO> DeleteAuditlog(Guid id)
-        {
-            var auditlog= await _auditLogRepository.GetAuditLogByID(id);
-
-            var data = await _auditLogRepository.DeleteAuditlog(auditlog);
-
-            var returndata = new AuditLogResponceDTO()
-            {
-                Action = data.Action,
-                Details = data.Details,
-                Id = data.Id,
-                ActionDate = data.ActionDate,
-                AdminId = data.AdminId,
-
-            };
-            return returndata;
-
-        }
-
-
-
-
     }
 }

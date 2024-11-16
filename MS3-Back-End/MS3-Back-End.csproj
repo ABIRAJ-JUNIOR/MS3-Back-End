@@ -34,6 +34,7 @@
   <ItemGroup>
     <Folder Include="Migrations\" />
     <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\Payment\" />
   </ItemGroup>
 
 </Project>

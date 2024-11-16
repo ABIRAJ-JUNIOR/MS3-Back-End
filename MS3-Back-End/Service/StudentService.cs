@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using MS3_Back_End.DBContext;
+using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.DTOs.RequestDTOs.Student;
 using MS3_Back_End.DTOs.ResponseDTOs.Address;
@@ -312,6 +313,49 @@ namespace MS3_Back_End.Service
 
             var data = await _StudentRepo.DeleteStudent(GetData);
             return data;
+        }
+
+                
+        public async Task<PaginationResponseDTO<StudentResponseDTO>> GetPaginatedCoursesAsync(PaginationParams paginationParams)
+        {
+
+            var AllStudents = await _StudentRepo.GetAllStudente();
+
+            if (AllStudents == null)
+            {
+                throw new Exception("Students Not Found");
+            }
+            var Students = await _StudentRepo.GetPaginatedCoursesAsync(paginationParams);
+
+            var StudentResponse= new List<StudentResponseDTO>();
+            foreach (var item in Students)
+            {
+                var obj = new StudentResponseDTO
+                {
+
+                    Id = item.Id,
+                    Nic = item.Nic,
+                    FirstName = item.FirstName,
+                    LastName = item.LastName,
+                    DateOfBirth = item.DateOfBirth,
+                    Gender = item.Gender,
+                    Phone = item.Phone,
+                    ImagePath = item.ImagePath!,
+                    CteatedDate = item.CteatedDate,
+                    UpdatedDate = item.UpdatedDate
+                };
+                StudentResponse.Add(obj);
+            }
+
+            var paginationResponseDto= new PaginationResponseDTO<StudentResponseDTO>
+            {
+                Items = StudentResponse,
+                PageNumber = paginationParams.PageIndex,
+                PageSize = paginationParams.PageSize,
+                TotalPages = (int)Math.Ceiling(AllStudents.Count / (double)paginationParams.PageSize)
+            };
+
+            return paginationResponseDto;
         }
     }
 }

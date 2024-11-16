@@ -31,7 +31,7 @@ namespace MS3_Back_End.Service
                 DateEvaluated = sa.DateEvaluated,
                 StudentAssessmentStatus = sa.StudentAssessmentStatus,
                 StudentId = sa.StudentId,
-                AssesmentId = sa.AssesmentId
+                AssessmentId = sa.AssessmentId
             }).ToList();
 
             return response;
@@ -49,7 +49,7 @@ namespace MS3_Back_End.Service
                 DateEvaluated = sa.DateEvaluated,
                 StudentAssessmentStatus = sa.StudentAssessmentStatus,
                 StudentId = sa.StudentId,
-                AssesmentId = sa.AssesmentId
+                AssessmentId = sa.AssessmentId
             }).ToList();
 
             return response;
@@ -67,7 +67,7 @@ namespace MS3_Back_End.Service
                 DateEvaluated = sa.DateEvaluated,
                 StudentAssessmentStatus = sa.StudentAssessmentStatus,
                 StudentId = sa.StudentId,
-                AssesmentId = sa.AssesmentId
+                AssessmentId = sa.AssessmentId
             }).ToList();
 
             return response;
@@ -80,7 +80,7 @@ namespace MS3_Back_End.Service
                 DateSubmitted = DateTime.Now,
                 StudentAssessmentStatus = StudentAssessmentStatus.Completed,
                 StudentId = request.StudentId,
-                AssesmentId = request.AssessmentId
+                AssessmentId = request.AssessmentId
             };
             var studentAssessmentData = await _repository.AddStudentAssessment(studentAssessment);
 
@@ -94,7 +94,7 @@ namespace MS3_Back_End.Service
             {
                 throw new Exception("Student Assessment not found");
             }
-            var assessmentData = await _assessmentRepository.GetAssessmentById(studentAssessmentData.AssesmentId);
+            var assessmentData = await _assessmentRepository.GetAssessmentById(studentAssessmentData.AssessmentId);
             if(assessmentData == null)
             {
                 throw new Exception("Assessment not found");

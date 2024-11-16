@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.Entities;
+﻿using MS3_Back_End.DTOs.Pagination;
+using MS3_Back_End.Entities;
 
 namespace MS3_Back_End.IRepository
 {
@@ -10,5 +11,6 @@ namespace MS3_Back_End.IRepository
         Task<Student> GetStudentById(Guid StudentId);
         Task<Student> UpdateStudent(Student Students);
         Task<string> DeleteStudent(Student Student);
+        Task<List<Student>> GetPaginatedCoursesAsync(PaginationParams paginationParams);
     }
 }

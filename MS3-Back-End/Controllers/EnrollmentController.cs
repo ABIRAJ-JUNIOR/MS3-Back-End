@@ -17,6 +17,19 @@ namespace MS3_Back_End.Controllers
             _enrollmentService = enrollement;
         }
 
+        [HttpPost]
+        public async Task<ActionResult<EnrollmentResponseDTO>> AddEnrollment([FromForm] EnrollmentRequestDTO enrollmentReq)
+        {
+            try
+            {
+                var enrollment = await _enrollmentService.AddEnrollment(enrollmentReq);
+                return Ok(enrollment);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpGet("Enrollment/{id}")]
         public async Task<ActionResult<EnrollmentResponseDTO>> GetEnrollmentById(Guid id)
@@ -32,12 +45,12 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("user/{userId}")]
-        public async Task<ActionResult<List<EnrollmentResponseDTO>>> SearchEnrollmentByUserId(Guid userId)
+        [HttpGet("user/{StudentId}")]
+        public async Task<ActionResult<List<EnrollmentResponseDTO>>> SearchEnrollmentByUserId(Guid StudentId)
         {
             try
             {
-                var enrollments = await _enrollmentService.SearchEnrollmentByUserId(userId);
+                var enrollments = await _enrollmentService.SearchEnrollmentByUserId(StudentId);
                 return Ok(enrollments);
             }
             catch (Exception ex)
@@ -60,39 +73,6 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<ActionResult<EnrollmentResponseDTO>> AddEnrollment([FromBody] EnrollmentRequestDTO enrollmentReq)
-        {
-            try
-            {
-                var enrollment = await _enrollmentService.AddEnrollment(enrollmentReq);
-                return Ok(enrollment);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPut("{id}")]
-        public async Task<ActionResult<EnrollmentResponseDTO>> UpdateEnrollment(Guid id, [FromBody] EnrollmentUpdateDTO enrollment)
-        {
-            if (id != enrollment.Id)
-            {
-                return BadRequest("ID mismatch");
-            }
-
-            try
-            {
-                var updatedEnrollment = await _enrollmentService.UpdateEnrollment(enrollment);
-                return Ok(updatedEnrollment);
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
-
         [HttpDelete("{id}")]
         public async Task<ActionResult<string>> DeleteEnrollment(Guid id)
         {
@@ -106,9 +86,5 @@ namespace MS3_Back_End.Controllers
                 return NotFound(ex.Message);
             }
         }
-
-
-
-
     }
 }

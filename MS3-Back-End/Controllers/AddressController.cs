@@ -34,54 +34,12 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("GetAddressbyStudentID")]
-        public async Task<IActionResult> GetAddressbyStuID(Guid stuID) 
+        [HttpPut("Update-Address/{id}")]
+        public async  Task<IActionResult> UpdateAddress(Guid id, AddressUpdateRequestDTO Updateaddress)
         {
             try
             {
-                var data = await _addressService.GetAddressbyStuID(stuID);
-                return Ok(data);
-            }
-            catch (Exception ex) 
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpGet("GetAllAddresses")]
-        public async Task<IActionResult> GetAllAddress()
-        {
-            try
-            {
-                var data = await _addressService.GetAllAddress();
-                return Ok(data);
-            }
-            catch (Exception ex) 
-            {
-               return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpDelete("Delete-Address")]
-        public async Task<IActionResult> DeleteAddress(Guid stuid)
-        {
-            try
-            {
-                var data = await _addressService.DeleteAddress(stuid);
-                return Ok(data);
-            }
-            catch (Exception ex) 
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPut("Update-Address")]
-        public async  Task<IActionResult> UpdateAddress(AddressUpdateRequestDTO addressUpdate,Guid stuID)
-        {
-            try
-            {
-                var data = await _addressService.UpdateAddress(addressUpdate, stuID);
+                var data = await _addressService.UpdateAddress(id,Updateaddress);
                 return Ok(data);
             }
             catch (Exception ex)
@@ -90,22 +48,20 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("Search-By-City")]
-        public async Task<IActionResult> SearchbyCity(string searchText)
+
+        [HttpDelete("Delete-Address/{id}")]
+        public async Task<IActionResult> DeleteAddress(Guid id)
         {
             try
             {
-                var data = await _addressService.SearchbyCity(searchText);
+                var data = await _addressService.DeleteAddress(id);
                 return Ok(data);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-
-
-
 
     }
 }

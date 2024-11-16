@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Student;
 using MS3_Back_End.IService;
 
@@ -94,6 +95,21 @@ namespace MS3_Back_End.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpGet("Pagination")]
+        public async Task<IActionResult> GetStudentByPagination(PaginationParams paginationparam)
+        {
+            try
+            {
+                var result = await _studentService.GetPaginatedCoursesAsync(paginationparam);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
 
     }

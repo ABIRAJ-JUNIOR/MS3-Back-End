@@ -35,12 +35,12 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("getCourseById")]
-        public async Task<IActionResult> GetCourseById(Guid CourseId)
+        [HttpGet("CourseShedule/{id}")]
+        public async Task<IActionResult> GetCourseSheduleById(Guid id)
         {
             try
             {
-                var response = await _courseScheduleService.GetCourseById(CourseId);
+                var response = await _courseScheduleService.GetCourseSheduleById(id);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -50,11 +50,11 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCourses()
+        public async Task<IActionResult> GetAllCourseShedule()
         {
             try
             {
-                var response = await _courseScheduleService.GetAllCourse();
+                var response = await _courseScheduleService.GetAllCourseShedule();
                 return Ok(response);
             }
             catch (Exception ex)
@@ -64,7 +64,7 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpGet("searchByLocation")]
-        public async Task<IActionResult> SearchCourse( string searchText)
+        public async Task<IActionResult> SearchCourseShedule( string searchText)
         {
             if (string.IsNullOrWhiteSpace(searchText))
             {
@@ -73,7 +73,7 @@ namespace MS3_Back_End.Controllers
 
             try
             {
-                var response = await _courseScheduleService.SearchCourse(searchText);
+                var response = await _courseScheduleService.SearchCourseShedule(searchText);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -82,12 +82,12 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpPut("courseId/{CourseId}")]
-        public async Task<IActionResult> UpdateCourse(UpdateCourseSheduleDTO courseReq)
+        [HttpPut("Update")]
+        public async Task<IActionResult> UpdateCourseShedule(UpdateCourseSheduleDTO courseReq)
         {
             try
             {
-                var response = await _courseScheduleService.UpdateCourse(courseReq);
+                var response = await _courseScheduleService.UpdateCourseShedule(courseReq);
                 return Ok(response);
             }
             catch (Exception ex)

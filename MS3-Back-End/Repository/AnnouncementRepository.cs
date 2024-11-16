@@ -41,7 +41,7 @@ namespace MS3_Back_End.Repository
         public async Task<Announcement> GetAnnouncemenntByID(Guid AnnouncementId)
         {
             var data = await _Db.Announcements.SingleOrDefaultAsync(c => c.Id == AnnouncementId && c.IsActive == true);
-            return data;
+            return data!;
         }
         public async Task<Announcement> UpdateAnnouncement(Announcement announcement)
         {
@@ -56,9 +56,5 @@ namespace MS3_Back_End.Repository
             await _Db.SaveChangesAsync();
             return "Delete Announcement SucessFully";
         }
-
-
-
-
     }
 }

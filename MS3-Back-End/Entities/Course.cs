@@ -27,8 +27,8 @@ namespace MS3_Back_End.Entities
 
     public enum CourseLevel
     {
-        Beginner,
-        Intermediate,   
-        Advanced,
+        Beginner = 1,
+        Intermediate = 2,   
+        Advanced = 3,
     }
 }

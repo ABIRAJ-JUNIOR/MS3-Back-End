@@ -13,14 +13,22 @@ namespace MS3_Back_End.Service
     public class NotificationService: INotificationService
     {
         private readonly INotificationRepository _notificationRepository;
+        private readonly IStudentRepository _studentRepository;
 
-        public NotificationService(INotificationRepository notificationRepository)
+        public NotificationService(INotificationRepository notificationRepository, IStudentRepository studentRepository)
         {
             _notificationRepository = notificationRepository;
+            _studentRepository = studentRepository;
         }
 
         public async Task<NotificationResponseDTO> AddNotification(NotificationRequestDTO requestDTO )
         {
+            var studentData = await _studentRepository.GetStudentById( requestDTO.StudentId );
+            if( studentData == null)
+            {
+                throw new Exception("Student not found");
+            }
+
             var Message = new Notification
             {
                 Message = requestDTO.Message,

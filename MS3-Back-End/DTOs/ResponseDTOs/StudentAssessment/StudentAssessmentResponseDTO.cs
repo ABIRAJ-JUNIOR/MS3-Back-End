@@ -13,6 +13,6 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.StudentAssessment
         public StudentAssessmentStatus StudentAssessmentStatus { get; set; }
 
         public Guid StudentId { get; set; }
-        public Guid AssesmentId { get; set; }
+        public Guid AssessmentId { get; set; }
     }
 }
