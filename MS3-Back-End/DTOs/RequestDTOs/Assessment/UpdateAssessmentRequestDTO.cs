@@ -10,6 +10,5 @@ namespace MS3_Back_End.DTOs.RequestDTOs.Assessment
         public int TotalMarks { get; set; }
         public int PassMarks { get; set; }
         public AssessmentStatus Status { get; set; }
-        public Guid CourseId { get; set; }
     }
 }

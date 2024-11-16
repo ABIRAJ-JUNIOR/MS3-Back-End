@@ -307,6 +307,9 @@ namespace MS3_Back_End.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("EnrollCount")
+                        .HasColumnType("int");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -340,9 +343,6 @@ namespace MS3_Back_End.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CourseSchedulesId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("CourseSheduleId")
                         .HasColumnType("uniqueidentifier");
 
@@ -360,7 +360,7 @@ namespace MS3_Back_End.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseSchedulesId");
+                    b.HasIndex("CourseSheduleId");
 
                     b.HasIndex("StudentId");
 
@@ -443,7 +443,7 @@ namespace MS3_Back_End.Migrations
                     b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("InstallmentNumber")
+                    b.Property<int?>("InstallmentNumber")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PaymentDate")
@@ -527,10 +527,7 @@ namespace MS3_Back_End.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AssesmentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("AssessmentId")
+                    b.Property<Guid>("AssessmentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateEvaluated")
@@ -665,9 +662,11 @@ namespace MS3_Back_End.Migrations
 
             modelBuilder.Entity("MS3_Back_End.Entities.Enrollment", b =>
                 {
-                    b.HasOne("MS3_Back_End.Entities.CourseSchedule", "CourseSchedules")
+                    b.HasOne("MS3_Back_End.Entities.CourseSchedule", "CourseShedule")
                         .WithMany("Enrollments")
-                        .HasForeignKey("CourseSchedulesId");
+                        .HasForeignKey("CourseSheduleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MS3_Back_End.Entities.Student", "Student")
                         .WithMany("Enrollments")
@@ -675,7 +674,7 @@ namespace MS3_Back_End.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CourseSchedules");
+                    b.Navigation("CourseShedule");
 
                     b.Navigation("Student");
                 });
@@ -725,7 +724,9 @@ namespace MS3_Back_End.Migrations
                 {
                     b.HasOne("MS3_Back_End.Entities.Assessment", "Assessment")
                         .WithMany("StudentAssessments")
-                        .HasForeignKey("AssessmentId");
+                        .HasForeignKey("AssessmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MS3_Back_End.Entities.Student", "Student")
                         .WithMany("Assessments")

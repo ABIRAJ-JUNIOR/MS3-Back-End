@@ -106,7 +106,6 @@ namespace MS3_Back_End.Service
             assessment.PassMarks = request.PassMarks;
             assessment.UpdateDate = DateTime.Now;
             assessment.Status = request.Status;
-            assessment.CourseId = request.CourseId;
 
             var updatedData = await _repository.UpdateAssessment(assessment);
 

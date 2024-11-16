@@ -73,7 +73,7 @@ namespace MS3_Back_End.Service
             return response;
         }
 
-        private async Task<string> SaveImageFile(IFormFile imageFile)
+        public async Task<string> SaveImageFile(IFormFile imageFile)
         {
             if (imageFile == null || imageFile.Length == 0)
                 return string.Empty;

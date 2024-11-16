@@ -11,7 +11,7 @@ namespace MS3_Back_End.Entities
         public decimal AmountPaid { get; set; }
         public DateTime PaymentDate { get; set; }
         public string? ImagePath { get; set; } = string.Empty;
-        public int InstallmentNumber { get; set; }
+        public int? InstallmentNumber { get; set; }
 
         public Guid EnrollmentId { get; set; }
 

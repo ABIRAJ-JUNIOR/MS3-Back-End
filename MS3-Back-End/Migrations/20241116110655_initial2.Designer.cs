@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MS3_Back_End.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20241112114324_initial5")]
-    partial class initial5
+    [Migration("20241116110655_initial2")]
+    partial class initial2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,7 +75,6 @@ namespace MS3_Back_End.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImagePath")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -85,6 +84,10 @@ namespace MS3_Back_End.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nic")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -307,6 +310,9 @@ namespace MS3_Back_End.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("EnrollCount")
+                        .HasColumnType("int");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -340,9 +346,6 @@ namespace MS3_Back_End.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CourseSchedulesId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("CourseSheduleId")
                         .HasColumnType("uniqueidentifier");
 
@@ -360,7 +363,7 @@ namespace MS3_Back_End.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseSchedulesId");
+                    b.HasIndex("CourseSheduleId");
 
                     b.HasIndex("StudentId");
 
@@ -434,20 +437,16 @@ namespace MS3_Back_End.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("AmmountPaid")
+                    b.Property<decimal>("AmountPaid")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("EnrollementId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("EnrollmentId")
+                    b.Property<Guid>("EnrollmentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ImagePath")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("InstallmentNumber")
+                    b.Property<int?>("InstallmentNumber")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PaymentDate")
@@ -501,7 +500,6 @@ namespace MS3_Back_End.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ImagePath")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -532,10 +530,7 @@ namespace MS3_Back_End.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AssesmentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("AssessmentId")
+                    b.Property<Guid>("AssessmentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateEvaluated")
@@ -670,9 +665,11 @@ namespace MS3_Back_End.Migrations
 
             modelBuilder.Entity("MS3_Back_End.Entities.Enrollment", b =>
                 {
-                    b.HasOne("MS3_Back_End.Entities.CourseSchedule", "CourseSchedules")
+                    b.HasOne("MS3_Back_End.Entities.CourseSchedule", "CourseShedule")
                         .WithMany("Enrollments")
-                        .HasForeignKey("CourseSchedulesId");
+                        .HasForeignKey("CourseSheduleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MS3_Back_End.Entities.Student", "Student")
                         .WithMany("Enrollments")
@@ -680,7 +677,7 @@ namespace MS3_Back_End.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CourseSchedules");
+                    b.Navigation("CourseShedule");
 
                     b.Navigation("Student");
                 });
@@ -719,7 +716,9 @@ namespace MS3_Back_End.Migrations
                 {
                     b.HasOne("MS3_Back_End.Entities.Enrollment", "Enrollment")
                         .WithMany("Payments")
-                        .HasForeignKey("EnrollmentId");
+                        .HasForeignKey("EnrollmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Enrollment");
                 });
@@ -728,7 +727,9 @@ namespace MS3_Back_End.Migrations
                 {
                     b.HasOne("MS3_Back_End.Entities.Assessment", "Assessment")
                         .WithMany("StudentAssessments")
-                        .HasForeignKey("AssessmentId");
+                        .HasForeignKey("AssessmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MS3_Back_End.Entities.Student", "Student")
                         .WithMany("Assessments")

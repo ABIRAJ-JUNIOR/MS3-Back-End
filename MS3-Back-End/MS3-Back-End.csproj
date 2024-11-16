@@ -10,16 +10,12 @@
   <ItemGroup>
     <Compile Remove="DTOs\ResponseDTOs\Auth\**" />
     <Compile Remove="TestingControllers\**" />
-    <Compile Remove="wwwroot\**" />
     <Content Remove="DTOs\ResponseDTOs\Auth\**" />
     <Content Remove="TestingControllers\**" />
-    <Content Remove="wwwroot\**" />
     <EmbeddedResource Remove="DTOs\ResponseDTOs\Auth\**" />
     <EmbeddedResource Remove="TestingControllers\**" />
-    <EmbeddedResource Remove="wwwroot\**" />
     <None Remove="DTOs\ResponseDTOs\Auth\**" />
     <None Remove="TestingControllers\**" />
-    <None Remove="wwwroot\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,6 +33,8 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\Payment\" />
   </ItemGroup>
 
 </Project>
