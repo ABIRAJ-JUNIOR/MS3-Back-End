@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MS3_Back_End.DTOs.Image;
 using MS3_Back_End.DTOs.RequestDTOs.Admin;
 using MS3_Back_End.DTOs.ResponseDTOs.Admin;
 using MS3_Back_End.IService;
@@ -53,13 +54,26 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPut("Update-Email")]
-
         public async Task<IActionResult>  UpdateEmail(UpdateEmailRequestDTO request)
         {
             try
             {
                 var updateEmail = await _adminService.UpdateEmail(request);
                 return Ok(updateEmail);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("Image")]
+        public async Task<IActionResult> UploadImage(Guid adminId, ImageRequestDTO request)
+        {
+            try
+            {
+                var response = await _adminService.UploadImage(adminId, request);
+                return Ok(response);
             }
             catch (Exception ex)
             {

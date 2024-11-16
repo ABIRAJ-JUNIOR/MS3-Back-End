@@ -1,4 +1,5 @@
 ﻿using MS3_Back_End.DTOs.Image;
+using MS3_Back_End.DTOs.RequestDTOs.__Password__;
 using MS3_Back_End.DTOs.RequestDTOs.Admin;
 using MS3_Back_End.DTOs.ResponseDTOs.Admin;
 using MS3_Back_End.Entities;
@@ -143,7 +144,7 @@ namespace MS3_Back_End.Service
 
         public async Task<string> UpdateEmail(UpdateEmailRequestDTO request)
         {
-            var userData = await _adminRepository.GetUserById(request.StudentId);
+            var userData = await _adminRepository.GetUserById(request.Id);
             if(userData == null)
             {
                 throw new Exception("User not found");
@@ -155,9 +156,27 @@ namespace MS3_Back_End.Service
 
             userData.Email = request.Email;
 
-            var updatedData = await _adminRepository.UpdateEmail(userData);
+            var updatedData = await _adminRepository.UpdateUser(userData);
 
             return "Update email successfully";
+        }
+
+        public async Task<string> UpdatePassword(UpdatePasswordRequestDTO request)
+        {
+            var userData = await _adminRepository.GetUserById(request.Id);
+            if (userData == null)
+            {
+                throw new Exception("User not found");
+            }
+            if (!BCrypt.Net.BCrypt.Verify(request.oldPassword, userData.Password))
+            {
+                throw new Exception("Old password is incorrect");
+            }
+
+            userData.Password = BCrypt.Net.BCrypt.HashPassword(request.newPassword);
+            var updatedData = await _adminRepository.UpdateUser(userData);
+
+            return "Update password successfully";
         }
 
         public async Task<string> UploadImage(Guid adminId ,ImageRequestDTO request)
