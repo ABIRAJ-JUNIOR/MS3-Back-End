@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MS3_Back_End.DTOs.Image;
 using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Student;
 using MS3_Back_End.IService;
@@ -110,6 +111,21 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
 
+        }
+
+        [HttpPost("Image/{studentId}")]
+
+        public async Task<IActionResult> UploadImage(Guid studentId, ImageRequestDTO request)
+        {
+            try
+            {
+                var response = await _studentService.UploadImage(studentId, request);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
     }

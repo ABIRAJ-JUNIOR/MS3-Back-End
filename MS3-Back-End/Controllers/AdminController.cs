@@ -82,7 +82,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpPost("Image")]
+        [HttpPost("Image/{adminId}")]
         public async Task<IActionResult> UploadImage(Guid adminId, ImageRequestDTO request)
         {
             try
