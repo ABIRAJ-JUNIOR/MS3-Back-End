@@ -97,7 +97,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("Pagination")]
+        [HttpPost("Pagination")]
         public async Task<IActionResult> GetStudentByPagination(PaginationParams paginationparam)
         {
             try
