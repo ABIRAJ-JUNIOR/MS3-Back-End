@@ -45,12 +45,12 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("user/{userId}")]
-        public async Task<ActionResult<List<EnrollmentResponseDTO>>> SearchEnrollmentByUserId(Guid userId)
+        [HttpGet("user/{StudentId}")]
+        public async Task<ActionResult<List<EnrollmentResponseDTO>>> SearchEnrollmentByUserId(Guid StudentId)
         {
             try
             {
-                var enrollments = await _enrollmentService.SearchEnrollmentByUserId(userId);
+                var enrollments = await _enrollmentService.SearchEnrollmentByUserId(StudentId);
                 return Ok(enrollments);
             }
             catch (Exception ex)

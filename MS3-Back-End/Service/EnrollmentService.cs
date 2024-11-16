@@ -41,7 +41,7 @@ namespace MS3_Back_End.Service
                 throw new Exception("Payment required");
             }
 
-            courseSheduleData.MaxStudents = courseSheduleData.EnrollCount + 1;
+            courseSheduleData.EnrollCount = courseSheduleData.EnrollCount + 1;
             await _courseSheduleRepository.UpdateCourseShedule(courseSheduleData);
 
             var Payment = new List<Payment>()
@@ -115,7 +115,18 @@ namespace MS3_Back_End.Service
                 CourseSheduleId = item.CourseSheduleId,
                 EnrollmentDate = item.EnrollmentDate,
                 PaymentStatus = item.PaymentStatus,
-                IsActive = item.IsActive
+                IsActive = item.IsActive,
+                PaymentResponse = item.Payments != null ? item.Payments.Select(payment => new PaymentResponseDTO()
+                {
+                    Id = payment.Id,
+                    PaymentType = payment.PaymentType,
+                    PaymentMethod = payment.PaymentMethod,
+                    AmountPaid = payment.AmountPaid,
+                    PaymentDate = payment.PaymentDate,
+                    ImagePath = payment.ImagePath,
+                    InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber : null,
+                    EnrollmentId = payment.EnrollmentId
+                }).ToList() : []
             }).ToList();    
 
             return ListEnrollment;
@@ -136,7 +147,19 @@ namespace MS3_Back_End.Service
                 CourseSheduleId = item.CourseSheduleId,
                 EnrollmentDate = item.EnrollmentDate,
                 PaymentStatus = item.PaymentStatus,
-                IsActive = item.IsActive
+                IsActive = item.IsActive,
+                PaymentResponse = item.Payments != null ? item.Payments.Select(payment => new PaymentResponseDTO()
+                {
+                    Id = payment.Id,
+                    PaymentType = payment.PaymentType,
+                    PaymentMethod = payment.PaymentMethod,
+                    AmountPaid = payment.AmountPaid,
+                    PaymentDate = payment.PaymentDate,
+                    ImagePath = payment.ImagePath,
+                    InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber : null,
+                    EnrollmentId = payment.EnrollmentId
+                }).ToList() : []
+
             }).ToList();
 
             return ListEnrollment;
@@ -158,6 +181,23 @@ namespace MS3_Back_End.Service
                 PaymentStatus = data.PaymentStatus,
                 IsActive = data.IsActive
             };
+
+            if(data.Payments != null)
+            {
+                var PaymentResponse = data.Payments.Select(payment => new PaymentResponseDTO()
+                {
+                    Id = payment.Id,
+                    PaymentType = payment.PaymentType,
+                    PaymentMethod = payment.PaymentMethod,
+                    AmountPaid = payment.AmountPaid,
+                    PaymentDate = payment.PaymentDate,
+                    ImagePath = payment.ImagePath,
+                    InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber : null,
+                    EnrollmentId = payment.EnrollmentId
+                }).ToList();
+
+                EnrollmentResponse.PaymentResponse = PaymentResponse;
+            }
 
             return EnrollmentResponse;
         }
