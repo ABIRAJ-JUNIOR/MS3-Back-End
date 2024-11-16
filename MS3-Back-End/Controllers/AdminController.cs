@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.Image;
+using MS3_Back_End.DTOs.RequestDTOs.__Password__;
 using MS3_Back_End.DTOs.RequestDTOs.Admin;
 using MS3_Back_End.DTOs.ResponseDTOs.Admin;
 using MS3_Back_End.IService;
@@ -60,6 +61,20 @@ namespace MS3_Back_End.Controllers
             {
                 var updateEmail = await _adminService.UpdateEmail(request);
                 return Ok(updateEmail);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("Update-Password")]
+        public async Task<IActionResult> UpdatePassword(UpdatePasswordRequestDTO request)
+        {
+            try
+            {
+                var updatePassword = await _adminService.UpdatePassword(request);
+                return Ok(updatePassword);
             }
             catch (Exception ex)
             {
