@@ -27,12 +27,11 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.Message });
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpGet]
-
         public async Task<IActionResult> GetAllPayments()
         {
             var paymentsList = await _paymentService.GetAllPayments();

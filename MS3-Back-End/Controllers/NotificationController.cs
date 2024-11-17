@@ -19,7 +19,7 @@ namespace MS3_Back_End.Controllers
             _notificationService = notificationService;
         }
 
-        [HttpPost("Add-Notification")]
+        [HttpPost]
         public async Task<IActionResult> AddNotification(NotificationRequest requestDTO)
         {
             try
@@ -33,7 +33,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("Notifications/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetAllNotification(Guid id)
         {
             try

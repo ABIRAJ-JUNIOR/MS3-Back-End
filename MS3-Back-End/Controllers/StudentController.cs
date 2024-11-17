@@ -37,7 +37,6 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-
         [HttpGet("getall")]
         public async Task<IActionResult> GetAllStudents()
         {
@@ -84,6 +83,7 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteStudent(Guid id)
         {
@@ -114,7 +114,6 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPost("Image/{studentId}")]
-
         public async Task<IActionResult> UploadImage(Guid studentId, ImageRequestDTO request)
         {
             try

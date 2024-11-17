@@ -18,7 +18,7 @@ namespace MS3_Back_End.Controllers
             _contactUsService = contactUsService;
         }
 
-        [HttpPost("Add-Message")]
+        [HttpPost]
         public async Task<IActionResult> AddMessage(ContactUsRequestDTO contactUsRequestDTO)
         {
             try
@@ -32,8 +32,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("Get-All-Messages")]
-
+        [HttpGet]
         public async Task<IActionResult> GetAllMessages()
         {
             try
@@ -47,8 +46,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpPut("Update-Message")]
-
+        [HttpPut]
         public async Task<IActionResult> UpdateMessage(UpdateResponseRequestDTO request)
         {
             try

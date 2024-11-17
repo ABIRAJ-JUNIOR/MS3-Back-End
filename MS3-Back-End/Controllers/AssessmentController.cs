@@ -33,7 +33,6 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpGet("Assessments")]
-
         public async Task<IActionResult> GetAllAssessment()
         {
             var assessmentList = await _service.GetAllAssessment();
@@ -41,7 +40,6 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPut("Assessment/{id}")]
-
         public async Task<IActionResult> UpdateAssessment(Guid id, UpdateAssessmentRequestDTO request)
         {
             try

@@ -18,7 +18,7 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<EnrollmentResponseDTO>> AddEnrollment([FromForm] EnrollmentRequestDTO enrollmentReq)
+        public async Task<ActionResult<EnrollmentResponseDTO>> AddEnrollment(EnrollmentRequestDTO enrollmentReq)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("user/{StudentId}")]
+        [HttpGet("Enrollments/{StudentId}")]
         public async Task<ActionResult<List<EnrollmentResponseDTO>>> SearchEnrollmentByUserId(Guid StudentId)
         {
             try
