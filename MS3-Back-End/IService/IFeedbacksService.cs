@@ -6,6 +6,8 @@ namespace MS3_Back_End.IService
     public interface IFeedbacksService
     {
         Task<FeedbacksResponceDTO> AddFeedbacks(FeedbacksRequestDTO reqfeedback);
+        Task<List<FeedbacksResponceDTO>> GetAllFeedbacks();
+
 
     }
 }
