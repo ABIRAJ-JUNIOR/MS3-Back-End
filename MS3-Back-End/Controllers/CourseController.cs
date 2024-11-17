@@ -18,7 +18,7 @@ namespace MS3_Back_End.Controller
            _courseService = courseService;
         }
 
-        [HttpPost("course")]
+        [HttpPost("Course")]
         public async Task<IActionResult> AddCourse(CourseRequestDTO courseRequest)
         {
             try
@@ -32,7 +32,7 @@ namespace MS3_Back_End.Controller
             }
         }
 
-        [HttpGet("search")]
+        [HttpGet("Search")]
         public async Task<IActionResult> SearchCourse(string searchText)
         {
             try
@@ -61,7 +61,7 @@ namespace MS3_Back_End.Controller
            
         }
 
-        [HttpGet("courseById")]
+        [HttpGet("courseById/{CourseId}")]
         public async Task<IActionResult> GetCourseById(Guid CourseId)
         {
             try

@@ -21,7 +21,7 @@ namespace MS3_Back_End.Service
             _studentRepository = studentRepository;
         }
 
-        public async Task<NotificationResponseDTO> AddNotification(NotificationRequestDTO requestDTO )
+        public async Task<NotificationResponseDTO> AddNotification(NotificationRequest requestDTO )
         {
             var studentData = await _studentRepository.GetStudentById( requestDTO.StudentId );
             if( studentData == null)

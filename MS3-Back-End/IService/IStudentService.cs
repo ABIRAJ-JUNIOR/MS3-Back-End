@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DTOs.Pagination;
+﻿using MS3_Back_End.DTOs.Image;
+using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Student;
 using MS3_Back_End.DTOs.ResponseDTOs.Student;
 using MS3_Back_End.IRepository;
@@ -14,5 +15,6 @@ namespace MS3_Back_End.IService
         Task<StudentResponseDTO> UpdateStudent(StudentUpdateDTO studentUpdate);
         Task<string> DeleteStudent(Guid Id);
         Task<PaginationResponseDTO<StudentResponseDTO>> GetPaginatedCoursesAsync(PaginationParams paginationParams);
+        Task<string> UploadImage(Guid studentId, ImageRequestDTO request);
     }
 }
