@@ -32,8 +32,15 @@ namespace MS3_Back_End.Controllers
         [HttpGet("Get-All-Feedbacks")]
         public async Task<IActionResult> getAllFeedbacks()
         {
-            var data=await _feedbackService.GetAllFeedbacks();
-            return Ok(data);
+            try
+            {
+                var data = await _feedbackService.GetAllFeedbacks();
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
