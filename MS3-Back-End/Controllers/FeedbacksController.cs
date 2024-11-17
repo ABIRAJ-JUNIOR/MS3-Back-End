@@ -29,5 +29,11 @@ namespace MS3_Back_End.Controllers
                return BadRequest(ex.Message);
             }
         }
+        [HttpGet("Get-All-Feedbacks")]
+        public async Task<IActionResult> getAllFeedbacks()
+        {
+            var data=await _feedbackService.GetAllFeedbacks();
+            return Ok(data);
+        }
     }
 }
