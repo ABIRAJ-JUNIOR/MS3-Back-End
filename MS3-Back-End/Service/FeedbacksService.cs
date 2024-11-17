@@ -1,4 +1,6 @@
-﻿using MS3_Back_End.Entities;
+﻿using MS3_Back_End.DTOs.RequestDTOs.Feedbacks;
+using MS3_Back_End.DTOs.ResponseDTOs;
+using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
 
@@ -12,7 +14,35 @@ namespace MS3_Back_End.Service
         {
             _feedbacksRepository = feedbacksRepository;
         }
-        public async Task<Feedbacks> AddFeedbacks(Feedbacks feedbacks)
+        public async Task<FeedbacksResponceDTO> AddFeedbacks(FeedbacksRequestDTO reqfeedback) 
+        {
+            var feedback = new Feedbacks()
+            {
+                StudentId = reqfeedback.StudentId,
+                FeedBackDate = reqfeedback.FeedBackDate,
+                FeedBackText = reqfeedback.FeedBackText,
+                Rating = reqfeedback.Rating,
+                CourseId = reqfeedback.CourseId,
+
+            };
+            var data= await _feedbacksRepository.AddFeedbacks(feedback);
+
+
+            var returndata = new FeedbacksResponceDTO()
+            {
+                CourseId = data.CourseId,
+                FeedBackText = data.FeedBackText,
+                Rating = data.Rating,
+                FeedBackDate = data.FeedBackDate,
+                Id = data.Id,
+                StudentId = data.StudentId,
+
+            };
+            return returndata;
+
+
+        
+        }
 
     }
 }
