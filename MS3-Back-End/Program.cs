@@ -83,6 +83,10 @@ namespace MS3_Back_End
             builder.Services.AddScoped<IAuditLogRepository,AuditLogRepository>();
             builder.Services.AddScoped<IAuditLogService,AuditLogService>();
 
+            //FeedBack
+            builder.Services.AddScoped<IFeedbacksRepository, FeedbacksRepository>();
+            builder.Services.AddScoped<IFeedbacksService, FeedbacksService>();
+
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policy =>

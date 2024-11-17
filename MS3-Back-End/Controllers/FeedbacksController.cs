@@ -16,7 +16,7 @@ namespace MS3_Back_End.Controllers
         {
             _feedbackService = feedbackService;
         }
-        [HttpPost("Add-Feedbacks")]
+        [HttpPost]
         public async Task<IActionResult> AddFeedback(FeedbacksRequestDTO feedbacksRequestDTO) 
         {
             try
@@ -29,7 +29,8 @@ namespace MS3_Back_End.Controllers
                return BadRequest(ex.Message);
             }
         }
-        [HttpGet("Get-All-Feedbacks")]
+
+        [HttpGet("FeedBacks")]
         public async Task<IActionResult> getAllFeedbacks()
         {
             try
