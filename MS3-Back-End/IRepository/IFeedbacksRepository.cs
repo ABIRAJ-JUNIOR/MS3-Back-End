@@ -6,6 +6,9 @@ namespace MS3_Back_End.IRepository
     {
         Task<Feedbacks> AddFeedbacks(Feedbacks feedbacks);
 
+        Task<List<Feedbacks>> getAllFeedbacks();
+
+
 
 
     }

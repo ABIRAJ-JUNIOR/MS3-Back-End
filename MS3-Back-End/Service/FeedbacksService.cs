@@ -43,6 +43,22 @@ namespace MS3_Back_End.Service
 
         
         }
+        public async Task<List<FeedbacksResponceDTO>> GetAllFeedbacks()
+        {
+            var datas= await _feedbacksRepository.getAllFeedbacks();
+
+            var retundatas=datas.Select(datas=> new FeedbacksResponceDTO()
+            {
+                CourseId=datas.CourseId,
+                FeedBackDate=datas.FeedBackDate,
+                FeedBackText=datas.FeedBackText,
+                Rating=datas.Rating,
+                StudentId=datas.StudentId,
+                Id=datas.Id,
+            }).ToList();
+
+            return retundatas;  
+        }
 
     }
 }
