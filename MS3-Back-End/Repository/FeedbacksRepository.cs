@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DBContext;
+﻿using Microsoft.EntityFrameworkCore;
+using MS3_Back_End.DBContext;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 
@@ -17,6 +18,11 @@ namespace MS3_Back_End.Repository
            var data= await _dbContext.Feedbacks.AddAsync(feedbacks);
             _dbContext.SaveChanges();
             return data.Entity;
+        }
+        public async Task<List<Feedbacks>> getAllFeedbacks()
+        {
+            var datas= await _dbContext.Feedbacks.ToListAsync();
+            return datas;
         }
     }
     
