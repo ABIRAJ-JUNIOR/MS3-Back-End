@@ -16,11 +16,18 @@ namespace MS3_Back_End.Controllers
         {
             _feedbackService = feedbackService;
         }
-        [HttpPost]
+        [HttpPost("Add-Feedbacks")]
         public async Task<IActionResult> AddFeedback(FeedbacksRequestDTO feedbacksRequestDTO) 
         {
-            var data=await _feedbackService.AddFeedbacks(feedbacksRequestDTO);
-            return Ok(data);
+            try
+            {
+                var data = await _feedbackService.AddFeedbacks(feedbacksRequestDTO);
+                return Ok(data);
+            }
+            catch (Exception ex) 
+            {
+               return BadRequest(ex.Message);
+            }
         }
     }
 }
