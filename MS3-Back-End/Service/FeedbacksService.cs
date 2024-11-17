@@ -19,7 +19,7 @@ namespace MS3_Back_End.Service
             var feedback = new Feedbacks()
             {
                 StudentId = reqfeedback.StudentId,
-                FeedBackDate = reqfeedback.FeedBackDate,
+                FeedBackDate = DateTime.Now,
                 FeedBackText = reqfeedback.FeedBackText,
                 Rating = reqfeedback.Rating,
                 CourseId = reqfeedback.CourseId,
@@ -39,11 +39,9 @@ namespace MS3_Back_End.Service
 
             };
             return returndata;
-
-
-        
         }
-        public async Task<List<FeedbacksResponceDTO>> GetAllFeedbacks()
+
+        public async Task<ICollection<FeedbacksResponceDTO>> GetAllFeedbacks()
         {
             var datas= await _feedbacksRepository.getAllFeedbacks();
 
