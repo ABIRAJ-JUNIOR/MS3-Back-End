@@ -256,17 +256,47 @@ namespace MS3_Back_End.Service
             return $"/Admin/{fileName}";
         }
 
-        //public async Task<PaginationResponseDTO<StudentResponseDTO>> GetPaginatedAdmin(int pageNumber, int pageSize)
-        //{
-        //    var allAdmins = await  _adminRepository.GetAllAdmins();
-        //    if (allAdmins == null)
-        //    {
-        //        throw new Exception("Admins Not Found");
-        //    }
+        public async Task<PaginationResponseDTO<AdminResponseDTO>> GetPaginatedAdmin(int pageNumber, int pageSize)
+        {
+            var allAdmins = await _adminRepository.GetAllAdmins();
+            if (allAdmins == null)
+            {
+                throw new Exception("Admins Not Found");
+            }
 
-        //    var admins = await _adminRepository.GetPaginatedAdmin(pageNumber,pageSize);
+            var admins = await _adminRepository.GetPaginatedAdmin(pageNumber, pageSize);
 
+            var response = admins.Select(a => new AdminResponseDTO()
+            {
+                Id = a.Id,
+                Nic = a.Nic,
+                FirstName = a.FirstName,
+                LastName = a.LastName,
+                Phone = a.Phone,
+                ImagePath = a.ImagePath,
+                CteatedDate = a.CteatedDate,
+                UpdatedDate = a.UpdatedDate,
+                IsActive = a.IsActive,
+                AuditLogs = a.AuditLogs != null ? a.AuditLogs.Select(data => new AuditLogResponceDTO()
+                {
+                    Id = data.Id,
+                    AdminId = data.AdminId,
+                    ActionDate = data.ActionDate,
+                    Details = data.Details,
+                    Action = data.Action,
+                }).ToList() : null
+            }).ToList();
 
-        //}
+            var paginationResponseDto = new PaginationResponseDTO<AdminResponseDTO>
+            {
+                Items = response,
+                CurrentPage = pageNumber,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling(allAdmins.Count / (double)pageSize),
+                TotalItem = allAdmins.Count,
+            };
+
+            return paginationResponseDto;
+        }
     }
 }
