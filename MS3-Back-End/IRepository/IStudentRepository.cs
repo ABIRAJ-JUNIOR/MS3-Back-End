@@ -11,6 +11,6 @@ namespace MS3_Back_End.IRepository
         Task<Student> GetStudentById(Guid StudentId);
         Task<Student> UpdateStudent(Student Students);
         Task<string> DeleteStudent(Student Student);
-        Task<List<Student>> GetPaginatedCoursesAsync(PaginationParams paginationParams);
+        Task<List<Student>> GetPaginatedCoursesAsync(int pageNumber, int pageSize);
     }
 }

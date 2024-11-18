@@ -291,7 +291,7 @@ namespace MS3_Back_End.Service
         }
 
                 
-        public async Task<PaginationResponseDTO<StudentResponseDTO>> GetPaginatedCoursesAsync(PaginationParams paginationParams)
+        public async Task<PaginationResponseDTO<StudentResponseDTO>> GetPaginatedCoursesAsync(int pageNumber, int pageSize)
         {
 
             var AllStudents = await _StudentRepo.GetAllStudente();
@@ -300,7 +300,7 @@ namespace MS3_Back_End.Service
             {
                 throw new Exception("Students Not Found");
             }
-            var Students = await _StudentRepo.GetPaginatedCoursesAsync(paginationParams);
+            var Students = await _StudentRepo.GetPaginatedCoursesAsync(pageNumber, pageSize);
 
             var StudentResponse = Students.Select(item => new StudentResponseDTO()
             {
@@ -328,9 +328,10 @@ namespace MS3_Back_End.Service
             var paginationResponseDto= new PaginationResponseDTO<StudentResponseDTO>
             {
                 Items = StudentResponse,
-                PageNumber = paginationParams.PageIndex,
-                PageSize = paginationParams.PageSize,
-                TotalPages = (int)Math.Ceiling(AllStudents.Count / (double)paginationParams.PageSize)
+                CurrentPage = pageNumber,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling(AllStudents.Count / (double)pageSize),
+                TotalItem = AllStudents.Count,
             };
 
             return paginationResponseDto;

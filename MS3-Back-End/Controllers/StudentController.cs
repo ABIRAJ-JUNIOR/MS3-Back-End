@@ -98,12 +98,12 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpPost("Pagination")]
-        public async Task<IActionResult> GetStudentByPagination(PaginationParams paginationparam)
+        [HttpGet("Pagination")]
+        public async Task<IActionResult> GetStudentByPagination(int pageNumber , int pageSize)
         {
             try
             {
-                var result = await _studentService.GetPaginatedCoursesAsync(paginationparam);
+                var result = await _studentService.GetPaginatedCoursesAsync(pageNumber , pageSize);
                 return Ok(result);
             }
             catch (Exception ex)

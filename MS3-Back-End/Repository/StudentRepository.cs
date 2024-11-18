@@ -54,11 +54,11 @@ namespace MS3_Back_End.Repository
             return "Student Deleted Successfull";
         }
 
-        public async Task<List<Student>> GetPaginatedCoursesAsync(PaginationParams paginationParams)
+        public async Task<List<Student>> GetPaginatedCoursesAsync(int pageNumber, int pageSize)
         {
             return await _Db.Students.Include(a => a.Address)
-                .Skip((paginationParams.PageIndex - 1) * paginationParams.PageSize)
-                .Take(paginationParams.PageSize)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
         }
     }

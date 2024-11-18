@@ -14,7 +14,7 @@ namespace MS3_Back_End.IService
         Task<List<StudentResponseDTO>> GetAllStudent();
         Task<StudentResponseDTO> UpdateStudent(StudentUpdateDTO studentUpdate);
         Task<string> DeleteStudent(Guid Id);
-        Task<PaginationResponseDTO<StudentResponseDTO>> GetPaginatedCoursesAsync(PaginationParams paginationParams);
+        Task<PaginationResponseDTO<StudentResponseDTO>> GetPaginatedCoursesAsync(int pageNumber, int pageSize);
         Task<string> UploadImage(Guid studentId, ImageRequestDTO request);
     }
 }
