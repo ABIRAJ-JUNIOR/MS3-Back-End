@@ -13,6 +13,6 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Enrollment
         public Guid StudentId { get; set; }
         public Guid CourseSheduleId { get; set; }
 
-        public ICollection<PaymentResponseDTO> PaymentResponse { get; set; } = new List<PaymentResponseDTO>();
+        public ICollection<PaymentResponseDTO> PaymentResponse { get; set; }
     }
 }

@@ -55,7 +55,7 @@ namespace MS3_Back_End.Service
 
         }
 
-        public async Task<List<CourseResponseDTO>> SearchCourse(string SearchText)
+        public async Task<ICollection<CourseResponseDTO>> SearchCourse(string SearchText)
         {
             var data = await _courseRepository.SearchCourse(SearchText);
             if (data == null)
@@ -80,7 +80,7 @@ namespace MS3_Back_End.Service
             return CourseResponse;
         }
 
-        public async Task<List<CourseResponseDTO>> GetAllCourse()
+        public async Task<ICollection<CourseResponseDTO>> GetAllCourse()
         {
             var data = await _courseRepository.GetAllCourse();
             if (data == null)

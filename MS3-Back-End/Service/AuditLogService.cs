@@ -47,7 +47,7 @@ namespace MS3_Back_End.Service
 
             return returndata;
         }
-        public async Task<List<AuditLogResponceDTO>> GetAllAuditlogs()
+        public async Task<ICollection<AuditLogResponceDTO>> GetAllAuditlogs()
         {
              var datas= await _auditLogRepository.GetAllAuditlogs();
             var returndatas=datas.Select(x => new AuditLogResponceDTO()
@@ -61,7 +61,7 @@ namespace MS3_Back_End.Service
             }).ToList();
             return returndatas;
         }
-        public async Task<List<AuditLogResponceDTO>> GetAuditLogsbyAdminId(Guid id)
+        public async Task<ICollection<AuditLogResponceDTO>> GetAuditLogsbyAdminId(Guid id)
         {
             var data =await _auditLogRepository.GetAuditLogsbyAdminId(id);
 

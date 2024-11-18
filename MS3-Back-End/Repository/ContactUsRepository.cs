@@ -21,7 +21,7 @@ namespace MS3_Back_End.Repository
             return message.Entity;
          }
 
-        public async Task<List<ContactUs>> GetAllMessages()
+        public async Task<ICollection<ContactUs>> GetAllMessages()
         {
             var getMessage = await _dbContext.ContactUs.ToListAsync();
             return getMessage;

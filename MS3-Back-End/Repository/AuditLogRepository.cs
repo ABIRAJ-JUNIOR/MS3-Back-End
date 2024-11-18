@@ -19,12 +19,12 @@ namespace MS3_Back_End.Repository
             await _dbContext.SaveChangesAsync();
             return data.Entity;
         }   
-        public async Task<List<AuditLog>> GetAllAuditlogs()
+        public async Task<ICollection<AuditLog>> GetAllAuditlogs()
         {
             var data= await _dbContext.AuditLogs.ToListAsync();
             return data;
         }
-        public async Task<List<AuditLog>> GetAuditLogsbyAdminId(Guid id)
+        public async Task<ICollection<AuditLog>> GetAuditLogsbyAdminId(Guid id)
         {
             var data= await _dbContext.AuditLogs.Where(a=>a.AdminId == id).ToListAsync();
             return data;

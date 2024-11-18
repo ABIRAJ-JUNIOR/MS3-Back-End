@@ -129,7 +129,7 @@ namespace MS3_Back_End.Service
             return StudentReponse;
         }
 
-        public async Task<List<StudentResponseDTO>> SearchStudent(string SearchText)
+        public async Task<ICollection<StudentResponseDTO>> SearchStudent(string SearchText)
         {
             var data = await _StudentRepo.SearchStudent(SearchText);
             if (data == null)
@@ -163,7 +163,7 @@ namespace MS3_Back_End.Service
 
         }
 
-        public async Task<List<StudentResponseDTO>> GetAllStudent()
+        public async Task<ICollection<StudentResponseDTO>> GetAllStudent()
         {
             var data = await _StudentRepo.GetAllStudente();
             if (data == null)

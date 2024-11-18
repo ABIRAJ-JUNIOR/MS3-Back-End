@@ -100,7 +100,7 @@ namespace MS3_Back_End.Service
         }
 
 
-        public async Task<List<EnrollmentResponseDTO>> SearchEnrollmentByUserId(Guid SearchUserId)
+        public async Task<ICollection<EnrollmentResponseDTO>> SearchEnrollmentByUserId(Guid SearchUserId)
         {
             var data = await _enrollmentRepository.SearchEnrollments(SearchUserId);
             if (data == null)
@@ -133,7 +133,7 @@ namespace MS3_Back_End.Service
         }
 
 
-        public async Task<List<EnrollmentResponseDTO>> GetAllEnrollements()
+        public async Task<ICollection<EnrollmentResponseDTO>> GetAllEnrollements()
         {
             var data = await _enrollmentRepository.GetEnrollments();
             if (data == null)

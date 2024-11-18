@@ -28,13 +28,13 @@ namespace MS3_Back_End.Repository
             return data.Entity;
         }
 
-        public async  Task<List<CourseSchedule>> SearchSheduleLocation(string SearchText)
+        public async  Task<ICollection<CourseSchedule>> SearchSheduleLocation(string SearchText)
         {
             var data = await  _Db.CourseSchedules.Where(n => n.Location.Contains(SearchText)).ToListAsync();
             return data;
         }
 
-        public async Task<List<CourseSchedule>> GetAllCourseShedule()
+        public async Task<ICollection<CourseSchedule>> GetAllCourseShedule()
         {
             var data = await _Db.CourseSchedules.ToListAsync();
             return data;

@@ -19,7 +19,7 @@ namespace MS3_Back_End.Repository
             _dbContext.SaveChanges();
             return data.Entity;
         }
-        public async Task<List<Feedbacks>> getAllFeedbacks()
+        public async Task<ICollection<Feedbacks>> getAllFeedbacks()
         {
             var datas= await _dbContext.Feedbacks.ToListAsync();
             return datas;

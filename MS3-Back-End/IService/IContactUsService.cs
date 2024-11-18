@@ -6,7 +6,7 @@ namespace MS3_Back_End.IService
     public interface IContactUsService
     {
         Task<ContactUsResponseDTO> AddMessage(ContactUsRequestDTO requestDTO);
-        Task<List<ContactUsResponseDTO>> GetAllMessages();
+        Task<ICollection<ContactUsResponseDTO>> GetAllMessages();
         Task<ContactUsResponseDTO> UpdateMessage(UpdateResponseRequestDTO request);
     }
 }
