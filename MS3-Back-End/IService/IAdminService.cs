@@ -8,6 +8,7 @@ namespace MS3_Back_End.IService
     public interface IAdminService
     {
         Task<AdminResponseDTO> AddAdmin(AdminRequestDTO request);
+        Task<AdminResponseDTO> GetAdminById(Guid id);
         Task<ICollection<AdminResponseDTO>> GetAllAdmins();
         Task<AdminResponseDTO> UpdateAdmin(Guid id, AdminUpdateRequestDTO request);
         Task<string> UpdateEmail(UpdateEmailRequestDTO request);

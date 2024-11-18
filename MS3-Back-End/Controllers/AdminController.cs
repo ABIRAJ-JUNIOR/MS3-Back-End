@@ -33,7 +33,21 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("Get")]
+        public async Task<IActionResult> GetAdminById(Guid id)
+        {
+            try
+            {
+                var adminData = await _adminService.GetAdminById(id);
+                return Ok(adminData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllAdmins()
         {
             var adminsList = await _adminService.GetAllAdmins();

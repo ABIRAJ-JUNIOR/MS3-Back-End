@@ -95,6 +95,10 @@ namespace MS3_Back_End.Service
         public async Task<AdminResponseDTO> GetAdminById(Guid id)
         {
             var adminData = await _adminRepository.GetAdminById(id);
+            if(adminData == null)
+            {
+                throw new Exception("Not found");
+            }
             var response = new AdminResponseDTO()
             {
                 Id = adminData.Id,
