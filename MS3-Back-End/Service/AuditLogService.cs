@@ -42,7 +42,7 @@ namespace MS3_Back_End.Service
                 AdminId = data.AdminId,
                 ActionDate = data.ActionDate,
                 Details = data.Details,
-                Action = auditLog.Action,
+                Action = data.Action,
             };
 
             return returndata;

@@ -2,6 +2,7 @@
 using MS3_Back_End.DTOs.RequestDTOs.__Password__;
 using MS3_Back_End.DTOs.RequestDTOs.Admin;
 using MS3_Back_End.DTOs.ResponseDTOs.Admin;
+using MS3_Back_End.DTOs.ResponseDTOs.AuditLog;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
@@ -91,6 +92,33 @@ namespace MS3_Back_End.Service
             return response;
         }
 
+        public async Task<AdminResponseDTO> GetAdminById(Guid id)
+        {
+            var adminData = await _adminRepository.GetAdminById(id);
+            var response = new AdminResponseDTO()
+            {
+                Id = adminData.Id,
+                Nic = adminData.Nic,
+                FirstName = adminData.FirstName,
+                LastName = adminData.LastName,
+                Phone = adminData.Phone,
+                ImagePath = adminData.ImagePath,
+                CteatedDate = adminData.CteatedDate,
+                UpdatedDate = adminData.UpdatedDate,
+                IsActive = adminData.IsActive,
+                AuditLogs = adminData.AuditLogs != null ? adminData.AuditLogs.Select(data => new AuditLogResponceDTO()
+                {
+                    Id = data.Id,
+                    AdminId = data.AdminId,
+                    ActionDate = data.ActionDate,
+                    Details = data.Details,
+                    Action = data.Action,
+                }).ToList() : null
+            };
+
+            return response;
+        }
+
         public async Task<ICollection<AdminResponseDTO>> GetAllAdmins()
         {
             var adminsList = await _adminRepository.GetAllAdmins();
@@ -106,6 +134,14 @@ namespace MS3_Back_End.Service
                 CteatedDate = a.CteatedDate,
                 UpdatedDate = a.UpdatedDate,
                 IsActive = a.IsActive,
+                AuditLogs = a.AuditLogs != null ? a.AuditLogs.Select(data => new AuditLogResponceDTO()
+                {
+                    Id = data.Id,
+                    AdminId = data.AdminId,
+                    ActionDate = data.ActionDate,
+                    Details = data.Details,
+                    Action = data.Action,
+                }).ToList() : null
             }).ToList();
 
             return response;
