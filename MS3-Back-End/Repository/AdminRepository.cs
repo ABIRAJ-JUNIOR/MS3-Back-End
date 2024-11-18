@@ -60,5 +60,12 @@ namespace MS3_Back_End.Repository
             return userData!;
         }
 
+        public async Task<ICollection<Admin>> GetPaginatedAdmin(int pageNumber, int pageSize)
+        {
+            return await _dbContext.Admins.Include(a => a.AuditLogs)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
     }
 }

@@ -54,7 +54,7 @@ namespace MS3_Back_End.Repository
             return "Student Deleted Successfull";
         }
 
-        public async Task<List<Student>> GetPaginatedCoursesAsync(int pageNumber, int pageSize)
+        public async Task<ICollection<Student>> GetPaginatedStudent(int pageNumber, int pageSize)
         {
             return await _Db.Students.Include(a => a.Address)
                 .Skip((pageNumber - 1) * pageSize)

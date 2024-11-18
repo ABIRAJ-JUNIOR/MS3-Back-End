@@ -103,7 +103,7 @@ namespace MS3_Back_End.Controllers
         {
             try
             {
-                var result = await _studentService.GetPaginatedCoursesAsync(pageNumber , pageSize);
+                var result = await _studentService.GetPaginatedStudent(pageNumber , pageSize);
                 return Ok(result);
             }
             catch (Exception ex)

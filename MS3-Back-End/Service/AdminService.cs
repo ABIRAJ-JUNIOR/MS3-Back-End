@@ -1,8 +1,10 @@
 ﻿using MS3_Back_End.DTOs.Image;
+using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.__Password__;
 using MS3_Back_End.DTOs.RequestDTOs.Admin;
 using MS3_Back_End.DTOs.ResponseDTOs.Admin;
 using MS3_Back_End.DTOs.ResponseDTOs.AuditLog;
+using MS3_Back_End.DTOs.ResponseDTOs.Student;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
@@ -253,5 +255,18 @@ namespace MS3_Back_End.Service
 
             return $"/Admin/{fileName}";
         }
+
+        //public async Task<PaginationResponseDTO<StudentResponseDTO>> GetPaginatedAdmin(int pageNumber, int pageSize)
+        //{
+        //    var allAdmins = await  _adminRepository.GetAllAdmins();
+        //    if (allAdmins == null)
+        //    {
+        //        throw new Exception("Admins Not Found");
+        //    }
+
+        //    var admins = await _adminRepository.GetPaginatedAdmin(pageNumber,pageSize);
+
+
+        //}
     }
 }

@@ -291,7 +291,7 @@ namespace MS3_Back_End.Service
         }
 
                 
-        public async Task<PaginationResponseDTO<StudentResponseDTO>> GetPaginatedCoursesAsync(int pageNumber, int pageSize)
+        public async Task<PaginationResponseDTO<StudentResponseDTO>> GetPaginatedStudent(int pageNumber, int pageSize)
         {
 
             var AllStudents = await _StudentRepo.GetAllStudente();
@@ -300,7 +300,7 @@ namespace MS3_Back_End.Service
             {
                 throw new Exception("Students Not Found");
             }
-            var Students = await _StudentRepo.GetPaginatedCoursesAsync(pageNumber, pageSize);
+            var Students = await _StudentRepo.GetPaginatedStudent(pageNumber, pageSize);
 
             var StudentResponse = Students.Select(item => new StudentResponseDTO()
             {
