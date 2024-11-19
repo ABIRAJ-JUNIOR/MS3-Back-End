@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DTOs.RequestDTOs.Course;
+﻿using MS3_Back_End.DTOs.Pagination;
+using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
 
 namespace MS3_Back_End.IService
@@ -11,6 +12,7 @@ namespace MS3_Back_End.IService
         Task<CourseResponseDTO> GetCourseById(Guid CourseId);
         Task<CourseResponseDTO> UpdateCourse(UpdateCourseRequestDTO course);
         Task<string> DeleteCourse(Guid Id);
+        Task<PaginationResponseDTO<CourseResponseDTO>> GetPaginatedCourses(int pageNumber, int pageSize);
 
     }
 }
