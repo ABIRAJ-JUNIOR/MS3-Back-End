@@ -46,7 +46,7 @@ namespace MS3_Back_End.Controller
             }
         }
 
-        [HttpGet("course")]
+        [HttpGet("Course")]
         public async Task<IActionResult> GetAllCourses()
         {
             try

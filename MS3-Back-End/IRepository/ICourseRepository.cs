@@ -10,5 +10,6 @@ namespace MS3_Back_End.IRepository
         Task<Course> GetCourseById(Guid CourseId);
         Task<Course> UpdateCourse(Course course);
         Task<string> DeleteCourse(Course course);
+        Task<ICollection<Course>> GetPaginatedCourses(int pageNumber, int pageSize);
     }
 }
