@@ -111,7 +111,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("Pagination")]
+        [HttpGet("Pagination/{pageNumber}/{pageSize}")]
 
         public async Task<IActionResult> GetPaginatedAdmin(int pageNumber, int pageSize)
         {

@@ -21,18 +21,18 @@ namespace MS3_Back_End.Repository
         }   
         public async Task<ICollection<AuditLog>> GetAllAuditlogs()
         {
-            var data= await _dbContext.AuditLogs.ToListAsync();
+            var data= await _dbContext.AuditLogs.Include(a => a.Admin).ToListAsync();
             return data;
         }
         public async Task<ICollection<AuditLog>> GetAuditLogsbyAdminId(Guid id)
         {
-            var data= await _dbContext.AuditLogs.Where(a=>a.AdminId == id).ToListAsync();
+            var data= await _dbContext.AuditLogs.Include(a => a.Admin).Where(a=>a.AdminId == id).ToListAsync();
             return data;
         }
 
         public async Task<AuditLog> GetAuditLogByID(Guid id)
         {
-            var data=await _dbContext.AuditLogs.SingleOrDefaultAsync(a=> a.Id == id);
+            var data=await _dbContext.AuditLogs.Include(a => a.Admin).SingleOrDefaultAsync(a=> a.Id == id);
             return data!;
         }
     }

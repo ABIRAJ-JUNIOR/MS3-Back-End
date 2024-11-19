@@ -32,7 +32,7 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("Get-All-Auditlogs")]
+        [HttpGet("GetAll")]
         public async Task<IActionResult> GetallAuditlogs()
         {
             try
