@@ -5,6 +5,7 @@ using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs;
 using MS3_Back_End.DTOs.ResponseDTOs.Admin;
+using MS3_Back_End.DTOs.ResponseDTOs.Assessment;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
@@ -182,6 +183,19 @@ namespace MS3_Back_End.Service
                     StudentId = fb.StudentId,
                     CourseId = fb.CourseId
                 }).ToList(),
+                Assessment = data.Assessments?.Select(a => new AssessmentResponseDTO()
+                {
+                    Id = a.Id,
+                    CourseId = a.CourseId,
+                    AssessmentType = a.AssessmentType,
+                    StartDate = a.StartDate,
+                    EndDate = a.EndDate,
+                    TotalMarks = a.TotalMarks,
+                    PassMarks = a.PassMarks,
+                    CreatedDate = a.CreatedDate,
+                    UpdateDate = a.UpdateDate,
+                    Status = a.Status
+                }).ToList()
             };
             return CourseResponse;
         }
