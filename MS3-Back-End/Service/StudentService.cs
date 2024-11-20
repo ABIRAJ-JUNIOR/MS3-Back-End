@@ -7,7 +7,10 @@ using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.DTOs.RequestDTOs.Student;
 using MS3_Back_End.DTOs.ResponseDTOs.Address;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
+using MS3_Back_End.DTOs.ResponseDTOs.Enrollment;
+using MS3_Back_End.DTOs.ResponseDTOs.Payment;
 using MS3_Back_End.DTOs.ResponseDTOs.Student;
+using MS3_Back_End.DTOs.ResponseDTOs.StudentAssessment;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
@@ -104,7 +107,7 @@ namespace MS3_Back_End.Service
                 FirstName = data.FirstName,
                 LastName = data.LastName,
                 DateOfBirth = data.DateOfBirth,
-                Gender = data.Gender,
+                Gender = ((Gender)data.Gender).ToString(),
                 Phone = data.Phone,
                 ImagePath = data.ImagePath!,
                 CteatedDate = data.CteatedDate,
@@ -144,7 +147,7 @@ namespace MS3_Back_End.Service
                 FirstName = item.FirstName,
                 LastName = item.LastName,
                 DateOfBirth = item.DateOfBirth,
-                Gender = item.Gender,
+                Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
                 ImagePath = item.ImagePath!,
                 CteatedDate = item.CteatedDate,
@@ -177,7 +180,7 @@ namespace MS3_Back_End.Service
                 FirstName = item.FirstName,
                 LastName = item.LastName,
                 DateOfBirth = item.DateOfBirth,
-                Gender = item.Gender,
+                Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
                 ImagePath = item.ImagePath!,
                 CteatedDate = item.CteatedDate,
@@ -211,16 +214,12 @@ namespace MS3_Back_End.Service
                 FirstName = item.FirstName,
                 LastName = item.LastName,
                 DateOfBirth = item.DateOfBirth,
-                Gender = item.Gender,
+                Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
                 ImagePath = item.ImagePath!,
                 CteatedDate = item.CteatedDate,
                 UpdatedDate = item.UpdatedDate,
-            };
-
-            if (item.Address != null)
-            {
-                var AddressResponse = new AddressResponseDTO()
+                Address = item.Address != null ? new AddressResponseDTO()
                 {
                     AddressLine1 = item.Address.AddressLine1,
                     AddressLine2 = item.Address.AddressLine2,
@@ -228,10 +227,39 @@ namespace MS3_Back_End.Service
                     City = item.Address.City,
                     Country = item.Address.Country,
                     StudentId = item.Id,
-                };
-
-                obj.Address = AddressResponse;
-            }
+                } : null,
+                Enrollments = item.Enrollments != null ? item.Enrollments.Select(enroll => new EnrollmentResponseDTO()
+                {
+                    Id = enroll.Id,
+                    StudentId = enroll.StudentId,
+                    CourseSheduleId = enroll.CourseSheduleId,
+                    EnrollmentDate = enroll.EnrollmentDate,
+                    PaymentStatus = enroll.PaymentStatus,
+                    IsActive = enroll.IsActive,
+                    PaymentResponse = enroll.Payments != null ? enroll.Payments.Select(payment => new PaymentResponseDTO()
+                    {
+                        Id = payment.Id,
+                        PaymentType = payment.PaymentType,
+                        PaymentMethod = payment.PaymentMethod,
+                        AmountPaid = payment.AmountPaid,
+                        PaymentDate = payment.PaymentDate,
+                        ImagePath = payment.ImagePath,
+                        InstallmentNumber = payment.InstallmentNumber,
+                        EnrollmentId = payment.EnrollmentId
+                    }).ToList() : null
+                }).ToList() : null,
+                StudentAssessments = item.Assessments != null ? item.Assessments.Select(sa => new StudentAssessmentResponseDTO()
+                {
+                    Id = sa.Id,
+                    MarksObtaines = sa.MarksObtaines,
+                    Grade = sa.Grade,
+                    FeedBack = sa.FeedBack,
+                    DateEvaluated = sa.DateEvaluated,
+                    StudentAssessmentStatus = sa.StudentAssessmentStatus,
+                    StudentId = sa.StudentId,
+                    AssessmentId = sa.AssessmentId
+                }).ToList() : null,
+            };
 
             return obj;
         }
@@ -266,7 +294,7 @@ namespace MS3_Back_End.Service
                 FirstName = item.FirstName,
                 LastName = item.LastName,
                 DateOfBirth = item.DateOfBirth,
-                Gender = item.Gender,
+                Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
                 ImagePath = item.ImagePath!,
                 CteatedDate = item.CteatedDate,
@@ -309,7 +337,7 @@ namespace MS3_Back_End.Service
                 FirstName = item.FirstName,
                 LastName = item.LastName,
                 DateOfBirth = item.DateOfBirth,
-                Gender = item.Gender,
+                Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
                 ImagePath = item.ImagePath!,
                 CteatedDate = item.CteatedDate,
