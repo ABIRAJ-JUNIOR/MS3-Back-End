@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
+using MS3_Back_End.DTOs.ResponseDTOs;
 using MS3_Back_End.DTOs.ResponseDTOs.Admin;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.Entities;
@@ -171,7 +172,16 @@ namespace MS3_Back_End.Service
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
                     ScheduleStatus = cs.ScheduleStatus
-                }).ToList() : null
+                }).ToList() : null,
+                Feedbacks = data.Feedbacks?.Select(fb => new FeedbacksResponceDTO()
+                {
+                    Id = fb.Id,
+                    FeedBackText = fb.FeedBackText,
+                    Rating = fb.Rating,
+                    FeedBackDate = fb.FeedBackDate,
+                    StudentId = fb.StudentId,
+                    CourseId = fb.CourseId
+                }).ToList(),
             };
             return CourseResponse;
         }
