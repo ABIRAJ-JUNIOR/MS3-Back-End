@@ -15,9 +15,16 @@ namespace MS3_Back_End.Repository
         }
         public async Task<Student> AddStudent(Student StudentReq)
         {
+            try
+            {
                 var data = await _Db.Students.AddAsync(StudentReq);
                 await _Db.SaveChangesAsync();
                 return data.Entity;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("Error occurred while adding the student to the database.", ex);
+            }
         }
 
         public async Task<ICollection<Student>> SearchStudent(string SearchText)
