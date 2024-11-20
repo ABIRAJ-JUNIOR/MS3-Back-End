@@ -71,10 +71,13 @@ namespace MS3_Back_End.Repository
         }
         public async Task<ICollection<Course>> GetPaginatedCourses(int pageNumber, int pageSize)
         {
-            return await _Db.Courses.Include(cs => cs.CourseSchedules)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+            var courses = await _Db.Courses
+                            .Include(c => c.CourseSchedules)
+                            .Skip((pageNumber - 1) * pageSize)
+                            .Take(pageSize)
+                            .ToListAsync();
+
+            return courses;
         }
     }
 }
