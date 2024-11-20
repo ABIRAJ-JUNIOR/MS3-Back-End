@@ -108,19 +108,20 @@ namespace MS3_Back_End.Service
                 throw new Exception("Courses Not Available");
             }
 
-            var CourseResponse = data.Select(item => new CourseResponseDTO()
+            var CourseResponse = data.Select(course => new CourseResponseDTO
             {
-                Id = item.Id,
-                CourseCategoryId = item.CourseCategoryId,
-                CourseName = item.CourseName,
-                Level = item.Level,
-                CourseFee = item.CourseFee,
-                Description = item.Description,
-                Prerequisites = item.Prerequisites,
-                ImagePath = item.ImagePath,
-                CreatedDate = item.CreatedDate,
-                UpdatedDate = item.UpdatedDate,
-                Shedules = item.CourseSchedules != null ? item.CourseSchedules.Select(cs => new CourseSheduleResponseDTO()
+                Id = course.Id,
+                CourseCategoryId = course.CourseCategoryId,
+                CourseName = course.CourseName,
+                Level = course.Level,
+                CourseFee = course.CourseFee,
+                Description = course.Description,
+                Prerequisites = course.Prerequisites,
+                ImagePath = course.ImagePath,
+                CreatedDate = course.CreatedDate,
+                UpdatedDate = course.UpdatedDate,
+
+                Shedules = course.CourseSchedules?.Select(cs => new CourseSheduleResponseDTO
                 {
                     Id = cs.Id,
                     CourseId = cs.CourseId,
@@ -134,7 +135,17 @@ namespace MS3_Back_End.Service
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
                     ScheduleStatus = cs.ScheduleStatus
-                }).ToList() : null
+                }).ToList(),
+
+                Feedbacks = course.Feedbacks?.Select(fb => new FeedbacksResponceDTO
+                {
+                    Id = fb.Id,
+                    FeedBackText = fb.FeedBackText,
+                    Rating = fb.Rating,
+                    FeedBackDate = fb.FeedBackDate,
+                    StudentId = fb.StudentId,
+                    CourseId = fb.CourseId
+                }).ToList() ?? new List<FeedbacksResponceDTO>()
             }).ToList();
 
             return CourseResponse;
