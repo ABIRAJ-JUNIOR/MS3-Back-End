@@ -330,32 +330,35 @@ namespace MS3_Back_End.Service
             }
             var Students = await _StudentRepo.GetPaginatedStudent(pageNumber, pageSize);
 
-            var StudentResponse = Students.Select(item => new StudentResponseDTO()
+            var studentResponses = Students.Select(student => new StudentResponseDTO
             {
-                Id = item.Id,
-                Nic = item.Nic,
-                FirstName = item.FirstName,
-                LastName = item.LastName,
-                DateOfBirth = item.DateOfBirth,
-                Gender = ((Gender)item.Gender).ToString(),
-                Phone = item.Phone,
-                ImagePath = item.ImagePath!,
-                CteatedDate = item.CteatedDate,
-                UpdatedDate = item.UpdatedDate,
-                Address = item.Address != null ? new AddressResponseDTO()
+                Id = student.Id,
+                Nic = student.Nic,
+                FirstName = student.FirstName,
+                LastName = student.LastName,
+                DateOfBirth = student.DateOfBirth,
+                Gender = ((Gender)student.Gender).ToString(),
+                Phone = student.Phone,
+                ImagePath = student.ImagePath,
+                CteatedDate = student.CteatedDate,
+                UpdatedDate = student.UpdatedDate,
+                IsActive = student.IsActive,
+
+                Address = student.Address != null ? new AddressResponseDTO
                 {
-                    AddressLine1 = item.Address.AddressLine1,
-                    AddressLine2 = item.Address.AddressLine2,
-                    PostalCode = item.Address.PostalCode,
-                    City = item.Address.City,
-                    Country = item.Address.Country,
-                    StudentId = item.Id,
-                } : null,
+                    AddressLine1 = student.Address.AddressLine1,
+                    AddressLine2 = student.Address.AddressLine2,
+                    City = student.Address.City,
+                    PostalCode = student.Address.PostalCode,
+                    Country = student.Address.Country,
+                    StudentId = student.Id
+                } : null,  
             }).ToList();
 
-            var paginationResponseDto= new PaginationResponseDTO<StudentResponseDTO>
+
+            var paginationResponseDto = new PaginationResponseDTO<StudentResponseDTO>
             {
-                Items = StudentResponse,
+                Items = studentResponses,
                 CurrentPage = pageNumber,
                 PageSize = pageSize,
                 TotalPages = (int)Math.Ceiling(AllStudents.Count / (double)pageSize),
