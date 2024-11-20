@@ -317,8 +317,31 @@ namespace MS3_Back_End.Service
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
                     ScheduleStatus = cs.ScheduleStatus
-                }).ToList() : null
+                }).ToList() : null,  
+                Feedbacks = item.Feedbacks?.Select(fb => new FeedbacksResponceDTO()
+                {
+                    Id = fb.Id,
+                    FeedBackText = fb.FeedBackText,
+                    Rating = fb.Rating,
+                    FeedBackDate = fb.FeedBackDate,
+                    StudentId = fb.StudentId,
+                    CourseId = fb.CourseId
+                }).ToList(),
+                Assessment = item.Assessments?.Select(a => new AssessmentResponseDTO()
+                {
+                    Id = a.Id,
+                    CourseId = a.CourseId,
+                    AssessmentType = a.AssessmentType,
+                    StartDate = a.StartDate,
+                    EndDate = a.EndDate,
+                    TotalMarks = a.TotalMarks,
+                    PassMarks = a.PassMarks,
+                    CreatedDate = a.CreatedDate,
+                    UpdateDate = a.UpdateDate,
+                    Status = a.Status
+                }).ToList()
             }).ToList();
+
 
             var paginationResponseDto = new PaginationResponseDTO<CourseResponseDTO>
             {
