@@ -38,11 +38,12 @@ namespace MS3_Back_End.Repository
         }
         public async Task<ICollection<Course>> GetAllCourse()
         {
-            var data = await _Db.Courses
-                     .Include(c => c.CourseSchedules)
-                     .Include(c => c.Feedbacks)
-                     .Where(c => c.IsDeleted == false)
-                     .ToListAsync();
+                var data = await _Db.Courses
+            .Include(c => c.CourseSchedules)  
+            .Include(c => c.Feedbacks)      
+            .Where(c => c.IsDeleted == false) 
+            .ToListAsync();
+
             return data;
         }
 
