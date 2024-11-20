@@ -292,19 +292,20 @@ namespace MS3_Back_End.Service
         {
             var allCourses = await _courseRepository.GetPaginatedCourses(pageNumber, pageSize);
 
-            var response = allCourses.Select(item => new CourseResponseDTO()
+            var courseResponses = allCourses.Select(course => new CourseResponseDTO
             {
-                Id = item.Id,
-                CourseCategoryId = item.CourseCategoryId,
-                CourseName = item.CourseName,
-                Level = item.Level,
-                CourseFee = item.CourseFee,
-                Description = item.Description,
-                Prerequisites = item.Prerequisites,
-                ImagePath = item.ImagePath,
-                CreatedDate = item.CreatedDate,
-                UpdatedDate = item.UpdatedDate,
-                Shedules = item.CourseSchedules != null ? item.CourseSchedules.Select(cs => new CourseSheduleResponseDTO()
+                Id = course.Id,
+                CourseCategoryId = course.CourseCategoryId,
+                CourseName = course.CourseName,
+                Level = course.Level,
+                CourseFee = course.CourseFee,
+                Description = course.Description,
+                Prerequisites = course.Prerequisites,
+                ImagePath = course.ImagePath,
+                CreatedDate = course.CreatedDate,
+                UpdatedDate = course.UpdatedDate,
+
+                Shedules = course.CourseSchedules?.Select(cs => new CourseSheduleResponseDTO
                 {
                     Id = cs.Id,
                     CourseId = cs.CourseId,
@@ -318,8 +319,9 @@ namespace MS3_Back_End.Service
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
                     ScheduleStatus = cs.ScheduleStatus
-                }).ToList() : null,  
-                Feedbacks = item.Feedbacks?.Select(fb => new FeedbacksResponceDTO()
+                }).ToList() ?? new List<CourseSheduleResponseDTO>(),  
+
+                Feedbacks = course.Feedbacks?.Select(fb => new FeedbacksResponceDTO
                 {
                     Id = fb.Id,
                     FeedBackText = fb.FeedBackText,
@@ -327,13 +329,12 @@ namespace MS3_Back_End.Service
                     FeedBackDate = fb.FeedBackDate,
                     StudentId = fb.StudentId,
                     CourseId = fb.CourseId
-                }).ToList()
+                }).ToList() ?? new List<FeedbacksResponceDTO>()
             }).ToList();
-
 
             var paginationResponseDto = new PaginationResponseDTO<CourseResponseDTO>
             {
-                Items = response,
+                Items = courseResponses,
                 CurrentPage = pageNumber,
                 PageSize = pageSize,
                 TotalPages = (int)Math.Ceiling(allCourses.Count / (double)pageSize),
