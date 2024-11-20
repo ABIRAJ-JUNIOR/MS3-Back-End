@@ -46,7 +46,7 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpGet("Enrollments/{StudentId}")]
-        public async Task<ActionResult<List<EnrollmentResponseDTO>>> SearchEnrollmentByUserId(Guid StudentId)
+        public async Task<ActionResult<ICollection<EnrollmentResponseDTO>>> SearchEnrollmentByUserId(Guid StudentId)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpGet("Enrollments")]
-        public async Task<ActionResult<List<EnrollmentResponseDTO>>> GetAllEnrollments()
+        public async Task<ActionResult<ICollection<EnrollmentResponseDTO>>> GetAllEnrollments()
         {
             try
             {

@@ -28,12 +28,12 @@ namespace MS3_Back_End.Repository
             }
 
         }
-        public async Task<List<Announcement>> SearchAnnouncements(string SearchText)
+        public async Task<ICollection<Announcement>> SearchAnnouncements(string SearchText)
         {
             var data = await _Db.Announcements.Where(n => n.Title.Contains(SearchText)).ToListAsync();
             return data;
         }
-        public async Task<List<Announcement>> GetAllAnnouncement()
+        public async Task<ICollection<Announcement>> GetAllAnnouncement()
         {
             var data = await _Db.Announcements.Where(c => c.IsActive == true).ToListAsync();
             return data;

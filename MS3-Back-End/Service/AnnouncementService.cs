@@ -47,7 +47,7 @@ namespace MS3_Back_End.Service
 
         }
 
-        public async Task<List<AnnouncementResponseDTO>> SearchAnnouncement(string SearchText)
+        public async Task<ICollection<AnnouncementResponseDTO>> SearchAnnouncement(string SearchText)
         {
             var data = await _AnnouncementRepo.SearchAnnouncements(SearchText);
             if (data == null)
@@ -69,7 +69,7 @@ namespace MS3_Back_End.Service
         }
 
 
-        public async Task<List<AnnouncementResponseDTO>> GetAllAnnouncement()
+        public async Task<ICollection<AnnouncementResponseDTO>> GetAllAnnouncement()
         {
             var data = await _AnnouncementRepo.GetAllAnnouncement();
             if (data == null)

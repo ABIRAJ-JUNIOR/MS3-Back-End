@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.Image;
 using MS3_Back_End.DTOs.Pagination;
@@ -98,21 +99,6 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("Pagination")]
-        public async Task<IActionResult> GetStudentByPagination(int pageNumber , int pageSize)
-        {
-            try
-            {
-                var result = await _studentService.GetPaginatedCoursesAsync(pageNumber , pageSize);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-
-        }
-
         [HttpPost("Image/{studentId}")]
         public async Task<IActionResult> UploadImage(Guid studentId, ImageRequestDTO request)
         {
@@ -125,6 +111,21 @@ namespace MS3_Back_End.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpGet("Pagination/{pageNumber}/{pageSize}")]
+        public async Task<IActionResult> GetStudentByPagination(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var result = await _studentService.GetPaginatedStudent(pageNumber, pageSize);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
 
     }

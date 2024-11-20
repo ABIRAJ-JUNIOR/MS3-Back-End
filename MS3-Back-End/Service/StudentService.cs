@@ -129,7 +129,7 @@ namespace MS3_Back_End.Service
             return StudentReponse;
         }
 
-        public async Task<List<StudentResponseDTO>> SearchStudent(string SearchText)
+        public async Task<ICollection<StudentResponseDTO>> SearchStudent(string SearchText)
         {
             var data = await _StudentRepo.SearchStudent(SearchText);
             if (data == null)
@@ -163,7 +163,7 @@ namespace MS3_Back_End.Service
 
         }
 
-        public async Task<List<StudentResponseDTO>> GetAllStudent()
+        public async Task<ICollection<StudentResponseDTO>> GetAllStudent()
         {
             var data = await _StudentRepo.GetAllStudente();
             if (data == null)
@@ -291,7 +291,7 @@ namespace MS3_Back_End.Service
         }
 
                 
-        public async Task<PaginationResponseDTO<StudentResponseDTO>> GetPaginatedCoursesAsync(int pageNumber, int pageSize)
+        public async Task<PaginationResponseDTO<StudentResponseDTO>> GetPaginatedStudent(int pageNumber, int pageSize)
         {
 
             var AllStudents = await _StudentRepo.GetAllStudente();
@@ -300,7 +300,7 @@ namespace MS3_Back_End.Service
             {
                 throw new Exception("Students Not Found");
             }
-            var Students = await _StudentRepo.GetPaginatedCoursesAsync(pageNumber, pageSize);
+            var Students = await _StudentRepo.GetPaginatedStudent(pageNumber, pageSize);
 
             var StudentResponse = Students.Select(item => new StudentResponseDTO()
             {

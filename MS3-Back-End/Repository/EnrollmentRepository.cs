@@ -20,13 +20,13 @@ namespace MS3_Back_End.Repository
                 await _Db.SaveChangesAsync();
                 return data.Entity;
         }
-        public async Task<List<Enrollment>> SearchEnrollments(Guid SearchId)
+        public async Task<ICollection<Enrollment>> SearchEnrollments(Guid SearchId)
         {
             var data = await _Db.Enrollments.Include(p => p.Payments).Where(x=>x.StudentId == SearchId).ToListAsync();
             return data;
         }
 
-        public async Task<List<Enrollment>> GetEnrollments()
+        public async Task<ICollection<Enrollment>> GetEnrollments()
         {
             var data = await _Db.Enrollments.Include(p => p.Payments).ToListAsync();
             return data;

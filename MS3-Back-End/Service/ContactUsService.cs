@@ -40,7 +40,7 @@ namespace MS3_Back_End.Service
             return newContactUs;
         }
 
-        public async Task<List<ContactUsResponseDTO>> GetAllMessages()
+        public async Task<ICollection<ContactUsResponseDTO>> GetAllMessages()
         {
             var allMessages = await _contactUsRepository.GetAllMessages();
             if (allMessages == null)

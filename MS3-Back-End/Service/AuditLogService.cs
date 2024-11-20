@@ -1,4 +1,6 @@
-﻿using MS3_Back_End.DTOs.RequestDTOs.AuditLog;
+﻿using Azure.Core;
+using MS3_Back_End.DTOs.RequestDTOs.AuditLog;
+using MS3_Back_End.DTOs.ResponseDTOs.Admin;
 using MS3_Back_End.DTOs.ResponseDTOs.AuditLog;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
@@ -47,7 +49,7 @@ namespace MS3_Back_End.Service
 
             return returndata;
         }
-        public async Task<List<AuditLogResponceDTO>> GetAllAuditlogs()
+        public async Task<ICollection<AuditLogResponceDTO>> GetAllAuditlogs()
         {
              var datas= await _auditLogRepository.GetAllAuditlogs();
             var returndatas=datas.Select(x => new AuditLogResponceDTO()
@@ -57,11 +59,21 @@ namespace MS3_Back_End.Service
                 Id= x.Id,
                 ActionDate= x.ActionDate,
                 AdminId= x.AdminId,
-                        
+                AdminResponse = new AdminResponseDTO()
+                {
+                    Id = x.Admin!.Id,
+                    Nic = x.Admin.Nic,
+                    FirstName = x.Admin.FirstName,
+                    LastName = x.Admin.LastName,
+                    Phone = x.Admin.Phone,
+                    CteatedDate = x.Admin.CteatedDate,
+                    UpdatedDate = x.Admin.CteatedDate,
+                    IsActive = x.Admin.IsActive,
+                }
             }).ToList();
             return returndatas;
         }
-        public async Task<List<AuditLogResponceDTO>> GetAuditLogsbyAdminId(Guid id)
+        public async Task<ICollection<AuditLogResponceDTO>> GetAuditLogsbyAdminId(Guid id)
         {
             var data =await _auditLogRepository.GetAuditLogsbyAdminId(id);
 
@@ -72,6 +84,17 @@ namespace MS3_Back_End.Service
                 ActionDate = x.ActionDate,
                 AdminId = x.AdminId,
                 Action = x.Action,
+                AdminResponse = new AdminResponseDTO()
+                {
+                    Id = x.Admin!.Id,
+                    Nic = x.Admin.Nic,
+                    FirstName = x.Admin.FirstName,
+                    LastName = x.Admin.LastName,
+                    Phone = x.Admin.Phone,
+                    CteatedDate = x.Admin.CteatedDate,
+                    UpdatedDate = x.Admin.CteatedDate,
+                    IsActive = x.Admin.IsActive,
+                }
             }).ToList();
 
             return returndata;  
@@ -87,7 +110,17 @@ namespace MS3_Back_End.Service
                 Id = data.Id,
                 ActionDate = data.ActionDate,
                 AdminId = data.AdminId,
-
+                AdminResponse = new AdminResponseDTO()
+                {
+                    Id = data.Admin!.Id,
+                    Nic = data.Admin.Nic,
+                    FirstName = data.Admin.FirstName,
+                    LastName = data.Admin.LastName,
+                    Phone = data.Admin.Phone,
+                    CteatedDate = data.Admin.CteatedDate,
+                    UpdatedDate = data.Admin.CteatedDate,
+                    IsActive = data.Admin.IsActive,
+                }
             };
 
             return returndata;

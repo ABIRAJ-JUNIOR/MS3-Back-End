@@ -2,7 +2,7 @@
 {
     public class PaginationResponseDTO<T>
     {
-        public ICollection<T> Items { get; set; } = new List<T>();
+        public ICollection<T> Items { get; set; }
         public int TotalPages { get; set; }
         public int TotalItem { get; set; }
         public int CurrentPage { get; set; }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.Image;
+using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.__Password__;
 using MS3_Back_End.DTOs.RequestDTOs.Admin;
 using MS3_Back_End.DTOs.ResponseDTOs.Admin;
@@ -102,6 +103,21 @@ namespace MS3_Back_End.Controllers
             try
             {
                 var response = await _adminService.UploadImage(adminId, request);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("Pagination/{pageNumber}/{pageSize}")]
+
+        public async Task<IActionResult> GetPaginatedAdmin(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var response = await _adminService.GetPaginatedAdmin(pageNumber, pageSize);
                 return Ok(response);
             }
             catch (Exception ex)
