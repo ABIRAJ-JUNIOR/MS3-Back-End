@@ -62,7 +62,7 @@ namespace MS3_Back_End.Controller
            
         }
 
-        [HttpGet("courseById/{CourseId}")]
+        [HttpGet("CourseById/{CourseId}")]
         public async Task<IActionResult> GetCourseById(Guid CourseId)
         {
             try
@@ -77,7 +77,7 @@ namespace MS3_Back_End.Controller
         }
 
 
-        [HttpPut("course")]
+        [HttpPut("Course")]
         public async Task<IActionResult> UpdateCourse(UpdateCourseRequestDTO courseRequest)
         {
             try
@@ -93,7 +93,7 @@ namespace MS3_Back_End.Controller
         }
 
 
-        [HttpDelete("course/{CourseId}")]
+        [HttpDelete("Course/{CourseId}")]
         public async Task<IActionResult> DeleteCourse(Guid CourseId)
         {
             try
