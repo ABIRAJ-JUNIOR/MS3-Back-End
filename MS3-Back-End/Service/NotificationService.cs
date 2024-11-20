@@ -21,7 +21,7 @@ namespace MS3_Back_End.Service
             _studentRepository = studentRepository;
         }
 
-        public async Task<NotificationResponseDTO> AddNotification(NotificationRequestDTO requestDTO )
+        public async Task<NotificationResponseDTO> AddNotification(NotificationRequest requestDTO )
         {
             var studentData = await _studentRepository.GetStudentById( requestDTO.StudentId );
             if( studentData == null)
@@ -52,7 +52,7 @@ namespace MS3_Back_End.Service
             return newNotification;
         }
 
-        public async Task<List<NotificationResponseDTO>> GetAllNotification(Guid id)
+        public async Task<ICollection<NotificationResponseDTO>> GetAllNotification(Guid id)
         {
             var allData = await _notificationRepository.GetAllNotification(id);
             if (allData == null)

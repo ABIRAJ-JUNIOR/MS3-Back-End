@@ -6,8 +6,8 @@ namespace MS3_Back_End.IRepository
 
     {
         Task<AuditLog> AddAuditLog(AuditLog auditLog);
-        Task<List<AuditLog>> GetAllAuditlogs();
-        Task<List<AuditLog>> GetAuditLogsbyAdminId(Guid id);
+        Task<ICollection<AuditLog>> GetAllAuditlogs();
+        Task<ICollection<AuditLog>> GetAuditLogsbyAdminId(Guid id);
         Task<AuditLog> GetAuditLogByID(Guid id);
     }
 }

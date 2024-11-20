@@ -16,7 +16,7 @@ namespace MS3_Back_End.Controllers
             _courseCategoryService = courseCategoryService;
         }
 
-        [HttpPost("Add-Category")]
+        [HttpPost]
         public async Task<IActionResult> AddCategory(CourseCategoryRequestDTO courseCategoryRequestDTO)
         {
             try
@@ -30,7 +30,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("course-Category-By-Id")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetCourseCategoryById(Guid Id)
         {
             try
@@ -44,7 +44,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpPut("Edit-Course-category")]
+        [HttpPut]
         public async Task<IActionResult> UpdateCourseCategory(CategoryUpdateRequestDTO courseCategoryRequestDTO)
         {
             try

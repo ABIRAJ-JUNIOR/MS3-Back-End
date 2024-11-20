@@ -23,20 +23,20 @@ namespace MS3_Back_End.Repository
 
         public async Task<Admin> GetAdminByNic(string nic)
         {
-            var adminData = await _dbContext.Admins.SingleOrDefaultAsync(a => a.Nic.ToLower() == nic.ToLower());
+            var adminData = await _dbContext.Admins.Include(al => al.AuditLogs).Where(a => a.IsActive != false).SingleOrDefaultAsync(a => a.Nic.ToLower() == nic.ToLower());
             return adminData!;
         }
 
         public async Task<Admin> GetAdminById(Guid id)
         {
-            var adminData = await _dbContext.Admins.SingleOrDefaultAsync(a => a.Id == id);
+            var adminData = await _dbContext.Admins.Include(al => al.AuditLogs).Where(a => a.IsActive != false).SingleOrDefaultAsync(a => a.Id == id);
             return adminData!;
         }
 
 
         public async Task<ICollection<Admin>> GetAllAdmins()
         {
-            var adminsList = await _dbContext.Admins.ToListAsync();
+            var adminsList = await _dbContext.Admins.Include(al => al.AuditLogs).Where(a => a.IsActive != false).ToListAsync();
             return adminsList;
         }
 
@@ -47,7 +47,7 @@ namespace MS3_Back_End.Repository
             return updatedData.Entity;
         }
 
-        public async Task<User> UpdateEmail(User user)
+        public async Task<User> UpdateUser(User user)
         {
             var updatedData = _dbContext.Users.Update(user);
             await _dbContext.SaveChangesAsync();
@@ -60,5 +60,12 @@ namespace MS3_Back_End.Repository
             return userData!;
         }
 
+        public async Task<ICollection<Admin>> GetPaginatedAdmin(int pageNumber, int pageSize)
+        {
+            return await _dbContext.Admins.Include(a => a.AuditLogs).Where(a => a.IsActive != false)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
     }
 }

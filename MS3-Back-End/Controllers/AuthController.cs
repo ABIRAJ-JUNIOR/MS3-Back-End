@@ -16,7 +16,7 @@ namespace MS3_Back_End.Controllers
             _authService = authService;
         }
 
-        [HttpPost("signup")]
+        [HttpPost("SignUp")]
         public async Task<IActionResult> SignUp(SignUpRequestDTO request)
         {
             try
@@ -30,8 +30,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpPatch("signin")]
-
+        [HttpPatch("SignIn")]
         public async Task<IActionResult> SignIn(SignInRequestDTO request)
         {
             try

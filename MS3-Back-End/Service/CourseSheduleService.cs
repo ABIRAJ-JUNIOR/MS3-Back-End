@@ -56,7 +56,7 @@ namespace MS3_Back_End.Service
 
         }
 
-        public async Task<List<CourseSheduleResponseDTO>> SearchCourseShedule(string SearchText)
+        public async Task<ICollection<CourseSheduleResponseDTO>> SearchCourseShedule(string SearchText)
         {
             var data = await _courseSheduleRepository.SearchSheduleLocation(SearchText);
             if (data == null)
@@ -84,7 +84,7 @@ namespace MS3_Back_End.Service
 
         }
 
-        public async Task<List<CourseSheduleResponseDTO>> GetAllCourseShedule()
+        public async Task<ICollection<CourseSheduleResponseDTO>> GetAllCourseShedule()
         {
             var data = await _courseSheduleRepository.GetAllCourseShedule();
             if (data == null)

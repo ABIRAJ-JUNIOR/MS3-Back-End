@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Azure;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
+using MS3_Back_End.DTOs.ResponseDTOs.Admin;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
@@ -48,14 +51,14 @@ namespace MS3_Back_End.Service
                 Prerequisites = data.Prerequisites,
                 ImagePath = data.ImagePath,
                 CreatedDate = data.CreatedDate,
-                UpdatedDate = data.UpdatedDate
+                UpdatedDate = data.UpdatedDate,
             };
 
             return CourseResponse;
 
         }
 
-        public async Task<List<CourseResponseDTO>> SearchCourse(string SearchText)
+        public async Task<ICollection<CourseResponseDTO>> SearchCourse(string SearchText)
         {
             var data = await _courseRepository.SearchCourse(SearchText);
             if (data == null)
@@ -74,13 +77,28 @@ namespace MS3_Back_End.Service
                 Prerequisites = item.Prerequisites,
                 ImagePath = item.ImagePath,
                 CreatedDate = item.CreatedDate,
-                UpdatedDate = item.UpdatedDate
+                UpdatedDate = item.UpdatedDate,
+                Shedules = item.CourseSchedules != null ? item.CourseSchedules.Select(cs => new CourseSheduleResponseDTO()
+                {
+                    Id = cs.Id,
+                    CourseId = cs.CourseId,
+                    StartDate = cs.StartDate,
+                    EndDate = cs.EndDate,
+                    Duration = cs.Duration,
+                    Time = cs.Time,
+                    Location = cs.Location,
+                    MaxStudents = cs.MaxStudents,
+                    EnrollCount = cs.EnrollCount,
+                    CreatedDate = cs.CreatedDate,
+                    UpdatedDate = cs.UpdatedDate,
+                    ScheduleStatus = cs.ScheduleStatus
+                }).ToList() : null
             }).ToList();
 
             return CourseResponse;
         }
 
-        public async Task<List<CourseResponseDTO>> GetAllCourse()
+        public async Task<ICollection<CourseResponseDTO>> GetAllCourse()
         {
             var data = await _courseRepository.GetAllCourse();
             if (data == null)
@@ -99,7 +117,22 @@ namespace MS3_Back_End.Service
                 Prerequisites = item.Prerequisites,
                 ImagePath = item.ImagePath,
                 CreatedDate = item.CreatedDate,
-                UpdatedDate = item.UpdatedDate
+                UpdatedDate = item.UpdatedDate,
+                Shedules = item.CourseSchedules != null ? item.CourseSchedules.Select(cs => new CourseSheduleResponseDTO()
+                {
+                    Id = cs.Id,
+                    CourseId = cs.CourseId,
+                    StartDate = cs.StartDate,
+                    EndDate = cs.EndDate,
+                    Duration = cs.Duration,
+                    Time = cs.Time,
+                    Location = cs.Location,
+                    MaxStudents = cs.MaxStudents,
+                    EnrollCount = cs.EnrollCount,
+                    CreatedDate = cs.CreatedDate,
+                    UpdatedDate = cs.UpdatedDate,
+                    ScheduleStatus = cs.ScheduleStatus
+                }).ToList() : null
             }).ToList();
 
             return CourseResponse;
@@ -123,7 +156,22 @@ namespace MS3_Back_End.Service
                 Prerequisites = data.Prerequisites,
                 ImagePath = data.ImagePath,
                 CreatedDate = data.CreatedDate,
-                UpdatedDate = data.UpdatedDate
+                UpdatedDate = data.UpdatedDate,
+                Shedules = data.CourseSchedules != null ? data.CourseSchedules.Select(cs => new CourseSheduleResponseDTO()
+                {
+                    Id = cs.Id,
+                    CourseId = cs.CourseId,
+                    StartDate = cs.StartDate,
+                    EndDate = cs.EndDate,
+                    Duration = cs.Duration,
+                    Time = cs.Time,
+                    Location = cs.Location,
+                    MaxStudents = cs.MaxStudents,
+                    EnrollCount = cs.EnrollCount,
+                    CreatedDate = cs.CreatedDate,
+                    UpdatedDate = cs.UpdatedDate,
+                    ScheduleStatus = cs.ScheduleStatus
+                }).ToList() : null
             };
             return CourseResponse;
         }
@@ -213,6 +261,51 @@ namespace MS3_Back_End.Service
             }
 
             return $"/Course/{fileName}";
+        }
+
+        public async Task<PaginationResponseDTO<CourseResponseDTO>> GetPaginatedCourses(int pageNumber, int pageSize)
+        {
+            var allCourses = await _courseRepository.GetPaginatedCourses(pageNumber, pageSize);
+
+            var response = allCourses.Select(item => new CourseResponseDTO()
+            {
+                Id = item.Id,
+                CourseCategoryId = item.CourseCategoryId,
+                CourseName = item.CourseName,
+                Level = item.Level,
+                CourseFee = item.CourseFee,
+                Description = item.Description,
+                Prerequisites = item.Prerequisites,
+                ImagePath = item.ImagePath,
+                CreatedDate = item.CreatedDate,
+                UpdatedDate = item.UpdatedDate,
+                Shedules = item.CourseSchedules != null ? item.CourseSchedules.Select(cs => new CourseSheduleResponseDTO()
+                {
+                    Id = cs.Id,
+                    CourseId = cs.CourseId,
+                    StartDate = cs.StartDate,
+                    EndDate = cs.EndDate,
+                    Duration = cs.Duration,
+                    Time = cs.Time,
+                    Location = cs.Location,
+                    MaxStudents = cs.MaxStudents,
+                    EnrollCount = cs.EnrollCount,
+                    CreatedDate = cs.CreatedDate,
+                    UpdatedDate = cs.UpdatedDate,
+                    ScheduleStatus = cs.ScheduleStatus
+                }).ToList() : null
+            }).ToList();
+
+            var paginationResponseDto = new PaginationResponseDTO<CourseResponseDTO>
+            {
+                Items = response,
+                CurrentPage = pageNumber,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling(allCourses.Count / (double)pageSize),
+                TotalItem = allCourses.Count,
+            };
+
+            return paginationResponseDto;
         }
     }
 }

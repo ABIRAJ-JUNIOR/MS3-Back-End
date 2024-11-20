@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MS3_Back_End.DTOs.Image;
 using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Student;
 using MS3_Back_End.IService;
@@ -35,7 +37,6 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
 
         [HttpGet("getall")]
         public async Task<IActionResult> GetAllStudents()
@@ -83,6 +84,7 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteStudent(Guid id)
         {
@@ -97,12 +99,26 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("Pagination")]
-        public async Task<IActionResult> GetStudentByPagination(PaginationParams paginationparam)
+        [HttpPost("Image/{studentId}")]
+        public async Task<IActionResult> UploadImage(Guid studentId, ImageRequestDTO request)
         {
             try
             {
-                var result = await _studentService.GetPaginatedCoursesAsync(paginationparam);
+                var response = await _studentService.UploadImage(studentId, request);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("Pagination/{pageNumber}/{pageSize}")]
+        public async Task<IActionResult> GetStudentByPagination(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var result = await _studentService.GetPaginatedStudent(pageNumber, pageSize);
                 return Ok(result);
             }
             catch (Exception ex)

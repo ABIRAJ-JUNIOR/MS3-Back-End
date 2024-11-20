@@ -376,9 +376,8 @@ namespace MS3_Back_End.Migrations
                     b.Property<Guid>("CourseId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("FeedBackDate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("FeedBackDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("FeedBackText")
                         .IsRequired()

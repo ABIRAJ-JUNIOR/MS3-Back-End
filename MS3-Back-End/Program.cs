@@ -1,10 +1,12 @@
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MS3_Back_End.DBContext;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
 using MS3_Back_End.Repository;
 using MS3_Back_End.Service;
+using System.Text;
 
 namespace MS3_Back_End
 {
@@ -82,6 +84,30 @@ namespace MS3_Back_End
             //Audit Log
             builder.Services.AddScoped<IAuditLogRepository,AuditLogRepository>();
             builder.Services.AddScoped<IAuditLogService,AuditLogService>();
+
+            //FeedBack
+            builder.Services.AddScoped<IFeedbacksRepository, FeedbacksRepository>();
+            builder.Services.AddScoped<IFeedbacksService, FeedbacksService>();
+
+
+
+            var jwtSettings = builder.Configuration.GetSection("Jwt");
+            var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]!);
+
+            builder.Services.AddAuthentication()
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = jwtSettings["Issuer"],
+                        ValidAudience = jwtSettings["Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(key)
+                    };
+                });
+
 
             builder.Services.AddCors(options =>
             {

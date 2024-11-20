@@ -13,7 +13,7 @@
         //Reference
         public Student? Student { get; set; }
         public CourseSchedule? CourseShedule { get; set; }
-        public ICollection<Payment> Payments { get; set; } = new List<Payment>();
+        public ICollection<Payment> Payments { get; set; }
 
     }
     public enum PaymentStatus

@@ -1,4 +1,6 @@
-﻿namespace MS3_Back_End.DTOs.ResponseDTOs.Admin
+﻿using MS3_Back_End.DTOs.ResponseDTOs.AuditLog;
+
+namespace MS3_Back_End.DTOs.ResponseDTOs.Admin
 {
     public class AdminResponseDTO
     {
@@ -11,5 +13,7 @@
         public DateTime CteatedDate { get; set; } = DateTime.MinValue;
         public DateTime? UpdatedDate { get; set; } = DateTime.MinValue;
         public bool IsActive { get; set; } = true;
+
+        public ICollection<AuditLogResponceDTO>? AuditLogs { get; set; }
     }
 }

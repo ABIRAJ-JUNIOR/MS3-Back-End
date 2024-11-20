@@ -1,5 +1,10 @@
-﻿using MS3_Back_End.DTOs.RequestDTOs.Admin;
+﻿using MS3_Back_End.DTOs.Image;
+using MS3_Back_End.DTOs.Pagination;
+using MS3_Back_End.DTOs.RequestDTOs.__Password__;
+using MS3_Back_End.DTOs.RequestDTOs.Admin;
 using MS3_Back_End.DTOs.ResponseDTOs.Admin;
+using MS3_Back_End.DTOs.ResponseDTOs.AuditLog;
+using MS3_Back_End.DTOs.ResponseDTOs.Student;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
@@ -10,11 +15,13 @@ namespace MS3_Back_End.Service
     {
         private readonly IAdminRepository _adminRepository;
         private readonly IAuthRepository _authRepository;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public AdminService(IAdminRepository adminRepository, IAuthRepository authRepository)
+        public AdminService(IAdminRepository adminRepository, IAuthRepository authRepository, IWebHostEnvironment webHostEnvironment)
         {
             _adminRepository = adminRepository;
             _authRepository = authRepository;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<AdminResponseDTO> AddAdmin(AdminRequestDTO request)
@@ -87,6 +94,37 @@ namespace MS3_Back_End.Service
             return response;
         }
 
+        public async Task<AdminResponseDTO> GetAdminById(Guid id)
+        {
+            var adminData = await _adminRepository.GetAdminById(id);
+            if(adminData == null)
+            {
+                throw new Exception("Not found");
+            }
+            var response = new AdminResponseDTO()
+            {
+                Id = adminData.Id,
+                Nic = adminData.Nic,
+                FirstName = adminData.FirstName,
+                LastName = adminData.LastName,
+                Phone = adminData.Phone,
+                ImagePath = adminData.ImagePath,
+                CteatedDate = adminData.CteatedDate,
+                UpdatedDate = adminData.UpdatedDate,
+                IsActive = adminData.IsActive,
+                AuditLogs = adminData.AuditLogs != null ? adminData.AuditLogs.Select(data => new AuditLogResponceDTO()
+                {
+                    Id = data.Id,
+                    AdminId = data.AdminId,
+                    ActionDate = data.ActionDate,
+                    Details = data.Details,
+                    Action = data.Action,
+                }).ToList() : null
+            };
+
+            return response;
+        }
+
         public async Task<ICollection<AdminResponseDTO>> GetAllAdmins()
         {
             var adminsList = await _adminRepository.GetAllAdmins();
@@ -102,6 +140,14 @@ namespace MS3_Back_End.Service
                 CteatedDate = a.CteatedDate,
                 UpdatedDate = a.UpdatedDate,
                 IsActive = a.IsActive,
+                AuditLogs = a.AuditLogs != null ? a.AuditLogs.Select(data => new AuditLogResponceDTO()
+                {
+                    Id = data.Id,
+                    AdminId = data.AdminId,
+                    ActionDate = data.ActionDate,
+                    Details = data.Details,
+                    Action = data.Action,
+                }).ToList() : null
             }).ToList();
 
             return response;
@@ -140,7 +186,7 @@ namespace MS3_Back_End.Service
 
         public async Task<string> UpdateEmail(UpdateEmailRequestDTO request)
         {
-            var userData = await _adminRepository.GetUserById(request.StudentId);
+            var userData = await _adminRepository.GetUserById(request.Id);
             if(userData == null)
             {
                 throw new Exception("User not found");
@@ -152,9 +198,105 @@ namespace MS3_Back_End.Service
 
             userData.Email = request.Email;
 
-            var updatedData = await _adminRepository.UpdateEmail(userData);
+            var updatedData = await _adminRepository.UpdateUser(userData);
 
             return "Update email successfully";
+        }
+
+        public async Task<string> UpdatePassword(UpdatePasswordRequestDTO request)
+        {
+            var userData = await _adminRepository.GetUserById(request.Id);
+            if (userData == null)
+            {
+                throw new Exception("User not found");
+            }
+            if (!BCrypt.Net.BCrypt.Verify(request.oldPassword, userData.Password))
+            {
+                throw new Exception("Old password is incorrect");
+            }
+
+            userData.Password = BCrypt.Net.BCrypt.HashPassword(request.newPassword);
+            var updatedData = await _adminRepository.UpdateUser(userData);
+
+            return "Update password successfully";
+        }
+
+        public async Task<string> UploadImage(Guid adminId ,ImageRequestDTO request)
+        {
+            var adminData = await _adminRepository.GetAdminById(adminId);
+            if(adminData == null)
+            {
+                throw new Exception("Admin not found");
+            }
+
+            adminData.ImagePath = request.ImageFile != null ? await SaveImageFile(request.ImageFile) : null;
+            var updatedData = await _adminRepository.UpdateAdmin(adminData);
+
+            return "Image upload successfully";
+        }
+
+        private async Task<string> SaveImageFile(IFormFile imageFile)
+        {
+            if (imageFile == null || imageFile.Length == 0)
+                return string.Empty;
+
+            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "Admin");
+
+            if (!Directory.Exists(uploadPath))
+                Directory.CreateDirectory(uploadPath);
+
+            string filePath = Path.Combine(uploadPath, fileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await imageFile.CopyToAsync(fileStream);
+            }
+
+            return $"/Admin/{fileName}";
+        }
+
+        public async Task<PaginationResponseDTO<AdminResponseDTO>> GetPaginatedAdmin(int pageNumber, int pageSize)
+        {
+            var allAdmins = await _adminRepository.GetAllAdmins();
+            if (allAdmins == null)
+            {
+                throw new Exception("Admins Not Found");
+            }
+
+            var admins = await _adminRepository.GetPaginatedAdmin(pageNumber, pageSize);
+
+            var response = admins.Select(a => new AdminResponseDTO()
+            {
+                Id = a.Id,
+                Nic = a.Nic,
+                FirstName = a.FirstName,
+                LastName = a.LastName,
+                Phone = a.Phone,
+                ImagePath = a.ImagePath,
+                CteatedDate = a.CteatedDate,
+                UpdatedDate = a.UpdatedDate,
+                IsActive = a.IsActive,
+                AuditLogs = a.AuditLogs != null ? a.AuditLogs.Select(data => new AuditLogResponceDTO()
+                {
+                    Id = data.Id,
+                    AdminId = data.AdminId,
+                    ActionDate = data.ActionDate,
+                    Details = data.Details,
+                    Action = data.Action,
+                }).ToList() : null
+            }).ToList();
+
+            var paginationResponseDto = new PaginationResponseDTO<AdminResponseDTO>
+            {
+                Items = response,
+                CurrentPage = pageNumber,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling(allAdmins.Count / (double)pageSize),
+                TotalItem = allAdmins.Count,
+            };
+
+            return paginationResponseDto;
         }
     }
 }

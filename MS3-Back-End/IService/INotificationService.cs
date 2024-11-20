@@ -6,8 +6,8 @@ namespace MS3_Back_End.IService
 {
     public interface INotificationService
     {
-        Task<NotificationResponseDTO> AddNotification(NotificationRequestDTO requestDTO);
-        Task<List<NotificationResponseDTO>> GetAllNotification(Guid id);
+        Task<NotificationResponseDTO> AddNotification(NotificationRequest requestDTO);
+        Task<ICollection<NotificationResponseDTO>> GetAllNotification(Guid id);
         Task<string> DeleteNotification(Guid id);
     }
 }

@@ -38,8 +38,7 @@ namespace MS3_Back_End.Controllers
             return Ok(assessmentList);
         }
 
-        [HttpPost("StudentAssessment")]
-
+        [HttpPost]
         public async Task<IActionResult> AddStudentAssessment(StudentAssessmentRequestDTO request)
         {
             var studentAssessmentData = await _service.AddStudentAssessment(request);
@@ -47,7 +46,6 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPut("Evaluate-Assessment/{id}")]
-
         public async Task<IActionResult> EvaluateStudentAssessment(Guid id, EvaluationRequestDTO request)
         {
             try
@@ -60,7 +58,6 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
 
     }
 }

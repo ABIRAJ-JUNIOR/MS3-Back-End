@@ -29,20 +29,20 @@ namespace MS3_Back_End.Repository
             }
            
         }
-        public async Task<List<Course>> SearchCourse(string SearchText)
+        public async Task<ICollection<Course>> SearchCourse(string SearchText)
         {
-            var data = await _Db.Courses.Where(n=>n.CourseName.Contains(SearchText) || n.Description.Contains(SearchText)).ToListAsync();
+            var data = await _Db.Courses.Include(cs => cs.CourseSchedules).Where(n=>n.CourseName.Contains(SearchText) || n.Description.Contains(SearchText)).ToListAsync();
             return data;
         }
-        public async Task<List<Course>> GetAllCourse()
+        public async Task<ICollection<Course>> GetAllCourse()
         {
-            var data = await _Db.Courses.Where(c=>c.IsDeleted==false).ToListAsync();
+            var data = await _Db.Courses.Include(cs => cs.CourseSchedules).Where(c=>c.IsDeleted==false).ToListAsync();
             return data;
         }
 
         public async Task<Course> GetCourseById(Guid CourseId)
         {
-            var data = await _Db.Courses.SingleOrDefaultAsync(c=>c.Id==CourseId && c.IsDeleted==false);
+            var data = await _Db.Courses.Include(cs => cs.CourseSchedules).SingleOrDefaultAsync(c=>c.Id==CourseId && c.IsDeleted==false);
             return data;
         }
         public async Task<Course> UpdateCourse(Course course)
@@ -57,6 +57,12 @@ namespace MS3_Back_End.Repository
             await _Db.SaveChangesAsync();
             return "Course Deleted Successfull";
         }
-       
+        public async Task<ICollection<Course>> GetPaginatedCourses(int pageNumber, int pageSize)
+        {
+            return await _Db.Courses.Include(cs => cs.CourseSchedules)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
     }
 }

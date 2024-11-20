@@ -20,7 +20,7 @@ namespace MS3_Back_End.Repository
                 return data.Entity;
         }
 
-        public async Task<List<Student>> SearchStudent(string SearchText)
+        public async Task<ICollection<Student>> SearchStudent(string SearchText)
         {
             var data = await _Db.Students .Where(n => n.FirstName.Contains(SearchText) || 
                n.LastName.Contains(SearchText) ||
@@ -28,7 +28,7 @@ namespace MS3_Back_End.Repository
             return data;
         }
 
-        public async Task<List<Student>> GetAllStudente()
+        public async Task<ICollection<Student>> GetAllStudente()
         {
             var data = await _Db.Students.Where(c => c.IsActive == true).Include(a => a.Address).ToListAsync();
             return data;
@@ -54,11 +54,11 @@ namespace MS3_Back_End.Repository
             return "Student Deleted Successfull";
         }
 
-        public async Task<List<Student>> GetPaginatedCoursesAsync(PaginationParams paginationParams)
+        public async Task<ICollection<Student>> GetPaginatedStudent(int pageNumber, int pageSize)
         {
-            return await _Db.Students
-                .Skip((paginationParams.PageIndex - 1) * paginationParams.PageSize)
-                .Take(paginationParams.PageSize)
+            return await _Db.Students.Include(a => a.Address)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
         }
     }

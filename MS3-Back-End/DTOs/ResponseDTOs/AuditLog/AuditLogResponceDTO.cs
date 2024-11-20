@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.Entities;
+﻿using MS3_Back_End.DTOs.ResponseDTOs.Admin;
+using MS3_Back_End.Entities;
 
 namespace MS3_Back_End.DTOs.ResponseDTOs.AuditLog
 {
@@ -12,7 +13,7 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.AuditLog
 
         public Guid AdminId { get; set; }
 
-        //public Admin? Admin { get; set; }
+        public AdminResponseDTO AdminResponse {  get; set; } = new AdminResponseDTO();
 
     }
 }

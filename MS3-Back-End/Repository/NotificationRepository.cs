@@ -21,7 +21,7 @@ namespace MS3_Back_End.Repository
             return notification.Entity;
         }
 
-        public async Task<List<Notification>> GetAllNotification(Guid id)
+        public async Task<ICollection<Notification>> GetAllNotification(Guid id)
         {
             var getAllNotification = await _appDBContext.Notifications.Where(n => n.StudentId == id).ToListAsync();
             return getAllNotification;
