@@ -8,6 +8,7 @@ using MS3_Back_End.DTOs.RequestDTOs.Student;
 using MS3_Back_End.DTOs.ResponseDTOs.Address;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Enrollment;
+using MS3_Back_End.DTOs.ResponseDTOs.Payment;
 using MS3_Back_End.DTOs.ResponseDTOs.Student;
 using MS3_Back_End.DTOs.ResponseDTOs.StudentAssessment;
 using MS3_Back_End.Entities;
@@ -218,7 +219,7 @@ namespace MS3_Back_End.Service
                 ImagePath = item.ImagePath!,
                 CteatedDate = item.CteatedDate,
                 UpdatedDate = item.UpdatedDate,
-                Address = item.Address != null ?  new AddressResponseDTO()
+                Address = item.Address != null ? new AddressResponseDTO()
                 {
                     AddressLine1 = item.Address.AddressLine1,
                     AddressLine2 = item.Address.AddressLine2,
@@ -227,7 +228,7 @@ namespace MS3_Back_End.Service
                     Country = item.Address.Country,
                     StudentId = item.Id,
                 } : null,
-                Enrollments = item.Enrollments != null ? item.Enrollments.Select(enroll =>  new EnrollmentResponseDTO()
+                Enrollments = item.Enrollments != null ? item.Enrollments.Select(enroll => new EnrollmentResponseDTO()
                 {
                     Id = enroll.Id,
                     StudentId = enroll.StudentId,
@@ -235,6 +236,17 @@ namespace MS3_Back_End.Service
                     EnrollmentDate = enroll.EnrollmentDate,
                     PaymentStatus = enroll.PaymentStatus,
                     IsActive = enroll.IsActive,
+                    PaymentResponse = enroll.Payments != null ? enroll.Payments.Select(payment => new PaymentResponseDTO()
+                    {
+                        Id = payment.Id,
+                        PaymentType = payment.PaymentType,
+                        PaymentMethod = payment.PaymentMethod,
+                        AmountPaid = payment.AmountPaid,
+                        PaymentDate = payment.PaymentDate,
+                        ImagePath = payment.ImagePath,
+                        InstallmentNumber = payment.InstallmentNumber,
+                        EnrollmentId = payment.EnrollmentId
+                    }).ToList() : null
                 }).ToList() : null,
                 StudentAssessments = item.Assessments != null ? item.Assessments.Select(sa => new StudentAssessmentResponseDTO()
                 {
