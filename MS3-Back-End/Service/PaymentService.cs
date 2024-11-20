@@ -45,8 +45,8 @@ namespace MS3_Back_End.Service
             return new PaymentResponseDTO
             {
                 Id = createdPayment.Id,
-                PaymentType = createdPayment.PaymentType,
-                PaymentMethod = createdPayment.PaymentMethod,
+                PaymentType = ((PaymentTypes)createdPayment.PaymentType).ToString(),
+                PaymentMethod = ((PaymentMethots)createdPayment.PaymentMethod).ToString(),
                 AmountPaid = createdPayment.AmountPaid,
                 PaymentDate = createdPayment.PaymentDate,
                 ImagePath = createdPayment.ImagePath,
@@ -61,8 +61,8 @@ namespace MS3_Back_End.Service
             var response = paymentsList.Select(p => new PaymentResponseDTO()
             {
                 Id = p.Id,
-                PaymentType = p.PaymentType,
-                PaymentMethod = p.PaymentMethod,
+                PaymentType = ((PaymentTypes)p.PaymentType).ToString(),
+                PaymentMethod = ((PaymentMethots)p.PaymentMethod).ToString(),
                 AmountPaid = p.AmountPaid,
                 PaymentDate = p.PaymentDate,
                 ImagePath = p.ImagePath,

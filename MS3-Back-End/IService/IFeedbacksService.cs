@@ -1,5 +1,5 @@
 ﻿using MS3_Back_End.DTOs.RequestDTOs.Feedbacks;
-using MS3_Back_End.DTOs.ResponseDTOs;
+using MS3_Back_End.DTOs.ResponseDTOs.FeedBack;
 
 namespace MS3_Back_End.IService
 {

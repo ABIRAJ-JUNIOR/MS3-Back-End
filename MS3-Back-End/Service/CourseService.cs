@@ -45,7 +45,7 @@ namespace MS3_Back_End.Service
                 Id = data.Id,
                 CourseCategoryId = data.CourseCategoryId,
                 CourseName = data.CourseName,
-                Level = data.Level,
+                Level = ((CourseLevel)data.Level).ToString(),
                 CourseFee = data.CourseFee,
                 Description = data.Description,
                 Prerequisites = data.Prerequisites,
@@ -71,7 +71,7 @@ namespace MS3_Back_End.Service
                 Id = item.Id,
                 CourseCategoryId = item.CourseCategoryId,
                 CourseName = item.CourseName,
-                Level = item.Level,
+                Level = ((CourseLevel)item.Level).ToString(),
                 CourseFee = item.CourseFee,
                 Description = item.Description,
                 Prerequisites = item.Prerequisites,
@@ -91,7 +91,7 @@ namespace MS3_Back_End.Service
                     EnrollCount = cs.EnrollCount,
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
-                    ScheduleStatus = cs.ScheduleStatus
+                    ScheduleStatus = ((ScheduleStatus)cs.ScheduleStatus).ToString()
                 }).ToList() : null
             }).ToList();
 
@@ -111,7 +111,7 @@ namespace MS3_Back_End.Service
                 Id = item.Id,
                 CourseCategoryId = item.CourseCategoryId,
                 CourseName = item.CourseName,
-                Level = item.Level,
+                Level = ((CourseLevel)item.Level).ToString(),
                 CourseFee = item.CourseFee,
                 Description = item.Description,
                 Prerequisites = item.Prerequisites,
@@ -131,7 +131,7 @@ namespace MS3_Back_End.Service
                     EnrollCount = cs.EnrollCount,
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
-                    ScheduleStatus = cs.ScheduleStatus
+                    ScheduleStatus = ((ScheduleStatus)cs.ScheduleStatus).ToString()
                 }).ToList() : null
             }).ToList();
 
@@ -151,6 +151,7 @@ namespace MS3_Back_End.Service
                 Id = data.Id,
                 CourseCategoryId = data.CourseCategoryId,
                 CourseName = data.CourseName,
+                Level = ((CourseLevel)data.Level).ToString(),
                 CourseFee = data.CourseFee,
                 Description = data.Description,
                 Prerequisites = data.Prerequisites,
@@ -170,7 +171,7 @@ namespace MS3_Back_End.Service
                     EnrollCount = cs.EnrollCount,
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
-                    ScheduleStatus = cs.ScheduleStatus
+                    ScheduleStatus = ((ScheduleStatus)cs.ScheduleStatus).ToString()
                 }).ToList() : null
             };
             return CourseResponse;
@@ -214,7 +215,7 @@ namespace MS3_Back_End.Service
                 Id = data.Id,
                 CourseCategoryId = data.CourseCategoryId,
                 CourseName = data.CourseName,
-                Level = data.Level,
+                Level = ((CourseLevel)data.Level).ToString(),
                 CourseFee = data.CourseFee,
                 Description = data.Description,
                 Prerequisites = data.Prerequisites,
@@ -272,7 +273,7 @@ namespace MS3_Back_End.Service
                 Id = item.Id,
                 CourseCategoryId = item.CourseCategoryId,
                 CourseName = item.CourseName,
-                Level = item.Level,
+                Level = ((CourseLevel)item.Level).ToString(),
                 CourseFee = item.CourseFee,
                 Description = item.Description,
                 Prerequisites = item.Prerequisites,
@@ -292,7 +293,7 @@ namespace MS3_Back_End.Service
                     EnrollCount = cs.EnrollCount,
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
-                    ScheduleStatus = cs.ScheduleStatus
+                    ScheduleStatus = ((ScheduleStatus)cs.ScheduleStatus).ToString()
                 }).ToList() : null
             }).ToList();
 

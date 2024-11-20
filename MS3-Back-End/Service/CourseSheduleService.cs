@@ -48,7 +48,7 @@ namespace MS3_Back_End.Service
                 EnrollCount = data.EnrollCount,
                 CreatedDate = data.CreatedDate,
                 UpdatedDate = data.UpdatedDate,
-                ScheduleStatus = data.ScheduleStatus,
+                ScheduleStatus = ((ScheduleStatus)data.ScheduleStatus).ToString(),
 
             };
 
@@ -77,7 +77,7 @@ namespace MS3_Back_End.Service
                 EnrollCount = item.EnrollCount,
                 CreatedDate = item.CreatedDate,
                 UpdatedDate = item.UpdatedDate,
-                ScheduleStatus = item.ScheduleStatus,
+                ScheduleStatus = ((ScheduleStatus)item.ScheduleStatus).ToString(),
             }).ToList();
             
             return CourseResponseList;
@@ -104,7 +104,7 @@ namespace MS3_Back_End.Service
                 EnrollCount = item.EnrollCount,
                 CreatedDate = item.CreatedDate,
                 UpdatedDate = item.UpdatedDate,
-                ScheduleStatus = item.ScheduleStatus,
+                ScheduleStatus = ((ScheduleStatus)item.ScheduleStatus).ToString(),
             }).ToList();
 
             return CourseResponseList;
@@ -131,7 +131,7 @@ namespace MS3_Back_End.Service
                 EnrollCount = data.EnrollCount,
                 CreatedDate = data.CreatedDate,
                 UpdatedDate = data.UpdatedDate,
-                ScheduleStatus = data.ScheduleStatus,
+                ScheduleStatus = ((ScheduleStatus)data.ScheduleStatus).ToString(),
             };
 
             return CourseResponse;
@@ -173,7 +173,7 @@ namespace MS3_Back_End.Service
                 EnrollCount = data.EnrollCount,
                 CreatedDate = data.CreatedDate,
                 UpdatedDate = data.UpdatedDate,
-                ScheduleStatus = data.ScheduleStatus,
+                ScheduleStatus = ((ScheduleStatus)data.ScheduleStatus).ToString(),
 
             };
 

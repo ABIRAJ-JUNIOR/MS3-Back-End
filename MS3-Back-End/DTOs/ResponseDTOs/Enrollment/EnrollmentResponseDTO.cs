@@ -7,7 +7,7 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Enrollment
     {
         public Guid Id { get; set; }
         public DateTime EnrollmentDate { get; set; }
-        public PaymentStatus PaymentStatus { get; set; }
+        public string PaymentStatus { get; set; } = string.Empty;
         public bool IsActive { get; set; }
 
         public Guid StudentId { get; set; }

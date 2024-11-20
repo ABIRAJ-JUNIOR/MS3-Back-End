@@ -75,7 +75,7 @@ namespace MS3_Back_End.Service
                 StudentId = data.StudentId,
                 CourseSheduleId = data.CourseSheduleId,
                 EnrollmentDate = data.EnrollmentDate,
-                PaymentStatus = data.PaymentStatus,
+                PaymentStatus = ((PaymentStatus)data.PaymentStatus).ToString(),
                 IsActive = data.IsActive
             };
 
@@ -84,8 +84,8 @@ namespace MS3_Back_End.Service
                 var PaymentResponse = data.Payments.Select(payment => new PaymentResponseDTO()
                 {
                     Id = payment.Id,
-                    PaymentType = payment.PaymentType,
-                    PaymentMethod = payment.PaymentMethod,
+                    PaymentType = ((PaymentTypes)payment.PaymentType).ToString(),
+                    PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
                     ImagePath = payment.ImagePath,
@@ -114,13 +114,13 @@ namespace MS3_Back_End.Service
                 StudentId = item.StudentId,
                 CourseSheduleId = item.CourseSheduleId,
                 EnrollmentDate = item.EnrollmentDate,
-                PaymentStatus = item.PaymentStatus,
+                PaymentStatus = ((PaymentStatus)item.PaymentStatus).ToString(),
                 IsActive = item.IsActive,
                 PaymentResponse = item.Payments != null ? item.Payments.Select(payment => new PaymentResponseDTO()
                 {
                     Id = payment.Id,
-                    PaymentType = payment.PaymentType,
-                    PaymentMethod = payment.PaymentMethod,
+                    PaymentType = ((PaymentTypes)payment.PaymentType).ToString(),
+                    PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
                     ImagePath = payment.ImagePath,
@@ -146,13 +146,13 @@ namespace MS3_Back_End.Service
                 StudentId = item.StudentId,
                 CourseSheduleId = item.CourseSheduleId,
                 EnrollmentDate = item.EnrollmentDate,
-                PaymentStatus = item.PaymentStatus,
+                PaymentStatus = ((PaymentStatus)item.PaymentStatus).ToString(),
                 IsActive = item.IsActive,
                 PaymentResponse = item.Payments != null ? item.Payments.Select(payment => new PaymentResponseDTO()
                 {
                     Id = payment.Id,
-                    PaymentType = payment.PaymentType,
-                    PaymentMethod = payment.PaymentMethod,
+                    PaymentType = ((PaymentTypes)payment.PaymentType).ToString(),
+                    PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
                     ImagePath = payment.ImagePath,
@@ -178,7 +178,7 @@ namespace MS3_Back_End.Service
                 StudentId = data.StudentId,
                 CourseSheduleId = data.CourseSheduleId,
                 EnrollmentDate = data.EnrollmentDate,
-                PaymentStatus = data.PaymentStatus,
+                PaymentStatus = ((PaymentStatus)data.PaymentStatus).ToString(),
                 IsActive = data.IsActive
             };
 
@@ -187,8 +187,8 @@ namespace MS3_Back_End.Service
                 var PaymentResponse = data.Payments.Select(payment => new PaymentResponseDTO()
                 {
                     Id = payment.Id,
-                    PaymentType = payment.PaymentType,
-                    PaymentMethod = payment.PaymentMethod,
+                    PaymentType = ((PaymentTypes)payment.PaymentType).ToString(),
+                    PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
                     ImagePath = payment.ImagePath,
