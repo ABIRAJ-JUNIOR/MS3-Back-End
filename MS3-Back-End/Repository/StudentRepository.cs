@@ -56,10 +56,12 @@ namespace MS3_Back_End.Repository
 
         public async Task<ICollection<Student>> GetPaginatedStudent(int pageNumber, int pageSize)
         {
-            return await _Db.Students.Include(a => a.Address)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
+            var students = await _Db.Students
+                .Include(s => s.Address)            
+                .Skip((pageNumber - 1) * pageSize)  
+                .Take(pageSize)                     
                 .ToListAsync();
+            return students;
         }
     }
 }
