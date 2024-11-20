@@ -31,18 +31,24 @@ namespace MS3_Back_End.Repository
         }
         public async Task<ICollection<Course>> SearchCourse(string SearchText)
         {
-            var data = await _Db.Courses.Include(cs => cs.CourseSchedules).Where(n=>n.CourseName.Contains(SearchText) || n.Description.Contains(SearchText)).ToListAsync();
+            var data = await _Db.Courses.Include(cs => cs.CourseSchedules).Where(n=>n.CourseName.Contains(SearchText) || n.Description.Contains(SearchText))
+                              .Include(x=>x.CourseSchedules)
+                              .Include(x=>x.Feedbacks)
+                              .Include(x=>x.Assessments).ToListAsync();
             return data;
         }
         public async Task<ICollection<Course>> GetAllCourse()
         {
-            var data = await _Db.Courses.Include(cs => cs.CourseSchedules).Where(c=>c.IsDeleted==false).ToListAsync();
+            var data = await _Db.Courses.Include(cs => cs.CourseSchedules).Where(c => c.IsDeleted == false)
+             .ToListAsync();
             return data;
         }
 
+
         public async Task<Course> GetCourseById(Guid CourseId)
         {
-            var data = await _Db.Courses.Include(cs => cs.CourseSchedules).SingleOrDefaultAsync(c=>c.Id==CourseId && c.IsDeleted==false);
+            var data = await _Db.Courses.SingleOrDefaultAsync(c=>c.Id==CourseId && c.IsDeleted==false)
+                 
             return data;
         }
         public async Task<Course> UpdateCourse(Course course)
