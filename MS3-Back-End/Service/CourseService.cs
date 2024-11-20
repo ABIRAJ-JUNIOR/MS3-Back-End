@@ -144,10 +144,12 @@ namespace MS3_Back_End.Service
         public async Task<CourseResponseDTO> GetCourseById(Guid CourseId)
         {
             var data = await _courseRepository.GetCourseById(CourseId);
+
             if (data == null)
             {
-                throw new Exception("Course Not Found");
+                throw new Exception("course not found");  
             }
+
             var CourseResponse = new CourseResponseDTO
             {
                 Id = data.Id,
@@ -159,7 +161,7 @@ namespace MS3_Back_End.Service
                 ImagePath = data.ImagePath,
                 CreatedDate = data.CreatedDate,
                 UpdatedDate = data.UpdatedDate,
-                Shedules = data.CourseSchedules != null ? data.CourseSchedules.Select(cs => new CourseSheduleResponseDTO()
+                Shedules = data.CourseSchedules?.Select(cs => new CourseSheduleResponseDTO()
                 {
                     Id = cs.Id,
                     CourseId = cs.CourseId,
@@ -173,7 +175,7 @@ namespace MS3_Back_End.Service
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
                     ScheduleStatus = cs.ScheduleStatus
-                }).ToList() : null,
+                }).ToList(), 
                 Feedbacks = data.Feedbacks?.Select(fb => new FeedbacksResponceDTO()
                 {
                     Id = fb.Id,
@@ -182,25 +184,13 @@ namespace MS3_Back_End.Service
                     FeedBackDate = fb.FeedBackDate,
                     StudentId = fb.StudentId,
                     CourseId = fb.CourseId
-                }).ToList(),
-                Assessment = data.Assessments?.Select(a => new AssessmentResponseDTO()
-                {
-                    Id = a.Id,
-                    CourseId = a.CourseId,
-                    AssessmentType = a.AssessmentType,
-                    StartDate = a.StartDate,
-                    EndDate = a.EndDate,
-                    TotalMarks = a.TotalMarks,
-                    PassMarks = a.PassMarks,
-                    CreatedDate = a.CreatedDate,
-                    UpdateDate = a.UpdateDate,
-                    Status = a.Status
                 }).ToList()
             };
+
             return CourseResponse;
         }
 
-       
+
         public async Task<CourseResponseDTO> UpdateCourse(UpdateCourseRequestDTO course)
         {
           
@@ -326,19 +316,6 @@ namespace MS3_Back_End.Service
                     FeedBackDate = fb.FeedBackDate,
                     StudentId = fb.StudentId,
                     CourseId = fb.CourseId
-                }).ToList(),
-                Assessment = item.Assessments?.Select(a => new AssessmentResponseDTO()
-                {
-                    Id = a.Id,
-                    CourseId = a.CourseId,
-                    AssessmentType = a.AssessmentType,
-                    StartDate = a.StartDate,
-                    EndDate = a.EndDate,
-                    TotalMarks = a.TotalMarks,
-                    PassMarks = a.PassMarks,
-                    CreatedDate = a.CreatedDate,
-                    UpdateDate = a.UpdateDate,
-                    Status = a.Status
                 }).ToList()
             }).ToList();
 
