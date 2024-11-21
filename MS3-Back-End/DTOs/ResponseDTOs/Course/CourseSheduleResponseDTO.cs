@@ -2,7 +2,7 @@
 
 namespace MS3_Back_End.DTOs.ResponseDTOs.Course
 {
-    public class CourseSheduleResponseDTO
+    public class CourseScheduleResponseDTO
     {
         public Guid Id { get; set; }
         public Guid CourseId { get;  set; }

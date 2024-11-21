@@ -8,17 +8,17 @@ namespace MS3_Back_End.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CourseSheduleController : ControllerBase
+    public class CourseScheduleController : ControllerBase
     {
-        private readonly ICourseSheduleService _courseScheduleService;
+        private readonly ICourseScheduleService _courseScheduleService;
 
-        public CourseSheduleController(ICourseSheduleService courseScheduleService)
+        public CourseScheduleController(ICourseScheduleService courseScheduleService)
         {
             _courseScheduleService = courseScheduleService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCourseSchedule(CourseSheduleRequestDTO courseReq)
+        public async Task<IActionResult> AddCourseSchedule(CourseScheduleRequestDTO courseReq)
         {
             if (courseReq == null)
             {
@@ -27,7 +27,7 @@ namespace MS3_Back_End.Controllers
             try
             {
 
-                var response = await _courseScheduleService.AddCourseShedule(courseReq);
+                var response = await _courseScheduleService.AddCourseSchedule(courseReq);
                 return Ok(response);
 
             }catch (Exception ex)
@@ -36,12 +36,12 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("CourseShedule/{id}")]
-        public async Task<IActionResult> GetCourseSheduleById(Guid id)
+        [HttpGet("CourseSchedule/{id}")]
+        public async Task<IActionResult> GetCourseScheduleById(Guid id)
         {
             try
             {
-                var response = await _courseScheduleService.GetCourseSheduleById(id);
+                var response = await _courseScheduleService.GetCourseScheduleById(id);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -51,11 +51,11 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCourseShedule()
+        public async Task<IActionResult> GetAllCourseSchedule()
         {
             try
             {
-                var response = await _courseScheduleService.GetAllCourseShedule();
+                var response = await _courseScheduleService.GetAllCourseSchedule();
                 return Ok(response);
             }
             catch (Exception ex)
@@ -65,7 +65,7 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpGet("searchByLocation")]
-        public async Task<IActionResult> SearchCourseShedule( string searchText)
+        public async Task<IActionResult> SearchCourseSchedule( string searchText)
         {
             if (string.IsNullOrWhiteSpace(searchText))
             {
@@ -74,7 +74,7 @@ namespace MS3_Back_End.Controllers
 
             try
             {
-                var response = await _courseScheduleService.SearchCourseShedule(searchText);
+                var response = await _courseScheduleService.SearchCourseSchedule(searchText);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -84,11 +84,11 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPut("Update")]
-        public async Task<IActionResult> UpdateCourseShedule(UpdateCourseSheduleDTO courseReq)
+        public async Task<IActionResult> UpdateCourseSchedule(UpdateCourseScheduleDTO courseReq)
         {
             try
             {
-                var response = await _courseScheduleService.UpdateCourseShedule(courseReq);
+                var response = await _courseScheduleService.UpdateCourseSchedule(courseReq);
                 return Ok(response);
             }
             catch (Exception ex)

@@ -9,18 +9,18 @@ using MS3_Back_End.Repository;
 
 namespace MS3_Back_End.Service
 {
-    public class CourseSheduleService : ICourseSheduleService
+    public class CourseScheduleService : ICourseScheduleService
     {
-        private readonly ICourseSheduleRepository _courseSheduleRepository;
-        public CourseSheduleService(ICourseSheduleRepository courseSheduleRepository)
+        private readonly ICourseScheduleRepository _courseScheduleRepository;
+        public CourseScheduleService(ICourseScheduleRepository courseScheduleRepository)
         {
-            _courseSheduleRepository = courseSheduleRepository;
+            _courseScheduleRepository = courseScheduleRepository;
         }
 
 
-        public async Task<CourseSheduleResponseDTO> AddCourseShedule(CourseSheduleRequestDTO courseReq)
+        public async Task<CourseScheduleResponseDTO> AddCourseSchedule(CourseScheduleRequestDTO courseReq)
         {
-            var CourseShedule = new CourseSchedule
+            var CourseSchedule = new CourseSchedule
             {
                 CourseId = courseReq.CourseId,
                 StartDate = courseReq.StartDate,
@@ -36,9 +36,9 @@ namespace MS3_Back_End.Service
 
             };
 
-            var data = await _courseSheduleRepository.AddCourseShedule(CourseShedule);
+            var data = await _courseScheduleRepository.AddCourseSchedule(CourseSchedule);
 
-            var CourseResponse = new CourseSheduleResponseDTO
+            var CourseResponse = new CourseScheduleResponseDTO
             {
                 Id = data.Id,
                 CourseId = data.CourseId,
@@ -59,15 +59,15 @@ namespace MS3_Back_End.Service
 
         }
 
-        public async Task<ICollection<CourseSheduleResponseDTO>> SearchCourseShedule(string SearchText)
+        public async Task<ICollection<CourseScheduleResponseDTO>> SearchCourseSchedule(string SearchText)
         {
-            var data = await _courseSheduleRepository.SearchSheduleLocation(SearchText);
+            var data = await _courseScheduleRepository.SearchScheduleLocation(SearchText);
             if (data == null)
             {
                 throw new Exception("Search Not Found");
             }
 
-            var CourseResponseList = data.Select(item => new CourseSheduleResponseDTO()
+            var CourseResponseList = data.Select(item => new CourseScheduleResponseDTO()
             {
                 Id = item.Id,
                 CourseId = item.CourseId,
@@ -87,14 +87,14 @@ namespace MS3_Back_End.Service
 
         }
 
-        public async Task<ICollection<CourseSheduleResponseDTO>> GetAllCourseShedule()
+        public async Task<ICollection<CourseScheduleResponseDTO>> GetAllCourseSchedule()
         {
-            var data = await _courseSheduleRepository.GetAllCourseShedule();
+            var data = await _courseScheduleRepository.GetAllCourseSchedule();
             if (data == null)
             {
                 throw new Exception("Courses Not Available");
             }
-            var CourseResponseList = data.Select(item => new CourseSheduleResponseDTO()
+            var CourseResponseList = data.Select(item => new CourseScheduleResponseDTO()
             {
                 Id = item.Id,
                 CourseId = item.CourseId,
@@ -114,14 +114,14 @@ namespace MS3_Back_End.Service
         }
 
 
-        public async Task<CourseSheduleResponseDTO> GetCourseSheduleById(Guid id)
+        public async Task<CourseScheduleResponseDTO> GetCourseScheduleById(Guid id)
         {
-            var data = await _courseSheduleRepository.GetCourseSheduleById(id);
+            var data = await _courseScheduleRepository.GetCourseScheduleById(id);
             if (data == null)
             {
                 throw new Exception("Course Not Found");
             }
-            var CourseResponse = new CourseSheduleResponseDTO
+            var CourseResponse = new CourseScheduleResponseDTO
             {
                 Id = data.Id,
                 CourseId = data.CourseId,
@@ -141,13 +141,13 @@ namespace MS3_Back_End.Service
         }
 
 
-        public async Task<CourseSheduleResponseDTO> UpdateCourseShedule(UpdateCourseSheduleDTO courseReq)
+        public async Task<CourseScheduleResponseDTO> UpdateCourseSchedule(UpdateCourseScheduleDTO courseReq)
         {
 
-            var getData = await _courseSheduleRepository.GetCourseSheduleById(courseReq.Id);
+            var getData = await _courseScheduleRepository.GetCourseScheduleById(courseReq.Id);
             if (getData == null)
             {
-                throw new Exception("Course Shedule not found");
+                throw new Exception("Course Schedule not found");
             }
 
             getData.CourseId = courseReq.CourseId;
@@ -161,9 +161,9 @@ namespace MS3_Back_End.Service
             getData.UpdatedDate = DateTime.Now;
 
 
-            var data = await _courseSheduleRepository.UpdateCourseShedule(getData);
+            var data = await _courseScheduleRepository.UpdateCourseSchedule(getData);
 
-            var CourseResponse = new CourseSheduleResponseDTO
+            var CourseResponse = new CourseScheduleResponseDTO
             {
                 Id = data.Id,
                 CourseId = data.CourseId,
@@ -184,11 +184,11 @@ namespace MS3_Back_End.Service
 
         }
 
-        public async Task<PaginationResponseDTO<CourseSheduleResponseDTO>> GetPaginatedCoursesSchedules(int pageNumber, int pageSize)
+        public async Task<PaginationResponseDTO<CourseScheduleResponseDTO>> GetPaginatedCoursesSchedules(int pageNumber, int pageSize)
         {
-            var allSchedules = await _courseSheduleRepository.GetPaginatedCoursesSchedules(pageNumber, pageSize);
+            var allSchedules = await _courseScheduleRepository.GetPaginatedCoursesSchedules(pageNumber, pageSize);
 
-            var courseScheduleResponse = allSchedules.Select(cs => new CourseSheduleResponseDTO
+            var courseScheduleResponse = allSchedules.Select(cs => new CourseScheduleResponseDTO
             {
                 Id = cs.Id,
                 CourseId = cs.CourseId,
@@ -218,7 +218,7 @@ namespace MS3_Back_End.Service
                 }
             }).ToList();
 
-            var paginationResponseDto = new PaginationResponseDTO<CourseSheduleResponseDTO>
+            var paginationResponseDto = new PaginationResponseDTO<CourseScheduleResponseDTO>
             {
                 Items = courseScheduleResponse,
                 CurrentPage = pageNumber,

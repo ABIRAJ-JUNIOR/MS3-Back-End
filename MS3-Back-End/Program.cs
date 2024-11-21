@@ -37,9 +37,9 @@ namespace MS3_Back_End
             builder.Services.AddScoped<ICourseRepository, CourseRepositoy>();
             builder.Services.AddScoped<ICourseService,CourseService>();
 
-            //CourseShedule
-            builder.Services.AddScoped<ICourseSheduleRepository,CourseSheduleRepository>();
-            builder.Services.AddScoped<ICourseSheduleService,CourseSheduleService>();
+            //CourseSchedule
+            builder.Services.AddScoped<ICourseScheduleRepository,CourseScheduleRepository>();
+            builder.Services.AddScoped<ICourseScheduleService,CourseScheduleService>();
           
             //ContactUs
             builder.Services.AddScoped<IContactUsRepository, ContactUsRepository>();

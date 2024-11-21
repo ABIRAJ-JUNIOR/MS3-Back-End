@@ -346,7 +346,7 @@ namespace MS3_Back_End.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CourseSheduleId")
+                    b.Property<Guid>("CourseScheduleId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("EnrollmentDate")
@@ -363,7 +363,7 @@ namespace MS3_Back_End.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseSheduleId");
+                    b.HasIndex("CourseScheduleId");
 
                     b.HasIndex("StudentId");
 
@@ -664,9 +664,9 @@ namespace MS3_Back_End.Migrations
 
             modelBuilder.Entity("MS3_Back_End.Entities.Enrollment", b =>
                 {
-                    b.HasOne("MS3_Back_End.Entities.CourseSchedule", "CourseShedule")
+                    b.HasOne("MS3_Back_End.Entities.CourseSchedule", "CourseSchedule")
                         .WithMany("Enrollments")
-                        .HasForeignKey("CourseSheduleId")
+                        .HasForeignKey("CourseScheduleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -676,7 +676,7 @@ namespace MS3_Back_End.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CourseShedule");
+                    b.Navigation("CourseSchedule");
 
                     b.Navigation("Student");
                 });

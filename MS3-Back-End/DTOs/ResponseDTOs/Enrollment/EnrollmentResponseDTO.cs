@@ -12,9 +12,9 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Enrollment
         public bool IsActive { get; set; }
 
         public Guid StudentId { get; set; }
-        public Guid CourseSheduleId { get; set; }
+        public Guid CourseScheduleId { get; set; }
 
         public ICollection<PaymentResponseDTO>? PaymentResponse { get; set; }
-        public CourseSheduleResponseDTO? CourseSheduleResponse { get; set; } 
+        public CourseScheduleResponseDTO? CourseScheduleResponse { get; set; } 
     }
 }

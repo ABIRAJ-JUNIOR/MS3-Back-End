@@ -8,11 +8,11 @@
         public bool IsActive { get; set; }
 
         public Guid StudentId { get; set; }
-        public Guid CourseSheduleId { get; set; }
+        public Guid CourseScheduleId { get; set; }
 
         //Reference
         public Student Student { get; set; } = new Student();
-        public CourseSchedule CourseShedule { get; set; } = new CourseSchedule();
+        public CourseSchedule CourseSchedule { get; set; } = new CourseSchedule();
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
     }

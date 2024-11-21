@@ -81,7 +81,7 @@ namespace MS3_Back_End.Service
                 ImagePath = item.ImagePath,
                 CreatedDate = item.CreatedDate,
                 UpdatedDate = item.UpdatedDate,
-                Shedules = item.CourseSchedules != null ? item.CourseSchedules.Select(cs => new CourseSheduleResponseDTO()
+                Schedules = item.CourseSchedules != null ? item.CourseSchedules.Select(cs => new CourseScheduleResponseDTO()
                 {
                     Id = cs.Id,
                     CourseId = cs.CourseId,
@@ -121,7 +121,7 @@ namespace MS3_Back_End.Service
                 ImagePath = course.ImagePath,
                 CreatedDate = course.CreatedDate,
                 UpdatedDate = course.UpdatedDate,
-                Shedules = course.CourseSchedules != null ? course.CourseSchedules.Select(cs => new CourseSheduleResponseDTO()
+                Schedules = course.CourseSchedules != null ? course.CourseSchedules.Select(cs => new CourseScheduleResponseDTO()
                 {
                     Id = cs.Id,
                     CourseId = cs.CourseId,
@@ -172,7 +172,7 @@ namespace MS3_Back_End.Service
                 ImagePath = data.ImagePath,
                 CreatedDate = data.CreatedDate,
                 UpdatedDate = data.UpdatedDate,
-                Shedules = data.CourseSchedules?.Select(cs => new CourseSheduleResponseDTO()
+                Schedules = data.CourseSchedules?.Select(cs => new CourseScheduleResponseDTO()
                 {
                     Id = cs.Id,
                     CourseId = cs.CourseId,
@@ -305,7 +305,7 @@ namespace MS3_Back_End.Service
                 CreatedDate = course.CreatedDate,
                 UpdatedDate = course.UpdatedDate,
 
-                Shedules = course.CourseSchedules?.Select(cs => new CourseSheduleResponseDTO
+                Schedules = course.CourseSchedules?.Select(cs => new CourseScheduleResponseDTO
                 {
                     Id = cs.Id,
                     CourseId = cs.CourseId,
@@ -319,7 +319,7 @@ namespace MS3_Back_End.Service
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
                     ScheduleStatus = ((ScheduleStatus)cs.ScheduleStatus).ToString()
-                }).ToList() ?? new List<CourseSheduleResponseDTO>(),  
+                }).ToList() ?? new List<CourseScheduleResponseDTO>(),  
 
                 Feedbacks = course.Feedbacks?.Select(fb => new FeedbacksResponceDTO
                 {

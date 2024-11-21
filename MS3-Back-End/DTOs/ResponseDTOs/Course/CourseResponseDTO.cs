@@ -18,7 +18,7 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Course
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
 
-        public ICollection<CourseSheduleResponseDTO>? Shedules { get; set; }
+        public ICollection<CourseScheduleResponseDTO>? Schedules { get; set; }
         public ICollection<FeedbacksResponceDTO>? Feedbacks { get; set; }
     }
 }

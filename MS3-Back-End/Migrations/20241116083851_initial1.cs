@@ -363,14 +363,14 @@ namespace MS3_Back_End.Migrations
                     PaymentStatus = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CourseSheduleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    CourseScheduleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Enrollments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Enrollments_CourseSchedules_CourseSheduleId",
-                        column: x => x.CourseSheduleId,
+                        name: "FK_Enrollments_CourseSchedules_CourseScheduleId",
+                        column: x => x.CourseScheduleId,
                         principalTable: "CourseSchedules",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -433,9 +433,9 @@ namespace MS3_Back_End.Migrations
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollments_CourseSheduleId",
+                name: "IX_Enrollments_CourseScheduleId",
                 table: "Enrollments",
-                column: "CourseSheduleId");
+                column: "CourseScheduleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Enrollments_StudentId",
