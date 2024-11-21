@@ -7,6 +7,7 @@ using MS3_Back_End.DTOs.ResponseDTOs;
 using MS3_Back_End.DTOs.ResponseDTOs.Admin;
 using MS3_Back_End.DTOs.ResponseDTOs.Assessment;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
+using MS3_Back_End.DTOs.ResponseDTOs.FeedBack;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
@@ -110,17 +111,17 @@ namespace MS3_Back_End.Service
 
             var CourseResponse = data.Select(course => new CourseResponseDTO
             {
-                Id = item.Id,
-                CourseCategoryId = item.CourseCategoryId,
-                CourseName = item.CourseName,
-                Level = ((CourseLevel)item.Level).ToString(),
-                CourseFee = item.CourseFee,
-                Description = item.Description,
-                Prerequisites = item.Prerequisites,
-                ImagePath = item.ImagePath,
-                CreatedDate = item.CreatedDate,
-                UpdatedDate = item.UpdatedDate,
-                Shedules = item.CourseSchedules != null ? item.CourseSchedules.Select(cs => new CourseSheduleResponseDTO()
+                Id = course.Id,
+                CourseCategoryId = course.CourseCategoryId,
+                CourseName = course.CourseName,
+                Level = ((CourseLevel)course.Level).ToString(),
+                CourseFee = course.CourseFee,
+                Description = course.Description,
+                Prerequisites = course.Prerequisites,
+                ImagePath = course.ImagePath,
+                CreatedDate = course.CreatedDate,
+                UpdatedDate = course.UpdatedDate,
+                Shedules = course.CourseSchedules != null ? course.CourseSchedules.Select(cs => new CourseSheduleResponseDTO()
                 {
                     Id = cs.Id,
                     CourseId = cs.CourseId,
@@ -134,8 +135,7 @@ namespace MS3_Back_End.Service
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
                     ScheduleStatus = ((ScheduleStatus)cs.ScheduleStatus).ToString()
-                }).ToList(),
-
+                }).ToList() : null,
                 Feedbacks = course.Feedbacks?.Select(fb => new FeedbacksResponceDTO
                 {
                     Id = fb.Id,
