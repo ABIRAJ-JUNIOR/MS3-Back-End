@@ -1,8 +1,11 @@
 ﻿using Microsoft.CodeAnalysis;
+using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
+using MS3_Back_End.DTOs.ResponseDTOs.FeedBack;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
+using MS3_Back_End.Repository;
 
 namespace MS3_Back_End.Service
 {
@@ -79,7 +82,7 @@ namespace MS3_Back_End.Service
                 UpdatedDate = item.UpdatedDate,
                 ScheduleStatus = ((ScheduleStatus)item.ScheduleStatus).ToString(),
             }).ToList();
-            
+
             return CourseResponseList;
 
         }
@@ -142,7 +145,7 @@ namespace MS3_Back_End.Service
         {
 
             var getData = await _courseSheduleRepository.GetCourseSheduleById(courseReq.Id);
-            if(getData == null)
+            if (getData == null)
             {
                 throw new Exception("Course Shedule not found");
             }
@@ -179,6 +182,52 @@ namespace MS3_Back_End.Service
 
             return CourseResponse;
 
+        }
+
+        public async Task<PaginationResponseDTO<CourseSheduleResponseDTO>> GetPaginatedCoursesSchedules(int pageNumber, int pageSize)
+        {
+            var allSchedules = await _courseSheduleRepository.GetPaginatedCoursesSchedules(pageNumber, pageSize);
+
+            var courseScheduleResponse = allSchedules.Select(cs => new CourseSheduleResponseDTO
+            {
+                Id = cs.Id,
+                CourseId = cs.CourseId,
+                StartDate = cs.StartDate,
+                EndDate = cs.EndDate,
+                Duration = cs.Duration,
+                Time = cs.Time,
+                Location = cs.Location,
+                MaxStudents = cs.MaxStudents,
+                EnrollCount = cs.EnrollCount,
+                CreatedDate = cs.CreatedDate,
+                UpdatedDate = cs.UpdatedDate,
+                ScheduleStatus = ((ScheduleStatus)cs.ScheduleStatus).ToString(),
+
+                CourseResponse = new CourseResponseDTO()
+                {
+                    Id = cs.Course.Id,
+                    CourseCategoryId = cs.Course.CourseCategoryId,
+                    CourseName = cs.Course.CourseName,
+                    Level = ((CourseLevel)cs.Course.Level).ToString(),
+                    CourseFee = cs.Course.CourseFee,
+                    Description = cs.Course.Description,
+                    Prerequisites = cs.Course.Prerequisites,
+                    ImagePath = cs.Course.ImagePath,
+                    CreatedDate = cs.Course.CreatedDate,
+                    UpdatedDate = cs.Course.UpdatedDate,
+                }
+            }).ToList();
+
+            var paginationResponseDto = new PaginationResponseDTO<CourseSheduleResponseDTO>
+            {
+                Items = courseScheduleResponse,
+                CurrentPage = pageNumber,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling(allSchedules.Count / (double)pageSize),
+                TotalItem = allSchedules.Count,
+            };
+
+            return paginationResponseDto;
         }
     }
 }
