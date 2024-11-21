@@ -48,7 +48,7 @@ namespace MS3_Back_End.Service
                         PassMarks = assessmentData.PassMarks,
                         CreatedDate = assessmentData.CreatedDate,
                         UpdateDate = assessmentData.UpdateDate,
-                        Status = assessmentData.Status,
+                        Status = ((AssessmentStatus)assessmentData.Status).ToString(),
                     };
 
                     return response;
@@ -83,7 +83,7 @@ namespace MS3_Back_End.Service
                     PassMarks = item.PassMarks,
                     CreatedDate = item.CreatedDate,
                     UpdateDate = item.UpdateDate,
-                    Status = item.Status,
+                    Status = ((AssessmentStatus)item.Status).ToString(),
                 };
                 responseList.Add(responseObj);
             }
@@ -120,7 +120,7 @@ namespace MS3_Back_End.Service
                 PassMarks = updatedData.PassMarks,
                 CreatedDate = updatedData.CreatedDate,
                 UpdateDate = updatedData.UpdateDate,
-                Status = updatedData.Status,
+                Status = ((AssessmentStatus)updatedData.Status).ToString(),
             };
 
             return response;

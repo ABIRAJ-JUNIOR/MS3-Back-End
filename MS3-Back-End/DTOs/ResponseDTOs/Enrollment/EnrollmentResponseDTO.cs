@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DTOs.ResponseDTOs.Payment;
+﻿using MS3_Back_End.DTOs.ResponseDTOs.Course;
+using MS3_Back_End.DTOs.ResponseDTOs.Payment;
 using MS3_Back_End.Entities;
 
 namespace MS3_Back_End.DTOs.ResponseDTOs.Enrollment
@@ -14,5 +15,6 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Enrollment
         public Guid CourseSheduleId { get; set; }
 
         public ICollection<PaymentResponseDTO>? PaymentResponse { get; set; }
+        public CourseSheduleResponseDTO? CourseSheduleResponse { get; set; } 
     }
 }

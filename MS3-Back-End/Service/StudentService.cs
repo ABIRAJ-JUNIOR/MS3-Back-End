@@ -6,6 +6,7 @@ using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.DTOs.RequestDTOs.Student;
 using MS3_Back_End.DTOs.ResponseDTOs.Address;
+using MS3_Back_End.DTOs.ResponseDTOs.Assessment;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Enrollment;
 using MS3_Back_End.DTOs.ResponseDTOs.Payment;
@@ -246,18 +247,59 @@ namespace MS3_Back_End.Service
                         ImagePath = payment.ImagePath,
                         InstallmentNumber = payment.InstallmentNumber,
                         EnrollmentId = payment.EnrollmentId
-                    }).ToList() : null
+                    }).ToList() : null,
+                    CourseSheduleResponse = new CourseSheduleResponseDTO()
+                    {
+                        Id = enroll.CourseShedule.Id,
+                        CourseId = enroll.CourseShedule.CourseId,
+                        StartDate = enroll.CourseShedule.StartDate,
+                        EndDate = enroll.CourseShedule.EndDate,
+                        Duration = enroll.CourseShedule.Duration,
+                        Time = enroll.CourseShedule.Time,
+                        Location = enroll.CourseShedule.Location,
+                        MaxStudents = enroll.CourseShedule.MaxStudents,
+                        EnrollCount = enroll.CourseShedule.EnrollCount,
+                        CreatedDate = enroll.CourseShedule.CreatedDate,
+                        UpdatedDate = enroll.CourseShedule.UpdatedDate,
+                        ScheduleStatus = ((ScheduleStatus)enroll.CourseShedule.ScheduleStatus).ToString(),
+                        CourseResponse = new CourseResponseDTO()
+                        {
+                            Id = enroll.CourseShedule.Course.Id,
+                            CourseCategoryId = enroll.CourseShedule.Course.CourseCategoryId,
+                            CourseName = enroll.CourseShedule.Course.CourseName,
+                            Level = ((CourseLevel)enroll.CourseShedule.Course.Level).ToString(),
+                            CourseFee = enroll.CourseShedule.Course.CourseFee,
+                            Description = enroll.CourseShedule.Course.Description,
+                            Prerequisites = enroll.CourseShedule.Course.Prerequisites,
+                            ImagePath = enroll.CourseShedule.Course.ImagePath,
+                            CreatedDate = enroll.CourseShedule.Course.CreatedDate,
+                            UpdatedDate = enroll.CourseShedule.Course.UpdatedDate,
+                        }
+                    }
                 }).ToList() : null,
-                StudentAssessments = item.Assessments != null ? item.Assessments.Select(sa => new StudentAssessmentResponseDTO()
+                StudentAssessments = item.StudentAssessments != null ? item.StudentAssessments.Select(sa => new StudentAssessmentResponseDTO()
                 {
                     Id = sa.Id,
                     MarksObtaines = sa.MarksObtaines,
-                    Grade = sa.Grade,
+                    Grade = sa.Grade != null ? ((Grade)sa.Grade).ToString() : null,
                     FeedBack = sa.FeedBack,
                     DateEvaluated = sa.DateEvaluated,
+                    DateSubmitted = sa.DateSubmitted,
                     StudentAssessmentStatus = ((StudentAssessmentStatus)sa.StudentAssessmentStatus).ToString(),
                     StudentId = sa.StudentId,
-                    AssessmentId = sa.AssessmentId
+                    AssessmentId = sa.AssessmentId,
+                    AssessmentResponse = new AssessmentResponseDTO(){
+                        Id = sa.Assessment.Id,
+                        CourseId = sa.Assessment.CourseId,
+                        AssessmentType = ((AssessmentType)sa.Assessment.AssessmentType).ToString(),
+                        StartDate = sa.Assessment.StartDate,
+                        EndDate = sa.Assessment.EndDate,
+                        TotalMarks = sa.Assessment.TotalMarks,
+                        PassMarks = sa.Assessment.PassMarks,
+                        CreatedDate = sa.Assessment.CreatedDate,
+                        UpdateDate = sa.Assessment.UpdateDate,
+                        Status = ((AssessmentStatus)sa.Assessment.Status).ToString(),
+                    }
                 }).ToList() : null,
             };
 

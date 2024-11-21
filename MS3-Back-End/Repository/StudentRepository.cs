@@ -49,7 +49,9 @@ namespace MS3_Back_End.Repository
                     .ThenInclude(p => p.Payments)
                 .Include(e => e.Enrollments)
                     .ThenInclude(enrollment => enrollment.CourseShedule).ThenInclude(c => c.Course)
-                .Include(a => a.Assessments).SingleOrDefaultAsync(c => c.Id == StudentId && c.IsActive == true);
+                .Include(a => a.StudentAssessments)
+                    .ThenInclude(a => a.Assessment)
+                .SingleOrDefaultAsync(c => c.Id == StudentId && c.IsActive == true);
             return data!;
         }
 

@@ -17,5 +17,7 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Course
         public DateTime UpdatedDate { get; set; }
         public string ScheduleStatus { get; set; } = string.Empty;
 
+        public CourseResponseDTO? CourseResponse { get; set; }
+
     }
 }
