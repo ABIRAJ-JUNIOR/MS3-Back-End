@@ -1,5 +1,5 @@
 ﻿using MS3_Back_End.DTOs.RequestDTOs.Feedbacks;
-using MS3_Back_End.DTOs.ResponseDTOs;
+using MS3_Back_End.DTOs.ResponseDTOs.FeedBack;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;

@@ -7,6 +7,7 @@ using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
 using MS3_Back_End.Repository;
 using System.Data;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MS3_Back_End.Service
 {
@@ -44,7 +45,7 @@ namespace MS3_Back_End.Service
             {
                 Id = data.Id,
                 Message = data.Message,
-                NotificationType = data.NotificationType,
+                NotificationType = ((NotificationType)data.NotificationType).ToString(),
                 DateSent = data.DateSent,
                 StudentId = data.StudentId,
                 IsRead = data.IsRead
@@ -64,7 +65,7 @@ namespace MS3_Back_End.Service
             {
                 Id = message.Id,
                 Message = message.Message,
-                NotificationType = message.NotificationType,
+                NotificationType = ((NotificationType)message.NotificationType).ToString(),
                 DateSent = message.DateSent,
                 StudentId = message.StudentId,
                 IsRead = message.IsRead

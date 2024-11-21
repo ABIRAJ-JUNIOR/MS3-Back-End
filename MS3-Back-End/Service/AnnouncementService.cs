@@ -39,7 +39,7 @@ namespace MS3_Back_End.Service
                 Title = data.Title,
                 DatePosted = data.DatePosted,
                 ExpirationDate = data.ExpirationDate,
-                AudienceType = data.AudienceType,
+                AudienceType = ((AudienceType)data.AudienceType).ToString(),
                 IsActive = data.IsActive
             };
 
@@ -60,7 +60,7 @@ namespace MS3_Back_End.Service
                 Id = item.Id,
                 Title = item.Title,
                 DatePosted = item.DatePosted,
-                AudienceType = item.AudienceType,
+                AudienceType = ((AudienceType)item.AudienceType).ToString(),
                 ExpirationDate = item.ExpirationDate,
                 IsActive = item.IsActive
             }).ToList();
@@ -81,7 +81,7 @@ namespace MS3_Back_End.Service
                 Id = item.Id,
                 Title = item.Title,
                 DatePosted = item.DatePosted,
-                AudienceType = item.AudienceType,
+                AudienceType = ((AudienceType)item.AudienceType).ToString(),
                 ExpirationDate = item.ExpirationDate,
                 IsActive = item.IsActive
             }).ToList();
@@ -102,7 +102,7 @@ namespace MS3_Back_End.Service
                 Id = data.Id,
                 Title = data.Title,
                 DatePosted = data.DatePosted,
-                AudienceType = data.AudienceType,
+                AudienceType = ((AudienceType)data.AudienceType).ToString(),
                 ExpirationDate = data.ExpirationDate,
                 IsActive = data.IsActive
             };
@@ -141,7 +141,7 @@ namespace MS3_Back_End.Service
                 Title = data.Title,
                 DatePosted = data.DatePosted,
                 ExpirationDate = data.ExpirationDate,
-                AudienceType = data.AudienceType,
+                AudienceType = ((AudienceType)data.AudienceType).ToString(),
                 IsActive = data.IsActive
             };
 

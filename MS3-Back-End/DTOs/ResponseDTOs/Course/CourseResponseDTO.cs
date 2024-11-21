@@ -7,7 +7,7 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Course
         public Guid Id { get; set; }
         public Guid CourseCategoryId { get; set; }
         public string CourseName { get; set; } = string.Empty;
-        public CourseLevel Level { get; set; }
+        public string Level { get; set; } = string.Empty;
         public decimal CourseFee { get; set; }
         public string Description { get; set; } = string.Empty;
         public string Prerequisites { get; set; } = string.Empty;

@@ -1,4 +1,4 @@
-﻿namespace MS3_Back_End.DTOs.ResponseDTOs
+﻿namespace MS3_Back_End.DTOs.ResponseDTOs.FeedBack
 {
     public class FeedbacksResponceDTO
     {
