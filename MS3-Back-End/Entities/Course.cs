@@ -19,9 +19,9 @@ namespace MS3_Back_End.Entities
         public Guid CourseCategoryId { get; set; }
 
         //Reference
-        public CourseCategory? CourseCategory { get; set; }
-        public ICollection<CourseSchedule>? CourseSchedules { get; set; }
-        public ICollection<Feedbacks>? Feedbacks { get; set; }
+        public CourseCategory CourseCategory { get; set; } = new CourseCategory();
+        public ICollection<CourseSchedule> CourseSchedules { get; set; } = new List<CourseSchedule>();
+        public ICollection<Feedbacks> Feedbacks { get; set; } = new List<Feedbacks>();
     }
 
     public enum CourseLevel

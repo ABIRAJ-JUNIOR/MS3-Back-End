@@ -17,8 +17,8 @@ namespace MS3_Back_End.Entities
         public Guid AssessmentId { get; set; }
 
         //Reference
-        public Student? Student { get; set; }
-        public Assessment? Assessment { get; set; }
+        public Student Student { get; set; } = new Student();
+        public Assessment Assessment { get; set; } = new Assessment();
 
     }
     public enum StudentAssessmentStatus

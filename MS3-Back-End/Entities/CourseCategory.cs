@@ -10,6 +10,6 @@ namespace MS3_Back_End.Entities
         public string Description { get; set; } = string.Empty;
 
         //Reference
-        public ICollection<Course>? Courses { get; set; }
+        public ICollection<Course> Courses { get; set; } = new List<Course>();
     }
 }

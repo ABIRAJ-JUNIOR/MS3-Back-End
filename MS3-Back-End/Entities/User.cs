@@ -11,7 +11,7 @@ namespace MS3_Back_End.Entities
         public string Password { get; set; } = string.Empty;
 
         //Reference
-        public UserRole? UserRole { get; set; }
+        public UserRole UserRole { get; set; } = new UserRole();
 
     }
 }
