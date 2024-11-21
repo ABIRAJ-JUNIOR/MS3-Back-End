@@ -1,4 +1,6 @@
-﻿using MS3_Back_End.Entities;
+﻿using MS3_Back_End.DTOs.ResponseDTOs.Assessment;
+using MS3_Back_End.DTOs.ResponseDTOs.CourseCategory;
+using MS3_Back_End.Entities;
 
 namespace MS3_Back_End.DTOs.ResponseDTOs.Course
 {
@@ -16,5 +18,6 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Course
         public DateTime UpdatedDate { get; set; }
 
         public ICollection<CourseSheduleResponseDTO>? Shedules { get; set; }
+        public ICollection<FeedbacksResponceDTO>? Feedbacks { get; set; }
     }
 }

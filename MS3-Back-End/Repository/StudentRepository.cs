@@ -15,9 +15,16 @@ namespace MS3_Back_End.Repository
         }
         public async Task<Student> AddStudent(Student StudentReq)
         {
+            try
+            {
                 var data = await _Db.Students.AddAsync(StudentReq);
                 await _Db.SaveChangesAsync();
                 return data.Entity;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("Error occurred while adding the student to the database.", ex);
+            }
         }
 
         public async Task<ICollection<Student>> SearchStudent(string SearchText)
@@ -56,10 +63,12 @@ namespace MS3_Back_End.Repository
 
         public async Task<ICollection<Student>> GetPaginatedStudent(int pageNumber, int pageSize)
         {
-            return await _Db.Students.Include(a => a.Address)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
+            var students = await _Db.Students
+                .Include(s => s.Address)            
+                .Skip((pageNumber - 1) * pageSize)  
+                .Take(pageSize)                     
                 .ToListAsync();
+            return students;
         }
     }
 }
