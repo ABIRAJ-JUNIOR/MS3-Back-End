@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
+using MS3_Back_End.IService;
 using MS3_Back_End.Service;
 
 namespace MS3_Back_End.Controllers
@@ -94,6 +95,21 @@ namespace MS3_Back_End.Controllers
             {
                 return NotFound(ex.Message);
             }
+        }
+
+        [HttpGet("Pagination/{pageNumber}/{pageSize}")]
+        public async Task<IActionResult> GetPaginatedCoursesSchedules(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var result = await _courseScheduleService.GetPaginatedCoursesSchedules(pageNumber, pageSize);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
     }
 }
