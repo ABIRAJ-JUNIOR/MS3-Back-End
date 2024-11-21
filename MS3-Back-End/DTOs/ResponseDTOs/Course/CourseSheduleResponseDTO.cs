@@ -15,7 +15,7 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Course
         public int EnrollCount { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
-        public ScheduleStatus ScheduleStatus { get; set; }
+        public string ScheduleStatus { get; set; } = string.Empty;
 
     }
 }

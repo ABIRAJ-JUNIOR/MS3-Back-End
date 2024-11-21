@@ -29,7 +29,7 @@ namespace MS3_Back_End.Service
                 Grade = sa.Grade,
                 FeedBack = sa.FeedBack,
                 DateEvaluated = sa.DateEvaluated,
-                StudentAssessmentStatus = sa.StudentAssessmentStatus,
+                StudentAssessmentStatus = ((StudentAssessmentStatus)sa.StudentAssessmentStatus).ToString(),
                 StudentId = sa.StudentId,
                 AssessmentId = sa.AssessmentId
             }).ToList();
@@ -47,7 +47,7 @@ namespace MS3_Back_End.Service
                 Grade = sa.Grade,
                 FeedBack = sa.FeedBack,
                 DateEvaluated = sa.DateEvaluated,
-                StudentAssessmentStatus = sa.StudentAssessmentStatus,
+                StudentAssessmentStatus = ((StudentAssessmentStatus)sa.StudentAssessmentStatus).ToString(),
                 StudentId = sa.StudentId,
                 AssessmentId = sa.AssessmentId
             }).ToList();
@@ -65,7 +65,7 @@ namespace MS3_Back_End.Service
                 Grade = sa.Grade,
                 FeedBack = sa.FeedBack,
                 DateEvaluated = sa.DateEvaluated,
-                StudentAssessmentStatus = sa.StudentAssessmentStatus,
+                StudentAssessmentStatus = ((StudentAssessmentStatus)sa.StudentAssessmentStatus).ToString(),
                 StudentId = sa.StudentId,
                 AssessmentId = sa.AssessmentId
             }).ToList();

@@ -234,13 +234,13 @@ namespace MS3_Back_End.Service
                     StudentId = enroll.StudentId,
                     CourseSheduleId = enroll.CourseSheduleId,
                     EnrollmentDate = enroll.EnrollmentDate,
-                    PaymentStatus = enroll.PaymentStatus,
+                    PaymentStatus = ((PaymentStatus)enroll.PaymentStatus).ToString(),
                     IsActive = enroll.IsActive,
                     PaymentResponse = enroll.Payments != null ? enroll.Payments.Select(payment => new PaymentResponseDTO()
                     {
                         Id = payment.Id,
-                        PaymentType = payment.PaymentType,
-                        PaymentMethod = payment.PaymentMethod,
+                        PaymentType = ((PaymentTypes)payment.PaymentType).ToString(),
+                        PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                         AmountPaid = payment.AmountPaid,
                         PaymentDate = payment.PaymentDate,
                         ImagePath = payment.ImagePath,
@@ -255,7 +255,7 @@ namespace MS3_Back_End.Service
                     Grade = sa.Grade,
                     FeedBack = sa.FeedBack,
                     DateEvaluated = sa.DateEvaluated,
-                    StudentAssessmentStatus = sa.StudentAssessmentStatus,
+                    StudentAssessmentStatus = ((StudentAssessmentStatus)sa.StudentAssessmentStatus).ToString(),
                     StudentId = sa.StudentId,
                     AssessmentId = sa.AssessmentId
                 }).ToList() : null,

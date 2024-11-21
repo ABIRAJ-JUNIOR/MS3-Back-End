@@ -47,7 +47,7 @@ namespace MS3_Back_End.Service
                 Id = data.Id,
                 CourseCategoryId = data.CourseCategoryId,
                 CourseName = data.CourseName,
-                Level = data.Level,
+                Level = ((CourseLevel)data.Level).ToString(),
                 CourseFee = data.CourseFee,
                 Description = data.Description,
                 Prerequisites = data.Prerequisites,
@@ -73,7 +73,7 @@ namespace MS3_Back_End.Service
                 Id = item.Id,
                 CourseCategoryId = item.CourseCategoryId,
                 CourseName = item.CourseName,
-                Level = item.Level,
+                Level = ((CourseLevel)item.Level).ToString(),
                 CourseFee = item.CourseFee,
                 Description = item.Description,
                 Prerequisites = item.Prerequisites,
@@ -93,7 +93,7 @@ namespace MS3_Back_End.Service
                     EnrollCount = cs.EnrollCount,
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
-                    ScheduleStatus = cs.ScheduleStatus
+                    ScheduleStatus = ((ScheduleStatus)cs.ScheduleStatus).ToString()
                 }).ToList() : null
             }).ToList();
 
@@ -110,18 +110,17 @@ namespace MS3_Back_End.Service
 
             var CourseResponse = data.Select(course => new CourseResponseDTO
             {
-                Id = course.Id,
-                CourseCategoryId = course.CourseCategoryId,
-                CourseName = course.CourseName,
-                Level = course.Level,
-                CourseFee = course.CourseFee,
-                Description = course.Description,
-                Prerequisites = course.Prerequisites,
-                ImagePath = course.ImagePath,
-                CreatedDate = course.CreatedDate,
-                UpdatedDate = course.UpdatedDate,
-
-                Shedules = course.CourseSchedules?.Select(cs => new CourseSheduleResponseDTO
+                Id = item.Id,
+                CourseCategoryId = item.CourseCategoryId,
+                CourseName = item.CourseName,
+                Level = ((CourseLevel)item.Level).ToString(),
+                CourseFee = item.CourseFee,
+                Description = item.Description,
+                Prerequisites = item.Prerequisites,
+                ImagePath = item.ImagePath,
+                CreatedDate = item.CreatedDate,
+                UpdatedDate = item.UpdatedDate,
+                Shedules = item.CourseSchedules != null ? item.CourseSchedules.Select(cs => new CourseSheduleResponseDTO()
                 {
                     Id = cs.Id,
                     CourseId = cs.CourseId,
@@ -134,7 +133,7 @@ namespace MS3_Back_End.Service
                     EnrollCount = cs.EnrollCount,
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
-                    ScheduleStatus = cs.ScheduleStatus
+                    ScheduleStatus = ((ScheduleStatus)cs.ScheduleStatus).ToString()
                 }).ToList(),
 
                 Feedbacks = course.Feedbacks?.Select(fb => new FeedbacksResponceDTO
@@ -166,6 +165,7 @@ namespace MS3_Back_End.Service
                 Id = data.Id,
                 CourseCategoryId = data.CourseCategoryId,
                 CourseName = data.CourseName,
+                Level = ((CourseLevel)data.Level).ToString(),
                 CourseFee = data.CourseFee,
                 Description = data.Description,
                 Prerequisites = data.Prerequisites,
@@ -185,7 +185,7 @@ namespace MS3_Back_End.Service
                     EnrollCount = cs.EnrollCount,
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
-                    ScheduleStatus = cs.ScheduleStatus
+                    ScheduleStatus = ((ScheduleStatus)cs.ScheduleStatus).ToString()
                 }).ToList(), 
                 Feedbacks = data.Feedbacks?.Select(fb => new FeedbacksResponceDTO()
                 {
@@ -239,7 +239,7 @@ namespace MS3_Back_End.Service
                 Id = data.Id,
                 CourseCategoryId = data.CourseCategoryId,
                 CourseName = data.CourseName,
-                Level = data.Level,
+                Level = ((CourseLevel)data.Level).ToString(),
                 CourseFee = data.CourseFee,
                 Description = data.Description,
                 Prerequisites = data.Prerequisites,
@@ -297,7 +297,7 @@ namespace MS3_Back_End.Service
                 Id = course.Id,
                 CourseCategoryId = course.CourseCategoryId,
                 CourseName = course.CourseName,
-                Level = course.Level,
+                Level = ((CourseLevel)course.Level).ToString(),
                 CourseFee = course.CourseFee,
                 Description = course.Description,
                 Prerequisites = course.Prerequisites,
@@ -318,7 +318,7 @@ namespace MS3_Back_End.Service
                     EnrollCount = cs.EnrollCount,
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
-                    ScheduleStatus = cs.ScheduleStatus
+                    ScheduleStatus = ((ScheduleStatus)cs.ScheduleStatus).ToString()
                 }).ToList() ?? new List<CourseSheduleResponseDTO>(),  
 
                 Feedbacks = course.Feedbacks?.Select(fb => new FeedbacksResponceDTO

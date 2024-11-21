@@ -41,7 +41,7 @@ namespace MS3_Back_End.Service
                     {
                         Id = assessmentData.Id,
                         CourseId = assessmentData.CourseId,
-                        AssessmentType = assessmentData.AssessmentType,
+                        AssessmentType = ((AssessmentType)assessmentData.AssessmentType).ToString(),
                         StartDate = assessmentData.StartDate,
                         EndDate = assessmentData.EndDate,
                         TotalMarks = assessmentData.TotalMarks,
@@ -76,7 +76,7 @@ namespace MS3_Back_End.Service
                 {
                     Id = item.Id,
                     CourseId = item.CourseId,
-                    AssessmentType = item.AssessmentType,
+                    AssessmentType = ((AssessmentType)item.AssessmentType).ToString(),
                     StartDate = item.StartDate,
                     EndDate = item.EndDate,
                     TotalMarks = item.TotalMarks,
@@ -113,7 +113,7 @@ namespace MS3_Back_End.Service
             {
                 Id = updatedData.Id,
                 CourseId = updatedData.CourseId,
-                AssessmentType = updatedData.AssessmentType,
+                AssessmentType = ((AssessmentType)updatedData.AssessmentType).ToString(),
                 StartDate = updatedData.StartDate,
                 EndDate = updatedData.EndDate,
                 TotalMarks = updatedData.TotalMarks,
