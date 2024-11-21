@@ -25,7 +25,7 @@ namespace MS3_Back_End.Service
             var response = studentAssessments.Select(sa => new StudentAssessmentResponseDTO()
             {
                 Id = sa.Id,
-                MarksObtaines = sa.MarksObtaines,
+                MarksObtaines = sa.MarksObtaines ,
                 Grade = sa.Grade,
                 FeedBack = sa.FeedBack,
                 DateEvaluated = sa.DateEvaluated,
