@@ -7,7 +7,7 @@ namespace MS3_Back_End.DTOs.RequestDTOs.Ènrollment
     public class EnrollmentRequestDTO
     {
         public Guid StudentId { get; set; }
-        public Guid CourseSheduleId { get; set; }
+        public Guid CourseScheduleId { get; set; }
 
         public EnrollmentPaymentRequestDTO PaymentRequest { get; set; } = new EnrollmentPaymentRequestDTO();
     }

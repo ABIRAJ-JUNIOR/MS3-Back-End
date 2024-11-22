@@ -16,7 +16,7 @@
     public enum NotificationType
     {
         PaymentReminder = 1,
-        SheduleUpdate = 2,
+        ScheduleUpdate = 2,
         CourseOffering = 3,
     }
 }

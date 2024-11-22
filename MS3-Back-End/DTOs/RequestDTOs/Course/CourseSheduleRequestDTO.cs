@@ -2,7 +2,7 @@
 
 namespace MS3_Back_End.DTOs.RequestDTOs.Course
 {
-    public class CourseSheduleRequestDTO
+    public class CourseScheduleRequestDTO
     {
         public Guid CourseId { get; set; }
         public DateTime StartDate { get; set; } = DateTime.MinValue;

@@ -25,11 +25,12 @@ namespace MS3_Back_End.Service
             var response = studentAssessments.Select(sa => new StudentAssessmentResponseDTO()
             {
                 Id = sa.Id,
-                MarksObtaines = sa.MarksObtaines,
-                Grade = sa.Grade,
+                MarksObtaines = sa.MarksObtaines ,
+                Grade = sa.Grade != null ? ((Grade)sa.Grade).ToString() : null,
                 FeedBack = sa.FeedBack,
                 DateEvaluated = sa.DateEvaluated,
-                StudentAssessmentStatus = sa.StudentAssessmentStatus,
+                DateSubmitted = sa.DateSubmitted,
+                StudentAssessmentStatus = ((StudentAssessmentStatus)sa.StudentAssessmentStatus).ToString(),
                 StudentId = sa.StudentId,
                 AssessmentId = sa.AssessmentId
             }).ToList();
@@ -44,10 +45,11 @@ namespace MS3_Back_End.Service
             {
                 Id = sa.Id,
                 MarksObtaines = sa.MarksObtaines,
-                Grade = sa.Grade,
+                Grade = sa.Grade != null ? ((Grade)sa.Grade).ToString() : null,
                 FeedBack = sa.FeedBack,
                 DateEvaluated = sa.DateEvaluated,
-                StudentAssessmentStatus = sa.StudentAssessmentStatus,
+                DateSubmitted = sa.DateSubmitted,
+                StudentAssessmentStatus = ((StudentAssessmentStatus)sa.StudentAssessmentStatus).ToString(),
                 StudentId = sa.StudentId,
                 AssessmentId = sa.AssessmentId
             }).ToList();
@@ -62,10 +64,11 @@ namespace MS3_Back_End.Service
             {
                 Id = sa.Id,
                 MarksObtaines = sa.MarksObtaines,
-                Grade = sa.Grade,
+                Grade = sa.Grade != null ? ((Grade)sa.Grade).ToString() : null,
                 FeedBack = sa.FeedBack,
                 DateEvaluated = sa.DateEvaluated,
-                StudentAssessmentStatus = sa.StudentAssessmentStatus,
+                DateSubmitted = sa.DateSubmitted,
+                StudentAssessmentStatus = ((StudentAssessmentStatus)sa.StudentAssessmentStatus).ToString(),
                 StudentId = sa.StudentId,
                 AssessmentId = sa.AssessmentId
             }).ToList();

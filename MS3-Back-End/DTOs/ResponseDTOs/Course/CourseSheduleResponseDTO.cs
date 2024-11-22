@@ -2,7 +2,7 @@
 
 namespace MS3_Back_End.DTOs.ResponseDTOs.Course
 {
-    public class CourseSheduleResponseDTO
+    public class CourseScheduleResponseDTO
     {
         public Guid Id { get; set; }
         public Guid CourseId { get;  set; }
@@ -15,7 +15,9 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Course
         public int EnrollCount { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
-        public ScheduleStatus ScheduleStatus { get; set; }
+        public string ScheduleStatus { get; set; } = string.Empty;
+
+        public CourseResponseDTO? CourseResponse { get; set; }
 
     }
 }

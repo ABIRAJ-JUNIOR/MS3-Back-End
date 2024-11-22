@@ -13,25 +13,25 @@ namespace MS3_Back_End.Service
     public class EnrollmentService :IEnrollementService
     {
         private readonly IEnrollmentRepository _enrollmentRepository;
-        private readonly ICourseSheduleRepository _courseSheduleRepository;
+        private readonly ICourseScheduleRepository _courseScheduleRepository;
         private readonly IPaymentService _paymentService;
 
-        public EnrollmentService(IEnrollmentRepository enrollmentRepository, ICourseSheduleRepository courseSheduleRepository, IPaymentService paymentService)
+        public EnrollmentService(IEnrollmentRepository enrollmentRepository, ICourseScheduleRepository courseScheduleRepository, IPaymentService paymentService)
         {
             _enrollmentRepository = enrollmentRepository;
-            _courseSheduleRepository = courseSheduleRepository;
+            _courseScheduleRepository = courseScheduleRepository;
             _paymentService = paymentService;
         }
 
         public async Task<EnrollmentResponseDTO> AddEnrollment(EnrollmentRequestDTO EnrollmentReq)
         {
-            var courseSheduleData = await _courseSheduleRepository.GetCourseSheduleById(EnrollmentReq.CourseSheduleId);
-            if(courseSheduleData == null)
+            var courseScheduleData = await _courseScheduleRepository.GetCourseScheduleById(EnrollmentReq.CourseScheduleId);
+            if(courseScheduleData == null)
             {
-                throw new Exception("CourseShedule not found");
+                throw new Exception("CourseSchedule not found");
             }
 
-            if(courseSheduleData.MaxStudents == courseSheduleData.EnrollCount)
+            if(courseScheduleData.MaxStudents == courseScheduleData.EnrollCount)
             {
                 throw new Exception("Reach limit");
             }
@@ -41,8 +41,8 @@ namespace MS3_Back_End.Service
                 throw new Exception("Payment required");
             }
 
-            courseSheduleData.EnrollCount = courseSheduleData.EnrollCount + 1;
-            await _courseSheduleRepository.UpdateCourseShedule(courseSheduleData);
+            courseScheduleData.EnrollCount = courseScheduleData.EnrollCount + 1;
+            await _courseScheduleRepository.UpdateCourseSchedule(courseScheduleData);
 
             var Payment = new List<Payment>()
             {
@@ -60,7 +60,7 @@ namespace MS3_Back_End.Service
             var Enrollment = new Enrollment()
             {
                 StudentId = EnrollmentReq.StudentId,
-                CourseSheduleId = EnrollmentReq.CourseSheduleId,
+                CourseScheduleId = EnrollmentReq.CourseScheduleId,
                 EnrollmentDate = DateTime.Now,
                 PaymentStatus = EnrollmentReq.PaymentRequest.PaymentType == PaymentTypes.FullPayment ? PaymentStatus.Paid : PaymentStatus.InProcess,
                 IsActive = true,
@@ -73,9 +73,9 @@ namespace MS3_Back_End.Service
             {
                 Id=data.Id,
                 StudentId = data.StudentId,
-                CourseSheduleId = data.CourseSheduleId,
+                CourseScheduleId = data.CourseScheduleId,
                 EnrollmentDate = data.EnrollmentDate,
-                PaymentStatus = data.PaymentStatus,
+                PaymentStatus = ((PaymentStatus)data.PaymentStatus).ToString(),
                 IsActive = data.IsActive
             };
 
@@ -84,8 +84,8 @@ namespace MS3_Back_End.Service
                 var PaymentResponse = data.Payments.Select(payment => new PaymentResponseDTO()
                 {
                     Id = payment.Id,
-                    PaymentType = payment.PaymentType,
-                    PaymentMethod = payment.PaymentMethod,
+                    PaymentType = ((PaymentTypes)payment.PaymentType).ToString(),
+                    PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
                     ImagePath = payment.ImagePath,
@@ -112,15 +112,15 @@ namespace MS3_Back_End.Service
             {
                 Id = item.Id,
                 StudentId = item.StudentId,
-                CourseSheduleId = item.CourseSheduleId,
+                CourseScheduleId = item.CourseScheduleId,
                 EnrollmentDate = item.EnrollmentDate,
-                PaymentStatus = item.PaymentStatus,
+                PaymentStatus = ((PaymentStatus)item.PaymentStatus).ToString(),
                 IsActive = item.IsActive,
                 PaymentResponse = item.Payments != null ? item.Payments.Select(payment => new PaymentResponseDTO()
                 {
                     Id = payment.Id,
-                    PaymentType = payment.PaymentType,
-                    PaymentMethod = payment.PaymentMethod,
+                    PaymentType = ((PaymentTypes)payment.PaymentType).ToString(),
+                    PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
                     ImagePath = payment.ImagePath,
@@ -144,15 +144,15 @@ namespace MS3_Back_End.Service
             {
                 Id = item.Id,
                 StudentId = item.StudentId,
-                CourseSheduleId = item.CourseSheduleId,
+                CourseScheduleId = item.CourseScheduleId,
                 EnrollmentDate = item.EnrollmentDate,
-                PaymentStatus = item.PaymentStatus,
+                PaymentStatus = ((PaymentStatus)item.PaymentStatus).ToString(),
                 IsActive = item.IsActive,
                 PaymentResponse = item.Payments != null ? item.Payments.Select(payment => new PaymentResponseDTO()
                 {
                     Id = payment.Id,
-                    PaymentType = payment.PaymentType,
-                    PaymentMethod = payment.PaymentMethod,
+                    PaymentType = ((PaymentTypes)payment.PaymentType).ToString(),
+                    PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
                     ImagePath = payment.ImagePath,
@@ -176,9 +176,9 @@ namespace MS3_Back_End.Service
             {
                 Id = data.Id,
                 StudentId = data.StudentId,
-                CourseSheduleId = data.CourseSheduleId,
+                CourseScheduleId = data.CourseScheduleId,
                 EnrollmentDate = data.EnrollmentDate,
-                PaymentStatus = data.PaymentStatus,
+                PaymentStatus = ((PaymentStatus)data.PaymentStatus).ToString(),
                 IsActive = data.IsActive
             };
 
@@ -187,8 +187,8 @@ namespace MS3_Back_End.Service
                 var PaymentResponse = data.Payments.Select(payment => new PaymentResponseDTO()
                 {
                     Id = payment.Id,
-                    PaymentType = payment.PaymentType,
-                    PaymentMethod = payment.PaymentMethod,
+                    PaymentType = ((PaymentTypes)payment.PaymentType).ToString(),
+                    PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
                     ImagePath = payment.ImagePath,

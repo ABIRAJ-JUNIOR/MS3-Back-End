@@ -2,13 +2,14 @@
 
 namespace MS3_Back_End.IRepository
 {
-    public interface ICourseSheduleRepository
+    public interface ICourseScheduleRepository
     {
-        Task<CourseSchedule> AddCourseShedule(CourseSchedule courseReq);
-        Task<ICollection<CourseSchedule>> SearchSheduleLocation(string SearchText);
-        Task<ICollection<CourseSchedule>> GetAllCourseShedule();
-        Task<CourseSchedule> GetCourseSheduleById(Guid id);
-        Task<CourseSchedule> UpdateCourseShedule(CourseSchedule course);
+        Task<CourseSchedule> AddCourseSchedule(CourseSchedule courseReq);
+        Task<ICollection<CourseSchedule>> SearchScheduleLocation(string SearchText);
+        Task<ICollection<CourseSchedule>> GetAllCourseSchedule();
+        Task<CourseSchedule> GetCourseScheduleById(Guid id);
+        Task<CourseSchedule> UpdateCourseSchedule(CourseSchedule course);
+        Task<ICollection<CourseSchedule>> GetPaginatedCoursesSchedules(int pageNumber, int pageSize);
 
     }
 }

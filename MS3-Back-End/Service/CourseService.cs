@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
+using MS3_Back_End.DTOs.ResponseDTOs;
 using MS3_Back_End.DTOs.ResponseDTOs.Admin;
+using MS3_Back_End.DTOs.ResponseDTOs.Assessment;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
+using MS3_Back_End.DTOs.ResponseDTOs.FeedBack;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
@@ -45,7 +48,7 @@ namespace MS3_Back_End.Service
                 Id = data.Id,
                 CourseCategoryId = data.CourseCategoryId,
                 CourseName = data.CourseName,
-                Level = data.Level,
+                Level = ((CourseLevel)data.Level).ToString(),
                 CourseFee = data.CourseFee,
                 Description = data.Description,
                 Prerequisites = data.Prerequisites,
@@ -71,14 +74,14 @@ namespace MS3_Back_End.Service
                 Id = item.Id,
                 CourseCategoryId = item.CourseCategoryId,
                 CourseName = item.CourseName,
-                Level = item.Level,
+                Level = ((CourseLevel)item.Level).ToString(),
                 CourseFee = item.CourseFee,
                 Description = item.Description,
                 Prerequisites = item.Prerequisites,
                 ImagePath = item.ImagePath,
                 CreatedDate = item.CreatedDate,
                 UpdatedDate = item.UpdatedDate,
-                Shedules = item.CourseSchedules != null ? item.CourseSchedules.Select(cs => new CourseSheduleResponseDTO()
+                Schedules = item.CourseSchedules != null ? item.CourseSchedules.Select(cs => new CourseScheduleResponseDTO()
                 {
                     Id = cs.Id,
                     CourseId = cs.CourseId,
@@ -91,7 +94,7 @@ namespace MS3_Back_End.Service
                     EnrollCount = cs.EnrollCount,
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
-                    ScheduleStatus = cs.ScheduleStatus
+                    ScheduleStatus = ((ScheduleStatus)cs.ScheduleStatus).ToString()
                 }).ToList() : null
             }).ToList();
 
@@ -106,19 +109,19 @@ namespace MS3_Back_End.Service
                 throw new Exception("Courses Not Available");
             }
 
-            var CourseResponse = data.Select(item => new CourseResponseDTO()
+            var CourseResponse = data.Select(course => new CourseResponseDTO
             {
-                Id = item.Id,
-                CourseCategoryId = item.CourseCategoryId,
-                CourseName = item.CourseName,
-                Level = item.Level,
-                CourseFee = item.CourseFee,
-                Description = item.Description,
-                Prerequisites = item.Prerequisites,
-                ImagePath = item.ImagePath,
-                CreatedDate = item.CreatedDate,
-                UpdatedDate = item.UpdatedDate,
-                Shedules = item.CourseSchedules != null ? item.CourseSchedules.Select(cs => new CourseSheduleResponseDTO()
+                Id = course.Id,
+                CourseCategoryId = course.CourseCategoryId,
+                CourseName = course.CourseName,
+                Level = ((CourseLevel)course.Level).ToString(),
+                CourseFee = course.CourseFee,
+                Description = course.Description,
+                Prerequisites = course.Prerequisites,
+                ImagePath = course.ImagePath,
+                CreatedDate = course.CreatedDate,
+                UpdatedDate = course.UpdatedDate,
+                Schedules = course.CourseSchedules != null ? course.CourseSchedules.Select(cs => new CourseScheduleResponseDTO()
                 {
                     Id = cs.Id,
                     CourseId = cs.CourseId,
@@ -131,8 +134,17 @@ namespace MS3_Back_End.Service
                     EnrollCount = cs.EnrollCount,
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
-                    ScheduleStatus = cs.ScheduleStatus
-                }).ToList() : null
+                    ScheduleStatus = ((ScheduleStatus)cs.ScheduleStatus).ToString()
+                }).ToList() : null,
+                Feedbacks = course.Feedbacks?.Select(fb => new FeedbacksResponceDTO
+                {
+                    Id = fb.Id,
+                    FeedBackText = fb.FeedBackText,
+                    Rating = fb.Rating,
+                    FeedBackDate = fb.FeedBackDate,
+                    StudentId = fb.StudentId,
+                    CourseId = fb.CourseId
+                }).ToList() ?? new List<FeedbacksResponceDTO>()
             }).ToList();
 
             return CourseResponse;
@@ -142,22 +154,25 @@ namespace MS3_Back_End.Service
         public async Task<CourseResponseDTO> GetCourseById(Guid CourseId)
         {
             var data = await _courseRepository.GetCourseById(CourseId);
+
             if (data == null)
             {
-                throw new Exception("Course Not Found");
+                throw new Exception("course not found");  
             }
+
             var CourseResponse = new CourseResponseDTO
             {
                 Id = data.Id,
                 CourseCategoryId = data.CourseCategoryId,
                 CourseName = data.CourseName,
+                Level = ((CourseLevel)data.Level).ToString(),
                 CourseFee = data.CourseFee,
                 Description = data.Description,
                 Prerequisites = data.Prerequisites,
                 ImagePath = data.ImagePath,
                 CreatedDate = data.CreatedDate,
                 UpdatedDate = data.UpdatedDate,
-                Shedules = data.CourseSchedules != null ? data.CourseSchedules.Select(cs => new CourseSheduleResponseDTO()
+                Schedules = data.CourseSchedules?.Select(cs => new CourseScheduleResponseDTO()
                 {
                     Id = cs.Id,
                     CourseId = cs.CourseId,
@@ -170,13 +185,23 @@ namespace MS3_Back_End.Service
                     EnrollCount = cs.EnrollCount,
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
-                    ScheduleStatus = cs.ScheduleStatus
-                }).ToList() : null
+                    ScheduleStatus = ((ScheduleStatus)cs.ScheduleStatus).ToString()
+                }).ToList(), 
+                Feedbacks = data.Feedbacks?.Select(fb => new FeedbacksResponceDTO()
+                {
+                    Id = fb.Id,
+                    FeedBackText = fb.FeedBackText,
+                    Rating = fb.Rating,
+                    FeedBackDate = fb.FeedBackDate,
+                    StudentId = fb.StudentId,
+                    CourseId = fb.CourseId
+                }).ToList()
             };
+
             return CourseResponse;
         }
 
-       
+
         public async Task<CourseResponseDTO> UpdateCourse(UpdateCourseRequestDTO course)
         {
           
@@ -214,7 +239,7 @@ namespace MS3_Back_End.Service
                 Id = data.Id,
                 CourseCategoryId = data.CourseCategoryId,
                 CourseName = data.CourseName,
-                Level = data.Level,
+                Level = ((CourseLevel)data.Level).ToString(),
                 CourseFee = data.CourseFee,
                 Description = data.Description,
                 Prerequisites = data.Prerequisites,
@@ -266,20 +291,22 @@ namespace MS3_Back_End.Service
         public async Task<PaginationResponseDTO<CourseResponseDTO>> GetPaginatedCourses(int pageNumber, int pageSize)
         {
             var allCourses = await _courseRepository.GetPaginatedCourses(pageNumber, pageSize);
+            var courses = await _courseRepository.GetAllCourse();
 
-            var response = allCourses.Select(item => new CourseResponseDTO()
+            var courseResponses = allCourses.Select(course => new CourseResponseDTO
             {
-                Id = item.Id,
-                CourseCategoryId = item.CourseCategoryId,
-                CourseName = item.CourseName,
-                Level = item.Level,
-                CourseFee = item.CourseFee,
-                Description = item.Description,
-                Prerequisites = item.Prerequisites,
-                ImagePath = item.ImagePath,
-                CreatedDate = item.CreatedDate,
-                UpdatedDate = item.UpdatedDate,
-                Shedules = item.CourseSchedules != null ? item.CourseSchedules.Select(cs => new CourseSheduleResponseDTO()
+                Id = course.Id,
+                CourseCategoryId = course.CourseCategoryId,
+                CourseName = course.CourseName,
+                Level = ((CourseLevel)course.Level).ToString(),
+                CourseFee = course.CourseFee,
+                Description = course.Description,
+                Prerequisites = course.Prerequisites,
+                ImagePath = course.ImagePath,
+                CreatedDate = course.CreatedDate,
+                UpdatedDate = course.UpdatedDate,
+
+                Schedules = course.CourseSchedules?.Select(cs => new CourseScheduleResponseDTO
                 {
                     Id = cs.Id,
                     CourseId = cs.CourseId,
@@ -292,16 +319,26 @@ namespace MS3_Back_End.Service
                     EnrollCount = cs.EnrollCount,
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
-                    ScheduleStatus = cs.ScheduleStatus
-                }).ToList() : null
+                    ScheduleStatus = ((ScheduleStatus)cs.ScheduleStatus).ToString()
+                }).ToList() ?? new List<CourseScheduleResponseDTO>(),  
+
+                Feedbacks = course.Feedbacks?.Select(fb => new FeedbacksResponceDTO
+                {
+                    Id = fb.Id,
+                    FeedBackText = fb.FeedBackText,
+                    Rating = fb.Rating,
+                    FeedBackDate = fb.FeedBackDate,
+                    StudentId = fb.StudentId,
+                    CourseId = fb.CourseId
+                }).ToList() ?? new List<FeedbacksResponceDTO>()
             }).ToList();
 
             var paginationResponseDto = new PaginationResponseDTO<CourseResponseDTO>
             {
-                Items = response,
+                Items = courseResponses,
                 CurrentPage = pageNumber,
                 PageSize = pageSize,
-                TotalPages = (int)Math.Ceiling(allCourses.Count / (double)pageSize),
+                TotalPages = (int)Math.Ceiling(courses.Count / (double)pageSize),
                 TotalItem = allCourses.Count,
             };
 

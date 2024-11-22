@@ -8,12 +8,12 @@
         public bool IsActive { get; set; }
 
         public Guid StudentId { get; set; }
-        public Guid CourseSheduleId { get; set; }
+        public Guid CourseScheduleId { get; set; }
 
         //Reference
         public Student? Student { get; set; }
-        public CourseSchedule? CourseShedule { get; set; }
-        public ICollection<Payment> Payments { get; set; }
+        public CourseSchedule? CourseSchedule { get; set; }
+        public ICollection<Payment>? Payments { get; set; }
 
     }
     public enum PaymentStatus

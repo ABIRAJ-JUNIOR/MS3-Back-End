@@ -6,8 +6,12 @@ using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.DTOs.RequestDTOs.Student;
 using MS3_Back_End.DTOs.ResponseDTOs.Address;
+using MS3_Back_End.DTOs.ResponseDTOs.Assessment;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
+using MS3_Back_End.DTOs.ResponseDTOs.Enrollment;
+using MS3_Back_End.DTOs.ResponseDTOs.Payment;
 using MS3_Back_End.DTOs.ResponseDTOs.Student;
+using MS3_Back_End.DTOs.ResponseDTOs.StudentAssessment;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
@@ -104,7 +108,7 @@ namespace MS3_Back_End.Service
                 FirstName = data.FirstName,
                 LastName = data.LastName,
                 DateOfBirth = data.DateOfBirth,
-                Gender = data.Gender,
+                Gender = ((Gender)data.Gender).ToString(),
                 Phone = data.Phone,
                 ImagePath = data.ImagePath!,
                 CteatedDate = data.CteatedDate,
@@ -144,7 +148,7 @@ namespace MS3_Back_End.Service
                 FirstName = item.FirstName,
                 LastName = item.LastName,
                 DateOfBirth = item.DateOfBirth,
-                Gender = item.Gender,
+                Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
                 ImagePath = item.ImagePath!,
                 CteatedDate = item.CteatedDate,
@@ -177,7 +181,7 @@ namespace MS3_Back_End.Service
                 FirstName = item.FirstName,
                 LastName = item.LastName,
                 DateOfBirth = item.DateOfBirth,
-                Gender = item.Gender,
+                Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
                 ImagePath = item.ImagePath!,
                 CteatedDate = item.CteatedDate,
@@ -211,16 +215,12 @@ namespace MS3_Back_End.Service
                 FirstName = item.FirstName,
                 LastName = item.LastName,
                 DateOfBirth = item.DateOfBirth,
-                Gender = item.Gender,
+                Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
                 ImagePath = item.ImagePath!,
                 CteatedDate = item.CteatedDate,
                 UpdatedDate = item.UpdatedDate,
-            };
-
-            if (item.Address != null)
-            {
-                var AddressResponse = new AddressResponseDTO()
+                Address = item.Address != null ? new AddressResponseDTO()
                 {
                     AddressLine1 = item.Address.AddressLine1,
                     AddressLine2 = item.Address.AddressLine2,
@@ -228,10 +228,80 @@ namespace MS3_Back_End.Service
                     City = item.Address.City,
                     Country = item.Address.Country,
                     StudentId = item.Id,
-                };
-
-                obj.Address = AddressResponse;
-            }
+                } : null,
+                Enrollments = item.Enrollments != null ? item.Enrollments.Select(enroll => new EnrollmentResponseDTO()
+                {
+                    Id = enroll.Id,
+                    StudentId = enroll.StudentId,
+                    CourseScheduleId = enroll.CourseScheduleId,
+                    EnrollmentDate = enroll.EnrollmentDate,
+                    PaymentStatus = ((PaymentStatus)enroll.PaymentStatus).ToString(),
+                    IsActive = enroll.IsActive,
+                    PaymentResponse = enroll.Payments != null ? enroll.Payments.Select(payment => new PaymentResponseDTO()
+                    {
+                        Id = payment.Id,
+                        PaymentType = ((PaymentTypes)payment.PaymentType).ToString(),
+                        PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
+                        AmountPaid = payment.AmountPaid,
+                        PaymentDate = payment.PaymentDate,
+                        ImagePath = payment.ImagePath,
+                        InstallmentNumber = payment.InstallmentNumber,
+                        EnrollmentId = payment.EnrollmentId
+                    }).ToList() : null,
+                    CourseScheduleResponse = new CourseScheduleResponseDTO()
+                    {
+                        Id = enroll.CourseSchedule.Id,
+                        CourseId = enroll.CourseSchedule.CourseId,
+                        StartDate = enroll.CourseSchedule.StartDate,
+                        EndDate = enroll.CourseSchedule.EndDate,
+                        Duration = enroll.CourseSchedule.Duration,
+                        Time = enroll.CourseSchedule.Time,
+                        Location = enroll.CourseSchedule.Location,
+                        MaxStudents = enroll.CourseSchedule.MaxStudents,
+                        EnrollCount = enroll.CourseSchedule.EnrollCount,
+                        CreatedDate = enroll.CourseSchedule.CreatedDate,
+                        UpdatedDate = enroll.CourseSchedule.UpdatedDate,
+                        ScheduleStatus = ((ScheduleStatus)enroll.CourseSchedule.ScheduleStatus).ToString(),
+                        CourseResponse = new CourseResponseDTO()
+                        {
+                            Id = enroll.CourseSchedule.Course.Id,
+                            CourseCategoryId = enroll.CourseSchedule.Course.CourseCategoryId,
+                            CourseName = enroll.CourseSchedule.Course.CourseName,
+                            Level = ((CourseLevel)enroll.CourseSchedule.Course.Level).ToString(),
+                            CourseFee = enroll.CourseSchedule.Course.CourseFee,
+                            Description = enroll.CourseSchedule.Course.Description,
+                            Prerequisites = enroll.CourseSchedule.Course.Prerequisites,
+                            ImagePath = enroll.CourseSchedule.Course.ImagePath,
+                            CreatedDate = enroll.CourseSchedule.Course.CreatedDate,
+                            UpdatedDate = enroll.CourseSchedule.Course.UpdatedDate,
+                        }
+                    }
+                }).ToList() : null,
+                StudentAssessments = item.StudentAssessments != null ? item.StudentAssessments.Select(sa => new StudentAssessmentResponseDTO()
+                {
+                    Id = sa.Id,
+                    MarksObtaines = sa.MarksObtaines,
+                    Grade = sa.Grade != null ? ((Grade)sa.Grade).ToString() : null,
+                    FeedBack = sa.FeedBack,
+                    DateEvaluated = sa.DateEvaluated,
+                    DateSubmitted = sa.DateSubmitted,
+                    StudentAssessmentStatus = ((StudentAssessmentStatus)sa.StudentAssessmentStatus).ToString(),
+                    StudentId = sa.StudentId,
+                    AssessmentId = sa.AssessmentId,
+                    AssessmentResponse = new AssessmentResponseDTO(){
+                        Id = sa.Assessment.Id,
+                        CourseId = sa.Assessment.CourseId,
+                        AssessmentType = ((AssessmentType)sa.Assessment.AssessmentType).ToString(),
+                        StartDate = sa.Assessment.StartDate,
+                        EndDate = sa.Assessment.EndDate,
+                        TotalMarks = sa.Assessment.TotalMarks,
+                        PassMarks = sa.Assessment.PassMarks,
+                        CreatedDate = sa.Assessment.CreatedDate,
+                        UpdateDate = sa.Assessment.UpdateDate,
+                        Status = ((AssessmentStatus)sa.Assessment.Status).ToString(),
+                    }
+                }).ToList() : null,
+            };
 
             return obj;
         }
@@ -266,7 +336,7 @@ namespace MS3_Back_End.Service
                 FirstName = item.FirstName,
                 LastName = item.LastName,
                 DateOfBirth = item.DateOfBirth,
-                Gender = item.Gender,
+                Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
                 ImagePath = item.ImagePath!,
                 CteatedDate = item.CteatedDate,
@@ -302,32 +372,35 @@ namespace MS3_Back_End.Service
             }
             var Students = await _StudentRepo.GetPaginatedStudent(pageNumber, pageSize);
 
-            var StudentResponse = Students.Select(item => new StudentResponseDTO()
+            var studentResponses = Students.Select(student => new StudentResponseDTO
             {
-                Id = item.Id,
-                Nic = item.Nic,
-                FirstName = item.FirstName,
-                LastName = item.LastName,
-                DateOfBirth = item.DateOfBirth,
-                Gender = item.Gender,
-                Phone = item.Phone,
-                ImagePath = item.ImagePath!,
-                CteatedDate = item.CteatedDate,
-                UpdatedDate = item.UpdatedDate,
-                Address = item.Address != null ? new AddressResponseDTO()
+                Id = student.Id,
+                Nic = student.Nic,
+                FirstName = student.FirstName,
+                LastName = student.LastName,
+                DateOfBirth = student.DateOfBirth,
+                Gender = ((Gender)student.Gender).ToString(),
+                Phone = student.Phone,
+                ImagePath = student.ImagePath,
+                CteatedDate = student.CteatedDate,
+                UpdatedDate = student.UpdatedDate,
+                IsActive = student.IsActive,
+
+                Address = student.Address != null ? new AddressResponseDTO
                 {
-                    AddressLine1 = item.Address.AddressLine1,
-                    AddressLine2 = item.Address.AddressLine2,
-                    PostalCode = item.Address.PostalCode,
-                    City = item.Address.City,
-                    Country = item.Address.Country,
-                    StudentId = item.Id,
-                } : null,
+                    AddressLine1 = student.Address.AddressLine1,
+                    AddressLine2 = student.Address.AddressLine2,
+                    City = student.Address.City,
+                    PostalCode = student.Address.PostalCode,
+                    Country = student.Address.Country,
+                    StudentId = student.Id
+                } : null,  
             }).ToList();
 
-            var paginationResponseDto= new PaginationResponseDTO<StudentResponseDTO>
+
+            var paginationResponseDto = new PaginationResponseDTO<StudentResponseDTO>
             {
-                Items = StudentResponse,
+                Items = studentResponses,
                 CurrentPage = pageNumber,
                 PageSize = pageSize,
                 TotalPages = (int)Math.Ceiling(AllStudents.Count / (double)pageSize),

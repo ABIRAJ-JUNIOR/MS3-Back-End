@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.Image;
 using MS3_Back_End.DTOs.Pagination;
@@ -112,7 +113,6 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpGet("Pagination/{pageNumber}/{pageSize}")]
-
         public async Task<IActionResult> GetPaginatedAdmin(int pageNumber, int pageSize)
         {
             try

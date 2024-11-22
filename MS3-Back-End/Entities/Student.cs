@@ -23,7 +23,7 @@ namespace MS3_Back_End.Entities
         public ICollection<Enrollment>? Enrollments { get; set; }
         public ICollection<Notification>? Notifications { get; set; }
         public ICollection<Feedbacks>? Feedbacks { get; set; }
-        public ICollection<StudentAssessment>? Assessments { get; set; }
+        public ICollection<StudentAssessment>? StudentAssessments { get; set; }
     }
 
     public enum Gender

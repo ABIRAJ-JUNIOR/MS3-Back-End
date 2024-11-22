@@ -343,7 +343,7 @@ namespace MS3_Back_End.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CourseSheduleId")
+                    b.Property<Guid>("CourseScheduleId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("EnrollmentDate")
@@ -360,7 +360,7 @@ namespace MS3_Back_End.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseSheduleId");
+                    b.HasIndex("CourseScheduleId");
 
                     b.HasIndex("StudentId");
 
@@ -529,20 +529,19 @@ namespace MS3_Back_End.Migrations
                     b.Property<Guid>("AssessmentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DateEvaluated")
+                    b.Property<DateTime?>("DateEvaluated")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateSubmitted")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FeedBack")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Grade")
+                    b.Property<int?>("Grade")
                         .HasColumnType("int");
 
-                    b.Property<int>("MarksObtaines")
+                    b.Property<int?>("MarksObtaines")
                         .HasColumnType("int");
 
                     b.Property<int>("StudentAssessmentStatus")
@@ -618,7 +617,7 @@ namespace MS3_Back_End.Migrations
             modelBuilder.Entity("MS3_Back_End.Entities.Assessment", b =>
                 {
                     b.HasOne("MS3_Back_End.Entities.Course", "Course")
-                        .WithMany("Assessments")
+                        .WithMany()
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -661,9 +660,9 @@ namespace MS3_Back_End.Migrations
 
             modelBuilder.Entity("MS3_Back_End.Entities.Enrollment", b =>
                 {
-                    b.HasOne("MS3_Back_End.Entities.CourseSchedule", "CourseShedule")
+                    b.HasOne("MS3_Back_End.Entities.CourseSchedule", "CourseSchedule")
                         .WithMany("Enrollments")
-                        .HasForeignKey("CourseSheduleId")
+                        .HasForeignKey("CourseScheduleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -673,7 +672,7 @@ namespace MS3_Back_End.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CourseShedule");
+                    b.Navigation("CourseSchedule");
 
                     b.Navigation("Student");
                 });
@@ -728,7 +727,7 @@ namespace MS3_Back_End.Migrations
                         .IsRequired();
 
                     b.HasOne("MS3_Back_End.Entities.Student", "Student")
-                        .WithMany("Assessments")
+                        .WithMany("StudentAssessments")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -769,8 +768,6 @@ namespace MS3_Back_End.Migrations
 
             modelBuilder.Entity("MS3_Back_End.Entities.Course", b =>
                 {
-                    b.Navigation("Assessments");
-
                     b.Navigation("CourseSchedules");
 
                     b.Navigation("Feedbacks");
@@ -800,18 +797,19 @@ namespace MS3_Back_End.Migrations
                 {
                     b.Navigation("Address");
 
-                    b.Navigation("Assessments");
-
                     b.Navigation("Enrollments");
 
                     b.Navigation("Feedbacks");
 
                     b.Navigation("Notifications");
+
+                    b.Navigation("StudentAssessments");
                 });
 
             modelBuilder.Entity("MS3_Back_End.Entities.User", b =>
                 {
-                    b.Navigation("UserRole");
+                    b.Navigation("UserRole")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

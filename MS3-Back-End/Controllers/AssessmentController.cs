@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.RequestDTOs.Assessment;
 using MS3_Back_End.DTOs.ResponseDTOs.Assessment;
 using MS3_Back_End.IService;
+using MS3_Back_End.Service;
 
 namespace MS3_Back_End.Controllers
 {
@@ -46,6 +47,20 @@ namespace MS3_Back_End.Controllers
             {
                 var updatedData = await _service.UpdateAssessment(id, request);
                 return Ok(updatedData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("Pagination/{pageNumber}/{pageSize}")]
+        public async Task<IActionResult> GetPaginatedAssessment(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var response = await _service.GetPaginatedAssessment(pageNumber, pageSize);
+                return Ok(response);
             }
             catch (Exception ex)
             {
