@@ -291,6 +291,7 @@ namespace MS3_Back_End.Service
         public async Task<PaginationResponseDTO<CourseResponseDTO>> GetPaginatedCourses(int pageNumber, int pageSize)
         {
             var allCourses = await _courseRepository.GetPaginatedCourses(pageNumber, pageSize);
+            var courses = await _courseRepository.GetAllCourse();
 
             var courseResponses = allCourses.Select(course => new CourseResponseDTO
             {
@@ -337,7 +338,7 @@ namespace MS3_Back_End.Service
                 Items = courseResponses,
                 CurrentPage = pageNumber,
                 PageSize = pageSize,
-                TotalPages = (int)Math.Ceiling(allCourses.Count / (double)pageSize),
+                TotalPages = (int)Math.Ceiling(courses.Count / (double)pageSize),
                 TotalItem = allCourses.Count,
             };
 
