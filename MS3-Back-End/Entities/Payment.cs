@@ -16,7 +16,7 @@ namespace MS3_Back_End.Entities
         public Guid EnrollmentId { get; set; }
 
         //Reference
-        public Enrollment? Enrollment { get; set; }
+        public Enrollment Enrollment { get; set; } = new Enrollment();
     }
 
     public enum PaymentTypes

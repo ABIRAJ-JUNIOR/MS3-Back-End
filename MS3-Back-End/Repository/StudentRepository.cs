@@ -43,7 +43,15 @@ namespace MS3_Back_End.Repository
        
         public async Task<Student> GetStudentById(Guid StudentId)
         {
-            var data = await _Db.Students.Include(a => a.Address).Include(e => e.Enrollments).Include(a => a.Assessments).SingleOrDefaultAsync(c => c.Id == StudentId && c.IsActive == true);
+            var data = await _Db.Students
+                .Include(a => a.Address)
+                .Include(e => e.Enrollments)
+                    .ThenInclude(p => p.Payments)
+                .Include(e => e.Enrollments)
+                    .ThenInclude(enrollment => enrollment.CourseSchedule).ThenInclude(c => c.Course)
+                .Include(a => a.StudentAssessments)
+                    .ThenInclude(a => a.Assessment)
+                .SingleOrDefaultAsync(c => c.Id == StudentId && c.IsActive == true);
             return data!;
         }
 

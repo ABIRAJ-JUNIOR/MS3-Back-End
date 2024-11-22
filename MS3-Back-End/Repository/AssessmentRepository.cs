@@ -39,5 +39,16 @@ namespace MS3_Back_End.Repository
             var assessmentData = await _dbContext.Assessments.SingleOrDefaultAsync(a => a.Id == id);
             return assessmentData!;
         }
+
+        public async Task<ICollection<Assessment>> GetPaginatedAssessment(int pageNumber, int pageSize)
+        {
+            var assessment = await _dbContext.Assessments
+                .Include(c => c.Course)
+                .Include(sa => sa.StudentAssessments)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            return assessment;
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace MS3_Back_End.DTOs.RequestDTOs.Course
 {
-    public class UpdateCourseSheduleDTO
+    public class UpdateCourseScheduleDTO
     {
         public Guid Id { get; set; }
         public Guid CourseId { get;  set; }

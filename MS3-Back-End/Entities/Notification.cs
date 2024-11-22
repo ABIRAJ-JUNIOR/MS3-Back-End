@@ -11,12 +11,12 @@
         public Guid StudentId { get; set; }
 
         //Reference
-        public Student? Student { get; set; }
+        public Student Student { get; set; } = new Student();
     }
     public enum NotificationType
     {
         PaymentReminder = 1,
-        SheduleUpdate = 2,
+        ScheduleUpdate = 2,
         CourseOffering = 3,
     }
 }

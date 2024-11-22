@@ -20,10 +20,10 @@ namespace MS3_Back_End.Entities
 
         //Reference
         public Address? Address { get; set; }
-        public ICollection<Enrollment>? Enrollments { get; set; }
-        public ICollection<Notification>? Notifications { get; set; }
-        public ICollection<Feedbacks>? Feedbacks { get; set; }
-        public ICollection<StudentAssessment>? Assessments { get; set; }
+        public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
+        public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+        public ICollection<Feedbacks> Feedbacks { get; set; } = new List<Feedbacks>();
+        public ICollection<StudentAssessment> StudentAssessments { get; set; } = new List<StudentAssessment>();
     }
 
     public enum Gender

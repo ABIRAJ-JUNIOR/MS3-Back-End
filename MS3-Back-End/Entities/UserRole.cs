@@ -7,7 +7,7 @@
         public Guid RoleId { get; set; }
 
         //Reference
-        public User? User { get; set; }
-        public Role? Role { get; set; }
+        public User User { get; set; } = new User();
+        public Role Role { get; set; } = new Role();
     }
 }

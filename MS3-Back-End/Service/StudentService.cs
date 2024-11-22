@@ -6,6 +6,7 @@ using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.DTOs.RequestDTOs.Student;
 using MS3_Back_End.DTOs.ResponseDTOs.Address;
+using MS3_Back_End.DTOs.ResponseDTOs.Assessment;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Enrollment;
 using MS3_Back_End.DTOs.ResponseDTOs.Payment;
@@ -232,7 +233,7 @@ namespace MS3_Back_End.Service
                 {
                     Id = enroll.Id,
                     StudentId = enroll.StudentId,
-                    CourseSheduleId = enroll.CourseSheduleId,
+                    CourseScheduleId = enroll.CourseScheduleId,
                     EnrollmentDate = enroll.EnrollmentDate,
                     PaymentStatus = ((PaymentStatus)enroll.PaymentStatus).ToString(),
                     IsActive = enroll.IsActive,
@@ -246,18 +247,59 @@ namespace MS3_Back_End.Service
                         ImagePath = payment.ImagePath,
                         InstallmentNumber = payment.InstallmentNumber,
                         EnrollmentId = payment.EnrollmentId
-                    }).ToList() : null
+                    }).ToList() : null,
+                    CourseScheduleResponse = new CourseScheduleResponseDTO()
+                    {
+                        Id = enroll.CourseSchedule.Id,
+                        CourseId = enroll.CourseSchedule.CourseId,
+                        StartDate = enroll.CourseSchedule.StartDate,
+                        EndDate = enroll.CourseSchedule.EndDate,
+                        Duration = enroll.CourseSchedule.Duration,
+                        Time = enroll.CourseSchedule.Time,
+                        Location = enroll.CourseSchedule.Location,
+                        MaxStudents = enroll.CourseSchedule.MaxStudents,
+                        EnrollCount = enroll.CourseSchedule.EnrollCount,
+                        CreatedDate = enroll.CourseSchedule.CreatedDate,
+                        UpdatedDate = enroll.CourseSchedule.UpdatedDate,
+                        ScheduleStatus = ((ScheduleStatus)enroll.CourseSchedule.ScheduleStatus).ToString(),
+                        CourseResponse = new CourseResponseDTO()
+                        {
+                            Id = enroll.CourseSchedule.Course.Id,
+                            CourseCategoryId = enroll.CourseSchedule.Course.CourseCategoryId,
+                            CourseName = enroll.CourseSchedule.Course.CourseName,
+                            Level = ((CourseLevel)enroll.CourseSchedule.Course.Level).ToString(),
+                            CourseFee = enroll.CourseSchedule.Course.CourseFee,
+                            Description = enroll.CourseSchedule.Course.Description,
+                            Prerequisites = enroll.CourseSchedule.Course.Prerequisites,
+                            ImagePath = enroll.CourseSchedule.Course.ImagePath,
+                            CreatedDate = enroll.CourseSchedule.Course.CreatedDate,
+                            UpdatedDate = enroll.CourseSchedule.Course.UpdatedDate,
+                        }
+                    }
                 }).ToList() : null,
-                StudentAssessments = item.Assessments != null ? item.Assessments.Select(sa => new StudentAssessmentResponseDTO()
+                StudentAssessments = item.StudentAssessments != null ? item.StudentAssessments.Select(sa => new StudentAssessmentResponseDTO()
                 {
                     Id = sa.Id,
                     MarksObtaines = sa.MarksObtaines,
-                    Grade = sa.Grade,
+                    Grade = sa.Grade != null ? ((Grade)sa.Grade).ToString() : null,
                     FeedBack = sa.FeedBack,
                     DateEvaluated = sa.DateEvaluated,
+                    DateSubmitted = sa.DateSubmitted,
                     StudentAssessmentStatus = ((StudentAssessmentStatus)sa.StudentAssessmentStatus).ToString(),
                     StudentId = sa.StudentId,
-                    AssessmentId = sa.AssessmentId
+                    AssessmentId = sa.AssessmentId,
+                    AssessmentResponse = new AssessmentResponseDTO(){
+                        Id = sa.Assessment.Id,
+                        CourseId = sa.Assessment.CourseId,
+                        AssessmentType = ((AssessmentType)sa.Assessment.AssessmentType).ToString(),
+                        StartDate = sa.Assessment.StartDate,
+                        EndDate = sa.Assessment.EndDate,
+                        TotalMarks = sa.Assessment.TotalMarks,
+                        PassMarks = sa.Assessment.PassMarks,
+                        CreatedDate = sa.Assessment.CreatedDate,
+                        UpdateDate = sa.Assessment.UpdateDate,
+                        Status = ((AssessmentStatus)sa.Assessment.Status).ToString(),
+                    }
                 }).ToList() : null,
             };
 

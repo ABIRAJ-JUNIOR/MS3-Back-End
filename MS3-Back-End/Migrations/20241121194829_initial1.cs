@@ -302,7 +302,7 @@ namespace MS3_Back_End.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FeedBackText = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: false),
-                    FeedBackDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FeedBackDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -328,15 +328,14 @@ namespace MS3_Back_End.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MarksObtaines = table.Column<int>(type: "int", nullable: false),
-                    Grade = table.Column<int>(type: "int", nullable: false),
-                    FeedBack = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MarksObtaines = table.Column<int>(type: "int", nullable: true),
+                    Grade = table.Column<int>(type: "int", nullable: true),
+                    FeedBack = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateSubmitted = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateEvaluated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateEvaluated = table.Column<DateTime>(type: "datetime2", nullable: true),
                     StudentAssessmentStatus = table.Column<int>(type: "int", nullable: false),
                     StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AssesmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AssessmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    AssessmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -345,7 +344,8 @@ namespace MS3_Back_End.Migrations
                         name: "FK_StudentAssessments_Assessments_AssessmentId",
                         column: x => x.AssessmentId,
                         principalTable: "Assessments",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_StudentAssessments_Students_StudentId",
                         column: x => x.StudentId,
@@ -363,14 +363,14 @@ namespace MS3_Back_End.Migrations
                     PaymentStatus = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CourseSheduleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    CourseScheduleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Enrollments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Enrollments_CourseSchedules_CourseSheduleId",
-                        column: x => x.CourseSheduleId,
+                        name: "FK_Enrollments_CourseSchedules_CourseScheduleId",
+                        column: x => x.CourseScheduleId,
                         principalTable: "CourseSchedules",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -433,9 +433,9 @@ namespace MS3_Back_End.Migrations
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollments_CourseSheduleId",
+                name: "IX_Enrollments_CourseScheduleId",
                 table: "Enrollments",
-                column: "CourseSheduleId");
+                column: "CourseScheduleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Enrollments_StudentId",
