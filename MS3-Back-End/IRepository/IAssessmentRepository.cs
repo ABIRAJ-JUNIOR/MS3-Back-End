@@ -8,5 +8,6 @@ namespace MS3_Back_End.IRepository
         Task<ICollection<Assessment>> GetAllAssessment();
         Task<Assessment> UpdateAssessment(Assessment assessment);
         Task<Assessment> GetAssessmentById(Guid id);
+        Task<ICollection<Assessment>> GetPaginatedAssessment(int pageNumber, int pageSize);
     }
 }
