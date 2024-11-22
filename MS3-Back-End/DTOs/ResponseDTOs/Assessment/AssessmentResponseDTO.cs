@@ -1,4 +1,6 @@
-﻿using MS3_Back_End.Entities;
+﻿using MS3_Back_End.DTOs.ResponseDTOs.Course;
+using MS3_Back_End.DTOs.ResponseDTOs.StudentAssessment;
+using MS3_Back_End.Entities;
 
 namespace MS3_Back_End.DTOs.ResponseDTOs.Assessment
 {
@@ -14,6 +16,9 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Assessment
         public DateTime CreatedDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string Status { get; set; } = string.Empty;
+
+        public CourseResponseDTO courseResponse { get; set; } = new CourseResponseDTO();
+        public ICollection<StudentAssessmentResponseDTO> studentAssessmentResponses { get; set; } = new List<StudentAssessmentResponseDTO>();
 
     }
 }
