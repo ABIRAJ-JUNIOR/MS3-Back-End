@@ -141,11 +141,11 @@ namespace MS3_Back_End
 
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("MyPolicy", policy =>
+                options.AddDefaultPolicy(policy =>
                 {
-                    policy.WithOrigins("https://your-allowed-origin.com")
-                          .AllowAnyMethod()
-                          .AllowAnyHeader();
+                    policy.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
                 });
             });
 
