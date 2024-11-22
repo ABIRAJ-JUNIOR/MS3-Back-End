@@ -7,7 +7,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-
 namespace MS3_Back_End.Service
 {
     public class AuthService : IAuthService
@@ -26,9 +25,9 @@ namespace MS3_Back_End.Service
             var nicCheck = await _authRepository.GetStudentByNic(request.Nic);
             var emailCheck = await _authRepository.GetUserByEmail(request.Email);
 
-            if(nicCheck == null)
+            if (nicCheck == null)
             {
-                if(emailCheck == null)
+                if (emailCheck == null)
                 {
                     var user = new User()
                     {
@@ -40,7 +39,7 @@ namespace MS3_Back_End.Service
 
                     var userData = await _authRepository.AddUser(user);
                     var roleData = await _authRepository.GetRoleByName("Student");
-                    if(roleData == null)
+                    if (roleData == null)
                     {
                         throw new Exception("Role not found");
                     }
@@ -88,24 +87,24 @@ namespace MS3_Back_End.Service
         {
             var userData = await _authRepository.GetUserByEmail(request.email);
 
-            if(userData == null)
+            if (userData == null)
             {
                 throw new Exception("User Not Found");
             }
 
-            if(!BCrypt.Net.BCrypt.Verify(request.password, userData.Password))
+            if (!BCrypt.Net.BCrypt.Verify(request.password, userData.Password))
             {
                 throw new Exception("Wrong password.");
             }
 
             var userRoleData = await _authRepository.GetUserRoleByUserId(userData.Id);
             var roleData = await _authRepository.GetRoleById(userRoleData.RoleId);
-            if(roleData == null)
+            if (roleData == null)
             {
                 throw new Exception("Role not found");
             }
-            
-            if(roleData.Name == "Student")
+
+            if (roleData.Name == "Student")
             {
                 var studentData = await _authRepository.GetStudentById(userData.Id);
                 var tokenRequest = new TokenRequestDTO()
@@ -118,7 +117,7 @@ namespace MS3_Back_End.Service
 
                 return CreateToken(tokenRequest);
             }
-            else if(roleData.Name == "Administrator" || roleData.Name == "Instructor")
+            else if (roleData.Name == "Administrator" || roleData.Name == "Instructor")
             {
                 var adminData = await _authRepository.GetAdminById(userData.Id);
                 var tokenRequest = new TokenRequestDTO()
