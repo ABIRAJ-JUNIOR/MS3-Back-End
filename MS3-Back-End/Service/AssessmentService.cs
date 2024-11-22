@@ -171,9 +171,10 @@ namespace MS3_Back_End.Service
                     DateSubmitted = sa.DateSubmitted,
                     StudentAssessmentStatus = ((StudentAssessmentStatus)sa.StudentAssessmentStatus).ToString(),
                     StudentId = sa.StudentId,
-                    AssessmentId = sa.AssessmentId
+                    AssessmentId = sa.AssessmentId,
+                    AssessmentResponse = null!,
                 }).ToList() : new List<StudentAssessmentResponseDTO>()
-                
+
             }).ToList(); ;
 
             var paginationResponseDto = new PaginationResponseDTO<AssessmentResponseDTO>
