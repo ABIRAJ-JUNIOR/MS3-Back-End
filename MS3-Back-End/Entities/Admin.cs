@@ -13,7 +13,7 @@
         public bool IsActive { get; set; } = true;
 
         //Reference
-        public ICollection<AuditLog> AuditLogs { get; set; } = new List<AuditLog>();
+        public ICollection<AuditLog>? AuditLogs { get; set; }
 
     }
 }

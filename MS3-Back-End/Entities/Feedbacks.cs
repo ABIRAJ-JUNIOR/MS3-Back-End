@@ -14,8 +14,8 @@ namespace MS3_Back_End.Entities
         public Guid CourseId { get; set; }
 
         //Reference
-        public Student Student { get; set; } = new Student();
-        public Course Course { get; set; } = new Course();
+        public Student? Student { get; set; }
+        public Course? Course { get; set; }
 
     }
 }

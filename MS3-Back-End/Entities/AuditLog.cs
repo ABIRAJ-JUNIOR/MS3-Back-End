@@ -13,7 +13,7 @@ namespace MS3_Back_End.Entities
         public Guid AdminId { get; set; }
 
         //Reference
-        public Admin Admin { get; set; } = new Admin();
+        public Admin? Admin { get; set; }
     }
 
 }

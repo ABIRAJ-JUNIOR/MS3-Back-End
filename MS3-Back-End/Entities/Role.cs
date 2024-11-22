@@ -6,6 +6,6 @@
         public string Name { get; set; } = string.Empty;
 
         //Reference
-        public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+        public ICollection<UserRole>? UserRoles { get; set; } 
     }
 }

@@ -11,7 +11,7 @@
         public Guid StudentId { get; set; }
 
         //Reference
-        public Student Student { get; set; } = new Student();
+        public Student? Student { get; set; }
     }
     public enum NotificationType
     {

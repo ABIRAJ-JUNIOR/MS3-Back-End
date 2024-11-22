@@ -30,7 +30,7 @@ namespace MS3_Back_End.Repository
         public async Task<ICollection<Student>> SearchStudent(string SearchText)
         {
             var data = await _Db.Students .Where(n => n.FirstName.Contains(SearchText) || 
-               n.LastName.Contains(SearchText) ||
+               n.LastName!.Contains(SearchText) ||
                n.Nic.Contains(SearchText)).Include(a => a.Address).ToListAsync();
             return data;
         }
@@ -45,11 +45,11 @@ namespace MS3_Back_End.Repository
         {
             var data = await _Db.Students
                 .Include(a => a.Address)
-                .Include(e => e.Enrollments)
+                .Include(e => e.Enrollments!)
                     .ThenInclude(p => p.Payments)
-                .Include(e => e.Enrollments)
+                .Include(e => e.Enrollments!)
                     .ThenInclude(enrollment => enrollment.CourseSchedule).ThenInclude(c => c.Course)
-                .Include(a => a.StudentAssessments)
+                .Include(a => a.StudentAssessments!)
                     .ThenInclude(a => a.Assessment)
                 .SingleOrDefaultAsync(c => c.Id == StudentId && c.IsActive == true);
             return data!;

@@ -20,8 +20,8 @@ namespace MS3_Back_End.Entities
         public Guid CourseId { get; set; }
 
         //Reference
-        public Course Course { get; set; } = new Course();
-        public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
+        public Course? Course { get; set; }
+        public ICollection<Enrollment>? Enrollments { get; set; }
 
     }
 

@@ -15,7 +15,7 @@ namespace MS3_Back_End.Entities
         public Guid StudentId { get; set; }
 
         //Reference
-        public Student Student { get; set; } = new Student();
+        public Student? Student { get; set; }
 
     }
 }

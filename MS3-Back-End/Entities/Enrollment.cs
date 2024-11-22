@@ -11,9 +11,9 @@
         public Guid CourseScheduleId { get; set; }
 
         //Reference
-        public Student Student { get; set; } = new Student();
-        public CourseSchedule CourseSchedule { get; set; } = new CourseSchedule();
-        public ICollection<Payment> Payments { get; set; } = new List<Payment>();
+        public Student? Student { get; set; }
+        public CourseSchedule? CourseSchedule { get; set; }
+        public ICollection<Payment>? Payments { get; set; }
 
     }
     public enum PaymentStatus
