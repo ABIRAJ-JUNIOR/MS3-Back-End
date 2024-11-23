@@ -62,8 +62,17 @@ namespace MS3_Back_End.Controllers
 
         public async Task<IActionResult> GetAllGetCourseCategory()
         {
-            var result=await _courseCategoryService.GetAllGetCourseCategory();
-            return Ok(result);
+
+            try
+            {
+                var result = await _courseCategoryService.GetAllGetCourseCategory();
+                return Ok(result);
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);
+            }
+   
         }
 
     }
