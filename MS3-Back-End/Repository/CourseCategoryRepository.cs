@@ -42,5 +42,11 @@ namespace MS3_Back_End.Repository
             return data.Entity;
         }
 
+        public async Task<List<CourseCategory>> GetAllGetCourseCategory()
+        {
+            var data = await _appDBContext.CourseCategories.ToListAsync();
+            return data;
+        }
+
     }
 }
