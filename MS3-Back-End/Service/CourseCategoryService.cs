@@ -71,5 +71,17 @@ namespace MS3_Back_End.Service
             };
             return CourseCategoryResponse;
         }
+        public async Task<List<CourseCategoryResponseDTO>> GetAllGetCourseCategory()
+        {
+            var data=await _courseCategoryRepository.GetAllGetCourseCategory();
+            var returndata=data.Select( c => new CourseCategoryResponseDTO() 
+            {
+              CategoryName = c.CategoryName,
+              Description = c.Description,
+              Id = c.Id
+              
+            }).ToList();
+            return returndata;
+        }
     }
 }
