@@ -30,7 +30,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpPatch("SignIn")]
+        [HttpPost("SignIn")]
         public async Task<IActionResult> SignIn(SignInRequestDTO request)
         {
             try
