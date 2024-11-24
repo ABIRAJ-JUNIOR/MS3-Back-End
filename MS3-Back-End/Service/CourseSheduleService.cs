@@ -212,7 +212,7 @@ namespace MS3_Back_End.Service
                     CourseFee = cs.Course.CourseFee,
                     Description = cs.Course.Description,
                     Prerequisites = cs.Course.Prerequisites,
-                    ImagePath = cs.Course.ImagePath,
+                    ImageUrl = cs.Course.ImageUrl,
                     CreatedDate = cs.Course.CreatedDate,
                     UpdatedDate = cs.Course.UpdatedDate,
                 }

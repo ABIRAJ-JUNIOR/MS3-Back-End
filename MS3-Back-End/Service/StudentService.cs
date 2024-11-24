@@ -78,7 +78,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = StudentReq.DateOfBirth,
                 Gender = StudentReq.Gender,
                 Phone = StudentReq.Phone,
-                ImagePath = StudentReq.ImageUrl,
+                ImageUrl = StudentReq.ImageUrl,
                 CteatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
 
@@ -109,7 +109,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = data.DateOfBirth,
                 Gender = ((Gender)data.Gender).ToString(),
                 Phone = data.Phone,
-                ImagePath = data.ImagePath!,
+                ImageUrl = data.ImageUrl!,
                 CteatedDate = data.CteatedDate,
                 UpdatedDate = data.UpdatedDate,
             };
@@ -149,7 +149,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = item.DateOfBirth,
                 Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
-                ImagePath = item.ImagePath!,
+                ImageUrl = item.ImageUrl!,
                 CteatedDate = item.CteatedDate,
                 UpdatedDate = item.UpdatedDate,
                 Address = item.Address != null ? new AddressResponseDTO()
@@ -182,7 +182,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = item.DateOfBirth,
                 Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
-                ImagePath = item.ImagePath!,
+                ImageUrl = item.ImageUrl!,
                 CteatedDate = item.CteatedDate,
                 UpdatedDate = item.UpdatedDate,
                 Address = item.Address != null ? new AddressResponseDTO()
@@ -216,7 +216,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = item.DateOfBirth,
                 Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
-                ImagePath = item.ImagePath!,
+                ImageUrl = item.ImageUrl!,
                 CteatedDate = item.CteatedDate,
                 UpdatedDate = item.UpdatedDate,
                 Address = item.Address != null ? new AddressResponseDTO()
@@ -243,7 +243,7 @@ namespace MS3_Back_End.Service
                         PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                         AmountPaid = payment.AmountPaid,
                         PaymentDate = payment.PaymentDate,
-                        ImagePath = payment.ImagePath,
+                        ImageUrl = payment.ImageUrl,
                         InstallmentNumber = payment.InstallmentNumber,
                         EnrollmentId = payment.EnrollmentId
                     }).ToList() : null,
@@ -270,7 +270,7 @@ namespace MS3_Back_End.Service
                             CourseFee = enroll.CourseSchedule.Course.CourseFee,
                             Description = enroll.CourseSchedule.Course.Description,
                             Prerequisites = enroll.CourseSchedule.Course.Prerequisites,
-                            ImagePath = enroll.CourseSchedule.Course.ImagePath,
+                            ImageUrl = enroll.CourseSchedule.Course.ImageUrl,
                             CreatedDate = enroll.CourseSchedule.Course.CreatedDate,
                             UpdatedDate = enroll.CourseSchedule.Course.UpdatedDate,
                         }
@@ -337,7 +337,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = item.DateOfBirth,
                 Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
-                ImagePath = item.ImagePath!,
+                ImageUrl = item.ImageUrl!,
                 CteatedDate = item.CteatedDate,
                 UpdatedDate = item.UpdatedDate
 
@@ -380,7 +380,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = student.DateOfBirth,
                 Gender = ((Gender)student.Gender).ToString(),
                 Phone = student.Phone,
-                ImagePath = student.ImagePath!,
+                ImageUrl = student.ImageUrl!,
                 CteatedDate = student.CteatedDate,
                 UpdatedDate = student.UpdatedDate,
                 IsActive = student.IsActive,
@@ -417,7 +417,7 @@ namespace MS3_Back_End.Service
                 throw new Exception("Student not found");
             }
 
-            studentData.ImagePath = request.ImageUrl != null ? request.ImageUrl : null;
+            studentData.ImageUrl = request.ImageUrl != null ? request.ImageUrl : null;
             var updatedData = await _StudentRepo.UpdateStudent(studentData);
 
             return "Image upload successfully";

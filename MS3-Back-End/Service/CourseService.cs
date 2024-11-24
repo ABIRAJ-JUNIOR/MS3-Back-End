@@ -34,7 +34,7 @@ namespace MS3_Back_End.Service
                 CourseFee = courseReq.CourseFee,
                 Description = courseReq.Description,
                 Prerequisites = courseReq.Prerequisites,
-                ImagePath = courseReq.ImageUrl!,
+                ImageUrl = courseReq.ImageUrl!,
                 CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now
             };
@@ -50,7 +50,7 @@ namespace MS3_Back_End.Service
                 CourseFee = data.CourseFee,
                 Description = data.Description,
                 Prerequisites = data.Prerequisites,
-                ImagePath = data.ImagePath,
+                ImageUrl = data.ImageUrl,
                 CreatedDate = data.CreatedDate,
                 UpdatedDate = data.UpdatedDate,
             };
@@ -76,7 +76,7 @@ namespace MS3_Back_End.Service
                 CourseFee = item.CourseFee,
                 Description = item.Description,
                 Prerequisites = item.Prerequisites,
-                ImagePath = item.ImagePath,
+                ImageUrl = item.ImageUrl,
                 CreatedDate = item.CreatedDate,
                 UpdatedDate = item.UpdatedDate,
                 Schedules = item.CourseSchedules != null ? item.CourseSchedules.Select(cs => new CourseScheduleResponseDTO()
@@ -116,7 +116,7 @@ namespace MS3_Back_End.Service
                 CourseFee = course.CourseFee,
                 Description = course.Description,
                 Prerequisites = course.Prerequisites,
-                ImagePath = course.ImagePath,
+                ImageUrl = course.ImageUrl,
                 CreatedDate = course.CreatedDate,
                 UpdatedDate = course.UpdatedDate,
                 Schedules = course.CourseSchedules != null ? course.CourseSchedules.Select(cs => new CourseScheduleResponseDTO()
@@ -167,7 +167,7 @@ namespace MS3_Back_End.Service
                 CourseFee = data.CourseFee,
                 Description = data.Description,
                 Prerequisites = data.Prerequisites,
-                ImagePath = data.ImagePath,
+                ImageUrl = data.ImageUrl,
                 CreatedDate = data.CreatedDate,
                 UpdatedDate = data.UpdatedDate,
                 Schedules = data.CourseSchedules?.Select(cs => new CourseScheduleResponseDTO()
@@ -225,7 +225,7 @@ namespace MS3_Back_End.Service
                 GetData.Prerequisites = course.Prerequisites;
 
             if (course.ImageUrl != null)
-                GetData.ImagePath = course.ImageUrl;
+                GetData.ImageUrl = course.ImageUrl;
 
 
             GetData.UpdatedDate=DateTime.Now;
@@ -241,7 +241,7 @@ namespace MS3_Back_End.Service
                 CourseFee = data.CourseFee,
                 Description = data.Description,
                 Prerequisites = data.Prerequisites,
-                ImagePath = data.ImagePath,
+                ImageUrl = data.ImageUrl,
                 UpdatedDate = data.UpdatedDate,
                 CreatedDate = data.CreatedDate,
 
@@ -280,7 +280,7 @@ namespace MS3_Back_End.Service
                 CourseFee = course.CourseFee,
                 Description = course.Description,
                 Prerequisites = course.Prerequisites,
-                ImagePath = course.ImagePath,
+                ImageUrl = course.ImageUrl,
                 CreatedDate = course.CreatedDate,
                 UpdatedDate = course.UpdatedDate,
 
