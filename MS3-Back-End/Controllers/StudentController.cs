@@ -100,11 +100,11 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPost("Image/{studentId}")]
-        public async Task<IActionResult> UploadImage(Guid studentId, ImageRequestDTO request)
+        public async Task<IActionResult> UploadImage(Guid studentId, IFormFile image)
         {
             try
             {
-                var response = await _studentService.UploadImage(studentId, request);
+                var response = await _studentService.UploadImage(studentId, image);
                 return Ok(response);
             }
             catch (Exception ex)

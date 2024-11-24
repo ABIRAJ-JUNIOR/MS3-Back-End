@@ -1,4 +1,6 @@
 ﻿using Azure.Core;
+using CloudinaryDotNet.Actions;
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Hosting;
 using MS3_Back_End.DBContext;
 using MS3_Back_End.DTOs.Image;
@@ -78,7 +80,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = StudentReq.DateOfBirth,
                 Gender = StudentReq.Gender,
                 Phone = StudentReq.Phone,
-                ImageUrl = StudentReq.ImageUrl,
+                ImageUrl = null,
                 CteatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
 
@@ -409,7 +411,7 @@ namespace MS3_Back_End.Service
             return paginationResponseDto;
         }
 
-        public async Task<string> UploadImage(Guid studentId, ImageRequestDTO request)
+        public async Task<string> UploadImage(Guid studentId, IFormFile image)
         {
             var studentData = await _StudentRepo.GetStudentById(studentId);
             if (studentData == null)
@@ -417,7 +419,23 @@ namespace MS3_Back_End.Service
                 throw new Exception("Student not found");
             }
 
-            studentData.ImageUrl = request.ImageUrl != null ? request.ImageUrl : null;
+            var cloudinaryUrl = "cloudinary://779552958281786:JupUDaXM2QyLcruGYFayOI1U9JI@dgpyq5til";
+
+            Cloudinary cloudinary = new Cloudinary(cloudinaryUrl);
+
+            using (var stream = image.OpenReadStream())
+            {
+                var uploadParams = new ImageUploadParams
+                {
+                    File = new FileDescription(image.FileName, stream),
+                    UseFilename = true,
+                    UniqueFilename = true,
+                    Overwrite = true
+                };
+
+                var uploadResult = await cloudinary.UploadAsync(uploadParams);
+                studentData.ImageUrl = (uploadResult.SecureUrl).ToString();
+            }
             var updatedData = await _StudentRepo.UpdateStudent(studentData);
 
             return "Image upload successfully";
