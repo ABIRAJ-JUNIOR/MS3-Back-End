@@ -15,13 +15,11 @@ namespace MS3_Back_End.Service
     {
         private readonly IAdminRepository _adminRepository;
         private readonly IAuthRepository _authRepository;
-        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public AdminService(IAdminRepository adminRepository, IAuthRepository authRepository, IWebHostEnvironment webHostEnvironment)
+        public AdminService(IAdminRepository adminRepository, IAuthRepository authRepository)
         {
             _adminRepository = adminRepository;
             _authRepository = authRepository;
-            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<AdminResponseDTO> AddAdmin(AdminRequestDTO request)
@@ -71,6 +69,7 @@ namespace MS3_Back_End.Service
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Phone = request.Phone,
+                ImagePath = request.ImageUrl,
                 CteatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
                 IsActive = true,
@@ -229,31 +228,10 @@ namespace MS3_Back_End.Service
                 throw new Exception("Admin not found");
             }
 
-            adminData.ImagePath = request.ImageFile != null ? await SaveImageFile(request.ImageFile) : null;
+            adminData.ImagePath = request.ImageUrl != null ? request.ImageUrl : null;
             var updatedData = await _adminRepository.UpdateAdmin(adminData);
 
             return "Image upload successfully";
-        }
-
-        private async Task<string> SaveImageFile(IFormFile imageFile)
-        {
-            if (imageFile == null || imageFile.Length == 0)
-                return string.Empty;
-
-            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
-            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "Admin");
-
-            if (!Directory.Exists(uploadPath))
-                Directory.CreateDirectory(uploadPath);
-
-            string filePath = Path.Combine(uploadPath, fileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await imageFile.CopyToAsync(fileStream);
-            }
-
-            return $"/Admin/{fileName}";
         }
 
         public async Task<PaginationResponseDTO<AdminResponseDTO>> GetPaginatedAdmin(int pageNumber, int pageSize)
