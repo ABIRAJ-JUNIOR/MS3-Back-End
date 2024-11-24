@@ -20,7 +20,7 @@ namespace MS3_Back_End.Controllers
 
 
         [HttpPost("student")]
-        public async Task<IActionResult> AddStudent(StudentRequestDTO studentRequest, IFormFile image)
+        public async Task<IActionResult> AddStudent(StudentRequestDTO studentRequest)
         {
             if (studentRequest == null)
             {

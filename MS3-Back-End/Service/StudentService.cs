@@ -24,13 +24,11 @@ namespace MS3_Back_End.Service
     {
         private readonly IStudentRepository _StudentRepo;
         private readonly IAuthRepository _authRepository;
-        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public StudentService(IStudentRepository studentRepo, IAuthRepository authRepository, IWebHostEnvironment webHostEnvironment)
+        public StudentService(IStudentRepository studentRepo, IAuthRepository authRepository)
         {
             _StudentRepo = studentRepo;
             _authRepository = authRepository;
-            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<StudentResponseDTO> AddStudent(StudentRequestDTO StudentReq)
@@ -80,6 +78,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = StudentReq.DateOfBirth,
                 Gender = StudentReq.Gender,
                 Phone = StudentReq.Phone,
+                ImagePath = StudentReq.ImageUrl,
                 CteatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
 
@@ -381,7 +380,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = student.DateOfBirth,
                 Gender = ((Gender)student.Gender).ToString(),
                 Phone = student.Phone,
-                ImagePath = student.ImagePath,
+                ImagePath = student.ImagePath!,
                 CteatedDate = student.CteatedDate,
                 UpdatedDate = student.UpdatedDate,
                 IsActive = student.IsActive,
@@ -418,31 +417,10 @@ namespace MS3_Back_End.Service
                 throw new Exception("Student not found");
             }
 
-            studentData.ImagePath = request.ImageFile != null ? await SaveImageFile(request.ImageFile) : null;
+            studentData.ImagePath = request.ImageUrl != null ? request.ImageUrl : null;
             var updatedData = await _StudentRepo.UpdateStudent(studentData);
 
             return "Image upload successfully";
-        }
-
-        private async Task<string> SaveImageFile(IFormFile imageFile)
-        {
-            if (imageFile == null || imageFile.Length == 0)
-                return string.Empty;
-
-            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
-            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "Student");
-
-            if (!Directory.Exists(uploadPath))
-                Directory.CreateDirectory(uploadPath);
-
-            string filePath = Path.Combine(uploadPath, fileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await imageFile.CopyToAsync(fileStream);
-            }
-
-            return $"/Student/{fileName}";
         }
     }
 }
