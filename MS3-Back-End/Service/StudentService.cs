@@ -1,4 +1,6 @@
 ﻿using Azure.Core;
+using CloudinaryDotNet.Actions;
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Hosting;
 using MS3_Back_End.DBContext;
 using MS3_Back_End.DTOs.Image;
@@ -24,13 +26,11 @@ namespace MS3_Back_End.Service
     {
         private readonly IStudentRepository _StudentRepo;
         private readonly IAuthRepository _authRepository;
-        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public StudentService(IStudentRepository studentRepo, IAuthRepository authRepository, IWebHostEnvironment webHostEnvironment)
+        public StudentService(IStudentRepository studentRepo, IAuthRepository authRepository)
         {
             _StudentRepo = studentRepo;
             _authRepository = authRepository;
-            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<StudentResponseDTO> AddStudent(StudentRequestDTO StudentReq)
@@ -80,6 +80,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = StudentReq.DateOfBirth,
                 Gender = StudentReq.Gender,
                 Phone = StudentReq.Phone,
+                ImageUrl = null,
                 CteatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
 
@@ -110,7 +111,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = data.DateOfBirth,
                 Gender = ((Gender)data.Gender).ToString(),
                 Phone = data.Phone,
-                ImagePath = data.ImagePath!,
+                ImageUrl = data.ImageUrl!,
                 CteatedDate = data.CteatedDate,
                 UpdatedDate = data.UpdatedDate,
             };
@@ -150,7 +151,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = item.DateOfBirth,
                 Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
-                ImagePath = item.ImagePath!,
+                ImageUrl = item.ImageUrl!,
                 CteatedDate = item.CteatedDate,
                 UpdatedDate = item.UpdatedDate,
                 Address = item.Address != null ? new AddressResponseDTO()
@@ -183,7 +184,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = item.DateOfBirth,
                 Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
-                ImagePath = item.ImagePath!,
+                ImageUrl = item.ImageUrl!,
                 CteatedDate = item.CteatedDate,
                 UpdatedDate = item.UpdatedDate,
                 Address = item.Address != null ? new AddressResponseDTO()
@@ -217,7 +218,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = item.DateOfBirth,
                 Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
-                ImagePath = item.ImagePath!,
+                ImageUrl = item.ImageUrl!,
                 CteatedDate = item.CteatedDate,
                 UpdatedDate = item.UpdatedDate,
                 Address = item.Address != null ? new AddressResponseDTO()
@@ -244,7 +245,7 @@ namespace MS3_Back_End.Service
                         PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                         AmountPaid = payment.AmountPaid,
                         PaymentDate = payment.PaymentDate,
-                        ImagePath = payment.ImagePath,
+                        ImageUrl = payment.ImageUrl,
                         InstallmentNumber = payment.InstallmentNumber,
                         EnrollmentId = payment.EnrollmentId
                     }).ToList() : null,
@@ -271,7 +272,7 @@ namespace MS3_Back_End.Service
                             CourseFee = enroll.CourseSchedule.Course.CourseFee,
                             Description = enroll.CourseSchedule.Course.Description,
                             Prerequisites = enroll.CourseSchedule.Course.Prerequisites,
-                            ImagePath = enroll.CourseSchedule.Course.ImagePath,
+                            ImageUrl = enroll.CourseSchedule.Course.ImageUrl,
                             CreatedDate = enroll.CourseSchedule.Course.CreatedDate,
                             UpdatedDate = enroll.CourseSchedule.Course.UpdatedDate,
                         }
@@ -338,7 +339,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = item.DateOfBirth,
                 Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
-                ImagePath = item.ImagePath!,
+                ImageUrl = item.ImageUrl!,
                 CteatedDate = item.CteatedDate,
                 UpdatedDate = item.UpdatedDate
 
@@ -381,7 +382,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = student.DateOfBirth,
                 Gender = ((Gender)student.Gender).ToString(),
                 Phone = student.Phone,
-                ImagePath = student.ImagePath,
+                ImageUrl = student.ImageUrl!,
                 CteatedDate = student.CteatedDate,
                 UpdatedDate = student.UpdatedDate,
                 IsActive = student.IsActive,
@@ -410,7 +411,7 @@ namespace MS3_Back_End.Service
             return paginationResponseDto;
         }
 
-        public async Task<string> UploadImage(Guid studentId, ImageRequestDTO request)
+        public async Task<string> UploadImage(Guid studentId, IFormFile image)
         {
             var studentData = await _StudentRepo.GetStudentById(studentId);
             if (studentData == null)
@@ -418,31 +419,26 @@ namespace MS3_Back_End.Service
                 throw new Exception("Student not found");
             }
 
-            studentData.ImagePath = request.ImageFile != null ? await SaveImageFile(request.ImageFile) : null;
+            var cloudinaryUrl = "cloudinary://779552958281786:JupUDaXM2QyLcruGYFayOI1U9JI@dgpyq5til";
+
+            Cloudinary cloudinary = new Cloudinary(cloudinaryUrl);
+
+            using (var stream = image.OpenReadStream())
+            {
+                var uploadParams = new ImageUploadParams
+                {
+                    File = new FileDescription(image.FileName, stream),
+                    UseFilename = true,
+                    UniqueFilename = true,
+                    Overwrite = true
+                };
+
+                var uploadResult = await cloudinary.UploadAsync(uploadParams);
+                studentData.ImageUrl = (uploadResult.SecureUrl).ToString();
+            }
             var updatedData = await _StudentRepo.UpdateStudent(studentData);
 
             return "Image upload successfully";
-        }
-
-        private async Task<string> SaveImageFile(IFormFile imageFile)
-        {
-            if (imageFile == null || imageFile.Length == 0)
-                return string.Empty;
-
-            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
-            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "Student");
-
-            if (!Directory.Exists(uploadPath))
-                Directory.CreateDirectory(uploadPath);
-
-            string filePath = Path.Combine(uploadPath, fileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await imageFile.CopyToAsync(fileStream);
-            }
-
-            return $"/Student/{fileName}";
         }
     }
 }

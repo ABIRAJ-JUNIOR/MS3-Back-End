@@ -1,4 +1,6 @@
-﻿using MS3_Back_End.DTOs.Image;
+﻿using CloudinaryDotNet.Actions;
+using CloudinaryDotNet;
+using MS3_Back_End.DTOs.Image;
 using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.__Password__;
 using MS3_Back_End.DTOs.RequestDTOs.Admin;
@@ -8,6 +10,7 @@ using MS3_Back_End.DTOs.ResponseDTOs.Student;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
+using Microsoft.SqlServer.Server;
 
 namespace MS3_Back_End.Service
 {
@@ -15,13 +18,11 @@ namespace MS3_Back_End.Service
     {
         private readonly IAdminRepository _adminRepository;
         private readonly IAuthRepository _authRepository;
-        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public AdminService(IAdminRepository adminRepository, IAuthRepository authRepository, IWebHostEnvironment webHostEnvironment)
+        public AdminService(IAdminRepository adminRepository, IAuthRepository authRepository)
         {
             _adminRepository = adminRepository;
             _authRepository = authRepository;
-            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<AdminResponseDTO> AddAdmin(AdminRequestDTO request)
@@ -71,6 +72,7 @@ namespace MS3_Back_End.Service
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Phone = request.Phone,
+                ImageUrl = null,
                 CteatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
                 IsActive = true,
@@ -85,7 +87,7 @@ namespace MS3_Back_End.Service
                 FirstName = adminData.FirstName,
                 LastName = adminData.LastName,
                 Phone = adminData.Phone,
-                ImagePath = adminData.ImagePath,
+                ImageUrl = adminData.ImageUrl,
                 CteatedDate = adminData.CteatedDate,
                 UpdatedDate = adminData.UpdatedDate,
                 IsActive = adminData.IsActive,
@@ -108,7 +110,7 @@ namespace MS3_Back_End.Service
                 FirstName = adminData.FirstName,
                 LastName = adminData.LastName,
                 Phone = adminData.Phone,
-                ImagePath = adminData.ImagePath,
+                ImageUrl = adminData.ImageUrl,
                 CteatedDate = adminData.CteatedDate,
                 UpdatedDate = adminData.UpdatedDate,
                 IsActive = adminData.IsActive,
@@ -136,7 +138,7 @@ namespace MS3_Back_End.Service
                 FirstName = a.FirstName,
                 LastName = a.LastName,
                 Phone = a.Phone,
-                ImagePath = a.ImagePath,
+                ImageUrl = a.ImageUrl,
                 CteatedDate = a.CteatedDate,
                 UpdatedDate = a.UpdatedDate,
                 IsActive = a.IsActive,
@@ -175,7 +177,7 @@ namespace MS3_Back_End.Service
                 FirstName = updatedData.FirstName,
                 LastName = updatedData.LastName,
                 Phone = updatedData.Phone,
-                ImagePath = updatedData.ImagePath,
+                ImageUrl = updatedData.ImageUrl,
                 CteatedDate = updatedData.CteatedDate,
                 UpdatedDate = updatedData.UpdatedDate,
                 IsActive = updatedData.IsActive,
@@ -221,7 +223,7 @@ namespace MS3_Back_End.Service
             return "Update password successfully";
         }
 
-        public async Task<string> UploadImage(Guid adminId ,ImageRequestDTO request)
+        public async Task<string> UploadImage(Guid adminId ,IFormFile image)
         {
             var adminData = await _adminRepository.GetAdminById(adminId);
             if(adminData == null)
@@ -229,31 +231,27 @@ namespace MS3_Back_End.Service
                 throw new Exception("Admin not found");
             }
 
-            adminData.ImagePath = request.ImageFile != null ? await SaveImageFile(request.ImageFile) : null;
+            var cloudinaryUrl = "cloudinary://779552958281786:JupUDaXM2QyLcruGYFayOI1U9JI@dgpyq5til";
+
+            Cloudinary cloudinary = new Cloudinary(cloudinaryUrl);
+
+            using (var stream = image.OpenReadStream())
+            {
+                var uploadParams = new ImageUploadParams
+                {
+                    File = new FileDescription(image.FileName, stream),
+                    UseFilename = true,
+                    UniqueFilename = true,
+                    Overwrite = true
+                };
+
+                var uploadResult = await cloudinary.UploadAsync(uploadParams);
+                adminData.ImageUrl = (uploadResult.SecureUrl).ToString();
+            }
+
             var updatedData = await _adminRepository.UpdateAdmin(adminData);
 
             return "Image upload successfully";
-        }
-
-        private async Task<string> SaveImageFile(IFormFile imageFile)
-        {
-            if (imageFile == null || imageFile.Length == 0)
-                return string.Empty;
-
-            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
-            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "Admin");
-
-            if (!Directory.Exists(uploadPath))
-                Directory.CreateDirectory(uploadPath);
-
-            string filePath = Path.Combine(uploadPath, fileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await imageFile.CopyToAsync(fileStream);
-            }
-
-            return $"/Admin/{fileName}";
         }
 
         public async Task<PaginationResponseDTO<AdminResponseDTO>> GetPaginatedAdmin(int pageNumber, int pageSize)
@@ -273,7 +271,7 @@ namespace MS3_Back_End.Service
                 FirstName = a.FirstName,
                 LastName = a.LastName,
                 Phone = a.Phone,
-                ImagePath = a.ImagePath,
+                ImageUrl = a.ImageUrl,
                 CteatedDate = a.CteatedDate,
                 UpdatedDate = a.UpdatedDate,
                 IsActive = a.IsActive,

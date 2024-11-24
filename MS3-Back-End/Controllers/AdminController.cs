@@ -7,6 +7,8 @@ using MS3_Back_End.DTOs.RequestDTOs.__Password__;
 using MS3_Back_End.DTOs.RequestDTOs.Admin;
 using MS3_Back_End.DTOs.ResponseDTOs.Admin;
 using MS3_Back_End.IService;
+using MS3_Back_End.Service;
+using System.Drawing;
 
 namespace MS3_Back_End.Controllers
 {
@@ -99,11 +101,11 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPost("Image/{adminId}")]
-        public async Task<IActionResult> UploadImage(Guid adminId, ImageRequestDTO request)
+        public async Task<IActionResult> UploadImage(Guid adminId,IFormFile ImageFile)
         {
             try
             {
-                var response = await _adminService.UploadImage(adminId, request);
+                var response = await _adminService.UploadImage(adminId, ImageFile);
                 return Ok(response);
             }
             catch (Exception ex)

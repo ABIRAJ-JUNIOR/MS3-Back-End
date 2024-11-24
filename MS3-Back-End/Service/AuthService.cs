@@ -61,7 +61,7 @@ namespace MS3_Back_End.Service
                         DateOfBirth = request.DateOfBirth,
                         Gender = request.Gender,
                         Phone = request.Phone,
-                        ImagePath = "",
+                        ImageUrl = "",
                         CteatedDate = DateTime.Now,
                         UpdatedDate = DateTime.Now,
                         IsActive = true,

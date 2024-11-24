@@ -16,7 +16,6 @@ namespace MS3_Back_End
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.WebHost.UseWebRoot("wwwroot");
 
             // Add services to the container.
 

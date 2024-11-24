@@ -14,13 +14,11 @@ namespace MS3_Back_End.Service
     {
         private readonly IEnrollmentRepository _enrollmentRepository;
         private readonly ICourseScheduleRepository _courseScheduleRepository;
-        private readonly IPaymentService _paymentService;
 
-        public EnrollmentService(IEnrollmentRepository enrollmentRepository, ICourseScheduleRepository courseScheduleRepository, IPaymentService paymentService)
+        public EnrollmentService(IEnrollmentRepository enrollmentRepository, ICourseScheduleRepository courseScheduleRepository)
         {
             _enrollmentRepository = enrollmentRepository;
             _courseScheduleRepository = courseScheduleRepository;
-            _paymentService = paymentService;
         }
 
         public async Task<EnrollmentResponseDTO> AddEnrollment(EnrollmentRequestDTO EnrollmentReq)
@@ -53,7 +51,7 @@ namespace MS3_Back_End.Service
                     AmountPaid = EnrollmentReq.PaymentRequest.AmountPaid,
                     PaymentDate = DateTime.Now,
                     InstallmentNumber = EnrollmentReq.PaymentRequest.InstallmentNumber != null ? EnrollmentReq.PaymentRequest.InstallmentNumber:null,
-                    ImagePath = EnrollmentReq.PaymentRequest.ImageFile != null ? await _paymentService.SaveImageFile(EnrollmentReq.PaymentRequest.ImageFile) : string.Empty,
+                    ImageUrl = EnrollmentReq.PaymentRequest.ImageUrl != null ? EnrollmentReq.PaymentRequest.ImageUrl  : string.Empty,
                 }
             };
 
@@ -88,7 +86,7 @@ namespace MS3_Back_End.Service
                     PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
-                    ImagePath = payment.ImagePath,
+                    ImageUrl = payment.ImageUrl,
                     InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber:null,
                     EnrollmentId = payment.EnrollmentId
                 }).ToList();
@@ -123,7 +121,7 @@ namespace MS3_Back_End.Service
                     PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
-                    ImagePath = payment.ImagePath,
+                    ImageUrl = payment.ImageUrl,
                     InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber : null,
                     EnrollmentId = payment.EnrollmentId
                 }).ToList() : []
@@ -155,7 +153,7 @@ namespace MS3_Back_End.Service
                     PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
-                    ImagePath = payment.ImagePath,
+                    ImageUrl = payment.ImageUrl,
                     InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber : null,
                     EnrollmentId = payment.EnrollmentId
                 }).ToList() : []
@@ -191,7 +189,7 @@ namespace MS3_Back_End.Service
                     PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
-                    ImagePath = payment.ImagePath,
+                    ImageUrl = payment.ImageUrl,
                     InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber : null,
                     EnrollmentId = payment.EnrollmentId
                 }).ToList();
