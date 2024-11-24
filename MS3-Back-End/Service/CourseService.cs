@@ -17,15 +17,13 @@ namespace MS3_Back_End.Service
     public class CourseService : ICourseService
     {
         private readonly ICourseRepository _courseRepository;
-        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public CourseService(ICourseRepository courseRepository, IWebHostEnvironment webHostEnvironment)
+        public CourseService(ICourseRepository courseRepository)
         {
             _courseRepository = courseRepository;
-            _webHostEnvironment = webHostEnvironment;
         }
 
-        public async Task<CourseResponseDTO> AddCourse([FromForm]CourseRequestDTO courseReq)
+        public async Task<CourseResponseDTO> AddCourse(CourseRequestDTO courseReq)
         {
 
             var Course = new Course
@@ -36,7 +34,7 @@ namespace MS3_Back_End.Service
                 CourseFee = courseReq.CourseFee,
                 Description = courseReq.Description,
                 Prerequisites = courseReq.Prerequisites,
-                ImagePath = await SaveImageFile(courseReq.ImageFile!),
+                ImagePath = courseReq.ImageUrl!,
                 CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now
             };
@@ -226,8 +224,8 @@ namespace MS3_Back_End.Service
             if (!string.IsNullOrEmpty(course.Prerequisites))
                 GetData.Prerequisites = course.Prerequisites;
 
-            if (course.ImageFile != null)
-                GetData.ImagePath = await SaveImageFile(course.ImageFile!);
+            if (course.ImageUrl != null)
+                GetData.ImagePath = course.ImageUrl;
 
 
             GetData.UpdatedDate=DateTime.Now;
@@ -267,26 +265,6 @@ namespace MS3_Back_End.Service
             return data;
         }
 
-        private async Task<string> SaveImageFile(IFormFile imageFile)
-        {
-            if (imageFile == null || imageFile.Length == 0)
-                return string.Empty;
-
-            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
-            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "Course");
-
-            if (!Directory.Exists(uploadPath))
-                Directory.CreateDirectory(uploadPath);
-
-            string filePath = Path.Combine(uploadPath, fileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await imageFile.CopyToAsync(fileStream);
-            }
-
-            return $"/Course/{fileName}";
-        }
 
         public async Task<PaginationResponseDTO<CourseResponseDTO>> GetPaginatedCourses(int pageNumber, int pageSize)
         {
