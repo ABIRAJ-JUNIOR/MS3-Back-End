@@ -9,12 +9,10 @@ namespace MS3_Back_End.Service
     public class PaymentService : IPaymentService
     {
         private readonly IPaymentRepository _paymentRepository;
-        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public PaymentService(IPaymentRepository paymentRepository, IWebHostEnvironment webHostEnvironment)
+        public PaymentService(IPaymentRepository paymentRepository)
         {
             _paymentRepository = paymentRepository;
-            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<PaymentResponseDTO> CreatePayment(PaymentRequestDTO paymentRequest)
@@ -35,9 +33,9 @@ namespace MS3_Back_End.Service
                 EnrollmentId = paymentRequest.EnrollmentId
             };
 
-            if (paymentRequest.ImageFile != null)
+            if (paymentRequest.ImageUrl != null)
             {
-                payment.ImagePath = await SaveImageFile(paymentRequest.ImageFile);
+                payment.ImagePath = paymentRequest.ImageUrl;
             }
 
             var createdPayment = await _paymentRepository.CreatePayment(payment);
@@ -71,27 +69,6 @@ namespace MS3_Back_End.Service
             }).ToList();
 
             return response;
-        }
-
-        public async Task<string> SaveImageFile(IFormFile imageFile)
-        {
-            if (imageFile == null || imageFile.Length == 0)
-                return string.Empty;
-
-            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
-            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "Payment");
-
-            if (!Directory.Exists(uploadPath))
-                Directory.CreateDirectory(uploadPath);
-
-            string filePath = Path.Combine(uploadPath, fileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await imageFile.CopyToAsync(fileStream);
-            }
-
-            return $"/Payment/{fileName}";
         }
 
     }
