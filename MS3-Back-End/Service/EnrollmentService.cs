@@ -14,13 +14,11 @@ namespace MS3_Back_End.Service
     {
         private readonly IEnrollmentRepository _enrollmentRepository;
         private readonly ICourseScheduleRepository _courseScheduleRepository;
-        private readonly IPaymentService _paymentService;
 
-        public EnrollmentService(IEnrollmentRepository enrollmentRepository, ICourseScheduleRepository courseScheduleRepository, IPaymentService paymentService)
+        public EnrollmentService(IEnrollmentRepository enrollmentRepository, ICourseScheduleRepository courseScheduleRepository)
         {
             _enrollmentRepository = enrollmentRepository;
             _courseScheduleRepository = courseScheduleRepository;
-            _paymentService = paymentService;
         }
 
         public async Task<EnrollmentResponseDTO> AddEnrollment(EnrollmentRequestDTO EnrollmentReq)
