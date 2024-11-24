@@ -1,4 +1,6 @@
 ﻿using Azure;
+using CloudinaryDotNet.Actions;
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.Pagination;
@@ -321,6 +323,35 @@ namespace MS3_Back_End.Service
             };
 
             return paginationResponseDto;
+        }
+        public async Task<string> UploadImage(Guid CourseId, IFormFile image)
+        {
+            var courseData = await _courseRepository.GetCourseById(CourseId);
+            if (courseData == null)
+            {
+                throw new Exception("Student not found");
+            }
+
+            var cloudinaryUrl = "cloudinary://779552958281786:JupUDaXM2QyLcruGYFayOI1U9JI@dgpyq5til";
+
+            Cloudinary cloudinary = new Cloudinary(cloudinaryUrl);
+
+            using (var stream = image.OpenReadStream())
+            {
+                var uploadParams = new ImageUploadParams
+                {
+                    File = new FileDescription(image.FileName, stream),
+                    UseFilename = true,
+                    UniqueFilename = true,
+                    Overwrite = true
+                };
+
+                var uploadResult = await cloudinary.UploadAsync(uploadParams);
+                courseData.ImageUrl = (uploadResult.SecureUrl).ToString();
+            }
+            var updatedData = await _courseRepository.UpdateCourse(courseData);
+
+            return "Image upload successfully";
         }
     }
 }
