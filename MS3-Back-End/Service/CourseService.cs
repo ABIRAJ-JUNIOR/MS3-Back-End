@@ -38,7 +38,8 @@ namespace MS3_Back_End.Service
                 Prerequisites = courseReq.Prerequisites,
                 ImageUrl = null!,
                 CreatedDate = DateTime.Now,
-                UpdatedDate = DateTime.Now
+                UpdatedDate = DateTime.Now,
+                IsDeleted = false,
             };
 
             var data = await _courseRepository.AddCourse(Course);
@@ -52,7 +53,7 @@ namespace MS3_Back_End.Service
                 CourseFee = data.CourseFee,
                 Description = data.Description,
                 Prerequisites = data.Prerequisites,
-                ImageUrl = data.ImageUrl,
+                ImageUrl = data.ImageUrl!,
                 CreatedDate = data.CreatedDate,
                 UpdatedDate = data.UpdatedDate,
             };

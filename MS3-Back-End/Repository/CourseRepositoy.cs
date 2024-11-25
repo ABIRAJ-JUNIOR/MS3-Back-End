@@ -16,18 +16,22 @@ namespace MS3_Back_End.Repository
 
         public async Task<Course> AddCourse(Course courseReq)
         {
-            var name = await _Db.Courses.SingleOrDefaultAsync(n => n.CourseName == courseReq.CourseName);
-            if (name == null)
-            {
-                var data = await _Db.Courses.AddAsync(courseReq);
-                await _Db.SaveChangesAsync();
-                return data.Entity;
-            }
-            else
+            var course = await _Db.Courses.SingleOrDefaultAsync(n => n.CourseName == courseReq.CourseName);
+            var courseCategory = await _Db.CourseCategories.SingleOrDefaultAsync(cc => cc.Id == courseReq.CourseCategoryId);
+            if (course != null)
             {
                 throw new Exception("Your Course Already Added");
+
+            }
+            
+            if(courseCategory == null)
+            {
+                throw new Exception("Course Category not found");
             }
 
+            var data = await _Db.Courses.AddAsync(courseReq);
+            await _Db.SaveChangesAsync();
+            return data.Entity;
         }
         public async Task<ICollection<Course>> SearchCourse(string SearchText)
         {

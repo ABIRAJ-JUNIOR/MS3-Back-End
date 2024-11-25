@@ -122,7 +122,7 @@ namespace MS3_Back_End.Controller
             }
 
         }
-        [HttpPost("image")]
+        [HttpPost("image/{CourseId}")]
         public async Task<IActionResult> UploadImage(Guid CourseId, IFormFile? image)
         {
             try
