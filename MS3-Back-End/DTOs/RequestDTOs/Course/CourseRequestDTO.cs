@@ -10,7 +10,6 @@ namespace MS3_Back_End.DTOs.RequestDTOs.Course
         public decimal CourseFee { get; set; }
         public string Description { get; set; } = string.Empty;
         public string Prerequisites { get; set; } = string.Empty;
-        public string? ImageUrl { get; set; }
 
     }
 }

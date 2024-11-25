@@ -33,10 +33,6 @@ namespace MS3_Back_End.Service
                 EnrollmentId = paymentRequest.EnrollmentId
             };
 
-            if (paymentRequest.ImageUrl != null)
-            {
-                payment.ImageUrl = paymentRequest.ImageUrl;
-            }
 
             var createdPayment = await _paymentRepository.CreatePayment(payment);
 
@@ -47,7 +43,6 @@ namespace MS3_Back_End.Service
                 PaymentMethod = ((PaymentMethots)createdPayment.PaymentMethod).ToString(),
                 AmountPaid = createdPayment.AmountPaid,
                 PaymentDate = createdPayment.PaymentDate,
-                ImageUrl = createdPayment.ImageUrl,
                 InstallmentNumber = createdPayment.InstallmentNumber,
                 EnrollmentId = createdPayment.EnrollmentId
             };
@@ -63,7 +58,6 @@ namespace MS3_Back_End.Service
                 PaymentMethod = ((PaymentMethots)p.PaymentMethod).ToString(),
                 AmountPaid = p.AmountPaid,
                 PaymentDate = p.PaymentDate,
-                ImageUrl = p.ImageUrl,
                 InstallmentNumber = p.InstallmentNumber,
                 EnrollmentId = p.EnrollmentId
             }).ToList();

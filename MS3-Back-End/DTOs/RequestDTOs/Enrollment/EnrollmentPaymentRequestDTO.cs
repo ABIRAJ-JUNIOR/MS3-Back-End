@@ -8,6 +8,5 @@ namespace MS3_Back_End.DTOs.RequestDTOs.Enrollment
         public PaymentMethots PaymentMethod { get; set; }
         public decimal AmountPaid { get; set; }
         public int? InstallmentNumber { get; set; }
-        public string? ImageUrl { get; set; }
     }
 }

@@ -51,7 +51,6 @@ namespace MS3_Back_End.Service
                     AmountPaid = EnrollmentReq.PaymentRequest.AmountPaid,
                     PaymentDate = DateTime.Now,
                     InstallmentNumber = EnrollmentReq.PaymentRequest.InstallmentNumber != null ? EnrollmentReq.PaymentRequest.InstallmentNumber:null,
-                    ImageUrl = EnrollmentReq.PaymentRequest.ImageUrl != null ? EnrollmentReq.PaymentRequest.ImageUrl  : string.Empty,
                 }
             };
 
@@ -86,7 +85,6 @@ namespace MS3_Back_End.Service
                     PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
-                    ImageUrl = payment.ImageUrl,
                     InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber:null,
                     EnrollmentId = payment.EnrollmentId
                 }).ToList();
@@ -121,7 +119,6 @@ namespace MS3_Back_End.Service
                     PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
-                    ImageUrl = payment.ImageUrl,
                     InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber : null,
                     EnrollmentId = payment.EnrollmentId
                 }).ToList() : []
@@ -153,7 +150,6 @@ namespace MS3_Back_End.Service
                     PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
-                    ImageUrl = payment.ImageUrl,
                     InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber : null,
                     EnrollmentId = payment.EnrollmentId
                 }).ToList() : []
@@ -189,7 +185,6 @@ namespace MS3_Back_End.Service
                     PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
-                    ImageUrl = payment.ImageUrl,
                     InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber : null,
                     EnrollmentId = payment.EnrollmentId
                 }).ToList();
