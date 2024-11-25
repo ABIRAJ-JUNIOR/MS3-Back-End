@@ -14,6 +14,6 @@ namespace MS3_Back_End.DTOs.RequestDTOs.Student
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
 
-        public AddressRequestDTO? Address { get; set; }
+        public StudentAddressRequestDTO? Address { get; set; }
     }
 }
