@@ -57,6 +57,7 @@ namespace MS3_Back_End.Controllers
         {
             var adminsList = await _adminService.GetAllAdmins();
             return Ok(adminsList);
+
         }
 
         [HttpPut("Update-Full-Details/{id}")]
