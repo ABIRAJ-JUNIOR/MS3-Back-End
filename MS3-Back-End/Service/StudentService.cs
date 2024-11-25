@@ -300,6 +300,8 @@ namespace MS3_Back_End.Service
                         CreatedDate = sa.Assessment.CreatedDate,
                         UpdateDate = sa.Assessment.UpdateDate,
                         Status = ((AssessmentStatus)sa.Assessment.Status).ToString(),
+                        courseResponse = null!,
+                        studentAssessmentResponses = null!
                     } : new AssessmentResponseDTO()
                 }).ToList() : null,
             };
