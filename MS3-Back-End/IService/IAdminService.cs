@@ -13,7 +13,7 @@ namespace MS3_Back_End.IService
         Task<AdminResponseDTO> AddAdmin(AdminRequestDTO request);
         Task<AdminResponseDTO> GetAdminById(Guid id);
         Task<ICollection<AdminResponseDTO>> GetAllAdmins();
-        Task<AdminResponseDTO> UpdateAdminFullDetails(Guid id, AdminFullUpdateRequestDTO request);
+        Task<AdminResponseDTO> UpdateAdminFullDetails(Guid id, AdminRequestDTO request);
         Task<AdminResponseDTO> UpdateAdminPersonalDetails(Guid id, AdminUpdateRequestDTO request);
         Task<string> UpdateEmail(UpdateEmailRequestDTO request);
         Task<string> UploadImage(Guid adminId,IFormFile? ImageFile);

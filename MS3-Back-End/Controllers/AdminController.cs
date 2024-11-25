@@ -61,7 +61,7 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPut("Update-Full-Details/{id}")]
-        public async Task<IActionResult> UpdateAdminFullDetails(Guid id, AdminFullUpdateRequestDTO request)
+        public async Task<IActionResult> UpdateAdminFullDetails(Guid id, AdminRequestDTO request)
         {
             var updateresponse = await _adminService.UpdateAdminFullDetails(id, request);
             return Ok(updateresponse);

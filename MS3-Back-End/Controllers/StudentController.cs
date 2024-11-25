@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.Image;
 using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Student;
+using MS3_Back_End.DTOs.ResponseDTOs.Student;
 using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Controllers
@@ -66,7 +67,21 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpPut("update")]
+        [HttpPut("Update-Full-Details/{id}")]
+        public async Task<IActionResult> UpdateStudentFullDetails(Guid id, StudentRequestDTO request)
+        {
+            try
+            {
+                var updatedData = await _studentService.UpdateStudentFullDetails(id, request);
+                return Ok(updatedData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("Update-Personal-Details")]
         public async Task<IActionResult> UpdateStudent(StudentUpdateDTO studentUpdate)
         {
             if (studentUpdate == null)
