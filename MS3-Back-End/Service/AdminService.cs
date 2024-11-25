@@ -11,6 +11,7 @@ using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
 using Microsoft.SqlServer.Server;
+using System.Runtime.InteropServices;
 
 namespace MS3_Back_End.Service
 {
@@ -155,7 +156,64 @@ namespace MS3_Back_End.Service
             return response;
         }
 
-        public async Task<AdminResponseDTO> UpdateAdmin(Guid id , AdminUpdateRequestDTO request)
+        public async Task<AdminResponseDTO> UpdateAdminFullDetails(Guid id , AdminFullUpdateRequestDTO request)
+        {
+            var adminData = await _adminRepository.GetAdminById(id);
+            if (adminData == null)
+            {
+                throw new Exception("Admin not found");
+            }
+            adminData.FirstName = request.FirstName;
+            adminData.Nic = request.Nic;
+            adminData.LastName = request.LastName;
+            adminData.Phone = request.Phone;
+            adminData.UpdatedDate = DateTime.Now;
+
+            var updatedData = await _adminRepository.UpdateAdmin(adminData);
+
+            var userData = await _adminRepository.GetUserById(id);
+            if (userData == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            userData.Email = request.Email;
+            userData.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
+
+            var userUpdateData = await _adminRepository.UpdateUser(userData);
+
+            var userRoleData = await _adminRepository.GetUserRoleByUserId(id);
+            if (userRoleData == null)
+            {
+                throw new Exception("UserRole not found");
+            }
+
+            var roleData = await _authRepository.GetRoleByName(((AdminRole)request.Role).ToString());
+            if (roleData == null)
+            {
+                throw new Exception("Role not found");
+            }
+
+            userRoleData.RoleId = roleData.Id;
+
+            var userRoleUpdateData = await _adminRepository.UpdateUserRole(userRoleData);
+
+            var response = new AdminResponseDTO()
+            {
+                Id = updatedData.Id,
+                Nic = updatedData.Nic,
+                FirstName = updatedData.FirstName,
+                LastName = updatedData.LastName,
+                Phone = updatedData.Phone,
+                ImageUrl = updatedData.ImageUrl,
+                CteatedDate = updatedData.CteatedDate,
+                UpdatedDate = updatedData.UpdatedDate,
+                IsActive = updatedData.IsActive,
+            };
+            return response;
+        }
+
+        public async Task<AdminResponseDTO> UpdateAdminPersonalDetails(Guid id , AdminUpdateRequestDTO request)
         {
             var adminData = await _adminRepository.GetAdminById(id);
             if(adminData == null)
@@ -300,6 +358,33 @@ namespace MS3_Back_End.Service
             };
 
             return paginationResponseDto;
+        }
+
+        public async Task<AdminResponseDTO> DeleteAdmin(Guid Id)
+        {
+            var adminData = await _adminRepository.GetAdminById(Id);
+            if (adminData == null)
+            {
+                throw new Exception("Admin not found");
+            }
+
+            adminData.IsActive = false;
+            var deletedAdmin = await _adminRepository.DeleteAdmin(adminData);
+
+            var response = new AdminResponseDTO()
+            {
+                Id = deletedAdmin.Id,
+                Nic = deletedAdmin.Nic,
+                FirstName = deletedAdmin.FirstName,
+                LastName = deletedAdmin.LastName,
+                Phone = deletedAdmin.Phone,
+                ImageUrl = deletedAdmin.ImageUrl,
+                CteatedDate = deletedAdmin.CteatedDate,
+                UpdatedDate = deletedAdmin.UpdatedDate,
+                IsActive = deletedAdmin.IsActive,
+            };
+
+            return response;
         }
     }
 }

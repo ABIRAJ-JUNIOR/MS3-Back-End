@@ -54,10 +54,23 @@ namespace MS3_Back_End.Repository
             return updatedData.Entity;
         }
 
+        public async Task<UserRole> UpdateUserRole(UserRole userRole)
+        {
+            var updatedData =  _dbContext.UserRoles.Update(userRole);
+            await _dbContext.SaveChangesAsync();
+            return updatedData.Entity;
+        }
+
         public async Task<User> GetUserById(Guid id)
         {
             var userData = await _dbContext.Users.SingleOrDefaultAsync(u => u.Id == id);
             return userData!;
+        }
+
+        public async Task<UserRole> GetUserRoleByUserId(Guid id)
+        {
+            var roleData = await _dbContext.UserRoles.SingleOrDefaultAsync(r => r.UserId == id);
+            return roleData!;
         }
 
         public async Task<ICollection<Admin>> GetPaginatedAdmin(int pageNumber, int pageSize)
@@ -66,6 +79,13 @@ namespace MS3_Back_End.Repository
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
+        }
+
+        public async Task<Admin> DeleteAdmin(Admin admin)
+        {
+            var admindata =  _dbContext.Admins.Update(admin);
+            await _dbContext.SaveChangesAsync();
+            return admindata.Entity;
         }
     }
 }

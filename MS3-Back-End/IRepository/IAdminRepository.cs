@@ -10,7 +10,10 @@ namespace MS3_Back_End.IRepository
         Task<ICollection<Admin>> GetAllAdmins();
         Task<Admin> UpdateAdmin(Admin admin);
         Task<User> UpdateUser(User user);
+        Task<UserRole> UpdateUserRole(UserRole userRole);
         Task<User> GetUserById(Guid id);
+        Task<UserRole> GetUserRoleByUserId(Guid id);
         Task<ICollection<Admin>> GetPaginatedAdmin(int pageNumber, int pageSize);
+        Task<Admin> DeleteAdmin(Admin admin);
     }
 }
