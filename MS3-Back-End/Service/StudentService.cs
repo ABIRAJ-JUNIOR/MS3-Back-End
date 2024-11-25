@@ -245,11 +245,10 @@ namespace MS3_Back_End.Service
                         PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                         AmountPaid = payment.AmountPaid,
                         PaymentDate = payment.PaymentDate,
-                        ImageUrl = payment.ImageUrl,
                         InstallmentNumber = payment.InstallmentNumber,
                         EnrollmentId = payment.EnrollmentId
                     }).ToList() : null,
-                    CourseScheduleResponse = new CourseScheduleResponseDTO()
+                    CourseScheduleResponse = enroll.CourseSchedule != null ? new CourseScheduleResponseDTO()
                     {
                         Id = enroll.CourseSchedule.Id,
                         CourseId = enroll.CourseSchedule.CourseId,
@@ -263,7 +262,7 @@ namespace MS3_Back_End.Service
                         CreatedDate = enroll.CourseSchedule.CreatedDate,
                         UpdatedDate = enroll.CourseSchedule.UpdatedDate,
                         ScheduleStatus = ((ScheduleStatus)enroll.CourseSchedule.ScheduleStatus).ToString(),
-                        CourseResponse = new CourseResponseDTO()
+                        CourseResponse = enroll.CourseSchedule.Course != null ? new CourseResponseDTO()
                         {
                             Id = enroll.CourseSchedule.Course.Id,
                             CourseCategoryId = enroll.CourseSchedule.Course.CourseCategoryId,
@@ -275,8 +274,8 @@ namespace MS3_Back_End.Service
                             ImageUrl = enroll.CourseSchedule.Course.ImageUrl,
                             CreatedDate = enroll.CourseSchedule.Course.CreatedDate,
                             UpdatedDate = enroll.CourseSchedule.Course.UpdatedDate,
-                        }
-                    }
+                        } : null,
+                    } : null
                 }).ToList() : null,
                 StudentAssessments = item.StudentAssessments != null ? item.StudentAssessments.Select(sa => new StudentAssessmentResponseDTO()
                 {
@@ -289,7 +288,8 @@ namespace MS3_Back_End.Service
                     StudentAssessmentStatus = ((StudentAssessmentStatus)sa.StudentAssessmentStatus).ToString(),
                     StudentId = sa.StudentId,
                     AssessmentId = sa.AssessmentId,
-                    AssessmentResponse = new AssessmentResponseDTO(){
+                    AssessmentResponse = sa.Assessment != null ? new AssessmentResponseDTO()
+                    {
                         Id = sa.Assessment.Id,
                         CourseId = sa.Assessment.CourseId,
                         AssessmentType = ((AssessmentType)sa.Assessment.AssessmentType).ToString(),
@@ -300,7 +300,7 @@ namespace MS3_Back_End.Service
                         CreatedDate = sa.Assessment.CreatedDate,
                         UpdateDate = sa.Assessment.UpdateDate,
                         Status = ((AssessmentStatus)sa.Assessment.Status).ToString(),
-                    }
+                    } : new AssessmentResponseDTO()
                 }).ToList() : null,
             };
 

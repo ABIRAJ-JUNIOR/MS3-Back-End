@@ -9,6 +9,5 @@ namespace MS3_Back_End.DTOs.RequestDTOs.Payment
         public decimal AmountPaid { get; set; }
         public int? InstallmentNumber { get; set; }
         public Guid EnrollmentId { get; set; }
-        public string? ImageUrl { get; set; }
     }
 }
