@@ -223,12 +223,17 @@ namespace MS3_Back_End.Service
             return "Update password successfully";
         }
 
-        public async Task<string> UploadImage(Guid adminId ,IFormFile image)
+        public async Task<string> UploadImage(Guid adminId ,IFormFile? image)
         {
             var adminData = await _adminRepository.GetAdminById(adminId);
             if(adminData == null)
             {
                 throw new Exception("Admin not found");
+            }
+
+            if (image == null)
+            {
+                throw new Exception($"Could not upload image");
             }
 
             var cloudinaryUrl = "cloudinary://779552958281786:JupUDaXM2QyLcruGYFayOI1U9JI@dgpyq5til";

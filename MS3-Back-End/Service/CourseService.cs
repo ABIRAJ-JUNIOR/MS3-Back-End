@@ -36,7 +36,7 @@ namespace MS3_Back_End.Service
                 CourseFee = courseReq.CourseFee,
                 Description = courseReq.Description,
                 Prerequisites = courseReq.Prerequisites,
-                ImageUrl = courseReq.ImageUrl!,
+                ImageUrl = null!,
                 CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now
             };
@@ -324,12 +324,17 @@ namespace MS3_Back_End.Service
 
             return paginationResponseDto;
         }
-        public async Task<string> UploadImage(Guid CourseId, IFormFile image)
+        public async Task<string> UploadImage(Guid CourseId, IFormFile? image)
         {
             var courseData = await _courseRepository.GetCourseById(CourseId);
             if (courseData == null)
             {
-                throw new Exception("Student not found");
+                throw new Exception("Course not found");
+            }
+
+            if(image == null)
+            {
+                throw new Exception($"Could not upload image");
             }
 
             var cloudinaryUrl = "cloudinary://779552958281786:JupUDaXM2QyLcruGYFayOI1U9JI@dgpyq5til";

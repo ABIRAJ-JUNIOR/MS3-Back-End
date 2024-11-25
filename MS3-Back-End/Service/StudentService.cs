@@ -413,12 +413,17 @@ namespace MS3_Back_End.Service
             return paginationResponseDto;
         }
 
-        public async Task<string> UploadImage(Guid studentId, IFormFile image)
+        public async Task<string> UploadImage(Guid studentId, IFormFile? image)
         {
             var studentData = await _StudentRepo.GetStudentById(studentId);
             if (studentData == null)
             {
                 throw new Exception("Student not found");
+            }
+
+            if(image == null)
+            {
+                throw new Exception("Could not upload image");
             }
 
             var cloudinaryUrl = "cloudinary://779552958281786:JupUDaXM2QyLcruGYFayOI1U9JI@dgpyq5til";
