@@ -122,6 +122,18 @@ namespace MS3_Back_End.Controller
             }
 
         }
+        [HttpPost("image")]
+        public async Task<IActionResult> UploadImage(Guid CourseId, IFormFile image)
+        {
+            try
+            {
+                var data = await _courseService.UploadImage(CourseId,image);
+                return Ok(data);
+            }catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }
