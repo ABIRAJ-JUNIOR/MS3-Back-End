@@ -1,7 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MS3_Back_End.DBContext;
+using MS3_Back_End.DTOs.ResponseDTOs.Admin;
+using MS3_Back_End.DTOs.ResponseDTOs.AuditLog;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MS3_Back_End.Repository
 {
@@ -48,12 +51,41 @@ namespace MS3_Back_End.Repository
         }
 
 
-        public async Task<ICollection<Admin>> GetPaginatedAdmin(int pageNumber, int pageSize)
+        public async Task<ICollection<AdminWithRoleDTO>> GetPaginatedAdmin(int pageNumber, int pageSize)
         {
-            return await _dbContext.Admins.Include(a => a.AuditLogs).Where(a => a.IsActive != false)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+
+            var result = await (from admin in _dbContext.Admins
+                                join user in _dbContext.Users on admin.Id equals user.Id
+                                join userRole in _dbContext.UserRoles on user.Id equals userRole.UserId
+                                join role in _dbContext.Roles on userRole.RoleId equals role.Id
+                                where admin.IsActive != false
+                                select new AdminWithRoleDTO
+                                {
+                                    Id = admin.Id,
+                                    RoleName = role.Name,
+                                    Nic = admin.Nic,
+                                    FirstName = admin.FirstName,
+                                    LastName = admin.LastName,
+                                    Phone = admin.Phone,
+                                    Email = user.Email,
+                                    ImageUrl = admin.ImageUrl,
+                                    CteatedDate = admin.CteatedDate,
+                                    UpdatedDate = admin.UpdatedDate,
+                                    IsActive = admin.IsActive,
+                                    AuditLogs = admin.AuditLogs!.Select(a => new AuditLogResponceDTO
+                                    {
+                                        Id = a.Id,
+                                        AdminId = a.AdminId,
+                                        ActionDate = a.ActionDate,
+                                        Details = a.Details,
+                                        Action = a.Action,
+                                    }).ToList()
+                                })
+                                .Skip((pageNumber - 1) * pageSize)
+                                .Take(pageSize)
+                                .ToListAsync();
+
+            return result;
         }
 
         public async Task<Admin> DeleteAdmin(Admin admin)

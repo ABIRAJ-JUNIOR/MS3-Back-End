@@ -1,4 +1,4 @@
-﻿using Azure.Core;
+﻿  using Azure.Core;
 using CloudinaryDotNet.Actions;
 using CloudinaryDotNet;
 using Microsoft.AspNetCore.Hosting;
@@ -321,6 +321,7 @@ namespace MS3_Back_End.Service
             }
 
             studentData.FirstName = request.FirstName;
+            studentData.Gender = request.Gender;
             studentData.LastName = request.LastName;
             studentData.Phone = request.Phone;
             studentData.UpdatedDate = DateTime.Now;

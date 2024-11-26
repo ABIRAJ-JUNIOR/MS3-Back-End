@@ -320,7 +320,7 @@ namespace MS3_Back_End.Service
             return "Image upload successfully";
         }
 
-        public async Task<PaginationResponseDTO<AdminResponseDTO>> GetPaginatedAdmin(int pageNumber, int pageSize)
+        public async Task<PaginationResponseDTO<AdminWithRoleDTO>> GetPaginatedAdmin(int pageNumber, int pageSize)
         {
             var allAdmins = await _adminRepository.GetAllAdmins();
             if (allAdmins == null)
@@ -330,13 +330,15 @@ namespace MS3_Back_End.Service
 
             var admins = await _adminRepository.GetPaginatedAdmin(pageNumber, pageSize);
 
-            var response = admins.Select(a => new AdminResponseDTO()
+            var response = admins.Select(a => new AdminWithRoleDTO()
             {
                 Id = a.Id,
                 Nic = a.Nic,
+                RoleName = a.RoleName,
                 FirstName = a.FirstName,
                 LastName = a.LastName,
                 Phone = a.Phone,
+                Email = a.Email,
                 ImageUrl = a.ImageUrl,
                 CteatedDate = a.CteatedDate,
                 UpdatedDate = a.UpdatedDate,
@@ -351,7 +353,7 @@ namespace MS3_Back_End.Service
                 }).ToList() : null
             }).ToList();
 
-            var paginationResponseDto = new PaginationResponseDTO<AdminResponseDTO>
+            var paginationResponseDto = new PaginationResponseDTO<AdminWithRoleDTO>
             {
                 Items = response,
                 CurrentPage = pageNumber,

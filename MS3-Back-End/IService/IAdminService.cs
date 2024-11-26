@@ -18,7 +18,7 @@ namespace MS3_Back_End.IService
         Task<string> UpdateEmail(UpdateEmailRequestDTO request);
         Task<string> UploadImage(Guid adminId,IFormFile? ImageFile);
         Task<string> UpdatePassword(UpdatePasswordRequestDTO request);
-        Task<PaginationResponseDTO<AdminResponseDTO>> GetPaginatedAdmin(int pageNumber, int pageSize);
+        Task<PaginationResponseDTO<AdminWithRoleDTO>> GetPaginatedAdmin(int pageNumber, int pageSize);
         Task<AdminResponseDTO> DeleteAdmin(Guid Id);
     }
 }
