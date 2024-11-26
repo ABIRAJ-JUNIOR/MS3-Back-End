@@ -156,29 +156,16 @@ namespace MS3_Back_End.Service
             return response;
         }
 
-        public async Task<AdminResponseDTO> UpdateAdminFullDetails(Guid id , AdminRequestDTO request)
+        public async Task<AdminResponseDTO> UpdateAdminFullDetails(Guid id , AdminFullUpdateDTO request)
         {
             var adminData = await _adminRepository.GetAdminById(id);
-            var nicCheck = await _authRepository.GetStudentByNic(request.Nic);
-            var emailCheck = await _authRepository.GetUserByEmail(request.Email);
 
             if (adminData == null)
             {
                 throw new Exception("Admin not found");
             }
 
-            if (nicCheck != null)
-            {
-                throw new Exception("Nic already used");
-            }
-
-            if (emailCheck != null)
-            {
-                throw new Exception("Email already used");
-            }
-
             adminData.FirstName = request.FirstName;
-            adminData.Nic = request.Nic;
             adminData.LastName = request.LastName;
             adminData.Phone = request.Phone;
             adminData.UpdatedDate = DateTime.Now;
@@ -191,8 +178,10 @@ namespace MS3_Back_End.Service
                 throw new Exception("User not found");
             }
 
-            userData.Email = request.Email;
-            userData.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
+            if(request.Password != null)
+            {
+                userData.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
+            }
 
             var userUpdateData = await _authRepository.UpdateUser(userData);
 
