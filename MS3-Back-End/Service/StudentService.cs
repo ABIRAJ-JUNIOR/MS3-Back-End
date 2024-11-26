@@ -19,6 +19,8 @@ using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
 using MS3_Back_End.Repository;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using MS3_Back_End.DTOs.RequestDTOs.Admin;
+using MS3_Back_End.DTOs.ResponseDTOs.Admin;
 
 namespace MS3_Back_End.Service
 {
@@ -271,7 +273,7 @@ namespace MS3_Back_End.Service
                             CourseFee = enroll.CourseSchedule.Course.CourseFee,
                             Description = enroll.CourseSchedule.Course.Description,
                             Prerequisites = enroll.CourseSchedule.Course.Prerequisites,
-                            ImageUrl = enroll.CourseSchedule.Course.ImageUrl,
+                            ImageUrl = enroll.CourseSchedule.Course.ImageUrl!,
                             CreatedDate = enroll.CourseSchedule.Course.CreatedDate,
                             UpdatedDate = enroll.CourseSchedule.Course.UpdatedDate,
                         } : null,
@@ -307,6 +309,79 @@ namespace MS3_Back_End.Service
             };
 
             return obj;
+        }
+
+        public async Task<StudentResponseDTO> UpdateStudentFullDetails(Guid id, StudentFullUpdateDTO request)
+        {
+            var studentData = await _StudentRepo.GetStudentById(id);
+
+            if (studentData == null)
+            {
+                throw new Exception("Student not found");
+            }
+
+            studentData.FirstName = request.FirstName;
+            studentData.LastName = request.LastName;
+            studentData.Phone = request.Phone;
+            studentData.UpdatedDate = DateTime.Now;
+            if (request.Address != null)
+            {
+                studentData.Address = new Address
+                {
+                    AddressLine1 = request.Address.AddressLine1,
+                    AddressLine2 = request.Address.AddressLine2,
+                    PostalCode = request.Address.PostalCode,
+                    City = request.Address.City,
+                    Country = request.Address.Country,
+                };
+            }
+
+            var updatedData = await _StudentRepo.UpdateStudent(studentData);
+
+            var userData = await _authRepository.GetUserById(id);
+            if (userData == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            if(userData.Password != null)
+            {
+                userData.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
+            }
+
+            var userUpdateData = await _authRepository.UpdateUser(userData);
+
+
+            var StudentReponse = new StudentResponseDTO
+            {
+                Id = updatedData.Id,
+                Nic = updatedData.Nic,
+                FirstName = updatedData.FirstName,
+                LastName = updatedData.LastName,
+                DateOfBirth = updatedData.DateOfBirth,
+                Gender = ((Gender)updatedData.Gender).ToString(),
+                Phone = updatedData.Phone,
+                ImageUrl = updatedData.ImageUrl!,
+                CteatedDate = updatedData.CteatedDate,
+                UpdatedDate = updatedData.UpdatedDate,
+            };
+
+            if (updatedData.Address != null)
+            {
+                var AddressResponse = new AddressResponseDTO
+                {
+                    StudentId = updatedData.Address.StudentId,
+                    AddressLine1 = updatedData.Address.AddressLine1,
+                    AddressLine2 = updatedData.Address.AddressLine2,
+                    PostalCode = updatedData.Address.PostalCode,
+                    City = updatedData.Address.City,
+                    Country = updatedData.Address.Country,
+                };
+
+                StudentReponse.Address = AddressResponse;
+            }
+
+            return StudentReponse;
         }
 
         public async Task<StudentResponseDTO> UpdateStudent(StudentUpdateDTO studentUpdate)

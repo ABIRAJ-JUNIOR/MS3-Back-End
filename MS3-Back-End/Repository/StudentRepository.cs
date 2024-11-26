@@ -48,7 +48,7 @@ namespace MS3_Back_End.Repository
                 .Include(e => e.Enrollments!)
                     .ThenInclude(p => p.Payments)
                 .Include(e => e.Enrollments!)
-                    .ThenInclude(enrollment => enrollment.CourseSchedule).ThenInclude(c => c.Course)
+                    .ThenInclude(enrollment => enrollment.CourseSchedule).ThenInclude(c => c!.Course)
                 .Include(a => a.StudentAssessments!)
                     .ThenInclude(a => a.Assessment)
                 .SingleOrDefaultAsync(c => c.Id == StudentId && c.IsActive == true);
@@ -71,7 +71,7 @@ namespace MS3_Back_End.Repository
 
         public async Task<ICollection<Student>> GetPaginatedStudent(int pageNumber, int pageSize)
         {
-            var students = await _Db.Students
+            var students = await _Db.Students.Where(s => s.IsActive != false)
                 .Include(s => s.Address)            
                 .Skip((pageNumber - 1) * pageSize)  
                 .Take(pageSize)                     

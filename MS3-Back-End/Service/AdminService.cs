@@ -156,33 +156,36 @@ namespace MS3_Back_End.Service
             return response;
         }
 
-        public async Task<AdminResponseDTO> UpdateAdminFullDetails(Guid id , AdminFullUpdateRequestDTO request)
+        public async Task<AdminResponseDTO> UpdateAdminFullDetails(Guid id , AdminFullUpdateDTO request)
         {
             var adminData = await _adminRepository.GetAdminById(id);
+
             if (adminData == null)
             {
                 throw new Exception("Admin not found");
             }
+
             adminData.FirstName = request.FirstName;
-            adminData.Nic = request.Nic;
             adminData.LastName = request.LastName;
             adminData.Phone = request.Phone;
             adminData.UpdatedDate = DateTime.Now;
 
             var updatedData = await _adminRepository.UpdateAdmin(adminData);
 
-            var userData = await _adminRepository.GetUserById(id);
+            var userData = await _authRepository.GetUserById(id);
             if (userData == null)
             {
                 throw new Exception("User not found");
             }
 
-            userData.Email = request.Email;
-            userData.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
+            if(request.Password != null)
+            {
+                userData.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
+            }
 
-            var userUpdateData = await _adminRepository.UpdateUser(userData);
+            var userUpdateData = await _authRepository.UpdateUser(userData);
 
-            var userRoleData = await _adminRepository.GetUserRoleByUserId(id);
+            var userRoleData = await _authRepository.GetUserRoleByUserId(id);
             if (userRoleData == null)
             {
                 throw new Exception("UserRole not found");
@@ -196,7 +199,7 @@ namespace MS3_Back_End.Service
 
             userRoleData.RoleId = roleData.Id;
 
-            var userRoleUpdateData = await _adminRepository.UpdateUserRole(userRoleData);
+            var userRoleUpdateData = await _authRepository.UpdateUserRole(userRoleData);
 
             var response = new AdminResponseDTO()
             {
@@ -246,7 +249,7 @@ namespace MS3_Back_End.Service
 
         public async Task<string> UpdateEmail(UpdateEmailRequestDTO request)
         {
-            var userData = await _adminRepository.GetUserById(request.Id);
+            var userData = await _authRepository.GetUserById(request.Id);
             if(userData == null)
             {
                 throw new Exception("User not found");
@@ -258,14 +261,14 @@ namespace MS3_Back_End.Service
 
             userData.Email = request.Email;
 
-            var updatedData = await _adminRepository.UpdateUser(userData);
+            var updatedData = await _authRepository.UpdateUser(userData);
 
             return "Update email successfully";
         }
 
         public async Task<string> UpdatePassword(UpdatePasswordRequestDTO request)
         {
-            var userData = await _adminRepository.GetUserById(request.Id);
+            var userData = await _authRepository.GetUserById(request.Id);
             if (userData == null)
             {
                 throw new Exception("User not found");
@@ -276,7 +279,7 @@ namespace MS3_Back_End.Service
             }
 
             userData.Password = BCrypt.Net.BCrypt.HashPassword(request.newPassword);
-            var updatedData = await _adminRepository.UpdateUser(userData);
+            var updatedData = await _authRepository.UpdateUser(userData);
 
             return "Update password successfully";
         }

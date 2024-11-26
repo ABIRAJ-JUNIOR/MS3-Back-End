@@ -78,5 +78,26 @@ namespace MS3_Back_End.Repository
             var adminData = await _dbContext.Admins.SingleOrDefaultAsync(s => s.Id == id);
             return adminData!;
         }
+
+        public async Task<User> UpdateUser(User user)
+        {
+            var updatedData = _dbContext.Users.Update(user);
+            await _dbContext.SaveChangesAsync();
+            return updatedData.Entity;
+        }
+
+        public async Task<UserRole> UpdateUserRole(UserRole userRole)
+        {
+            var updatedData = _dbContext.UserRoles.Update(userRole);
+            await _dbContext.SaveChangesAsync();
+            return updatedData.Entity;
+        }
+
+        public async Task<User> GetUserById(Guid id)
+        {
+            var userData = await _dbContext.Users.SingleOrDefaultAsync(u => u.Id == id);
+            return userData!;
+        }
+
     }
 }
