@@ -21,8 +21,6 @@ namespace MS3_Back_End.Repository
             {
                 throw new Exception("Course not found");
             }
-
-            var courseScheduleData = await _Db.CourseSchedules.SingleOrDefaultAsync(cs => cs.CourseId == courseReq.CourseId);
             var data = await _Db.CourseSchedules.AddAsync(courseReq);
             await _Db.SaveChangesAsync();
             return data.Entity;

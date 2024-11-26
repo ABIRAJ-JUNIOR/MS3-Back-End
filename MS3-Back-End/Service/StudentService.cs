@@ -451,36 +451,9 @@ namespace MS3_Back_End.Service
             }
             var Students = await _StudentRepo.GetPaginatedStudent(pageNumber, pageSize);
 
-            var studentResponses = Students.Select(student => new StudentWithUserResponseDTO
-            {
-                Id = student.Id,
-                Nic = student.Nic,
-                FirstName = student.FirstName,
-                LastName = student.LastName,
-                DateOfBirth = student.DateOfBirth,
-                Gender = student.Gender,
-                Phone = student.Phone,
-                Email = student.Email,
-                ImageUrl = student.ImageUrl!,
-                CteatedDate = student.CteatedDate,
-                UpdatedDate = student.UpdatedDate,
-                IsActive = student.IsActive,
-
-                Address = student.Address != null ? new AddressResponseDTO
-                {
-                    AddressLine1 = student.Address.AddressLine1,
-                    AddressLine2 = student.Address.AddressLine2,
-                    City = student.Address.City,
-                    PostalCode = student.Address.PostalCode,
-                    Country = student.Address.Country,
-                    StudentId = student.Id
-                } : null,  
-            }).ToList();
-
-
             var paginationResponseDto = new PaginationResponseDTO<StudentWithUserResponseDTO>
             {
-                Items = studentResponses,
+                Items = Students,
                 CurrentPage = pageNumber,
                 PageSize = pageSize,
                 TotalPages = (int)Math.Ceiling(AllStudents.Count / (double)pageSize),

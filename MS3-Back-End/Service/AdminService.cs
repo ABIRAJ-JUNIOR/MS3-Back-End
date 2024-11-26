@@ -330,32 +330,9 @@ namespace MS3_Back_End.Service
 
             var admins = await _adminRepository.GetPaginatedAdmin(pageNumber, pageSize);
 
-            var response = admins.Select(a => new AdminWithRoleDTO()
-            {
-                Id = a.Id,
-                Nic = a.Nic,
-                RoleName = a.RoleName,
-                FirstName = a.FirstName,
-                LastName = a.LastName,
-                Phone = a.Phone,
-                Email = a.Email,
-                ImageUrl = a.ImageUrl,
-                CteatedDate = a.CteatedDate,
-                UpdatedDate = a.UpdatedDate,
-                IsActive = a.IsActive,
-                AuditLogs = a.AuditLogs != null ? a.AuditLogs.Select(data => new AuditLogResponceDTO()
-                {
-                    Id = data.Id,
-                    AdminId = data.AdminId,
-                    ActionDate = data.ActionDate,
-                    Details = data.Details,
-                    Action = data.Action,
-                }).ToList() : null
-            }).ToList();
-
             var paginationResponseDto = new PaginationResponseDTO<AdminWithRoleDTO>
             {
-                Items = response,
+                Items = admins,
                 CurrentPage = pageNumber,
                 PageSize = pageSize,
                 TotalPages = (int)Math.Ceiling(allAdmins.Count / (double)pageSize),
