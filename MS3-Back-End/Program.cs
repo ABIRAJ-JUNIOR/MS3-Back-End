@@ -118,7 +118,7 @@ namespace MS3_Back_End
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "Enter 'Bearer' [space] and your token"
+                    Description = "Enter your token"
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement

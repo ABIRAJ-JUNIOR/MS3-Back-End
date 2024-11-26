@@ -311,29 +311,16 @@ namespace MS3_Back_End.Service
             return obj;
         }
 
-        public async Task<StudentResponseDTO> UpdateStudentFullDetails(Guid id, StudentRequestDTO request)
+        public async Task<StudentResponseDTO> UpdateStudentFullDetails(Guid id, StudentFullUpdateDTO request)
         {
             var studentData = await _StudentRepo.GetStudentById(id);
-            var nicCheck = await _authRepository.GetStudentByNic(request.Nic);
-            var emailCheck = await _authRepository.GetUserByEmail(request.Email);
 
             if (studentData == null)
             {
                 throw new Exception("Student not found");
             }
 
-            if (nicCheck != null)
-            {
-                throw new Exception("Nic already used");
-            }
-
-            if (emailCheck != null)
-            {
-                throw new Exception("Email already used");
-            }
-
             studentData.FirstName = request.FirstName;
-            studentData.Nic = request.Nic;
             studentData.LastName = request.LastName;
             studentData.Phone = request.Phone;
             studentData.UpdatedDate = DateTime.Now;
@@ -357,8 +344,10 @@ namespace MS3_Back_End.Service
                 throw new Exception("User not found");
             }
 
-            userData.Email = request.Email;
-            userData.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
+            if(userData.Password != null)
+            {
+                userData.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
+            }
 
             var userUpdateData = await _authRepository.UpdateUser(userData);
 

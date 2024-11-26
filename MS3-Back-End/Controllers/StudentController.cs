@@ -68,7 +68,7 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPut("Update-Full-Details/{id}")]
-        public async Task<IActionResult> UpdateStudentFullDetails(Guid id, StudentRequestDTO request)
+        public async Task<IActionResult> UpdateStudentFullDetails(Guid id, StudentFullUpdateDTO request)
         {
             try
             {

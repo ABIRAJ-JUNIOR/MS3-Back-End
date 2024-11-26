@@ -11,7 +11,7 @@ namespace MS3_Back_End.IService
         Task<StudentResponseDTO> AddStudent(StudentRequestDTO StudentReq);
         Task<ICollection<StudentResponseDTO>> SearchStudent(string SearchText);
         Task<StudentResponseDTO> GetStudentById(Guid StudentId);
-        Task<StudentResponseDTO> UpdateStudentFullDetails(Guid id, StudentRequestDTO request);
+        Task<StudentResponseDTO> UpdateStudentFullDetails(Guid id, StudentFullUpdateDTO request);
         Task<ICollection<StudentResponseDTO>> GetAllStudent();
         Task<StudentResponseDTO> UpdateStudent(StudentUpdateDTO studentUpdate);
         Task<string> DeleteStudent(Guid Id);
