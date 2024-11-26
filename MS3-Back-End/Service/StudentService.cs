@@ -314,10 +314,24 @@ namespace MS3_Back_End.Service
         public async Task<StudentResponseDTO> UpdateStudentFullDetails(Guid id, StudentRequestDTO request)
         {
             var studentData = await _StudentRepo.GetStudentById(id);
+            var nicCheck = await _authRepository.GetStudentByNic(request.Nic);
+            var emailCheck = await _authRepository.GetUserByEmail(request.Email);
+
             if (studentData == null)
             {
-                throw new Exception("Admin not found");
+                throw new Exception("Student not found");
             }
+
+            if (nicCheck != null)
+            {
+                throw new Exception("Nic already used");
+            }
+
+            if (emailCheck != null)
+            {
+                throw new Exception("Email already used");
+            }
+
             studentData.FirstName = request.FirstName;
             studentData.Nic = request.Nic;
             studentData.LastName = request.LastName;

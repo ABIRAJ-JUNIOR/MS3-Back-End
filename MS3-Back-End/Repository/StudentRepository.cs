@@ -71,7 +71,7 @@ namespace MS3_Back_End.Repository
 
         public async Task<ICollection<Student>> GetPaginatedStudent(int pageNumber, int pageSize)
         {
-            var students = await _Db.Students
+            var students = await _Db.Students.Where(s => s.IsActive != false)
                 .Include(s => s.Address)            
                 .Skip((pageNumber - 1) * pageSize)  
                 .Take(pageSize)                     

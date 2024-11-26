@@ -159,10 +159,24 @@ namespace MS3_Back_End.Service
         public async Task<AdminResponseDTO> UpdateAdminFullDetails(Guid id , AdminRequestDTO request)
         {
             var adminData = await _adminRepository.GetAdminById(id);
+            var nicCheck = await _authRepository.GetStudentByNic(request.Nic);
+            var emailCheck = await _authRepository.GetUserByEmail(request.Email);
+
             if (adminData == null)
             {
                 throw new Exception("Admin not found");
             }
+
+            if (nicCheck != null)
+            {
+                throw new Exception("Nic already used");
+            }
+
+            if (emailCheck != null)
+            {
+                throw new Exception("Email already used");
+            }
+
             adminData.FirstName = request.FirstName;
             adminData.Nic = request.Nic;
             adminData.LastName = request.LastName;
