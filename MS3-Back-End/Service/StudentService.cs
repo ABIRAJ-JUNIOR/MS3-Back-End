@@ -440,7 +440,7 @@ namespace MS3_Back_End.Service
         }
 
                 
-        public async Task<PaginationResponseDTO<StudentResponseDTO>> GetPaginatedStudent(int pageNumber, int pageSize)
+        public async Task<PaginationResponseDTO<StudentWithUserResponseDTO>> GetPaginatedStudent(int pageNumber, int pageSize)
         {
 
             var AllStudents = await _StudentRepo.GetAllStudente();
@@ -451,15 +451,16 @@ namespace MS3_Back_End.Service
             }
             var Students = await _StudentRepo.GetPaginatedStudent(pageNumber, pageSize);
 
-            var studentResponses = Students.Select(student => new StudentResponseDTO
+            var studentResponses = Students.Select(student => new StudentWithUserResponseDTO
             {
                 Id = student.Id,
                 Nic = student.Nic,
                 FirstName = student.FirstName,
                 LastName = student.LastName,
                 DateOfBirth = student.DateOfBirth,
-                Gender = ((Gender)student.Gender).ToString(),
+                Gender = student.Gender,
                 Phone = student.Phone,
+                Email = student.Email,
                 ImageUrl = student.ImageUrl!,
                 CteatedDate = student.CteatedDate,
                 UpdatedDate = student.UpdatedDate,
@@ -477,7 +478,7 @@ namespace MS3_Back_End.Service
             }).ToList();
 
 
-            var paginationResponseDto = new PaginationResponseDTO<StudentResponseDTO>
+            var paginationResponseDto = new PaginationResponseDTO<StudentWithUserResponseDTO>
             {
                 Items = studentResponses,
                 CurrentPage = pageNumber,

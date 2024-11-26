@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MS3_Back_End.DBContext;
 using MS3_Back_End.DTOs.Pagination;
+using MS3_Back_End.DTOs.ResponseDTOs.Address;
+using MS3_Back_End.DTOs.ResponseDTOs.Student;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 
@@ -69,13 +71,39 @@ namespace MS3_Back_End.Repository
             return "Student Deleted Successfull";
         }
 
-        public async Task<ICollection<Student>> GetPaginatedStudent(int pageNumber, int pageSize)
+        public async Task<ICollection<StudentWithUserResponseDTO>> GetPaginatedStudent(int pageNumber, int pageSize)
         {
-            var students = await _Db.Students.Where(s => s.IsActive != false)
-                .Include(s => s.Address)            
-                .Skip((pageNumber - 1) * pageSize)  
-                .Take(pageSize)                     
+            var students = await (from student in _Db.Students
+                                  join address in _Db.Addresses on student.Id equals address.StudentId
+                                  join user in _Db.Users on student.Id equals user.Id
+                                  where student.IsActive != false
+                                  select new StudentWithUserResponseDTO
+                                  {
+                                      Id = student.Id,
+                                      Nic = student.Nic,
+                                      FirstName = student.FirstName,
+                                      LastName = student.LastName,
+                                      DateOfBirth = student.DateOfBirth,
+                                      Gender = ((Gender)student.Gender).ToString(),
+                                      Phone = student.Phone,
+                                      Email = user.Email,
+                                      ImageUrl = student.ImageUrl!,
+                                      CteatedDate = student.CteatedDate,
+                                      UpdatedDate = student.UpdatedDate,
+                                      Address = student.Address != null ? new AddressResponseDTO()
+                                      {
+                                          AddressLine1 = address.AddressLine1,
+                                          AddressLine2 = address.AddressLine2,
+                                          City = address.City,
+                                          PostalCode = address.PostalCode,
+                                          Country = address.Country,
+                                          StudentId = address.Id
+                                      } : null,
+                                  })
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+
             return students;
         }
     }

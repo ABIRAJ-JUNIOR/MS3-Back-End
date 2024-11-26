@@ -1,4 +1,5 @@
 ﻿using MS3_Back_End.DTOs.Pagination;
+using MS3_Back_End.DTOs.ResponseDTOs.Student;
 using MS3_Back_End.Entities;
 
 namespace MS3_Back_End.IRepository
@@ -11,6 +12,6 @@ namespace MS3_Back_End.IRepository
         Task<Student> GetStudentById(Guid StudentId);
         Task<Student> UpdateStudent(Student Students);
         Task<string> DeleteStudent(Student Student);
-        Task<ICollection<Student>> GetPaginatedStudent(int pageNumber, int pageSize);
+        Task<ICollection<StudentWithUserResponseDTO>> GetPaginatedStudent(int pageNumber, int pageSize);
     }
 }
