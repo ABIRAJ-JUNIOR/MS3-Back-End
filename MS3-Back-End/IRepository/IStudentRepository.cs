@@ -9,7 +9,8 @@ namespace MS3_Back_End.IRepository
         Task<Student> AddStudent(Student StudentReq);
         Task<ICollection<Student>> SearchStudent(string SearchText);
         Task<ICollection<Student>> GetAllStudente();
-        Task<Student> GetStudentById(Guid StudentId);
+        Task<Student> GetStudentById(Guid id);
+        Task<StudentFullDetailsResponseDTO> GetStudentFullDetailsById(Guid StudentId);
         Task<Student> UpdateStudent(Student Students);
         Task<string> DeleteStudent(Student Student);
         Task<ICollection<StudentWithUserResponseDTO>> GetPaginatedStudent(int pageNumber, int pageSize);

@@ -17,9 +17,15 @@ namespace MS3_Back_End.Repository
         public async Task<CourseSchedule> AddCourseSchedule(CourseSchedule courseReq)
         {
             var courseData = await _Db.Courses.SingleOrDefaultAsync(c => c.Id == courseReq.CourseId);
+            var courseSchedule = await _Db.CourseSchedules.SingleOrDefaultAsync(cs => cs.CourseId == courseReq.CourseId && cs.StartDate == courseReq.StartDate && cs.EndDate == courseReq.EndDate && cs.Location == courseReq.Location);
             if (courseData == null)
             {
                 throw new Exception("Course not found");
+            }
+
+            if (courseSchedule != null)
+            {
+                throw new Exception("Course Schedule already exists");
             }
             var data = await _Db.CourseSchedules.AddAsync(courseReq);
             await _Db.SaveChangesAsync();
@@ -54,7 +60,7 @@ namespace MS3_Back_End.Repository
         public async Task<ICollection<CourseSchedule>> GetPaginatedCoursesSchedules(int pageNumber, int pageSize)
         {
             var courses = await _Db.CourseSchedules
-                      .Include(c => c.Course)
+                      .Include(c => c.Course).OrderByDescending(c => c.CreatedDate)
                       .Skip((pageNumber - 1) * pageSize)
                       .Take(pageSize)
                       .ToListAsync();

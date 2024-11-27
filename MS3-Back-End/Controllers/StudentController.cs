@@ -54,11 +54,11 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetStudentById(Guid id)
+        public async Task<IActionResult> GetStudentFullDetailsById(Guid id)
         {
             try
             {
-                var student = await _studentService.GetStudentById(id);
+                var student = await _studentService.GetStudentFullDetailsById(id);
                 return Ok(student);
             }
             catch (Exception ex)

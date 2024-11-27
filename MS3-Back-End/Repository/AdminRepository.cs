@@ -55,10 +55,17 @@ namespace MS3_Back_End.Repository
         {
 
             var result = await (from admin in _dbContext.Admins
-                                join user in _dbContext.Users on admin.Id equals user.Id
-                                join userRole in _dbContext.UserRoles on user.Id equals userRole.UserId
-                                join role in _dbContext.Roles on userRole.RoleId equals role.Id
+                                join user in _dbContext.Users
+                                    on admin.Id equals user.Id into userGroup
+                                from user in userGroup.DefaultIfEmpty() 
+                                join userRole in _dbContext.UserRoles
+                                    on user.Id equals userRole.UserId into userRoleGroup
+                                from userRole in userRoleGroup.DefaultIfEmpty() 
+                                join role in _dbContext.Roles
+                                    on userRole.RoleId equals role.Id into roleGroup
+                                from role in roleGroup.DefaultIfEmpty() 
                                 where admin.IsActive != false
+                                orderby admin.CteatedDate descending
                                 select new AdminWithRoleDTO
                                 {
                                     Id = admin.Id,
@@ -86,6 +93,7 @@ namespace MS3_Back_End.Repository
                                 .ToListAsync();
 
             return result;
+
         }
 
         public async Task<Admin> DeleteAdmin(Admin admin)

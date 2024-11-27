@@ -36,7 +36,7 @@ namespace MS3_Back_End.Service
                 CourseFee = courseReq.CourseFee,
                 Description = courseReq.Description,
                 Prerequisites = courseReq.Prerequisites,
-                ImageUrl = null!,
+                ImageUrl = null,
                 CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
                 IsDeleted = false,
@@ -79,7 +79,7 @@ namespace MS3_Back_End.Service
                 CourseFee = item.CourseFee,
                 Description = item.Description,
                 Prerequisites = item.Prerequisites,
-                ImageUrl = item.ImageUrl,
+                ImageUrl = item.ImageUrl!,
                 CreatedDate = item.CreatedDate,
                 UpdatedDate = item.UpdatedDate,
                 Schedules = item.CourseSchedules != null ? item.CourseSchedules.Select(cs => new CourseScheduleResponseDTO()
@@ -119,7 +119,7 @@ namespace MS3_Back_End.Service
                 CourseFee = course.CourseFee,
                 Description = course.Description,
                 Prerequisites = course.Prerequisites,
-                ImageUrl = course.ImageUrl,
+                ImageUrl = course.ImageUrl!,
                 CreatedDate = course.CreatedDate,
                 UpdatedDate = course.UpdatedDate,
                 Schedules = course.CourseSchedules != null ? course.CourseSchedules.Select(cs => new CourseScheduleResponseDTO()
@@ -170,7 +170,7 @@ namespace MS3_Back_End.Service
                 CourseFee = data.CourseFee,
                 Description = data.Description,
                 Prerequisites = data.Prerequisites,
-                ImageUrl = data.ImageUrl,
+                ImageUrl = data.ImageUrl!,
                 CreatedDate = data.CreatedDate,
                 UpdatedDate = data.UpdatedDate,
                 Schedules = data.CourseSchedules?.Select(cs => new CourseScheduleResponseDTO()
@@ -203,11 +203,11 @@ namespace MS3_Back_End.Service
         }
 
 
-        public async Task<CourseResponseDTO> UpdateCourse(UpdateCourseRequestDTO course)
+        public async Task<CourseResponseDTO> UpdateCourse(Guid id, UpdateCourseRequestDTO course)
         {
           
 
-            var GetData =await _courseRepository.GetCourseById(course.Id);
+            var GetData =await _courseRepository.GetCourseById(id);
 
             if (course.CategoryId.HasValue)
                 GetData.CourseCategoryId = course.CategoryId.Value;
@@ -244,7 +244,7 @@ namespace MS3_Back_End.Service
                 CourseFee = data.CourseFee,
                 Description = data.Description,
                 Prerequisites = data.Prerequisites,
-                ImageUrl = data.ImageUrl,
+                ImageUrl = data.ImageUrl!,
                 UpdatedDate = data.UpdatedDate,
                 CreatedDate = data.CreatedDate,
 
@@ -271,10 +271,10 @@ namespace MS3_Back_End.Service
 
         public async Task<PaginationResponseDTO<CourseResponseDTO>> GetPaginatedCourses(int pageNumber, int pageSize)
         {
-            var allCourses = await _courseRepository.GetPaginatedCourses(pageNumber, pageSize);
-            var courses = await _courseRepository.GetAllCourse();
+            var courses = await _courseRepository.GetPaginatedCourses(pageNumber, pageSize);
+            var allCourses = await _courseRepository.GetAllCourse();
 
-            var courseResponses = allCourses.Select(course => new CourseResponseDTO
+            var courseResponses = courses.Select(course => new CourseResponseDTO
             {
                 Id = course.Id,
                 CourseCategoryId = course.CourseCategoryId,
@@ -283,7 +283,7 @@ namespace MS3_Back_End.Service
                 CourseFee = course.CourseFee,
                 Description = course.Description,
                 Prerequisites = course.Prerequisites,
-                ImageUrl = course.ImageUrl,
+                ImageUrl = course.ImageUrl!,
                 CreatedDate = course.CreatedDate,
                 UpdatedDate = course.UpdatedDate,
 
@@ -319,7 +319,7 @@ namespace MS3_Back_End.Service
                 Items = courseResponses,
                 CurrentPage = pageNumber,
                 PageSize = pageSize,
-                TotalPages = (int)Math.Ceiling(courses.Count / (double)pageSize),
+                TotalPages = (int)Math.Ceiling(allCourses.Count / (double)pageSize),
                 TotalItem = allCourses.Count,
             };
 

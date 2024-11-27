@@ -10,7 +10,7 @@ namespace MS3_Back_End.IService
         Task<ICollection<CourseResponseDTO>> SearchCourse(string SearchText);
         Task<ICollection<CourseResponseDTO>> GetAllCourse();
         Task<CourseResponseDTO> GetCourseById(Guid CourseId);
-        Task<CourseResponseDTO> UpdateCourse(UpdateCourseRequestDTO course);
+        Task<CourseResponseDTO> UpdateCourse(Guid id, UpdateCourseRequestDTO courseRequest);
         Task<string> DeleteCourse(Guid Id);
         Task<PaginationResponseDTO<CourseResponseDTO>> GetPaginatedCourses(int pageNumber, int pageSize);
         Task<string> UploadImage(Guid CourseId, IFormFile? image);
