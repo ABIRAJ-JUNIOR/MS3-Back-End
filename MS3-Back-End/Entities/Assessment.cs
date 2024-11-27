@@ -11,6 +11,7 @@ namespace MS3_Back_End.Entities
         public DateTime EndDate { get; set; }
         public int TotalMarks { get; set; }
         public int PassMarks { get; set; }
+        public string? AssessmentLink { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public AssessmentStatus Status { get; set; }
@@ -24,7 +25,15 @@ namespace MS3_Back_End.Entities
     public enum AssessmentType
     {
         Quiz = 1,
-        Exam = 2
+        Exam = 2,
+        Presentation = 3,
+        Practical = 4,
+        OnlineTest = 5,
+        Midterm = 6,
+        FinalExam = 7,
+        MockTest = 8,
+        LabAssessment = 9,
+        OpenBookTest = 10,
     }
 
     public enum AssessmentStatus

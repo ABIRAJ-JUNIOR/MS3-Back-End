@@ -13,6 +13,7 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Assessment
         public DateTime EndDate { get; set; }
         public int TotalMarks { get; set; }
         public int PassMarks { get; set; }
+        public string? AssessmentLink { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string Status { get; set; } = string.Empty;

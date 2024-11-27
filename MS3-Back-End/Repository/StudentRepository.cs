@@ -50,7 +50,7 @@ namespace MS3_Back_End.Repository
 
         public async Task<Student> GetStudentById(Guid id)
         {
-            var studentData = await _Db.Students.SingleOrDefaultAsync(s => s.Id == id);
+            var studentData = await _Db.Students.Include(a => a.Address).SingleOrDefaultAsync(s => s.Id == id);
             return studentData!;
         }
        
@@ -172,6 +172,7 @@ namespace MS3_Back_End.Repository
                                           EndDate = sa.Assessment.EndDate,
                                           TotalMarks = sa.Assessment.TotalMarks,
                                           PassMarks = sa.Assessment.PassMarks,
+                                          AssessmentLink = sa.Assessment.AssessmentLink,
                                           CreatedDate = sa.Assessment.CreatedDate,
                                           UpdateDate = sa.Assessment.UpdateDate,
                                           Status = ((AssessmentStatus)sa.Assessment.Status).ToString(),
