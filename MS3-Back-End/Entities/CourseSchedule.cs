@@ -22,6 +22,7 @@ namespace MS3_Back_End.Entities
         //Reference
         public Course? Course { get; set; }
         public ICollection<Enrollment>? Enrollments { get; set; }
+        public ICollection<Assessment>? Assessment { get; set; }
 
     }
 

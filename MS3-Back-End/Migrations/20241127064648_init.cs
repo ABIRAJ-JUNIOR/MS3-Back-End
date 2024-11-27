@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MS3_Back_End.Migrations
 {
     /// <inheritdoc />
-    public partial class initial1 : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -154,7 +154,7 @@ namespace MS3_Back_End.Migrations
                     CourseFee = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Prerequisites = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -176,11 +176,11 @@ namespace MS3_Back_End.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AddressLine1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AddressLine1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AddressLine2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -242,32 +242,6 @@ namespace MS3_Back_End.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Assessments",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AssessmentType = table.Column<int>(type: "int", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TotalMarks = table.Column<int>(type: "int", nullable: false),
-                    PassMarks = table.Column<int>(type: "int", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Assessments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Assessments_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CourseSchedules",
                 columns: table => new
                 {
@@ -324,32 +298,33 @@ namespace MS3_Back_End.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "StudentAssessments",
+                name: "Assessments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MarksObtaines = table.Column<int>(type: "int", nullable: true),
-                    Grade = table.Column<int>(type: "int", nullable: true),
-                    FeedBack = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateSubmitted = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateEvaluated = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    StudentAssessmentStatus = table.Column<int>(type: "int", nullable: false),
-                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AssessmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    AssessmentType = table.Column<int>(type: "int", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TotalMarks = table.Column<int>(type: "int", nullable: false),
+                    PassMarks = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CourseScheduleId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StudentAssessments", x => x.Id);
+                    table.PrimaryKey("PK_Assessments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_StudentAssessments_Assessments_AssessmentId",
-                        column: x => x.AssessmentId,
-                        principalTable: "Assessments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Assessments_CourseSchedules_CourseScheduleId",
+                        column: x => x.CourseScheduleId,
+                        principalTable: "CourseSchedules",
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_StudentAssessments_Students_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Students",
+                        name: "FK_Assessments_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -383,6 +358,37 @@ namespace MS3_Back_End.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "StudentAssessments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MarksObtaines = table.Column<int>(type: "int", nullable: true),
+                    Grade = table.Column<int>(type: "int", nullable: true),
+                    FeedBack = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateSubmitted = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateEvaluated = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    StudentAssessmentStatus = table.Column<int>(type: "int", nullable: false),
+                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AssessmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentAssessments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StudentAssessments_Assessments_AssessmentId",
+                        column: x => x.AssessmentId,
+                        principalTable: "Assessments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentAssessments_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Payments",
                 columns: table => new
                 {
@@ -391,7 +397,6 @@ namespace MS3_Back_End.Migrations
                     PaymentMethod = table.Column<int>(type: "int", nullable: false),
                     AmountPaid = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     InstallmentNumber = table.Column<int>(type: "int", nullable: true),
                     EnrollmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -416,6 +421,11 @@ namespace MS3_Back_End.Migrations
                 name: "IX_Assessments_CourseId",
                 table: "Assessments",
                 column: "CourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Assessments_CourseScheduleId",
+                table: "Assessments",
+                column: "CourseScheduleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AuditLogs_AdminId",
@@ -530,10 +540,10 @@ namespace MS3_Back_End.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "CourseSchedules");
+                name: "Students");
 
             migrationBuilder.DropTable(
-                name: "Students");
+                name: "CourseSchedules");
 
             migrationBuilder.DropTable(
                 name: "Courses");
