@@ -1,11 +1,12 @@
-﻿using MS3_Back_End.Entities;
+﻿using MS3_Back_End.DTOs.ResponseDTOs.Assessment;
+using MS3_Back_End.Entities;
 
 namespace MS3_Back_End.DTOs.ResponseDTOs.Course
 {
     public class CourseScheduleResponseDTO
     {
         public Guid Id { get; set; }
-        public Guid CourseId { get;  set; }
+        public Guid CourseId { get; set; }
         public DateTime StartDate { get; set; } = DateTime.MinValue;
         public DateTime EndDate { get; set; } = DateTime.MinValue;
         public int Duration { get; set; }
@@ -18,6 +19,7 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Course
         public string ScheduleStatus { get; set; } = string.Empty;
 
         public CourseResponseDTO? CourseResponse { get; set; }
+        public List<AssessmentResponseDTO>? AssessmentResponses { get; set; }
 
     }
 }

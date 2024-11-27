@@ -1,5 +1,6 @@
 ﻿using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Payment;
+using MS3_Back_End.DTOs.ResponseDTOs.StudentAssessment;
 using MS3_Back_End.Entities;
 
 namespace MS3_Back_End.DTOs.ResponseDTOs.Enrollment
@@ -16,5 +17,6 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Enrollment
 
         public ICollection<PaymentResponseDTO>? PaymentResponse { get; set; }
         public CourseScheduleResponseDTO? CourseScheduleResponse { get; set; } 
+        public ICollection<StudentAssessmentResponseDTO>? StudentAssesmentResponse { get; set; }
     }
 }

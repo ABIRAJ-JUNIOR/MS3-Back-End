@@ -40,12 +40,12 @@ namespace MS3_Back_End.Service
             var nicCheck = await _authRepository.GetStudentByNic(StudentReq.Nic);
             var emailCheck = await _authRepository.GetUserByEmail(StudentReq.Email);
 
-            if(nicCheck != null)
+            if (nicCheck != null)
             {
                 throw new Exception("Nic already used");
             }
 
-            if(emailCheck != null)
+            if (emailCheck != null)
             {
                 throw new Exception("Email already used");
             }
@@ -88,7 +88,7 @@ namespace MS3_Back_End.Service
 
             };
 
-            if(StudentReq.Address != null)
+            if (StudentReq.Address != null)
             {
                 var address = new Address
                 {
@@ -277,35 +277,50 @@ namespace MS3_Back_End.Service
                             CreatedDate = enroll.CourseSchedule.Course.CreatedDate,
                             UpdatedDate = enroll.CourseSchedule.Course.UpdatedDate,
                         } : null,
-                    } : null
-                }).ToList() : null,
-                StudentAssessments = item.StudentAssessments != null ? item.StudentAssessments.Select(sa => new StudentAssessmentResponseDTO()
-                {
-                    Id = sa.Id,
-                    MarksObtaines = sa.MarksObtaines,
-                    Grade = sa.Grade != null ? ((Grade)sa.Grade).ToString() : null,
-                    FeedBack = sa.FeedBack,
-                    DateEvaluated = sa.DateEvaluated,
-                    DateSubmitted = sa.DateSubmitted,
-                    StudentAssessmentStatus = ((StudentAssessmentStatus)sa.StudentAssessmentStatus).ToString(),
-                    StudentId = sa.StudentId,
-                    AssessmentId = sa.AssessmentId,
-                    AssessmentResponse = sa.Assessment != null ? new AssessmentResponseDTO()
+                        AssessmentResponses = enroll.CourseSchedule.Course?.Assessment?.Select(assessment => new AssessmentResponseDTO()
+                        {
+                            Id = assessment.Id,
+                            CourseId = assessment.CourseId,
+                            AssessmentType = ((AssessmentType)assessment.AssessmentType).ToString(),
+                            StartDate = assessment.StartDate,
+                            EndDate = assessment.EndDate,
+                            TotalMarks = assessment.TotalMarks,
+                            PassMarks = assessment.PassMarks,
+                            CreatedDate = assessment.CreatedDate,
+                            UpdateDate = assessment.UpdateDate,
+                            Status = ((AssessmentStatus)assessment.Status).ToString(),
+                            courseResponse = null!,
+                            studentAssessmentResponses = null!
+                        }).ToList()
+                    } : null,
+                    StudentAssesmentResponse = item.StudentAssessments != null ? item.StudentAssessments.Select(sa => new StudentAssessmentResponseDTO()
                     {
-                        Id = sa.Assessment.Id,
-                        CourseId = sa.Assessment.CourseId,
-                        AssessmentType = ((AssessmentType)sa.Assessment.AssessmentType).ToString(),
-                        StartDate = sa.Assessment.StartDate,
-                        EndDate = sa.Assessment.EndDate,
-                        TotalMarks = sa.Assessment.TotalMarks,
-                        PassMarks = sa.Assessment.PassMarks,
-                        CreatedDate = sa.Assessment.CreatedDate,
-                        UpdateDate = sa.Assessment.UpdateDate,
-                        Status = ((AssessmentStatus)sa.Assessment.Status).ToString(),
-                        courseResponse = null!,
-                        studentAssessmentResponses = null!
-                    } : new AssessmentResponseDTO()
-                }).ToList() : null,
+                        Id = sa.Id,
+                        MarksObtaines = sa.MarksObtaines,
+                        Grade = sa.Grade != null ? ((Grade)sa.Grade).ToString() : null,
+                        FeedBack = sa.FeedBack,
+                        DateEvaluated = sa.DateEvaluated,
+                        DateSubmitted = sa.DateSubmitted,
+                        StudentAssessmentStatus = ((StudentAssessmentStatus)sa.StudentAssessmentStatus).ToString(),
+                        StudentId = sa.StudentId,
+                        AssessmentId = sa.AssessmentId,
+                        AssessmentResponse = sa.Assessment != null ? new AssessmentResponseDTO()
+                        {
+                            Id = sa.Assessment.Id,
+                            CourseId = sa.Assessment.CourseId,
+                            AssessmentType = ((AssessmentType)sa.Assessment.AssessmentType).ToString(),
+                            StartDate = sa.Assessment.StartDate,
+                            EndDate = sa.Assessment.EndDate,
+                            TotalMarks = sa.Assessment.TotalMarks,
+                            PassMarks = sa.Assessment.PassMarks,
+                            CreatedDate = sa.Assessment.CreatedDate,
+                            UpdateDate = sa.Assessment.UpdateDate,
+                            Status = ((AssessmentStatus)sa.Assessment.Status).ToString(),
+                            courseResponse = null!,
+                            studentAssessmentResponses = null!
+                        } : new AssessmentResponseDTO()
+                    }).ToList() : null,
+                }).ToList() : null
             };
 
             return obj;
@@ -344,7 +359,7 @@ namespace MS3_Back_End.Service
                 throw new Exception("User not found");
             }
 
-            if(userData.Password != null)
+            if (userData.Password != null)
             {
                 userData.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
             }
@@ -438,7 +453,7 @@ namespace MS3_Back_End.Service
             return data;
         }
 
-                
+
         public async Task<PaginationResponseDTO<StudentResponseDTO>> GetPaginatedStudent(int pageNumber, int pageSize)
         {
 
@@ -472,7 +487,7 @@ namespace MS3_Back_End.Service
                     PostalCode = student.Address.PostalCode,
                     Country = student.Address.Country,
                     StudentId = student.Id
-                } : null,  
+                } : null,
             }).ToList();
 
 
@@ -496,7 +511,7 @@ namespace MS3_Back_End.Service
                 throw new Exception("Student not found");
             }
 
-            if(image == null)
+            if (image == null)
             {
                 throw new Exception("Could not upload image");
             }

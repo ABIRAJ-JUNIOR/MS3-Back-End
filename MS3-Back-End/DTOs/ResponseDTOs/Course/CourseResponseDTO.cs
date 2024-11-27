@@ -20,5 +20,7 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Course
 
         public ICollection<CourseScheduleResponseDTO>? Schedules { get; set; }
         public ICollection<FeedbacksResponceDTO>? Feedbacks { get; set; }
+
+        public ICollection<AssessmentResponseDTO>? AssessmentResponse { get; set; }
     }
 }

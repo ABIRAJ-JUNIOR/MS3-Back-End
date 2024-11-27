@@ -131,9 +131,6 @@ namespace MS3_Back_End.Migrations
                     b.Property<Guid>("CourseId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CourseScheduleId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -158,8 +155,6 @@ namespace MS3_Back_End.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
-
-                    b.HasIndex("CourseScheduleId");
 
                     b.ToTable("Assessments");
                 });
@@ -614,14 +609,10 @@ namespace MS3_Back_End.Migrations
             modelBuilder.Entity("MS3_Back_End.Entities.Assessment", b =>
                 {
                     b.HasOne("MS3_Back_End.Entities.Course", "Course")
-                        .WithMany()
+                        .WithMany("Assessment")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("MS3_Back_End.Entities.CourseSchedule", null)
-                        .WithMany("Assessment")
-                        .HasForeignKey("CourseScheduleId");
 
                     b.Navigation("Course");
                 });
@@ -769,6 +760,8 @@ namespace MS3_Back_End.Migrations
 
             modelBuilder.Entity("MS3_Back_End.Entities.Course", b =>
                 {
+                    b.Navigation("Assessment");
+
                     b.Navigation("CourseSchedules");
 
                     b.Navigation("Feedbacks");
@@ -781,8 +774,6 @@ namespace MS3_Back_End.Migrations
 
             modelBuilder.Entity("MS3_Back_End.Entities.CourseSchedule", b =>
                 {
-                    b.Navigation("Assessment");
-
                     b.Navigation("Enrollments");
                 });
 
