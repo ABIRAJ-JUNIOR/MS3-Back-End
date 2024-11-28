@@ -10,7 +10,7 @@ namespace MS3_Back_End.Service
         Task<ICollection<CourseScheduleResponseDTO>> SearchCourseSchedule(string SearchText);
         Task<ICollection<CourseScheduleResponseDTO>> GetAllCourseSchedule();
         Task<CourseScheduleResponseDTO> GetCourseScheduleById(Guid CourseId);
-        Task<CourseScheduleResponseDTO> UpdateCourseSchedule(UpdateCourseScheduleDTO courseReq);
+        Task<CourseScheduleResponseDTO> UpdateCourseSchedule(Guid id, UpdateCourseScheduleDTO courseReq);
         Task<PaginationResponseDTO<CourseScheduleResponseDTO>> GetPaginatedCoursesSchedules(int pageNumber, int pageSize);
 
     }

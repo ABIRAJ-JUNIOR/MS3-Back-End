@@ -1,4 +1,4 @@
-﻿using Azure.Core;
+﻿  using Azure.Core;
 using CloudinaryDotNet.Actions;
 using CloudinaryDotNet;
 using Microsoft.AspNetCore.Hosting;
@@ -203,127 +203,14 @@ namespace MS3_Back_End.Service
         }
 
 
-        public async Task<StudentResponseDTO> GetStudentById(Guid StudentId)
+        public async Task<StudentFullDetailsResponseDTO> GetStudentFullDetailsById(Guid StudentId)
         {
-            var item = await _StudentRepo.GetStudentById(StudentId);
+            var item = await _StudentRepo.GetStudentFullDetailsById(StudentId);
             if (item == null)
             {
                 throw new Exception("Student Not Found");
             }
-
-            var obj = new StudentResponseDTO
-            {
-                Id = item.Id,
-                Nic = item.Nic,
-                FirstName = item.FirstName,
-                LastName = item.LastName,
-                DateOfBirth = item.DateOfBirth,
-                Gender = ((Gender)item.Gender).ToString(),
-                Phone = item.Phone,
-                ImageUrl = item.ImageUrl!,
-                CteatedDate = item.CteatedDate,
-                UpdatedDate = item.UpdatedDate,
-                Address = item.Address != null ? new AddressResponseDTO()
-                {
-                    AddressLine1 = item.Address.AddressLine1,
-                    AddressLine2 = item.Address.AddressLine2,
-                    PostalCode = item.Address.PostalCode,
-                    City = item.Address.City,
-                    Country = item.Address.Country,
-                    StudentId = item.Id,
-                } : null,
-                Enrollments = item.Enrollments != null ? item.Enrollments.Select(enroll => new EnrollmentResponseDTO()
-                {
-                    Id = enroll.Id,
-                    StudentId = enroll.StudentId,
-                    CourseScheduleId = enroll.CourseScheduleId,
-                    EnrollmentDate = enroll.EnrollmentDate,
-                    PaymentStatus = ((PaymentStatus)enroll.PaymentStatus).ToString(),
-                    IsActive = enroll.IsActive,
-                    PaymentResponse = enroll.Payments != null ? enroll.Payments.Select(payment => new PaymentResponseDTO()
-                    {
-                        Id = payment.Id,
-                        PaymentType = ((PaymentTypes)payment.PaymentType).ToString(),
-                        PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
-                        AmountPaid = payment.AmountPaid,
-                        PaymentDate = payment.PaymentDate,
-                        InstallmentNumber = payment.InstallmentNumber,
-                        EnrollmentId = payment.EnrollmentId
-                    }).ToList() : null,
-                    CourseScheduleResponse = enroll.CourseSchedule != null ? new CourseScheduleResponseDTO()
-                    {
-                        Id = enroll.CourseSchedule.Id,
-                        CourseId = enroll.CourseSchedule.CourseId,
-                        StartDate = enroll.CourseSchedule.StartDate,
-                        EndDate = enroll.CourseSchedule.EndDate,
-                        Duration = enroll.CourseSchedule.Duration,
-                        Time = enroll.CourseSchedule.Time,
-                        Location = enroll.CourseSchedule.Location,
-                        MaxStudents = enroll.CourseSchedule.MaxStudents,
-                        EnrollCount = enroll.CourseSchedule.EnrollCount,
-                        CreatedDate = enroll.CourseSchedule.CreatedDate,
-                        UpdatedDate = enroll.CourseSchedule.UpdatedDate,
-                        ScheduleStatus = ((ScheduleStatus)enroll.CourseSchedule.ScheduleStatus).ToString(),
-                        CourseResponse = enroll.CourseSchedule.Course != null ? new CourseResponseDTO()
-                        {
-                            Id = enroll.CourseSchedule.Course.Id,
-                            CourseCategoryId = enroll.CourseSchedule.Course.CourseCategoryId,
-                            CourseName = enroll.CourseSchedule.Course.CourseName,
-                            Level = ((CourseLevel)enroll.CourseSchedule.Course.Level).ToString(),
-                            CourseFee = enroll.CourseSchedule.Course.CourseFee,
-                            Description = enroll.CourseSchedule.Course.Description,
-                            Prerequisites = enroll.CourseSchedule.Course.Prerequisites,
-                            ImageUrl = enroll.CourseSchedule.Course.ImageUrl!,
-                            CreatedDate = enroll.CourseSchedule.Course.CreatedDate,
-                            UpdatedDate = enroll.CourseSchedule.Course.UpdatedDate,
-                        } : null,
-                        AssessmentResponses = enroll.CourseSchedule.Course?.Assessment?.Select(assessment => new AssessmentResponseDTO()
-                        {
-                            Id = assessment.Id,
-                            CourseId = assessment.CourseId,
-                            AssessmentType = ((AssessmentType)assessment.AssessmentType).ToString(),
-                            StartDate = assessment.StartDate,
-                            EndDate = assessment.EndDate,
-                            TotalMarks = assessment.TotalMarks,
-                            PassMarks = assessment.PassMarks,
-                            CreatedDate = assessment.CreatedDate,
-                            UpdateDate = assessment.UpdateDate,
-                            Status = ((AssessmentStatus)assessment.Status).ToString(),
-                            courseResponse = null!,
-                            studentAssessmentResponses = null!
-                        }).ToList()
-                    } : null,
-                    StudentAssesmentResponse = item.StudentAssessments != null ? item.StudentAssessments.Select(sa => new StudentAssessmentResponseDTO()
-                    {
-                        Id = sa.Id,
-                        MarksObtaines = sa.MarksObtaines,
-                        Grade = sa.Grade != null ? ((Grade)sa.Grade).ToString() : null,
-                        FeedBack = sa.FeedBack,
-                        DateEvaluated = sa.DateEvaluated,
-                        DateSubmitted = sa.DateSubmitted,
-                        StudentAssessmentStatus = ((StudentAssessmentStatus)sa.StudentAssessmentStatus).ToString(),
-                        StudentId = sa.StudentId,
-                        AssessmentId = sa.AssessmentId,
-                        AssessmentResponse = sa.Assessment != null ? new AssessmentResponseDTO()
-                        {
-                            Id = sa.Assessment.Id,
-                            CourseId = sa.Assessment.CourseId,
-                            AssessmentType = ((AssessmentType)sa.Assessment.AssessmentType).ToString(),
-                            StartDate = sa.Assessment.StartDate,
-                            EndDate = sa.Assessment.EndDate,
-                            TotalMarks = sa.Assessment.TotalMarks,
-                            PassMarks = sa.Assessment.PassMarks,
-                            CreatedDate = sa.Assessment.CreatedDate,
-                            UpdateDate = sa.Assessment.UpdateDate,
-                            Status = ((AssessmentStatus)sa.Assessment.Status).ToString(),
-                            courseResponse = null!,
-                            studentAssessmentResponses = null!
-                        } : new AssessmentResponseDTO()
-                    }).ToList() : null,
-                }).ToList() : null
-            };
-
-            return obj;
+            return item;
         }
 
         public async Task<StudentResponseDTO> UpdateStudentFullDetails(Guid id, StudentFullUpdateDTO request)
@@ -336,6 +223,7 @@ namespace MS3_Back_End.Service
             }
 
             studentData.FirstName = request.FirstName;
+            studentData.Gender = request.Gender;
             studentData.LastName = request.LastName;
             studentData.Phone = request.Phone;
             studentData.UpdatedDate = DateTime.Now;
@@ -452,9 +340,9 @@ namespace MS3_Back_End.Service
             var data = await _StudentRepo.DeleteStudent(GetData);
             return data;
         }
+                
+        public async Task<PaginationResponseDTO<StudentWithUserResponseDTO>> GetPaginatedStudent(int pageNumber, int pageSize)
 
-
-        public async Task<PaginationResponseDTO<StudentResponseDTO>> GetPaginatedStudent(int pageNumber, int pageSize)
         {
 
             var AllStudents = await _StudentRepo.GetAllStudente();
@@ -465,35 +353,10 @@ namespace MS3_Back_End.Service
             }
             var Students = await _StudentRepo.GetPaginatedStudent(pageNumber, pageSize);
 
-            var studentResponses = Students.Select(student => new StudentResponseDTO
+            var paginationResponseDto = new PaginationResponseDTO<StudentWithUserResponseDTO>
+
             {
-                Id = student.Id,
-                Nic = student.Nic,
-                FirstName = student.FirstName,
-                LastName = student.LastName,
-                DateOfBirth = student.DateOfBirth,
-                Gender = ((Gender)student.Gender).ToString(),
-                Phone = student.Phone,
-                ImageUrl = student.ImageUrl!,
-                CteatedDate = student.CteatedDate,
-                UpdatedDate = student.UpdatedDate,
-                IsActive = student.IsActive,
-
-                Address = student.Address != null ? new AddressResponseDTO
-                {
-                    AddressLine1 = student.Address.AddressLine1,
-                    AddressLine2 = student.Address.AddressLine2,
-                    City = student.Address.City,
-                    PostalCode = student.Address.PostalCode,
-                    Country = student.Address.Country,
-                    StudentId = student.Id
-                } : null,
-            }).ToList();
-
-
-            var paginationResponseDto = new PaginationResponseDTO<StudentResponseDTO>
-            {
-                Items = studentResponses,
+                Items = Students,
                 CurrentPage = pageNumber,
                 PageSize = pageSize,
                 TotalPages = (int)Math.Ceiling(AllStudents.Count / (double)pageSize),

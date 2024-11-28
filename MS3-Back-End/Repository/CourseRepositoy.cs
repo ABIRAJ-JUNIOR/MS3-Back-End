@@ -11,18 +11,11 @@ namespace MS3_Back_End.Repository
         public CourseRepositoy(AppDBContext db)
         {
             _Db = db;
-
         }
 
         public async Task<Course> AddCourse(Course courseReq)
         {
-            var course = await _Db.Courses.SingleOrDefaultAsync(n => n.CourseName == courseReq.CourseName);
             var courseCategory = await _Db.CourseCategories.SingleOrDefaultAsync(cc => cc.Id == courseReq.CourseCategoryId);
-            if (course != null)
-            {
-                throw new Exception("Your Course Already Added");
-
-            }
             
             if(courseCategory == null)
             {
