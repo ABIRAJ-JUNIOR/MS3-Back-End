@@ -167,6 +167,7 @@ namespace MS3_Back_End.Repository
                                       {
                                           Id = sa.Assessment.Id,
                                           CourseId = sa.Assessment.CourseId,
+                                          AssessmentTitle = sa.Assessment.AssessmentTitle,
                                           AssessmentType = ((AssessmentType)sa.Assessment.AssessmentType).ToString(),
                                           StartDate = sa.Assessment.StartDate,
                                           EndDate = sa.Assessment.EndDate,

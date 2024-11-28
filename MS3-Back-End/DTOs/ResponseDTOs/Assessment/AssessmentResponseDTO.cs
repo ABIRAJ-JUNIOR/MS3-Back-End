@@ -8,6 +8,7 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Assessment
     {
         public Guid Id { get; set; }
         public Guid CourseId { get; set; }
+        public string AssessmentTitle { get; set; } = string.Empty;
         public string AssessmentType { get; set; } = string.Empty;
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

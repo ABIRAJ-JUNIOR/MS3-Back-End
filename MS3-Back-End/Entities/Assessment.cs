@@ -6,6 +6,7 @@ namespace MS3_Back_End.Entities
     {
         [Key]
         public Guid Id { get; set; }
+        public string AssessmentTitle { get; set; } = string.Empty;
         public AssessmentType AssessmentType { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

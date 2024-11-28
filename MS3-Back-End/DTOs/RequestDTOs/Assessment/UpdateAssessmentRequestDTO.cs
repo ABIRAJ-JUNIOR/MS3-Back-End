@@ -4,6 +4,7 @@ namespace MS3_Back_End.DTOs.RequestDTOs.Assessment
 {
     public class UpdateAssessmentRequestDTO
     {
+        public string AssessmentTitle { get; set; } = string.Empty;
         public AssessmentType AssessmentType { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

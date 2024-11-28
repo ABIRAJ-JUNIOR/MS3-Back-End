@@ -38,6 +38,7 @@ namespace MS3_Back_End.Service
             var assessment = new Assessment()
             {
                 CourseId = request.CourseId,
+                AssessmentTitle = request.AssessmentTitle,
                 AssessmentType = request.AssessmentType,
                 StartDate = request.StartDate,
                 EndDate = request.EndDate,
@@ -55,6 +56,7 @@ namespace MS3_Back_End.Service
             {
                 Id = assessmentData.Id,
                 CourseId = assessmentData.CourseId,
+                AssessmentTitle = assessmentData.AssessmentTitle,
                 AssessmentType = ((AssessmentType)assessmentData.AssessmentType).ToString(),
                 StartDate = assessmentData.StartDate,
                 EndDate = assessmentData.EndDate,
@@ -77,6 +79,7 @@ namespace MS3_Back_End.Service
             {
                 Id = item.Id,
                 CourseId = item.CourseId,
+                AssessmentTitle = item.AssessmentTitle,
                 AssessmentType = ((AssessmentType)item.AssessmentType).ToString(),
                 StartDate = item.StartDate,
                 EndDate = item.EndDate,
@@ -99,6 +102,7 @@ namespace MS3_Back_End.Service
                 throw new Exception("Assessment not found");
             }
 
+            assessment.AssessmentTitle = request.AssessmentTitle;
             assessment.AssessmentType = request.AssessmentType;
             assessment.StartDate = request.StartDate;
             assessment.EndDate = request.EndDate;
@@ -114,6 +118,7 @@ namespace MS3_Back_End.Service
             {
                 Id = updatedData.Id,
                 CourseId = updatedData.CourseId,
+                AssessmentTitle = updatedData.AssessmentTitle,
                 AssessmentType = ((AssessmentType)updatedData.AssessmentType).ToString(),
                 StartDate = updatedData.StartDate,
                 EndDate = updatedData.EndDate,
@@ -141,6 +146,7 @@ namespace MS3_Back_End.Service
             {
                 Id = item.Id,
                 CourseId = item.CourseId,
+                AssessmentTitle = item.AssessmentTitle,
                 AssessmentType = ((AssessmentType)item.AssessmentType).ToString(),
                 StartDate = item.StartDate,
                 EndDate = item.EndDate,
