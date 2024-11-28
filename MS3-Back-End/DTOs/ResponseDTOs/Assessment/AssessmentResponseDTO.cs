@@ -17,7 +17,7 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Assessment
         public string? AssessmentLink { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
         public DateTime UpdateDate { get; set; }
-        public string Status { get; set; } = string.Empty;
+        public string AssessmentStatus { get; set; } = string.Empty;
 
         public CourseResponseDTO courseResponse { get; set; } = new CourseResponseDTO();
         public ICollection<StudentAssessmentResponseDTO> studentAssessmentResponses { get; set; } = new List<StudentAssessmentResponseDTO>();

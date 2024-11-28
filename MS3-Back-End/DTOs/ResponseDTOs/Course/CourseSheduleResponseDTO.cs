@@ -19,7 +19,5 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Course
         public string ScheduleStatus { get; set; } = string.Empty;
 
         public CourseResponseDTO? CourseResponse { get; set; }
-        public List<AssessmentResponseDTO>? AssessmentResponses { get; set; }
-
     }
 }

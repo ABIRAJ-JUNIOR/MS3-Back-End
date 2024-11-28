@@ -177,7 +177,7 @@ namespace MS3_Back_End.Repository
                                           AssessmentLink = sa.Assessment.AssessmentLink,
                                           CreatedDate = sa.Assessment.CreatedDate,
                                           UpdateDate = sa.Assessment.UpdateDate,
-                                          Status = ((AssessmentStatus)sa.Assessment.Status).ToString(),
+                                          AssessmentStatus = ((AssessmentStatus)sa.Assessment.Status).ToString(),
                                           courseResponse = null!,
                                           studentAssessmentResponses = null!
                                       } : new AssessmentResponseDTO()
