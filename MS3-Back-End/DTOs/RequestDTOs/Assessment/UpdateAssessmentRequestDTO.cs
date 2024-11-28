@@ -12,6 +12,6 @@ namespace MS3_Back_End.DTOs.RequestDTOs.Assessment
         public int TotalMarks { get; set; }
         public int PassMarks { get; set; }
         public string? AssessmentLink { get; set; } = string.Empty;
-        public AssessmentStatus Status { get; set; }
+        public AssessmentStatus AssessmentStatus { get; set; }
     }
 }

@@ -47,6 +47,7 @@ namespace MS3_Back_End.Service
                 AssessmentLink = request.AssessmentLink,
                 CreatedDate = DateTime.Now,
                 UpdateDate = DateTime.Now,
+                Status = AssessmentStatus.NotStarted,
             };
 
             var assessmentData = await _repository.AddAssessment(assessment);
@@ -110,7 +111,7 @@ namespace MS3_Back_End.Service
             assessment.PassMarks = request.PassMarks;
             assessment.AssessmentLink = request.AssessmentLink;
             assessment.UpdateDate = DateTime.Now;
-            assessment.Status = request.Status;
+            assessment.Status = request.AssessmentStatus;
 
             var updatedData = await _repository.UpdateAssessment(assessment);
 
