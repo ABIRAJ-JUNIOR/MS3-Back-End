@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MS3_Back_End.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class initial1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -246,11 +246,13 @@ namespace MS3_Back_End.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AssessmentTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AssessmentType = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TotalMarks = table.Column<int>(type: "int", nullable: false),
                     PassMarks = table.Column<int>(type: "int", nullable: false),
+                    AssessmentLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MS3_Back_End.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20241128065227_initial5")]
-    partial class initial5
+    [Migration("20241128080120_initial1")]
+    partial class initial1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -619,7 +619,7 @@ namespace MS3_Back_End.Migrations
             modelBuilder.Entity("MS3_Back_End.Entities.Assessment", b =>
                 {
                     b.HasOne("MS3_Back_End.Entities.Course", "Course")
-                        .WithMany()
+                        .WithMany("Assessment")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -770,6 +770,8 @@ namespace MS3_Back_End.Migrations
 
             modelBuilder.Entity("MS3_Back_End.Entities.Course", b =>
                 {
+                    b.Navigation("Assessment");
+
                     b.Navigation("CourseSchedules");
 
                     b.Navigation("Feedbacks");
