@@ -40,12 +40,12 @@ namespace MS3_Back_End.Service
             var nicCheck = await _authRepository.GetStudentByNic(StudentReq.Nic);
             var emailCheck = await _authRepository.GetUserByEmail(StudentReq.Email);
 
-            if(nicCheck != null)
+            if (nicCheck != null)
             {
                 throw new Exception("Nic already used");
             }
 
-            if(emailCheck != null)
+            if (emailCheck != null)
             {
                 throw new Exception("Email already used");
             }
@@ -88,7 +88,7 @@ namespace MS3_Back_End.Service
 
             };
 
-            if(StudentReq.Address != null)
+            if (StudentReq.Address != null)
             {
                 var address = new Address
                 {
@@ -247,7 +247,7 @@ namespace MS3_Back_End.Service
                 throw new Exception("User not found");
             }
 
-            if(userData.Password != null)
+            if (userData.Password != null)
             {
                 userData.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
             }
@@ -340,9 +340,9 @@ namespace MS3_Back_End.Service
             var data = await _StudentRepo.DeleteStudent(GetData);
             return data;
         }
-
                 
         public async Task<PaginationResponseDTO<StudentWithUserResponseDTO>> GetPaginatedStudent(int pageNumber, int pageSize)
+
         {
 
             var AllStudents = await _StudentRepo.GetAllStudente();
@@ -354,6 +354,7 @@ namespace MS3_Back_End.Service
             var Students = await _StudentRepo.GetPaginatedStudent(pageNumber, pageSize);
 
             var paginationResponseDto = new PaginationResponseDTO<StudentWithUserResponseDTO>
+
             {
                 Items = Students,
                 CurrentPage = pageNumber,
@@ -373,7 +374,7 @@ namespace MS3_Back_End.Service
                 throw new Exception("Student not found");
             }
 
-            if(image == null)
+            if (image == null)
             {
                 throw new Exception("Could not upload image");
             }

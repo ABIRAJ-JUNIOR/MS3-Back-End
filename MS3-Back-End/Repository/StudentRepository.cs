@@ -56,6 +56,7 @@ namespace MS3_Back_End.Repository
        
         public async Task<StudentFullDetailsResponseDTO> GetStudentFullDetailsById(Guid StudentId)
         {
+
             var data = await (from student in _Db.Students
                               join address in _Db.Addresses on student.Id equals address.StudentId into addressGroup
                               from address in addressGroup.DefaultIfEmpty()
@@ -182,7 +183,7 @@ namespace MS3_Back_End.Repository
                                       } : new AssessmentResponseDTO()
                                   }).ToList() : null,
                               }).FirstOrDefaultAsync();
-
+                              
             return data!;
 
         }
