@@ -65,5 +65,21 @@ namespace MS3_Back_End.Service
             return response;
         }
 
+        public async Task<ICollection<PaymentResponseDTO>> RecentPayments()
+        {
+            var recentPayments = await _paymentRepository.RecentPayments();
+            var response = recentPayments.Select(p => new PaymentResponseDTO()
+            {
+                Id = p.Id,
+                PaymentType = ((PaymentTypes)p.PaymentType).ToString(),
+                PaymentMethod = ((PaymentMethots)p.PaymentMethod).ToString(),
+                AmountPaid = p.AmountPaid,
+                PaymentDate = p.PaymentDate,
+                InstallmentNumber = p.InstallmentNumber,
+                EnrollmentId = p.EnrollmentId
+            }).ToList();
+
+            return response;
+        }
     }
 }
