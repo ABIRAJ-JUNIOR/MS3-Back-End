@@ -37,6 +37,13 @@ namespace MS3_Back_End.Repository
             return data;
         }
 
+        public async Task<Enrollment> UpdateEnrollment(Enrollment Enrollment)
+        {
+            var updatedData = _Db.Update(Enrollment);
+            await _Db.SaveChangesAsync();
+            return updatedData.Entity;
+        }
+
         public async Task<string> DeleteEnrollment(Enrollment course)
         {
             _Db.Enrollments.Update(course);
