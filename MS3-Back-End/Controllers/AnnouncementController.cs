@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.RequestDTOs;
 using MS3_Back_End.DTOs.RequestDTOs.Announcement;
@@ -111,6 +112,19 @@ namespace MS3_Back_End.Controllers
             catch (Exception ex)
             {
                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("GetPaginatedAnnouncement")]
+        public async Task<IActionResult> GetPaginatedAnnouncement(int pagenumber,int pagesize)
+        {
+            try
+            {
+                var Anouncements = await _announcementService.GetPaginatedAnnouncement(pagenumber, pagesize);
+                return Ok(Anouncements);
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);
             }
         }
 
