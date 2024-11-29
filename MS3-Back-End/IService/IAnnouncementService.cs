@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DTOs.RequestDTOs;
+﻿using MS3_Back_End.DTOs.Pagination;
+using MS3_Back_End.DTOs.RequestDTOs;
 using MS3_Back_End.DTOs.RequestDTOs.Announcement;
 using MS3_Back_End.DTOs.ResponseDTOs.Announcement;
 using MS3_Back_End.Entities;
@@ -13,7 +14,8 @@ namespace MS3_Back_End.IService
         Task<AnnouncementResponseDTO> GetAnnouncementById(Guid id);
         Task<AnnouncementResponseDTO> UpdateAnnouncement(AnnounceUpdateDTO announcement);
         Task<string> DeleteAnnouncement(Guid Id);
-        Task<ICollection<AnnouncementResponseDTO>> GetPaginatedAnnouncement(int pageNumber, int pageSize);
+        Task<PaginationResponseDTO<AnnouncementResponseDTO>> GetPaginatedAnnouncement(int pageNumber, int pageSize);
+
 
     }
 }
