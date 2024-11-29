@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DTOs.RequestDTOs;
+﻿using MS3_Back_End.DTOs.Pagination;
+using MS3_Back_End.DTOs.RequestDTOs;
 using MS3_Back_End.DTOs.RequestDTOs.Announcement;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Announcement;
@@ -90,9 +91,9 @@ namespace MS3_Back_End.Service
         }
 
 
-        public async Task<AnnouncementResponseDTO> GetAnnouncementById(Guid CourseId)
+        public async Task<AnnouncementResponseDTO> GetAnnouncementById(Guid id)
         {
-            var data = await _AnnouncementRepo.GetAnnouncemenntByID(CourseId);
+            var data = await _AnnouncementRepo.GetAnnouncemenntByID(id);
             if (data == null)
             {
                 throw new Exception("Announcement Not Found");
@@ -161,5 +162,33 @@ namespace MS3_Back_End.Service
             var data = await _AnnouncementRepo.DeleteAnnouncement(GetData);
             return data;
         }
+        public async Task<PaginationResponseDTO<AnnouncementResponseDTO>> GetPaginatedAnnouncement(int pageNumber, int pageSize)
+        {
+            var AllAnouncements= await _AnnouncementRepo.GetAllAnnouncement();
+            var data = await _AnnouncementRepo.GetPaginatedAnnouncement(pageNumber, pageSize);
+            var returndata = data.Select(x => new AnnouncementResponseDTO
+            {
+                Id = x.Id,
+                Title = x.Title,
+                DatePosted = x.DatePosted,
+                ExpirationDate = x.ExpirationDate,
+                AudienceType = ((AudienceType)x.AudienceType).ToString(),
+                IsActive = x.IsActive
+            }).ToList();
+
+            var PaginationResponseDTO = new PaginationResponseDTO<AnnouncementResponseDTO>
+            {
+                Items = returndata,
+                PageSize = pageSize,
+                CurrentPage = pageNumber,  
+                TotalPages = (int)Math.Ceiling(AllAnouncements.Count / (double)pageSize),
+                TotalItem = AllAnouncements.Count,
+
+
+
+            };
+            return PaginationResponseDTO;
+        }
+
     }
 }

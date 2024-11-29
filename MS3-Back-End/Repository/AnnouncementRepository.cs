@@ -15,18 +15,9 @@ namespace MS3_Back_End.Repository
 
         public async Task<Announcement> AddAnnouncement(Announcement AnouncementReq)
         {
-            var Data = await _Db.Announcements.SingleOrDefaultAsync(n => n.Title==AnouncementReq.Title);
-            if (Data == null)
-            {
                 var data = await _Db.Announcements.AddAsync(AnouncementReq);
                 await _Db.SaveChangesAsync();
                 return data.Entity;
-            }
-            else
-            {
-                throw new Exception("Your Course Already Added");
-            }
-
         }
         public async Task<ICollection<Announcement>> SearchAnnouncements(string SearchText)
         {
@@ -55,6 +46,16 @@ namespace MS3_Back_End.Repository
             var data = _Db.Announcements.Update(announcement);
             await _Db.SaveChangesAsync();
             return "Delete Announcement SucessFully";
+        }
+        public async Task<ICollection<Announcement>> GetPaginatedAnnouncement(int pageNumber, int pageSize)
+        {
+            var announcementData = await _Db.Announcements
+                      .Where(a => a.IsActive == true)
+                      .Skip((pageNumber - 1) * pageSize)
+                      .Take(pageSize)
+                      .ToListAsync();
+
+            return announcementData;
         }
     }
 }
