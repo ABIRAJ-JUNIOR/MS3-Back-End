@@ -150,6 +150,23 @@ namespace MS3_Back_End.Repository
                                               ImageUrl = enroll.CourseSchedule.Course.ImageUrl!,
                                               CreatedDate = enroll.CourseSchedule.Course.CreatedDate,
                                               UpdatedDate = enroll.CourseSchedule.Course.UpdatedDate,
+                                              AssessmentResponse = enroll.CourseSchedule.Course.Assessment != null ? enroll.CourseSchedule.Course.Assessment.Select(a => new AssessmentResponseDTO()
+                                              {
+                                                  Id = a.Id,
+                                                  CourseId = a.CourseId,
+                                                  AssessmentTitle = a.AssessmentTitle,
+                                                  AssessmentType = ((AssessmentType)a.AssessmentType).ToString(),
+                                                  StartDate = a.StartDate,
+                                                  EndDate = a.EndDate,
+                                                  TotalMarks = a.TotalMarks,
+                                                  PassMarks = a.PassMarks,
+                                                  AssessmentLink = a.AssessmentLink,
+                                                  CreatedDate = a.CreatedDate,
+                                                  UpdateDate = a.UpdateDate,
+                                                  AssessmentStatus = ((AssessmentStatus)a.Status).ToString(),
+                                                  courseResponse = null!,
+                                                  studentAssessmentResponses = null!
+                                              }).ToList() : null
                                           } : null,
                                       } : null
                                   }).ToList() : null,
@@ -177,7 +194,7 @@ namespace MS3_Back_End.Repository
                                           AssessmentLink = sa.Assessment.AssessmentLink,
                                           CreatedDate = sa.Assessment.CreatedDate,
                                           UpdateDate = sa.Assessment.UpdateDate,
-                                          Status = ((AssessmentStatus)sa.Assessment.Status).ToString(),
+                                          AssessmentStatus = ((AssessmentStatus)sa.Assessment.Status).ToString(),
                                           courseResponse = null!,
                                           studentAssessmentResponses = null!
                                       } : new AssessmentResponseDTO()

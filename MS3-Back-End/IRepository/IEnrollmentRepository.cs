@@ -8,6 +8,7 @@ namespace MS3_Back_End.IRepository
         Task<ICollection<Enrollment>> SearchEnrollments(Guid SearchId);
         Task<ICollection<Enrollment>> GetEnrollments();
         Task<Enrollment> GetEnrollmentById(Guid EnrollmentId);
+        Task<Enrollment> UpdateEnrollment(Enrollment Enrollment);
         Task<string> DeleteEnrollment(Enrollment course);
     }
 }

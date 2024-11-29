@@ -27,7 +27,7 @@ namespace MS3_Back_End.Service
         {
             if (request.StartDate < DateTime.Now)
             {
-                throw new ArgumentOutOfRangeException("The start date cannot be in the past. Please provide a valid future date.");
+                throw new ArgumentException("The start date cannot be in the past. Please provide a valid future date.");
             }
 
             if (request.EndDate < request.StartDate)
@@ -65,7 +65,7 @@ namespace MS3_Back_End.Service
                 AssessmentLink = assessmentData.AssessmentLink,
                 CreatedDate = assessmentData.CreatedDate,
                 UpdateDate = assessmentData.UpdateDate,
-                Status = ((AssessmentStatus)assessmentData.Status).ToString(),
+                AssessmentStatus = ((AssessmentStatus)assessmentData.Status).ToString(),
             };
 
             return response;
@@ -88,7 +88,7 @@ namespace MS3_Back_End.Service
                 AssessmentLink = item.AssessmentLink,
                 CreatedDate = item.CreatedDate,
                 UpdateDate = item.UpdateDate,
-                Status = ((AssessmentStatus)item.Status).ToString(),
+                AssessmentStatus = ((AssessmentStatus)item.Status).ToString(),
             }).ToList();
 
             return responseList;
@@ -102,6 +102,7 @@ namespace MS3_Back_End.Service
                 throw new Exception("Assessment not found");
             }
 
+            assessment.CourseId = request.CourseId;
             assessment.AssessmentTitle = request.AssessmentTitle;
             assessment.AssessmentType = request.AssessmentType;
             assessment.StartDate = request.StartDate;
@@ -110,7 +111,7 @@ namespace MS3_Back_End.Service
             assessment.PassMarks = request.PassMarks;
             assessment.AssessmentLink = request.AssessmentLink;
             assessment.UpdateDate = DateTime.Now;
-            assessment.Status = request.Status;
+            assessment.Status = request.AssessmentStatus;
 
             var updatedData = await _repository.UpdateAssessment(assessment);
 
@@ -127,7 +128,7 @@ namespace MS3_Back_End.Service
                 AssessmentLink = updatedData.AssessmentLink,
                 CreatedDate = updatedData.CreatedDate,
                 UpdateDate = updatedData.UpdateDate,
-                Status = ((AssessmentStatus)updatedData.Status).ToString(),
+                AssessmentStatus = ((AssessmentStatus)updatedData.Status).ToString(),
             };
 
             return response;
@@ -155,7 +156,7 @@ namespace MS3_Back_End.Service
                 AssessmentLink = item.AssessmentLink,
                 CreatedDate = item.CreatedDate,
                 UpdateDate = item.UpdateDate,
-                Status = ((AssessmentStatus)item.Status).ToString(),
+                AssessmentStatus = ((AssessmentStatus)item.Status).ToString(),
                 courseResponse = item.Course != null ? new CourseResponseDTO()
                 {
                     Id = item.Course.Id,

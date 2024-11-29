@@ -6,5 +6,6 @@ namespace MS3_Back_End.IRepository
     {
         Task<Payment> CreatePayment(Payment payment);
         Task<ICollection<Payment>> GetAllPayments();
+        Task<ICollection<Payment>> RecentPayments();
     }
 }

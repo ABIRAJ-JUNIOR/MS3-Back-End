@@ -26,5 +26,11 @@ namespace MS3_Back_End.Repository
             var paymentLists = await _context.Payments.ToListAsync();
             return paymentLists;
         }
+
+        public async Task<ICollection<Payment>> RecentPayments()
+        {
+            var recentPayments = await _context.Payments.OrderByDescending(p => p.PaymentDate).Take(5).ToListAsync();
+            return recentPayments;
+        }
     }
 }

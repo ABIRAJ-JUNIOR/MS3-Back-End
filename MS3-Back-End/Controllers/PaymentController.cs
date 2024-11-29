@@ -31,11 +31,18 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllPayments()
         {
             var paymentsList = await _paymentService.GetAllPayments();
             return Ok(paymentsList);
+        }
+
+        [HttpGet("Recent")]
+        public async Task<IActionResult> RecentPayments()
+        {
+            var recentPayments = await _paymentService.RecentPayments();
+            return Ok(recentPayments);
         }
     }
 }
