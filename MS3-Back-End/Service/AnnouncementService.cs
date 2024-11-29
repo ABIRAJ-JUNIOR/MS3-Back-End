@@ -161,5 +161,20 @@ namespace MS3_Back_End.Service
             var data = await _AnnouncementRepo.DeleteAnnouncement(GetData);
             return data;
         }
+        public async Task<ICollection<AnnouncementResponseDTO>> GetPaginatedAnnouncement(int pageNumber, int pageSize)
+        {
+            var data = await _AnnouncementRepo.GetPaginatedAnnouncement(pageNumber, pageSize);
+            var returndata = data.Select(x => new AnnouncementResponseDTO
+            {
+                Id = x.Id,
+                Title = x.Title,
+                DatePosted = x.DatePosted,
+                ExpirationDate = x.ExpirationDate,
+                AudienceType = ((AudienceType)x.AudienceType).ToString(),
+                IsActive = x.IsActive
+            }).ToList();
+            return returndata;
+        }
+
     }
 }
