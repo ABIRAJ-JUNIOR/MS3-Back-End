@@ -114,7 +114,7 @@ namespace MS3_Back_End.Controllers
                return BadRequest(ex.Message);
             }
         }
-        [HttpGet("GetPaginatedAnnouncement")]
+        [HttpGet("Pagination")]
         public async Task<IActionResult> GetPaginatedAnnouncement(int pagenumber,int pagesize)
         {
             try

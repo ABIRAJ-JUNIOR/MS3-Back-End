@@ -13,7 +13,7 @@ namespace MS3_Back_End.IService
         Task<AnnouncementResponseDTO> GetAnnouncementById(Guid id);
         Task<AnnouncementResponseDTO> UpdateAnnouncement(AnnounceUpdateDTO announcement);
         Task<string> DeleteAnnouncement(Guid Id);
-        Task<ICollection<Announcement>> GetPaginatedAnnouncement(int pageNumber, int pageSize);
+        Task<ICollection<AnnouncementResponseDTO>> GetPaginatedAnnouncement(int pageNumber, int pageSize);
 
     }
 }

@@ -49,8 +49,13 @@ namespace MS3_Back_End.Repository
         }
         public async Task<ICollection<Announcement>> GetPaginatedAnnouncement(int pageNumber, int pageSize)
         {
-            var data=await _Db.Announcements.Where(a=>a.IsActive==true).Take((pageNumber-1)*pageSize).Skip(pageSize).ToListAsync();
-            return data;
+            var announcementData = await _Db.Announcements
+                      .Where(a => a.IsActive == true)
+                      .Skip((pageNumber - 1) * pageSize)
+                      .Take(pageSize)
+                      .ToListAsync();
+
+            return announcementData;
         }
     }
 }
