@@ -47,5 +47,10 @@ namespace MS3_Back_End.Repository
             await _Db.SaveChangesAsync();
             return "Delete Announcement SucessFully";
         }
+        public async Task<ICollection<Announcement>> GetPaginatedAnnouncement(int pageNumber, int pageSize)
+        {
+            var data=await _Db.Announcements.Take((pageNumber-1)*pageSize).Skip(pageSize).ToListAsync();
+            return data;
+        }
     }
 }
