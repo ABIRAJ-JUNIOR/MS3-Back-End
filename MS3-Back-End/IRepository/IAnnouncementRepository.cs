@@ -10,5 +10,7 @@ namespace MS3_Back_End.IRepository
         Task<Announcement> GetAnnouncemenntByID(Guid AnnouncementId);
         Task<Announcement> UpdateAnnouncement(Announcement announcement);
         Task<string> DeleteAnnouncement(Announcement announcement);
+        Task<ICollection<Announcement>> GetPaginatedAnnouncement(int pageNumber, int pageSize);
+
     }
 }
