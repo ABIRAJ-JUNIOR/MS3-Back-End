@@ -90,9 +90,9 @@ namespace MS3_Back_End.Service
         }
 
 
-        public async Task<AnnouncementResponseDTO> GetAnnouncementById(Guid CourseId)
+        public async Task<AnnouncementResponseDTO> GetAnnouncementById(Guid id)
         {
-            var data = await _AnnouncementRepo.GetAnnouncemenntByID(CourseId);
+            var data = await _AnnouncementRepo.GetAnnouncemenntByID(id);
             if (data == null)
             {
                 throw new Exception("Announcement Not Found");
