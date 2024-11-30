@@ -20,6 +20,22 @@ namespace MS3_Back_End.Service
 
         public async Task<CourseScheduleResponseDTO> AddCourseSchedule(CourseScheduleRequestDTO courseReq)
         {
+            if (courseReq.StartDate < DateTime.UtcNow)
+            {
+                throw new ArgumentException("The course start date cannot be in the past. Please select a valid future date.");
+            }
+
+            if (courseReq.EndDate < courseReq.StartDate)
+            {
+                throw new ArgumentException("The course end date cannot be earlier than the start date. Please select a valid end date.");
+            }
+
+            if (courseReq.MaxStudents <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(courseReq.MaxStudents), "The maximum number of students must be greater than 0.");
+            }
+
+
             var CourseSchedule = new CourseSchedule
             {
                 CourseId = courseReq.CourseId,
@@ -141,10 +157,10 @@ namespace MS3_Back_End.Service
         }
 
 
-        public async Task<CourseScheduleResponseDTO> UpdateCourseSchedule(UpdateCourseScheduleDTO courseReq)
+        public async Task<CourseScheduleResponseDTO> UpdateCourseSchedule(Guid id ,UpdateCourseScheduleDTO courseReq)
         {
 
-            var getData = await _courseScheduleRepository.GetCourseScheduleById(courseReq.Id);
+            var getData = await _courseScheduleRepository.GetCourseScheduleById(id);
             if (getData == null)
             {
                 throw new Exception("Course Schedule not found");
@@ -186,9 +202,10 @@ namespace MS3_Back_End.Service
 
         public async Task<PaginationResponseDTO<CourseScheduleResponseDTO>> GetPaginatedCoursesSchedules(int pageNumber, int pageSize)
         {
-            var allSchedules = await _courseScheduleRepository.GetPaginatedCoursesSchedules(pageNumber, pageSize);
+            var allSchedules = await _courseScheduleRepository.GetAllCourseSchedule();
+            var paginatedSchedules = await _courseScheduleRepository.GetPaginatedCoursesSchedules(pageNumber, pageSize);
 
-            var courseScheduleResponse = allSchedules.Select(cs => new CourseScheduleResponseDTO
+            var courseScheduleResponse = paginatedSchedules.Select(cs => new CourseScheduleResponseDTO
             {
                 Id = cs.Id,
                 CourseId = cs.CourseId,
@@ -202,8 +219,7 @@ namespace MS3_Back_End.Service
                 CreatedDate = cs.CreatedDate,
                 UpdatedDate = cs.UpdatedDate,
                 ScheduleStatus = ((ScheduleStatus)cs.ScheduleStatus).ToString(),
-
-                CourseResponse = new CourseResponseDTO()
+                CourseResponse =cs.Course != null ?  new CourseResponseDTO()
                 {
                     Id = cs.Course.Id,
                     CourseCategoryId = cs.Course.CourseCategoryId,
@@ -212,10 +228,10 @@ namespace MS3_Back_End.Service
                     CourseFee = cs.Course.CourseFee,
                     Description = cs.Course.Description,
                     Prerequisites = cs.Course.Prerequisites,
-                    ImagePath = cs.Course.ImagePath,
+                    ImageUrl = cs.Course.ImageUrl!,
                     CreatedDate = cs.Course.CreatedDate,
                     UpdatedDate = cs.Course.UpdatedDate,
-                }
+                } : null,
             }).ToList();
 
             var paginationResponseDto = new PaginationResponseDTO<CourseScheduleResponseDTO>

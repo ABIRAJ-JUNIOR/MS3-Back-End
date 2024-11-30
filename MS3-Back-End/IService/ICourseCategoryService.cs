@@ -8,5 +8,7 @@ namespace MS3_Back_End.IService
         Task<CourseCategoryResponseDTO> AddCategory(CourseCategoryRequestDTO courseCategoryRequestDTO);
         Task<CourseCategoryResponseDTO> GetCourseCategoryById(Guid Id);
         Task<CourseCategoryResponseDTO> UpdateCourseCategory(CategoryUpdateRequestDTO courseCategoryRequestDTO);
+        Task<List<CourseCategoryResponseDTO>> GetAllGetCourseCategory();
+
     }
 }

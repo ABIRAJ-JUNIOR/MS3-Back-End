@@ -7,6 +7,6 @@ namespace MS3_Back_End.IService
     {
         Task<PaymentResponseDTO> CreatePayment(PaymentRequestDTO paymentRequest);
         Task<ICollection<PaymentResponseDTO>> GetAllPayments();
-        Task<string> SaveImageFile(IFormFile imageFile);
+        Task<ICollection<PaymentResponseDTO>> RecentPayments();
     }
 }

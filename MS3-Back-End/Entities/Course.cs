@@ -11,7 +11,7 @@ namespace MS3_Back_End.Entities
         public decimal CourseFee { get; set; }
         public string Description { get; set; } = string.Empty;
         public string Prerequisites { get; set; } = string.Empty;
-        public string ImagePath { get; set; } = string.Empty;
+        public string? ImageUrl { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public bool IsDeleted { get; set; } = false;
@@ -22,6 +22,8 @@ namespace MS3_Back_End.Entities
         public CourseCategory? CourseCategory { get; set; }
         public ICollection<CourseSchedule>? CourseSchedules { get; set; }
         public ICollection<Feedbacks>? Feedbacks { get; set; }
+        public ICollection<Assessment>? Assessment { get; set; } = new List<Assessment>();
+
     }
 
     public enum CourseLevel

@@ -9,7 +9,6 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Payment
         public string PaymentMethod { get; set; } = string.Empty;
         public decimal AmountPaid { get; set; }
         public DateTime PaymentDate { get; set; }
-        public string? ImagePath { get; set; }
         public int? InstallmentNumber { get; set; }
         public Guid EnrollmentId { get; set; }
     }

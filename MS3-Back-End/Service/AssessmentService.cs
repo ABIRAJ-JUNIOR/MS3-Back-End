@@ -25,50 +25,50 @@ namespace MS3_Back_End.Service
 
         public async Task<AssessmentResponseDTO> AddAssessment(AssessmentRequestDTO request)
         {
-            if(request.StartDate >=  DateTime.Now)
+            if (request.StartDate < DateTime.Now)
             {
-                if (request.EndDate > request.StartDate)
-                {
-                    var assessment = new Assessment()
-                    {
-                        CourseId = request.CourseId,
-                        AssessmentType = request.AssessmentType,
-                        StartDate = request.StartDate,
-                        EndDate = request.EndDate,
-                        TotalMarks = request.TotalMarks,
-                        PassMarks = request.PassMarks,
-                        CreatedDate = DateTime.Now,
-                        UpdateDate = DateTime.Now,
-                        Status = AssessmentStatus.NotStarted,
-                    };
-
-                    var assessmentData = await _repository.AddAssessment(assessment);
-
-                    var response = new AssessmentResponseDTO()
-                    {
-                        Id = assessmentData.Id,
-                        CourseId = assessmentData.CourseId,
-                        AssessmentType = ((AssessmentType)assessmentData.AssessmentType).ToString(),
-                        StartDate = assessmentData.StartDate,
-                        EndDate = assessmentData.EndDate,
-                        TotalMarks = assessmentData.TotalMarks,
-                        PassMarks = assessmentData.PassMarks,
-                        CreatedDate = assessmentData.CreatedDate,
-                        UpdateDate = assessmentData.UpdateDate,
-                        Status = ((AssessmentStatus)assessmentData.Status).ToString(),
-                    };
-
-                    return response;
-                }
-                else
-                {
-                    throw new Exception("Invalid End Date");
-                }
+                throw new ArgumentException("The start date cannot be in the past. Please provide a valid future date.");
             }
-            else
+
+            if (request.EndDate < request.StartDate)
             {
-                throw new Exception("Invalid Start Date");
+                throw new ArgumentException("The end date cannot be earlier than the start date. Please provide a valid end date.");
             }
+
+            var assessment = new Assessment()
+            {
+                CourseId = request.CourseId,
+                AssessmentTitle = request.AssessmentTitle,
+                AssessmentType = request.AssessmentType,
+                StartDate = request.StartDate,
+                EndDate = request.EndDate,
+                TotalMarks = request.TotalMarks,
+                PassMarks = request.PassMarks,
+                AssessmentLink = request.AssessmentLink,
+                CreatedDate = DateTime.Now,
+                UpdateDate = DateTime.Now,
+                Status = AssessmentStatus.NotStarted,
+            };
+
+            var assessmentData = await _repository.AddAssessment(assessment);
+
+            var response = new AssessmentResponseDTO()
+            {
+                Id = assessmentData.Id,
+                CourseId = assessmentData.CourseId,
+                AssessmentTitle = assessmentData.AssessmentTitle,
+                AssessmentType = ((AssessmentType)assessmentData.AssessmentType).ToString(),
+                StartDate = assessmentData.StartDate,
+                EndDate = assessmentData.EndDate,
+                TotalMarks = assessmentData.TotalMarks,
+                PassMarks = assessmentData.PassMarks,
+                AssessmentLink = assessmentData.AssessmentLink,
+                CreatedDate = assessmentData.CreatedDate,
+                UpdateDate = assessmentData.UpdateDate,
+                AssessmentStatus = ((AssessmentStatus)assessmentData.Status).ToString(),
+            };
+
+            return response;
         }
 
         public async Task<ICollection<AssessmentResponseDTO>> GetAllAssessment()
@@ -79,14 +79,16 @@ namespace MS3_Back_End.Service
             {
                 Id = item.Id,
                 CourseId = item.CourseId,
+                AssessmentTitle = item.AssessmentTitle,
                 AssessmentType = ((AssessmentType)item.AssessmentType).ToString(),
                 StartDate = item.StartDate,
                 EndDate = item.EndDate,
                 TotalMarks = item.TotalMarks,
                 PassMarks = item.PassMarks,
+                AssessmentLink = item.AssessmentLink,
                 CreatedDate = item.CreatedDate,
                 UpdateDate = item.UpdateDate,
-                Status = ((AssessmentStatus)item.Status).ToString(),
+                AssessmentStatus = ((AssessmentStatus)item.Status).ToString(),
             }).ToList();
 
             return responseList;
@@ -100,13 +102,16 @@ namespace MS3_Back_End.Service
                 throw new Exception("Assessment not found");
             }
 
+            assessment.CourseId = request.CourseId;
+            assessment.AssessmentTitle = request.AssessmentTitle;
             assessment.AssessmentType = request.AssessmentType;
             assessment.StartDate = request.StartDate;
             assessment.EndDate = request.EndDate;
             assessment.TotalMarks = request.TotalMarks;
             assessment.PassMarks = request.PassMarks;
+            assessment.AssessmentLink = request.AssessmentLink;
             assessment.UpdateDate = DateTime.Now;
-            assessment.Status = request.Status;
+            assessment.Status = request.AssessmentStatus;
 
             var updatedData = await _repository.UpdateAssessment(assessment);
 
@@ -114,14 +119,16 @@ namespace MS3_Back_End.Service
             {
                 Id = updatedData.Id,
                 CourseId = updatedData.CourseId,
+                AssessmentTitle = updatedData.AssessmentTitle,
                 AssessmentType = ((AssessmentType)updatedData.AssessmentType).ToString(),
                 StartDate = updatedData.StartDate,
                 EndDate = updatedData.EndDate,
                 TotalMarks = updatedData.TotalMarks,
                 PassMarks = updatedData.PassMarks,
+                AssessmentLink = updatedData.AssessmentLink,
                 CreatedDate = updatedData.CreatedDate,
                 UpdateDate = updatedData.UpdateDate,
-                Status = ((AssessmentStatus)updatedData.Status).ToString(),
+                AssessmentStatus = ((AssessmentStatus)updatedData.Status).ToString(),
             };
 
             return response;
@@ -140,15 +147,17 @@ namespace MS3_Back_End.Service
             {
                 Id = item.Id,
                 CourseId = item.CourseId,
+                AssessmentTitle = item.AssessmentTitle,
                 AssessmentType = ((AssessmentType)item.AssessmentType).ToString(),
                 StartDate = item.StartDate,
                 EndDate = item.EndDate,
                 TotalMarks = item.TotalMarks,
                 PassMarks = item.PassMarks,
+                AssessmentLink = item.AssessmentLink,
                 CreatedDate = item.CreatedDate,
                 UpdateDate = item.UpdateDate,
-                Status = ((AssessmentStatus)item.Status).ToString(),
-                courseResponse = new CourseResponseDTO()
+                AssessmentStatus = ((AssessmentStatus)item.Status).ToString(),
+                courseResponse = item.Course != null ? new CourseResponseDTO()
                 {
                     Id = item.Course.Id,
                     CourseCategoryId = item.Course.CourseCategoryId,
@@ -157,10 +166,10 @@ namespace MS3_Back_End.Service
                     CourseFee = item.Course.CourseFee,
                     Description = item.Course.Description,
                     Prerequisites = item.Course.Prerequisites,
-                    ImagePath = item.Course.ImagePath,
+                    ImageUrl = item.Course.ImageUrl!,
                     CreatedDate = item.Course.CreatedDate,
                     UpdatedDate = item.Course.UpdatedDate,
-                },
+                } : new CourseResponseDTO(),
                 studentAssessmentResponses = item.StudentAssessments != null ? item.StudentAssessments.Select(sa => new StudentAssessmentResponseDTO()
                 {
                     Id = sa.Id,

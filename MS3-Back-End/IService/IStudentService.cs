@@ -10,11 +10,12 @@ namespace MS3_Back_End.IService
     {
         Task<StudentResponseDTO> AddStudent(StudentRequestDTO StudentReq);
         Task<ICollection<StudentResponseDTO>> SearchStudent(string SearchText);
-        Task<StudentResponseDTO> GetStudentById(Guid StudentId);
+        Task<StudentFullDetailsResponseDTO> GetStudentFullDetailsById(Guid StudentId);
+        Task<StudentResponseDTO> UpdateStudentFullDetails(Guid id, StudentFullUpdateDTO request);
         Task<ICollection<StudentResponseDTO>> GetAllStudent();
         Task<StudentResponseDTO> UpdateStudent(StudentUpdateDTO studentUpdate);
         Task<string> DeleteStudent(Guid Id);
-        Task<PaginationResponseDTO<StudentResponseDTO>> GetPaginatedStudent(int pageNumber, int pageSize);
-        Task<string> UploadImage(Guid studentId, ImageRequestDTO request);
+        Task<PaginationResponseDTO<StudentWithUserResponseDTO>> GetPaginatedStudent(int pageNumber, int pageSize);
+        Task<string> UploadImage(Guid studentId, IFormFile? image);
     }
 }

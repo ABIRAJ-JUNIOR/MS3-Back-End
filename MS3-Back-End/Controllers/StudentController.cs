@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.Image;
 using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Student;
+using MS3_Back_End.DTOs.ResponseDTOs.Student;
 using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Controllers
@@ -53,11 +54,11 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetStudentById(Guid id)
+        public async Task<IActionResult> GetStudentFullDetailsById(Guid id)
         {
             try
             {
-                var student = await _studentService.GetStudentById(id);
+                var student = await _studentService.GetStudentFullDetailsById(id);
                 return Ok(student);
             }
             catch (Exception ex)
@@ -66,7 +67,21 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpPut("update")]
+        [HttpPut("Update-Full-Details/{id}")]
+        public async Task<IActionResult> UpdateStudentFullDetails(Guid id, StudentFullUpdateDTO request)
+        {
+            try
+            {
+                var updatedData = await _studentService.UpdateStudentFullDetails(id, request);
+                return Ok(updatedData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("Update-Personal-Details")]
         public async Task<IActionResult> UpdateStudent(StudentUpdateDTO studentUpdate)
         {
             if (studentUpdate == null)
@@ -100,11 +115,11 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPost("Image/{studentId}")]
-        public async Task<IActionResult> UploadImage(Guid studentId, ImageRequestDTO request)
+        public async Task<IActionResult> UploadImage(Guid studentId, IFormFile? image)
         {
             try
             {
-                var response = await _studentService.UploadImage(studentId, request);
+                var response = await _studentService.UploadImage(studentId, image);
                 return Ok(response);
             }
             catch (Exception ex)

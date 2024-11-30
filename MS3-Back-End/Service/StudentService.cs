@@ -1,4 +1,6 @@
-﻿using Azure.Core;
+﻿  using Azure.Core;
+using CloudinaryDotNet.Actions;
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Hosting;
 using MS3_Back_End.DBContext;
 using MS3_Back_End.DTOs.Image;
@@ -17,6 +19,8 @@ using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
 using MS3_Back_End.Repository;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using MS3_Back_End.DTOs.RequestDTOs.Admin;
+using MS3_Back_End.DTOs.ResponseDTOs.Admin;
 
 namespace MS3_Back_End.Service
 {
@@ -24,13 +28,11 @@ namespace MS3_Back_End.Service
     {
         private readonly IStudentRepository _StudentRepo;
         private readonly IAuthRepository _authRepository;
-        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public StudentService(IStudentRepository studentRepo, IAuthRepository authRepository, IWebHostEnvironment webHostEnvironment)
+        public StudentService(IStudentRepository studentRepo, IAuthRepository authRepository)
         {
             _StudentRepo = studentRepo;
             _authRepository = authRepository;
-            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<StudentResponseDTO> AddStudent(StudentRequestDTO StudentReq)
@@ -38,12 +40,12 @@ namespace MS3_Back_End.Service
             var nicCheck = await _authRepository.GetStudentByNic(StudentReq.Nic);
             var emailCheck = await _authRepository.GetUserByEmail(StudentReq.Email);
 
-            if(nicCheck != null)
+            if (nicCheck != null)
             {
                 throw new Exception("Nic already used");
             }
 
-            if(emailCheck != null)
+            if (emailCheck != null)
             {
                 throw new Exception("Email already used");
             }
@@ -80,12 +82,13 @@ namespace MS3_Back_End.Service
                 DateOfBirth = StudentReq.DateOfBirth,
                 Gender = StudentReq.Gender,
                 Phone = StudentReq.Phone,
+                ImageUrl = null,
                 CteatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
 
             };
 
-            if(StudentReq.Address != null)
+            if (StudentReq.Address != null)
             {
                 var address = new Address
                 {
@@ -110,7 +113,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = data.DateOfBirth,
                 Gender = ((Gender)data.Gender).ToString(),
                 Phone = data.Phone,
-                ImagePath = data.ImagePath!,
+                ImageUrl = data.ImageUrl!,
                 CteatedDate = data.CteatedDate,
                 UpdatedDate = data.UpdatedDate,
             };
@@ -150,7 +153,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = item.DateOfBirth,
                 Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
-                ImagePath = item.ImagePath!,
+                ImageUrl = item.ImageUrl!,
                 CteatedDate = item.CteatedDate,
                 UpdatedDate = item.UpdatedDate,
                 Address = item.Address != null ? new AddressResponseDTO()
@@ -183,7 +186,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = item.DateOfBirth,
                 Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
-                ImagePath = item.ImagePath!,
+                ImageUrl = item.ImageUrl!,
                 CteatedDate = item.CteatedDate,
                 UpdatedDate = item.UpdatedDate,
                 Address = item.Address != null ? new AddressResponseDTO()
@@ -200,110 +203,88 @@ namespace MS3_Back_End.Service
         }
 
 
-        public async Task<StudentResponseDTO> GetStudentById(Guid StudentId)
+        public async Task<StudentFullDetailsResponseDTO> GetStudentFullDetailsById(Guid StudentId)
         {
-            var item = await _StudentRepo.GetStudentById(StudentId);
+            var item = await _StudentRepo.GetStudentFullDetailsById(StudentId);
             if (item == null)
             {
                 throw new Exception("Student Not Found");
             }
+            return item;
+        }
 
-            var obj = new StudentResponseDTO
+        public async Task<StudentResponseDTO> UpdateStudentFullDetails(Guid id, StudentFullUpdateDTO request)
+        {
+            var studentData = await _StudentRepo.GetStudentById(id);
+
+            if (studentData == null)
             {
-                Id = item.Id,
-                Nic = item.Nic,
-                FirstName = item.FirstName,
-                LastName = item.LastName,
-                DateOfBirth = item.DateOfBirth,
-                Gender = ((Gender)item.Gender).ToString(),
-                Phone = item.Phone,
-                ImagePath = item.ImagePath!,
-                CteatedDate = item.CteatedDate,
-                UpdatedDate = item.UpdatedDate,
-                Address = item.Address != null ? new AddressResponseDTO()
+                throw new Exception("Student not found");
+            }
+
+            studentData.FirstName = request.FirstName;
+            studentData.Gender = request.Gender;
+            studentData.LastName = request.LastName;
+            studentData.Phone = request.Phone;
+            studentData.UpdatedDate = DateTime.Now;
+            if (request.Address != null)
+            {
+                studentData.Address = new Address
                 {
-                    AddressLine1 = item.Address.AddressLine1,
-                    AddressLine2 = item.Address.AddressLine2,
-                    PostalCode = item.Address.PostalCode,
-                    City = item.Address.City,
-                    Country = item.Address.Country,
-                    StudentId = item.Id,
-                } : null,
-                Enrollments = item.Enrollments != null ? item.Enrollments.Select(enroll => new EnrollmentResponseDTO()
-                {
-                    Id = enroll.Id,
-                    StudentId = enroll.StudentId,
-                    CourseScheduleId = enroll.CourseScheduleId,
-                    EnrollmentDate = enroll.EnrollmentDate,
-                    PaymentStatus = ((PaymentStatus)enroll.PaymentStatus).ToString(),
-                    IsActive = enroll.IsActive,
-                    PaymentResponse = enroll.Payments != null ? enroll.Payments.Select(payment => new PaymentResponseDTO()
-                    {
-                        Id = payment.Id,
-                        PaymentType = ((PaymentTypes)payment.PaymentType).ToString(),
-                        PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
-                        AmountPaid = payment.AmountPaid,
-                        PaymentDate = payment.PaymentDate,
-                        ImagePath = payment.ImagePath,
-                        InstallmentNumber = payment.InstallmentNumber,
-                        EnrollmentId = payment.EnrollmentId
-                    }).ToList() : null,
-                    CourseScheduleResponse = new CourseScheduleResponseDTO()
-                    {
-                        Id = enroll.CourseSchedule.Id,
-                        CourseId = enroll.CourseSchedule.CourseId,
-                        StartDate = enroll.CourseSchedule.StartDate,
-                        EndDate = enroll.CourseSchedule.EndDate,
-                        Duration = enroll.CourseSchedule.Duration,
-                        Time = enroll.CourseSchedule.Time,
-                        Location = enroll.CourseSchedule.Location,
-                        MaxStudents = enroll.CourseSchedule.MaxStudents,
-                        EnrollCount = enroll.CourseSchedule.EnrollCount,
-                        CreatedDate = enroll.CourseSchedule.CreatedDate,
-                        UpdatedDate = enroll.CourseSchedule.UpdatedDate,
-                        ScheduleStatus = ((ScheduleStatus)enroll.CourseSchedule.ScheduleStatus).ToString(),
-                        CourseResponse = new CourseResponseDTO()
-                        {
-                            Id = enroll.CourseSchedule.Course.Id,
-                            CourseCategoryId = enroll.CourseSchedule.Course.CourseCategoryId,
-                            CourseName = enroll.CourseSchedule.Course.CourseName,
-                            Level = ((CourseLevel)enroll.CourseSchedule.Course.Level).ToString(),
-                            CourseFee = enroll.CourseSchedule.Course.CourseFee,
-                            Description = enroll.CourseSchedule.Course.Description,
-                            Prerequisites = enroll.CourseSchedule.Course.Prerequisites,
-                            ImagePath = enroll.CourseSchedule.Course.ImagePath,
-                            CreatedDate = enroll.CourseSchedule.Course.CreatedDate,
-                            UpdatedDate = enroll.CourseSchedule.Course.UpdatedDate,
-                        }
-                    }
-                }).ToList() : null,
-                StudentAssessments = item.StudentAssessments != null ? item.StudentAssessments.Select(sa => new StudentAssessmentResponseDTO()
-                {
-                    Id = sa.Id,
-                    MarksObtaines = sa.MarksObtaines,
-                    Grade = sa.Grade != null ? ((Grade)sa.Grade).ToString() : null,
-                    FeedBack = sa.FeedBack,
-                    DateEvaluated = sa.DateEvaluated,
-                    DateSubmitted = sa.DateSubmitted,
-                    StudentAssessmentStatus = ((StudentAssessmentStatus)sa.StudentAssessmentStatus).ToString(),
-                    StudentId = sa.StudentId,
-                    AssessmentId = sa.AssessmentId,
-                    AssessmentResponse = new AssessmentResponseDTO(){
-                        Id = sa.Assessment.Id,
-                        CourseId = sa.Assessment.CourseId,
-                        AssessmentType = ((AssessmentType)sa.Assessment.AssessmentType).ToString(),
-                        StartDate = sa.Assessment.StartDate,
-                        EndDate = sa.Assessment.EndDate,
-                        TotalMarks = sa.Assessment.TotalMarks,
-                        PassMarks = sa.Assessment.PassMarks,
-                        CreatedDate = sa.Assessment.CreatedDate,
-                        UpdateDate = sa.Assessment.UpdateDate,
-                        Status = ((AssessmentStatus)sa.Assessment.Status).ToString(),
-                    }
-                }).ToList() : null,
+                    AddressLine1 = request.Address.AddressLine1,
+                    AddressLine2 = request.Address.AddressLine2,
+                    PostalCode = request.Address.PostalCode,
+                    City = request.Address.City,
+                    Country = request.Address.Country,
+                };
+            }
+
+            var updatedData = await _StudentRepo.UpdateStudent(studentData);
+
+            var userData = await _authRepository.GetUserById(id);
+            if (userData == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            if (userData.Password != null)
+            {
+                userData.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
+            }
+
+            var userUpdateData = await _authRepository.UpdateUser(userData);
+
+
+            var StudentReponse = new StudentResponseDTO
+            {
+                Id = updatedData.Id,
+                Nic = updatedData.Nic,
+                FirstName = updatedData.FirstName,
+                LastName = updatedData.LastName,
+                DateOfBirth = updatedData.DateOfBirth,
+                Gender = ((Gender)updatedData.Gender).ToString(),
+                Phone = updatedData.Phone,
+                ImageUrl = updatedData.ImageUrl!,
+                CteatedDate = updatedData.CteatedDate,
+                UpdatedDate = updatedData.UpdatedDate,
             };
 
-            return obj;
+            if (updatedData.Address != null)
+            {
+                var AddressResponse = new AddressResponseDTO
+                {
+                    StudentId = updatedData.Address.StudentId,
+                    AddressLine1 = updatedData.Address.AddressLine1,
+                    AddressLine2 = updatedData.Address.AddressLine2,
+                    PostalCode = updatedData.Address.PostalCode,
+                    City = updatedData.Address.City,
+                    Country = updatedData.Address.Country,
+                };
+
+                StudentReponse.Address = AddressResponse;
+            }
+
+            return StudentReponse;
         }
 
         public async Task<StudentResponseDTO> UpdateStudent(StudentUpdateDTO studentUpdate)
@@ -338,7 +319,7 @@ namespace MS3_Back_End.Service
                 DateOfBirth = item.DateOfBirth,
                 Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
-                ImagePath = item.ImagePath!,
+                ImageUrl = item.ImageUrl!,
                 CteatedDate = item.CteatedDate,
                 UpdatedDate = item.UpdatedDate
 
@@ -359,9 +340,9 @@ namespace MS3_Back_End.Service
             var data = await _StudentRepo.DeleteStudent(GetData);
             return data;
         }
-
                 
-        public async Task<PaginationResponseDTO<StudentResponseDTO>> GetPaginatedStudent(int pageNumber, int pageSize)
+        public async Task<PaginationResponseDTO<StudentWithUserResponseDTO>> GetPaginatedStudent(int pageNumber, int pageSize)
+
         {
 
             var AllStudents = await _StudentRepo.GetAllStudente();
@@ -372,35 +353,10 @@ namespace MS3_Back_End.Service
             }
             var Students = await _StudentRepo.GetPaginatedStudent(pageNumber, pageSize);
 
-            var studentResponses = Students.Select(student => new StudentResponseDTO
+            var paginationResponseDto = new PaginationResponseDTO<StudentWithUserResponseDTO>
+
             {
-                Id = student.Id,
-                Nic = student.Nic,
-                FirstName = student.FirstName,
-                LastName = student.LastName,
-                DateOfBirth = student.DateOfBirth,
-                Gender = ((Gender)student.Gender).ToString(),
-                Phone = student.Phone,
-                ImagePath = student.ImagePath,
-                CteatedDate = student.CteatedDate,
-                UpdatedDate = student.UpdatedDate,
-                IsActive = student.IsActive,
-
-                Address = student.Address != null ? new AddressResponseDTO
-                {
-                    AddressLine1 = student.Address.AddressLine1,
-                    AddressLine2 = student.Address.AddressLine2,
-                    City = student.Address.City,
-                    PostalCode = student.Address.PostalCode,
-                    Country = student.Address.Country,
-                    StudentId = student.Id
-                } : null,  
-            }).ToList();
-
-
-            var paginationResponseDto = new PaginationResponseDTO<StudentResponseDTO>
-            {
-                Items = studentResponses,
+                Items = Students,
                 CurrentPage = pageNumber,
                 PageSize = pageSize,
                 TotalPages = (int)Math.Ceiling(AllStudents.Count / (double)pageSize),
@@ -410,7 +366,7 @@ namespace MS3_Back_End.Service
             return paginationResponseDto;
         }
 
-        public async Task<string> UploadImage(Guid studentId, ImageRequestDTO request)
+        public async Task<string> UploadImage(Guid studentId, IFormFile? image)
         {
             var studentData = await _StudentRepo.GetStudentById(studentId);
             if (studentData == null)
@@ -418,31 +374,31 @@ namespace MS3_Back_End.Service
                 throw new Exception("Student not found");
             }
 
-            studentData.ImagePath = request.ImageFile != null ? await SaveImageFile(request.ImageFile) : null;
+            if (image == null)
+            {
+                throw new Exception("Could not upload image");
+            }
+
+            var cloudinaryUrl = "cloudinary://779552958281786:JupUDaXM2QyLcruGYFayOI1U9JI@dgpyq5til";
+
+            Cloudinary cloudinary = new Cloudinary(cloudinaryUrl);
+
+            using (var stream = image.OpenReadStream())
+            {
+                var uploadParams = new ImageUploadParams
+                {
+                    File = new FileDescription(image.FileName, stream),
+                    UseFilename = true,
+                    UniqueFilename = true,
+                    Overwrite = true
+                };
+
+                var uploadResult = await cloudinary.UploadAsync(uploadParams);
+                studentData.ImageUrl = (uploadResult.SecureUrl).ToString();
+            }
             var updatedData = await _StudentRepo.UpdateStudent(studentData);
 
             return "Image upload successfully";
-        }
-
-        private async Task<string> SaveImageFile(IFormFile imageFile)
-        {
-            if (imageFile == null || imageFile.Length == 0)
-                return string.Empty;
-
-            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
-            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "Student");
-
-            if (!Directory.Exists(uploadPath))
-                Directory.CreateDirectory(uploadPath);
-
-            string filePath = Path.Combine(uploadPath, fileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await imageFile.CopyToAsync(fileStream);
-            }
-
-            return $"/Student/{fileName}";
         }
     }
 }

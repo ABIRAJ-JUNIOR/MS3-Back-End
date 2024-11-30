@@ -20,13 +20,8 @@ namespace MS3_Back_End.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCourseSchedule(CourseScheduleRequestDTO courseReq)
         {
-            if (courseReq == null)
-            {
-                return BadRequest("Course schedule data is required.");
-            }
             try
             {
-
                 var response = await _courseScheduleService.AddCourseSchedule(courseReq);
                 return Ok(response);
 
@@ -83,12 +78,12 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpPut("Update")]
-        public async Task<IActionResult> UpdateCourseSchedule(UpdateCourseScheduleDTO courseReq)
+        [HttpPut("Update/{id}")]
+        public async Task<IActionResult> UpdateCourseSchedule(Guid id, UpdateCourseScheduleDTO courseReq)
         {
             try
             {
-                var response = await _courseScheduleService.UpdateCourseSchedule(courseReq);
+                var response = await _courseScheduleService.UpdateCourseSchedule(id,courseReq);
                 return Ok(response);
             }
             catch (Exception ex)

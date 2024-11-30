@@ -6,7 +6,10 @@ using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.__Password__;
 using MS3_Back_End.DTOs.RequestDTOs.Admin;
 using MS3_Back_End.DTOs.ResponseDTOs.Admin;
+using MS3_Back_End.Entities;
 using MS3_Back_End.IService;
+using MS3_Back_End.Service;
+using System.Drawing;
 
 namespace MS3_Back_End.Controllers
 {
@@ -35,12 +38,12 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("Get")]
-        public async Task<IActionResult> GetAdminById(Guid id)
+        [HttpGet("Get/{id}")]
+        public async Task<IActionResult> GetAdminFulldetailsById(Guid id)
         {
             try
             {
-                var adminData = await _adminService.GetAdminById(id);
+                var adminData = await _adminService.GetAdminFulldetailsById(id);
                 return Ok(adminData);
             }
             catch (Exception ex)
@@ -54,14 +57,22 @@ namespace MS3_Back_End.Controllers
         {
             var adminsList = await _adminService.GetAllAdmins();
             return Ok(adminsList);
+
         }
 
-        [HttpPut("Update-Personal-Details")]
-        public async Task<IActionResult> UpdateAdmin(Guid id, AdminUpdateRequestDTO request)
+        [HttpPut("Update-Full-Details/{id}")]
+        public async Task<IActionResult> UpdateAdminFullDetails(Guid id, AdminFullUpdateDTO request)
+        {
+            var updateresponse = await _adminService.UpdateAdminFullDetails(id, request);
+            return Ok(updateresponse);
+        }
+
+        [HttpPut("Update-Personal-Details/{id}")]
+        public async Task<IActionResult> UpdateAdminPersonalDetails(Guid id, AdminUpdateRequestDTO request)
         {
             try
             {
-                var updatedData = await _adminService.UpdateAdmin(id, request);
+                var updatedData = await _adminService.UpdateAdminPersonalDetails(id, request);
                 return Ok(updatedData);
             }
             catch (Exception ex)
@@ -99,11 +110,11 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPost("Image/{adminId}")]
-        public async Task<IActionResult> UploadImage(Guid adminId, ImageRequestDTO request)
+        public async Task<IActionResult> UploadImage(Guid adminId,IFormFile? ImageFile)
         {
             try
             {
-                var response = await _adminService.UploadImage(adminId, request);
+                var response = await _adminService.UploadImage(adminId, ImageFile);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -119,6 +130,21 @@ namespace MS3_Back_End.Controllers
             {
                 var response = await _adminService.GetPaginatedAdmin(pageNumber, pageSize);
                 return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{Id}")]
+
+        public async Task<IActionResult> DeleteAdmin(Guid Id)
+        {
+            try
+            {
+                var rsponse = await _adminService.DeleteAdmin(Id);
+                return Ok(rsponse);
             }
             catch (Exception ex)
             {

@@ -42,7 +42,7 @@ namespace MS3_Back_End.Repository
 
         public async Task<ICollection<Assessment>> GetPaginatedAssessment(int pageNumber, int pageSize)
         {
-            var assessment = await _dbContext.Assessments
+            var assessment = await _dbContext.Assessments.OrderByDescending(o => o.CreatedDate)
                 .Include(c => c.Course)
                 .Include(sa => sa.StudentAssessments)
                 .Skip((pageNumber - 1) * pageSize)

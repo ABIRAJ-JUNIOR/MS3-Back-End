@@ -16,7 +16,6 @@ namespace MS3_Back_End
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.WebHost.UseWebRoot("wwwroot");
 
             // Add services to the container.
 
@@ -119,7 +118,7 @@ namespace MS3_Back_End
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "Enter 'Bearer' [space] and your token"
+                    Description = "Enter your token"
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -141,11 +140,11 @@ namespace MS3_Back_End
 
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("MyPolicy", policy =>
+                options.AddDefaultPolicy(policy =>
                 {
-                    policy.WithOrigins("https://your-allowed-origin.com")
-                          .AllowAnyMethod()
-                          .AllowAnyHeader();
+                    policy.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
                 });
             });
 

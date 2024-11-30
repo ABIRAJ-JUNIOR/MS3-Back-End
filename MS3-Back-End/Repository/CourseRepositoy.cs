@@ -11,23 +11,20 @@ namespace MS3_Back_End.Repository
         public CourseRepositoy(AppDBContext db)
         {
             _Db = db;
-
         }
 
         public async Task<Course> AddCourse(Course courseReq)
         {
-            var name = await _Db.Courses.SingleOrDefaultAsync(n => n.CourseName == courseReq.CourseName);
-            if (name == null)
+            var courseCategory = await _Db.CourseCategories.SingleOrDefaultAsync(cc => cc.Id == courseReq.CourseCategoryId);
+            
+            if(courseCategory == null)
             {
-                var data = await _Db.Courses.AddAsync(courseReq);
-                await _Db.SaveChangesAsync();
-                return data.Entity;
-            }
-            else
-            {
-                throw new Exception("Your Course Already Added");
+                throw new Exception("Course Category not found");
             }
 
+            var data = await _Db.Courses.AddAsync(courseReq);
+            await _Db.SaveChangesAsync();
+            return data.Entity;
         }
         public async Task<ICollection<Course>> SearchCourse(string SearchText)
         {
@@ -81,5 +78,6 @@ namespace MS3_Back_End.Repository
 
             return courses;
         }
+     
     }
 }

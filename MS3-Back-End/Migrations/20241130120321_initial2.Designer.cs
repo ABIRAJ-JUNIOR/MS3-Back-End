@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MS3_Back_End.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20241121194829_initial1")]
-    partial class initial1
+    [Migration("20241130120321_initial2")]
+    partial class initial2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,22 +32,18 @@ namespace MS3_Back_End.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AddressLine1")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AddressLine2")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Country")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PostalCode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("StudentId")
@@ -67,6 +63,9 @@ namespace MS3_Back_End.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("CoverImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CteatedDate")
                         .HasColumnType("datetime2");
 
@@ -74,7 +73,7 @@ namespace MS3_Back_End.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImagePath")
+                    b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -131,6 +130,13 @@ namespace MS3_Back_End.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AssessmentLink")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AssessmentTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("AssessmentType")
                         .HasColumnType("int");
@@ -249,8 +255,7 @@ namespace MS3_Back_End.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
+                    b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -442,9 +447,6 @@ namespace MS3_Back_End.Migrations
                     b.Property<Guid>("EnrollmentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ImagePath")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("InstallmentNumber")
                         .HasColumnType("int");
 
@@ -498,7 +500,7 @@ namespace MS3_Back_End.Migrations
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
-                    b.Property<string>("ImagePath")
+                    b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -620,7 +622,7 @@ namespace MS3_Back_End.Migrations
             modelBuilder.Entity("MS3_Back_End.Entities.Assessment", b =>
                 {
                     b.HasOne("MS3_Back_End.Entities.Course", "Course")
-                        .WithMany()
+                        .WithMany("Assessment")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -771,6 +773,8 @@ namespace MS3_Back_End.Migrations
 
             modelBuilder.Entity("MS3_Back_End.Entities.Course", b =>
                 {
+                    b.Navigation("Assessment");
+
                     b.Navigation("CourseSchedules");
 
                     b.Navigation("Feedbacks");
@@ -811,8 +815,7 @@ namespace MS3_Back_End.Migrations
 
             modelBuilder.Entity("MS3_Back_End.Entities.User", b =>
                 {
-                    b.Navigation("UserRole")
-                        .IsRequired();
+                    b.Navigation("UserRole");
                 });
 #pragma warning restore 612, 618
         }

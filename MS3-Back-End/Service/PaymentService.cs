@@ -9,12 +9,12 @@ namespace MS3_Back_End.Service
     public class PaymentService : IPaymentService
     {
         private readonly IPaymentRepository _paymentRepository;
-        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IEnrollmentRepository _enrollmentRepository;
 
-        public PaymentService(IPaymentRepository paymentRepository, IWebHostEnvironment webHostEnvironment)
+        public PaymentService(IPaymentRepository paymentRepository, IEnrollmentRepository enrollmentRepository)
         {
             _paymentRepository = paymentRepository;
-            _webHostEnvironment = webHostEnvironment;
+            _enrollmentRepository = enrollmentRepository;
         }
 
         public async Task<PaymentResponseDTO> CreatePayment(PaymentRequestDTO paymentRequest)
@@ -22,6 +22,13 @@ namespace MS3_Back_End.Service
             if(paymentRequest.AmountPaid < 0)
             {
                 throw new Exception("Amount Should be positive");
+            }
+
+            if(paymentRequest.InstallmentNumber == 3)
+            {
+                var enrollmentData = await _enrollmentRepository.GetEnrollmentById(paymentRequest.EnrollmentId);
+                enrollmentData.PaymentStatus = PaymentStatus.Paid;
+                await _enrollmentRepository.UpdateEnrollment(enrollmentData);
             }
 
             var payment = new Payment
@@ -35,10 +42,6 @@ namespace MS3_Back_End.Service
                 EnrollmentId = paymentRequest.EnrollmentId
             };
 
-            if (paymentRequest.ImageFile != null)
-            {
-                payment.ImagePath = await SaveImageFile(paymentRequest.ImageFile);
-            }
 
             var createdPayment = await _paymentRepository.CreatePayment(payment);
 
@@ -49,7 +52,6 @@ namespace MS3_Back_End.Service
                 PaymentMethod = ((PaymentMethots)createdPayment.PaymentMethod).ToString(),
                 AmountPaid = createdPayment.AmountPaid,
                 PaymentDate = createdPayment.PaymentDate,
-                ImagePath = createdPayment.ImagePath,
                 InstallmentNumber = createdPayment.InstallmentNumber,
                 EnrollmentId = createdPayment.EnrollmentId
             };
@@ -65,7 +67,6 @@ namespace MS3_Back_End.Service
                 PaymentMethod = ((PaymentMethots)p.PaymentMethod).ToString(),
                 AmountPaid = p.AmountPaid,
                 PaymentDate = p.PaymentDate,
-                ImagePath = p.ImagePath,
                 InstallmentNumber = p.InstallmentNumber,
                 EnrollmentId = p.EnrollmentId
             }).ToList();
@@ -73,26 +74,21 @@ namespace MS3_Back_End.Service
             return response;
         }
 
-        public async Task<string> SaveImageFile(IFormFile imageFile)
+        public async Task<ICollection<PaymentResponseDTO>> RecentPayments()
         {
-            if (imageFile == null || imageFile.Length == 0)
-                return string.Empty;
-
-            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
-            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "Payment");
-
-            if (!Directory.Exists(uploadPath))
-                Directory.CreateDirectory(uploadPath);
-
-            string filePath = Path.Combine(uploadPath, fileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            var recentPayments = await _paymentRepository.RecentPayments();
+            var response = recentPayments.Select(p => new PaymentResponseDTO()
             {
-                await imageFile.CopyToAsync(fileStream);
-            }
+                Id = p.Id,
+                PaymentType = ((PaymentTypes)p.PaymentType).ToString(),
+                PaymentMethod = ((PaymentMethots)p.PaymentMethod).ToString(),
+                AmountPaid = p.AmountPaid,
+                PaymentDate = p.PaymentDate,
+                InstallmentNumber = p.InstallmentNumber,
+                EnrollmentId = p.EnrollmentId
+            }).ToList();
 
-            return $"/Payment/{fileName}";
+            return response;
         }
-
     }
 }

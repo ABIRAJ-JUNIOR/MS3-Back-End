@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.RequestDTOs.CourseCategory;
+using MS3_Back_End.DTOs.ResponseDTOs.CourseCategory;
 using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Controllers
@@ -56,6 +57,22 @@ namespace MS3_Back_End.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+        [HttpGet("GetAllCategory")]
+
+        public async Task<IActionResult> GetAllGetCourseCategory()
+        {
+
+            try
+            {
+                var result = await _courseCategoryService.GetAllGetCourseCategory();
+                return Ok(result);
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);
+            }
+   
         }
 
     }

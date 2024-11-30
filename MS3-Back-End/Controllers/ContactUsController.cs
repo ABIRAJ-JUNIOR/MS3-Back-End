@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MS3_Back_End.DTOs.RequestDTOs.ContactUs;
+using MS3_Back_End.DTOs.ResponseDTOs.ContactUs;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IService;
 
@@ -53,6 +54,20 @@ namespace MS3_Back_End.Controllers
             {
                 var updateMessage = await _contactUsService.UpdateMessage(request);
                 return Ok(updateMessage);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("Delete/{Id}")]
+        public async Task<IActionResult> DeleteMessage(Guid id)
+        {
+            try
+            {
+                var deletedData = await _contactUsService.DeleteMessage(id);
+                return Ok(deletedData);
             }
             catch (Exception ex)
             {

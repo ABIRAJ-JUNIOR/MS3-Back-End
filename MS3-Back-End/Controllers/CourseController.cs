@@ -19,7 +19,7 @@ namespace MS3_Back_End.Controller
            _courseService = courseService;
         }
 
-        [HttpPost("Course")]
+        [HttpPost("Add")]
         public async Task<IActionResult> AddCourse(CourseRequestDTO courseRequest)
         {
             try
@@ -47,7 +47,7 @@ namespace MS3_Back_End.Controller
             }
         }
 
-        [HttpGet("Course")]
+        [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllCourses()
         {
             try
@@ -62,7 +62,7 @@ namespace MS3_Back_End.Controller
            
         }
 
-        [HttpGet("CourseById/{CourseId}")]
+        [HttpGet("GetById/{CourseId}")]
         public async Task<IActionResult> GetCourseById(Guid CourseId)
         {
             try
@@ -77,12 +77,12 @@ namespace MS3_Back_End.Controller
         }
 
 
-        [HttpPut("Course")]
-        public async Task<IActionResult> UpdateCourse(UpdateCourseRequestDTO courseRequest)
+        [HttpPut("Update/{id}")]
+        public async Task<IActionResult> UpdateCourse(Guid id , UpdateCourseRequestDTO courseRequest)
         {
             try
             {
-                var result = await _courseService.UpdateCourse(courseRequest);
+                var result = await _courseService.UpdateCourse(id ,courseRequest);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -93,7 +93,7 @@ namespace MS3_Back_End.Controller
         }
 
 
-        [HttpDelete("Course/{CourseId}")]
+        [HttpDelete("Delete/{CourseId}")]
         public async Task<IActionResult> DeleteCourse(Guid CourseId)
         {
             try
@@ -121,6 +121,18 @@ namespace MS3_Back_End.Controller
                 return BadRequest(ex.Message);
             }
 
+        }
+        [HttpPost("image/{CourseId}")]
+        public async Task<IActionResult> UploadImage(Guid CourseId, IFormFile? image)
+        {
+            try
+            {
+                var data = await _courseService.UploadImage(CourseId,image);
+                return Ok(data);
+            }catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
     }
