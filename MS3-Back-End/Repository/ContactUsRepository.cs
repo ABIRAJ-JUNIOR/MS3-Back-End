@@ -23,7 +23,7 @@ namespace MS3_Back_End.Repository
 
         public async Task<ICollection<ContactUs>> GetAllMessages()
         {
-            var getMessage = await _dbContext.ContactUs.ToListAsync();
+            var getMessage = await _dbContext.ContactUs.OrderByDescending(c => c.DateSubmited).ToListAsync();
             return getMessage;
         }
 
