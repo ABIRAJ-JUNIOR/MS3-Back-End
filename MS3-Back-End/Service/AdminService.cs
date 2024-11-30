@@ -347,5 +347,9 @@ namespace MS3_Back_End.Service
 
             return response;
         }
+        public async Task<Admin> UpdateAdminProfile()
+        {
+
+        }
     }
 }
