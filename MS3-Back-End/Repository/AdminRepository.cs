@@ -36,6 +36,55 @@ namespace MS3_Back_End.Repository
             return adminData!;
         }
 
+        public async Task<AdminAllDataResponseDTO> GetAdminFulldetailsById(Guid id)
+        {
+            var adminData = await (
+                from admin in _dbContext.Admins
+                where admin.IsActive != false && admin.Id == id
+
+                join auditLog in _dbContext.AuditLogs
+                    on admin.Id equals auditLog.AdminId into auditLogsGroup
+                from auditLog in auditLogsGroup.DefaultIfEmpty()
+
+                join user in _dbContext.Users
+                    on admin.Id equals user.Id into usersGroup
+                from user in usersGroup.DefaultIfEmpty()
+                join userRole in _dbContext.UserRoles
+                                    on user.Id equals userRole.UserId into userRoleGroup
+                from userRole in userRoleGroup.DefaultIfEmpty()
+                join role in _dbContext.Roles
+                    on userRole.RoleId equals role.Id into roleGroup
+                from role in roleGroup.DefaultIfEmpty()
+                where admin.IsActive != false
+                select new AdminAllDataResponseDTO
+                {
+                    Id = admin.Id,
+                    RoleName = role.Name,
+                    Nic = admin.Nic,
+                    FirstName = admin.FirstName,
+                    LastName = admin.LastName,
+                    Phone = admin.Phone,
+                    Email = user.Email,
+                    ImageUrl = admin.ImageUrl,
+                    CoverImageUrl = admin.CoverImageUrl,
+                    CteatedDate = admin.CteatedDate,
+                    UpdatedDate = admin.UpdatedDate,
+                    IsActive = admin.IsActive,
+                    AuditLogs = admin.AuditLogs!.Select(a => new AuditLogResponceDTO
+                    {
+                        Id = a.Id,
+                        AdminId = a.AdminId,
+                        ActionDate = a.ActionDate,
+                        Details = a.Details,
+                        Action = a.Action,
+                        AdminResponse = null!,
+                    }).ToList()
+                }
+            ).FirstOrDefaultAsync();
+
+            return adminData!;
+        }
+
 
         public async Task<ICollection<Admin>> GetAllAdmins()
         {
