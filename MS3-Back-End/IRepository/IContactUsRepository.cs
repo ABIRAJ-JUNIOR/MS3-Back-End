@@ -8,5 +8,6 @@ namespace MS3_Back_End.IRepository
         Task<ICollection<ContactUs>> GetAllMessages();
         Task<ContactUs> GetMessageById(Guid Id);
         Task<ContactUs> UpdateMessage(ContactUs contactUs);
+        Task<ContactUs> DeleteMessage(ContactUs contactUs);
     }
 }
