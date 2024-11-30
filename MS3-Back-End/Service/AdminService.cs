@@ -97,35 +97,14 @@ namespace MS3_Back_End.Service
             return response;
         }
 
-        public async Task<AdminResponseDTO> GetAdminById(Guid id)
+        public async Task<AdminAllDataResponseDTO> GetAdminFulldetailsById(Guid id)
         {
-            var adminData = await _adminRepository.GetAdminById(id);
+            var adminData = await _adminRepository.GetAdminFulldetailsById(id);
             if(adminData == null)
             {
                 throw new Exception("Not found");
             }
-            var response = new AdminResponseDTO()
-            {
-                Id = adminData.Id,
-                Nic = adminData.Nic,
-                FirstName = adminData.FirstName,
-                LastName = adminData.LastName,
-                Phone = adminData.Phone,
-                ImageUrl = adminData.ImageUrl,
-                CteatedDate = adminData.CteatedDate,
-                UpdatedDate = adminData.UpdatedDate,
-                IsActive = adminData.IsActive,
-                AuditLogs = adminData.AuditLogs != null ? adminData.AuditLogs.Select(data => new AuditLogResponceDTO()
-                {
-                    Id = data.Id,
-                    AdminId = data.AdminId,
-                    ActionDate = data.ActionDate,
-                    Details = data.Details,
-                    Action = data.Action,
-                }).ToList() : null
-            };
-
-            return response;
+            return adminData;
         }
 
         public async Task<ICollection<AdminResponseDTO>> GetAllAdmins()

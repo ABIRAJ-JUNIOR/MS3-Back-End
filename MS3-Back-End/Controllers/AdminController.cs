@@ -38,12 +38,12 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("Get")]
-        public async Task<IActionResult> GetAdminById(Guid id)
+        [HttpGet("Get/{id}")]
+        public async Task<IActionResult> GetAdminFulldetailsById(Guid id)
         {
             try
             {
-                var adminData = await _adminService.GetAdminById(id);
+                var adminData = await _adminService.GetAdminFulldetailsById(id);
                 return Ok(adminData);
             }
             catch (Exception ex)

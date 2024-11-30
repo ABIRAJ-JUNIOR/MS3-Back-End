@@ -11,7 +11,7 @@ namespace MS3_Back_End.IService
     public interface IAdminService
     {
         Task<AdminResponseDTO> AddAdmin(AdminRequestDTO request);
-        Task<AdminResponseDTO> GetAdminById(Guid id);
+        Task<AdminAllDataResponseDTO> GetAdminFulldetailsById(Guid id);
         Task<ICollection<AdminResponseDTO>> GetAllAdmins();
         Task<AdminResponseDTO> UpdateAdminFullDetails(Guid id, AdminFullUpdateDTO request);
         Task<AdminResponseDTO> UpdateAdminPersonalDetails(Guid id, AdminUpdateRequestDTO request);
