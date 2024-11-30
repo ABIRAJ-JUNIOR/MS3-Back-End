@@ -3,6 +3,7 @@ using MS3_Back_End.DTOs.ResponseDTOs.ContactUs;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MS3_Back_End.Service
 {
@@ -87,6 +88,28 @@ namespace MS3_Back_End.Service
                 IsRead = UpdatedData.IsRead
             };
             return newUpdateMessage;
+        }
+
+        public async Task<ContactUsResponseDTO> DeleteMessage(Guid id)
+        {
+            var message = await _contactUsRepository.GetMessageById(id);
+            if(message == null)
+            {
+                throw new Exception("message not found");
+            }
+
+            var data = await _contactUsRepository.DeleteMessage(message);
+            var deleteddata = new ContactUsResponseDTO
+            {
+                Id = data.Id,
+                Name = data.Name,
+                Email = data.Email,
+                Message = data.Message,
+                Response = data.Response,
+                DateSubmited = data.DateSubmited,
+                IsRead = data.IsRead
+            };
+            return deleteddata;
         }
 
     }

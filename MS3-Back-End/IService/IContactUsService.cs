@@ -8,5 +8,6 @@ namespace MS3_Back_End.IService
         Task<ContactUsResponseDTO> AddMessage(ContactUsRequestDTO requestDTO);
         Task<ICollection<ContactUsResponseDTO>> GetAllMessages();
         Task<ContactUsResponseDTO> UpdateMessage(UpdateResponseRequestDTO request);
+        Task<ContactUsResponseDTO> DeleteMessage(Guid id);
     }
 }
