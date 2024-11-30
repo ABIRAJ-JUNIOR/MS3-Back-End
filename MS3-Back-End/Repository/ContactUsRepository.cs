@@ -40,5 +40,11 @@ namespace MS3_Back_End.Repository
             return updateMessage.Entity;
         }
 
+        public async Task<ContactUs> DeleteMessage(ContactUs contactUs)
+        {
+            var deletedData =  _dbContext.ContactUs.Remove(contactUs);
+            await _dbContext.SaveChangesAsync();
+            return deletedData.Entity;
+        }
     }
 }

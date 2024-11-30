@@ -34,6 +34,7 @@ namespace MS3_Back_End.Service
                 Name = data.Name,
                 Email = data.Email,
                 Message = data.Message,
+                Response = data.Response,
                 DateSubmited = data.DateSubmited,
                 IsRead = data.IsRead
             };
@@ -54,8 +55,9 @@ namespace MS3_Back_End.Service
                 Name = message.Name,
                 Email = message.Email,
                 Message = message.Message,
+                Response = message.Response,
                 DateSubmited = DateTime.Now,
-                IsRead = false
+                IsRead = message.IsRead
             }).ToList();
 
             return ContactUsResponse;
