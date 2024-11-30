@@ -151,5 +151,20 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut("AdminProfile{ID}")]
+        public async Task<IActionResult> UpdateAdminProfile(Guid ID, AdminProfileUpdateDTO admindata)
+        {
+
+            try
+            {
+                var data = await _adminService.UpdateAdminProfile(ID, admindata);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
