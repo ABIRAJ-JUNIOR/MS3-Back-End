@@ -18,7 +18,7 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePayment( PaymentRequestDTO paymentRequest)
+        public async Task<IActionResult> CreatePayment([FromForm] PaymentRequestDTO paymentRequest)
         {
             try
             {

@@ -20,5 +20,7 @@ namespace MS3_Back_End.IService
         Task<string> UpdatePassword(UpdatePasswordRequestDTO request);
         Task<PaginationResponseDTO<AdminWithRoleDTO>> GetPaginatedAdmin(int pageNumber, int pageSize);
         Task<AdminResponseDTO> DeleteAdmin(Guid Id);
+        Task<AdminProfileUpdateresDTO> UpdateAdminProfile(Guid ID, AdminProfileUpdateDTO admindata);
+
     }
 }

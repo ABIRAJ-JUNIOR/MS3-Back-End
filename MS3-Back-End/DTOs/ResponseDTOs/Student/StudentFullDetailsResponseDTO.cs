@@ -1,6 +1,5 @@
 ﻿using MS3_Back_End.DTOs.ResponseDTOs.Address;
 using MS3_Back_End.DTOs.ResponseDTOs.Enrollment;
-using MS3_Back_End.DTOs.ResponseDTOs.Notification;
 using MS3_Back_End.DTOs.ResponseDTOs.StudentAssessment;
 
 namespace MS3_Back_End.DTOs.ResponseDTOs.Student
@@ -23,6 +22,5 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Student
         public AddressResponseDTO? Address { get; set; }
         public ICollection<EnrollmentResponseDTO>? Enrollments { get; set; }
         public ICollection<StudentAssessmentResponseDTO>? StudentAssessments { get; set; }
-        public ICollection<NotificationResponseDTO>? Notifications { get; set; }
     }
 }
