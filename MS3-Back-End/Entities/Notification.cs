@@ -6,7 +6,7 @@
         public string Message { get; set; } = string.Empty;
         public DateTime DateSent { get; set; }
         public NotificationType NotificationType { get; set; }
-        public bool IsRead{ get; set; }
+        public bool IsRead{ get; set; } = true;
 
         public Guid StudentId { get; set; }
 
