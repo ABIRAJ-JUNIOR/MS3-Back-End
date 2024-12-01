@@ -5,6 +5,7 @@ using MS3_Back_End.DTOs.ResponseDTOs.Address;
 using MS3_Back_End.DTOs.ResponseDTOs.Assessment;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Enrollment;
+using MS3_Back_End.DTOs.ResponseDTOs.Notification;
 using MS3_Back_End.DTOs.ResponseDTOs.Payment;
 using MS3_Back_End.DTOs.ResponseDTOs.Student;
 using MS3_Back_End.DTOs.ResponseDTOs.StudentAssessment;
@@ -36,7 +37,7 @@ namespace MS3_Back_End.Repository
 
         public async Task<ICollection<Student>> SearchStudent(string SearchText)
         {
-            var data = await _Db.Students .Where(n => n.FirstName.Contains(SearchText) || 
+            var data = await _Db.Students.Where(n => n.FirstName.Contains(SearchText) ||
                n.LastName!.Contains(SearchText) ||
                n.Nic.Contains(SearchText)).Include(a => a.Address).ToListAsync();
             return data;
@@ -53,7 +54,7 @@ namespace MS3_Back_End.Repository
             var studentData = await _Db.Students.Include(a => a.Address).SingleOrDefaultAsync(s => s.Id == id);
             return studentData!;
         }
-       
+
         public async Task<StudentFullDetailsResponseDTO> GetStudentFullDetailsById(Guid StudentId)
         {
 
@@ -82,7 +83,12 @@ namespace MS3_Back_End.Repository
                               join assessment in _Db.Assessments on studentAssessment.AssessmentId equals assessment.Id into assessmentGroup
                               from assessment in assessmentGroup.DefaultIfEmpty()
 
+                              join notification in _Db.Notifications on student.Id equals notification.StudentId into notificationGroup
+                              from notification in notificationGroup.DefaultIfEmpty()
+
                               where student.Id == StudentId && student.IsActive == true
+
+
 
                               select new StudentFullDetailsResponseDTO()
                               {
@@ -170,6 +176,15 @@ namespace MS3_Back_End.Repository
                                           } : null,
                                       } : null
                                   }).ToList() : null,
+                                  Notifications = student.Notifications != null ? student.Notifications.Select(n => new NotificationResponseDTO()
+                                  {
+                                      Id = n.Id,
+                                      Message = n.Message,
+                                      DateSent = n.DateSent,
+                                      NotificationType = ((NotificationType)n.NotificationType).ToString(),
+                                      IsRead = n.IsRead,
+                                      StudentId = n.StudentId
+                                  }).ToList() : null,
                                   StudentAssessments = student.StudentAssessments != null ? student.StudentAssessments!.Select(sa => new StudentAssessmentResponseDTO()
                                   {
                                       Id = sa.Id,
@@ -200,7 +215,7 @@ namespace MS3_Back_End.Repository
                                       } : new AssessmentResponseDTO()
                                   }).ToList() : null,
                               }).FirstOrDefaultAsync();
-                              
+
             return data!;
 
         }
@@ -227,7 +242,7 @@ namespace MS3_Back_End.Repository
                                   from address in addressGroup.DefaultIfEmpty()
                                   join user in _Db.Users
                                     on student.Id equals user.Id into userGroup
-                                  from user in userGroup.DefaultIfEmpty() 
+                                  from user in userGroup.DefaultIfEmpty()
                                   where student.IsActive != false
                                   orderby student.CteatedDate descending
                                   select new StudentWithUserResponseDTO
