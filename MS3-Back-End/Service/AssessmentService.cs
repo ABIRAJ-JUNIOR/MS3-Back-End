@@ -89,6 +89,8 @@ namespace MS3_Back_End.Service
                 CreatedDate = item.CreatedDate,
                 UpdateDate = item.UpdateDate,
                 AssessmentStatus = ((AssessmentStatus)item.Status).ToString(),
+                courseResponse = null!,
+                studentAssessmentResponses = null!,
             }).ToList();
 
             return responseList;
