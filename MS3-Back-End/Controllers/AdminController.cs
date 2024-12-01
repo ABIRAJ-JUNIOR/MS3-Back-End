@@ -109,7 +109,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpPost("Image/{adminId}")]
+        [HttpPost("Image/{adminId}/${isCoverImage}")]
         public async Task<IActionResult> UploadImage(Guid adminId, IFormFile? ImageFile, bool isCoverImage)
         {
             try

@@ -51,7 +51,7 @@ namespace MS3_Back_End.Service
             return "Completed Assessment Successfully";
         }
 
-        public async Task<string> EvaluateStudentAssessment(Guid id , EvaluationRequestDTO request)
+        public async Task<StudentAssessmentResponseDTO> EvaluateStudentAssessment(Guid id , EvaluationRequestDTO request)
         {
             var studentAssessmentData = await _repository.StudentAssessmentGetById(id);
             if(studentAssessmentData == null)
@@ -77,7 +77,20 @@ namespace MS3_Back_End.Service
 
             var updatedData = await _repository.EvaluateStudentAssessment(studentAssessmentData);
 
-            return "Assessment Evaluated Successfully";
+            var response = new StudentAssessmentResponseDTO()
+            {
+                Id = updatedData.Id,
+                MarksObtaines = updatedData.MarksObtaines,
+                Grade = updatedData.Grade != null ? ((Grade)updatedData.Grade).ToString() : null,
+                FeedBack = updatedData.FeedBack,
+                DateEvaluated = updatedData.DateEvaluated,
+                DateSubmitted = updatedData.DateSubmitted,
+                StudentAssessmentStatus = ((StudentAssessmentStatus)updatedData.StudentAssessmentStatus).ToString(),
+                StudentId = updatedData.StudentId,
+                AssessmentId = updatedData.AssessmentId,
+            };
+
+            return response;
         }
     }
 }
