@@ -16,7 +16,7 @@ namespace MS3_Back_End.IService
         Task<AdminResponseDTO> UpdateAdminFullDetails(Guid id, AdminFullUpdateDTO request);
         Task<AdminResponseDTO> UpdateAdminPersonalDetails(Guid id, AdminUpdateRequestDTO request);
         Task<string> UpdateEmail(UpdateEmailRequestDTO request);
-        Task<string> UploadImage(Guid adminId,IFormFile? ImageFile);
+        Task<string> UploadImage(Guid adminId, IFormFile? ImageFile, bool isCoverImage);
         Task<string> UpdatePassword(UpdatePasswordRequestDTO request);
         Task<PaginationResponseDTO<AdminWithRoleDTO>> GetPaginatedAdmin(int pageNumber, int pageSize);
         Task<AdminResponseDTO> DeleteAdmin(Guid Id);

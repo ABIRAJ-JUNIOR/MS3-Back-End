@@ -110,11 +110,11 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPost("Image/{adminId}")]
-        public async Task<IActionResult> UploadImage(Guid adminId,IFormFile? ImageFile)
+        public async Task<IActionResult> UploadImage(Guid adminId, IFormFile? ImageFile, bool isCoverImage)
         {
             try
             {
-                var response = await _adminService.UploadImage(adminId, ImageFile);
+                var response = await _adminService.UploadImage(adminId, ImageFile,isCoverImage);
                 return Ok(response);
             }
             catch (Exception ex)

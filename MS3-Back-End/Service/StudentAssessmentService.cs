@@ -22,58 +22,19 @@ namespace MS3_Back_End.Service
         public async Task<ICollection<StudentAssessmentResponseDTO>> GetAllAssessments()
         {
             var studentAssessments = await _repository.GetAllAssessments();
-            var response = studentAssessments.Select(sa => new StudentAssessmentResponseDTO()
-            {
-                Id = sa.Id,
-                MarksObtaines = sa.MarksObtaines ,
-                Grade = sa.Grade != null ? ((Grade)sa.Grade).ToString() : null,
-                FeedBack = sa.FeedBack,
-                DateEvaluated = sa.DateEvaluated,
-                DateSubmitted = sa.DateSubmitted,
-                StudentAssessmentStatus = ((StudentAssessmentStatus)sa.StudentAssessmentStatus).ToString(),
-                StudentId = sa.StudentId,
-                AssessmentId = sa.AssessmentId
-            }).ToList();
-
-            return response;
+            return studentAssessments;
         }
 
         public async Task<ICollection<StudentAssessmentResponseDTO>> GetAllEvaluatedAssessments()
         {
             var nonEvaluateAssessments = await _repository.GetAllEvaluatedAssessments();
-            var response = nonEvaluateAssessments.Select(sa => new StudentAssessmentResponseDTO()
-            {
-                Id = sa.Id,
-                MarksObtaines = sa.MarksObtaines,
-                Grade = sa.Grade != null ? ((Grade)sa.Grade).ToString() : null,
-                FeedBack = sa.FeedBack,
-                DateEvaluated = sa.DateEvaluated,
-                DateSubmitted = sa.DateSubmitted,
-                StudentAssessmentStatus = ((StudentAssessmentStatus)sa.StudentAssessmentStatus).ToString(),
-                StudentId = sa.StudentId,
-                AssessmentId = sa.AssessmentId
-            }).ToList();
-
-            return response;
+            return nonEvaluateAssessments;
         }
 
         public async Task<ICollection<StudentAssessmentResponseDTO>> GetAllNonEvaluateAssessments()
         {
             var nonEvaluateAssessments = await _repository.GetAllNonEvaluateAssessments();
-            var response = nonEvaluateAssessments.Select(sa => new StudentAssessmentResponseDTO()
-            {
-                Id = sa.Id,
-                MarksObtaines = sa.MarksObtaines,
-                Grade = sa.Grade != null ? ((Grade)sa.Grade).ToString() : null,
-                FeedBack = sa.FeedBack,
-                DateEvaluated = sa.DateEvaluated,
-                DateSubmitted = sa.DateSubmitted,
-                StudentAssessmentStatus = ((StudentAssessmentStatus)sa.StudentAssessmentStatus).ToString(),
-                StudentId = sa.StudentId,
-                AssessmentId = sa.AssessmentId
-            }).ToList();
-
-            return response;
+            return nonEvaluateAssessments;
         }
 
         public async Task<string> AddStudentAssessment(StudentAssessmentRequestDTO request)

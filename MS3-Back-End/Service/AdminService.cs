@@ -263,7 +263,7 @@ namespace MS3_Back_End.Service
             return "Update password successfully";
         }
 
-        public async Task<string> UploadImage(Guid adminId ,IFormFile? image)
+        public async Task<string> UploadImage(Guid adminId, IFormFile? ImageFile, bool isCoverImage)
         {
             var adminData = await _adminRepository.GetAdminById(adminId);
             if(adminData == null)
@@ -271,7 +271,7 @@ namespace MS3_Back_End.Service
                 throw new Exception("Admin not found");
             }
 
-            if (image == null)
+            if (ImageFile == null)
             {
                 throw new Exception($"Could not upload image");
             }
@@ -280,18 +280,25 @@ namespace MS3_Back_End.Service
 
             Cloudinary cloudinary = new Cloudinary(cloudinaryUrl);
 
-            using (var stream = image.OpenReadStream())
+            using (var stream = ImageFile.OpenReadStream())
             {
                 var uploadParams = new ImageUploadParams
                 {
-                    File = new FileDescription(image.FileName, stream),
+                    File = new FileDescription(ImageFile.FileName, stream),
                     UseFilename = true,
                     UniqueFilename = true,
                     Overwrite = true
                 };
 
                 var uploadResult = await cloudinary.UploadAsync(uploadParams);
-                adminData.ImageUrl = (uploadResult.SecureUrl).ToString();
+                if(isCoverImage)
+                {
+                    adminData.CoverImageUrl = (uploadResult.SecureUrl).ToString();
+                }
+                else
+                {
+                    adminData.ImageUrl = (uploadResult.SecureUrl).ToString();
+                }
             }
 
             var updatedData = await _adminRepository.UpdateAdmin(adminData);
@@ -376,7 +383,7 @@ namespace MS3_Back_End.Service
             var returdata = new AdminProfileUpdateresDTO()
             { 
                     FirstName = data1.FirstName,
-                    LastName = data1.LastName,
+                    LastName = data1.LastName!,
                     Phone = data1.Phone,
                     Email=data2.Email
             };

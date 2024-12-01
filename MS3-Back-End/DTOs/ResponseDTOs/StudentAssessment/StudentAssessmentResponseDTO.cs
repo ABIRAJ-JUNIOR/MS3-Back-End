@@ -1,4 +1,5 @@
 ﻿using MS3_Back_End.DTOs.ResponseDTOs.Assessment;
+using MS3_Back_End.DTOs.ResponseDTOs.Student;
 using MS3_Back_End.Entities;
 
 namespace MS3_Back_End.DTOs.ResponseDTOs.StudentAssessment
@@ -17,5 +18,6 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.StudentAssessment
         public Guid AssessmentId { get; set; }
 
         public AssessmentResponseDTO AssessmentResponse { get; set; } = new AssessmentResponseDTO();
+        public StudentResponseDTO StudentResponse { get; set; } = new StudentResponseDTO();
     }
 }
