@@ -11,5 +11,7 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Notification
         public bool IsRead { get; set; }
 
         public Guid StudentId { get; set; }
+
+
     }
 }

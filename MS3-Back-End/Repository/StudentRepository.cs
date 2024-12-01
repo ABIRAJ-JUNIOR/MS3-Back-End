@@ -5,6 +5,7 @@ using MS3_Back_End.DTOs.ResponseDTOs.Address;
 using MS3_Back_End.DTOs.ResponseDTOs.Assessment;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Enrollment;
+using MS3_Back_End.DTOs.ResponseDTOs.Notification;
 using MS3_Back_End.DTOs.ResponseDTOs.Payment;
 using MS3_Back_End.DTOs.ResponseDTOs.Student;
 using MS3_Back_End.DTOs.ResponseDTOs.StudentAssessment;
@@ -81,6 +82,9 @@ namespace MS3_Back_End.Repository
 
                               join assessment in _Db.Assessments on studentAssessment.AssessmentId equals assessment.Id into assessmentGroup
                               from assessment in assessmentGroup.DefaultIfEmpty()
+
+                              join notification in _Db.Notifications on student.Id equals notification.StudentId into notificationGroup
+                              from notification in notificationGroup.DefaultIfEmpty()
 
                               where student.Id == StudentId && student.IsActive == true
 
@@ -169,6 +173,15 @@ namespace MS3_Back_End.Repository
                                               }).ToList() : null
                                           } : null,
                                       } : null
+                                  }).ToList() : null,
+                                  Notification = student.Notifications != null ? student.Notifications.Select(n => new NotificationResponseDTO()
+                                  {
+                                      Id = n.Id,
+                                      Message = n.Message,
+                                      DateSent = n.DateSent,
+                                      NotificationType = ((NotificationType)n.NotificationType).ToString(),
+                                      IsRead = n.IsRead,
+                                      StudentId = n.StudentId
                                   }).ToList() : null,
                                   StudentAssessments = student.StudentAssessments != null ? student.StudentAssessments!.Select(sa => new StudentAssessmentResponseDTO()
                                   {
