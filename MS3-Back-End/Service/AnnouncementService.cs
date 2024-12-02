@@ -26,6 +26,7 @@ namespace MS3_Back_End.Service
             var Announcement = new Announcement
             {
                 Title = AnnouncementReq.Title,
+                Description = AnnouncementReq.Description,
                 DatePosted = DateTime.Now,
                 ExpirationDate = AnnouncementReq.ExpirationDate,
                 AudienceType = AnnouncementReq.AudienceType,
@@ -38,6 +39,7 @@ namespace MS3_Back_End.Service
             {
                 Id = data.Id,
                 Title = data.Title,
+                Description = data.Description,
                 DatePosted = data.DatePosted,
                 ExpirationDate = data.ExpirationDate,
                 AudienceType = ((AudienceType)data.AudienceType).ToString(),
@@ -60,6 +62,7 @@ namespace MS3_Back_End.Service
             {
                 Id = item.Id,
                 Title = item.Title,
+                Description = item.Description,
                 DatePosted = item.DatePosted,
                 AudienceType = ((AudienceType)item.AudienceType).ToString(),
                 ExpirationDate = item.ExpirationDate,
@@ -81,6 +84,7 @@ namespace MS3_Back_End.Service
             {
                 Id = item.Id,
                 Title = item.Title,
+                Description = item.Description,
                 DatePosted = item.DatePosted,
                 AudienceType = ((AudienceType)item.AudienceType).ToString(),
                 ExpirationDate = item.ExpirationDate,
@@ -102,6 +106,7 @@ namespace MS3_Back_End.Service
             {
                 Id = data.Id,
                 Title = data.Title,
+                Description = data.Description,
                 DatePosted = data.DatePosted,
                 AudienceType = ((AudienceType)data.AudienceType).ToString(),
                 ExpirationDate = data.ExpirationDate,
@@ -122,6 +127,11 @@ namespace MS3_Back_End.Service
                 GetData.Title = announcement.Title;
             }
 
+            if(announcement.Description != null)
+            {
+                GetData.Description = announcement.Description;
+            }
+
             if (announcement.ExpirationDate.HasValue)
             {
                 GetData.ExpirationDate = announcement.ExpirationDate.Value;
@@ -140,6 +150,7 @@ namespace MS3_Back_End.Service
             {
                 Id = data.Id,
                 Title = data.Title,
+                Description = data.Description,
                 DatePosted = data.DatePosted,
                 ExpirationDate = data.ExpirationDate,
                 AudienceType = ((AudienceType)data.AudienceType).ToString(),
@@ -170,6 +181,7 @@ namespace MS3_Back_End.Service
             {
                 Id = x.Id,
                 Title = x.Title,
+                Description = x.Description,
                 DatePosted = x.DatePosted,
                 ExpirationDate = x.ExpirationDate,
                 AudienceType = ((AudienceType)x.AudienceType).ToString(),
@@ -183,9 +195,6 @@ namespace MS3_Back_End.Service
                 CurrentPage = pageNumber,  
                 TotalPages = (int)Math.Ceiling(AllAnouncements.Count / (double)pageSize),
                 TotalItem = AllAnouncements.Count,
-
-
-
             };
             return PaginationResponseDTO;
         }
