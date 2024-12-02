@@ -247,6 +247,12 @@ namespace MS3_Back_End.Repository
             await _dbcontext.SaveChangesAsync();
             return assessmentData.Entity;
         }
+        public async Task<List<StudentAssessment>> GetStudentAssesmentById(Guid studentId)
+        {
+            var assesmentData = await _dbcontext.StudentAssessments.Where(student=>student.StudentId==studentId).Include(a=>a.Assessment).Include(s=>s.Student).ToListAsync();
+            return assesmentData;
+
+        }
 
         public async Task<StudentAssessment> EvaluateStudentAssessment(StudentAssessment studentAssessment)
         {
