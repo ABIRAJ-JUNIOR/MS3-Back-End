@@ -9,7 +9,7 @@ namespace MS3_Back_End.IService
         Task<ICollection<StudentAssessmentResponseDTO>> GetAllEvaluatedAssessments();
         Task<ICollection<StudentAssessmentResponseDTO>> GetAllNonEvaluateAssessments();
         Task<string> AddStudentAssessment(StudentAssessmentRequestDTO request);
+        Task<StudentAssessmentResponseDTO> EvaluateStudentAssessment(Guid id, EvaluationRequestDTO request);
         Task<List<StudentAssessmentResponseDTO>> GetStudentAssesmentById(Guid studentId);
-        Task<string> EvaluateStudentAssessment(Guid id, EvaluationRequestDTO request);
     }
 }
