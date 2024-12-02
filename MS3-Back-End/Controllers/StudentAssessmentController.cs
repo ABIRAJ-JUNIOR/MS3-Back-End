@@ -44,6 +44,12 @@ namespace MS3_Back_End.Controllers
             var studentAssessmentData = await _service.AddStudentAssessment(request);
             return Ok(studentAssessmentData);
         }
+        [HttpGet("studentAssesment/{id}")]
+        public async Task<IActionResult> GetAllNonEvaluateAssessments(Guid id)
+        {
+            var assessmentList = await _service.GetStudentAssesmentById(id);
+            return Ok(assessmentList);
+        }
 
         [HttpPut("Evaluate-Assessment/{id}")]
         public async Task<IActionResult> EvaluateStudentAssessment(Guid id, EvaluationRequestDTO request)

@@ -8,7 +8,7 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.StudentAssessment
     {
         public Guid Id { get; set; }
         public int? MarksObtaines { get; set; }
-        public string? Grade { get; set; }
+        public string? Grade { get; set; } = string.Empty;
         public string? FeedBack { get; set; } = string.Empty;
         public DateTime DateSubmitted { get; set; }
         public DateTime? DateEvaluated { get; set; }
@@ -17,7 +17,7 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.StudentAssessment
         public Guid StudentId { get; set; }
         public Guid AssessmentId { get; set; }
 
-        public AssessmentResponseDTO AssessmentResponse { get; set; } = new AssessmentResponseDTO();
-        public StudentResponseDTO StudentResponse { get; set; } = new StudentResponseDTO();
+        public AssessmentResponseDTO? AssessmentResponse { get; set; } = new AssessmentResponseDTO();
+        public StudentResponseDTO? StudentResponse { get; set; } = new StudentResponseDTO();
     }
 }
