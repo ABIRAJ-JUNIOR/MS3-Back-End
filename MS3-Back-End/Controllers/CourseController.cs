@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
+using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IService;
 using MS3_Back_End.Service;
@@ -122,6 +123,7 @@ namespace MS3_Back_End.Controller
             }
 
         }
+
         [HttpPost("image/{CourseId}")]
         public async Task<IActionResult> UploadImage(Guid CourseId, IFormFile? image)
         {
@@ -135,5 +137,12 @@ namespace MS3_Back_End.Controller
             }
         }
 
+        [HttpGet("Top3")]
+
+        public async Task<IActionResult> GetTop3Courses()
+        {
+            var data = await _courseService.GetTop3Courses();
+            return Ok(data);
+        }
     }
 }
