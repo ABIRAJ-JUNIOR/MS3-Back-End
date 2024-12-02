@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.RequestDTOs;
 using MS3_Back_End.DTOs.RequestDTOs.Announcement;
+using MS3_Back_End.DTOs.ResponseDTOs.Announcement;
 using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Controllers
@@ -63,18 +64,13 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpPut("Announcement")]
-        public async Task<IActionResult> UpdateAnnouncement(AnnounceUpdateDTO announcementUpdate)
+        [HttpGet("Recent")]
+        public async Task<IActionResult> RecentAnnouncement()
         {
-            if (announcementUpdate == null)
-            {
-                return BadRequest("Announcement update data is required.");
-            }
-
             try
             {
-                var updatedAnnouncement = await _announcementService.UpdateAnnouncement(announcementUpdate);
-                return Ok(updatedAnnouncement);
+                var response = await _announcementService.RecentAnnouncement();
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -114,12 +110,13 @@ namespace MS3_Back_End.Controllers
                return BadRequest(ex.Message);
             }
         }
-        [HttpGet("Pagination")]
-        public async Task<IActionResult> GetPaginatedAnnouncement(int pagenumber,int pagesize)
+
+        [HttpGet("Pagination/{pagenumber}/{pagesize}")]
+        public async Task<IActionResult> GetPaginatedAnnouncement(int pagenumber,int pagesize,string? role)
         {
             try
             {
-                var Anouncements = await _announcementService.GetPaginatedAnnouncement(pagenumber, pagesize);
+                var Anouncements = await _announcementService.GetPaginatedAnnouncement(pagenumber, pagesize, role);
                 return Ok(Anouncements);
             }
             catch (Exception ex) 

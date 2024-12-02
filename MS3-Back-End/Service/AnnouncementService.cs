@@ -8,6 +8,7 @@ using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
 using MS3_Back_End.Repository;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MS3_Back_End.Service
 {
@@ -117,47 +118,22 @@ namespace MS3_Back_End.Service
 
 
 
-        public async Task<AnnouncementResponseDTO> UpdateAnnouncement(AnnounceUpdateDTO announcement)
+        public async Task<ICollection<AnnouncementResponseDTO>> RecentAnnouncement()
         {
 
-            var GetData = await _AnnouncementRepo.GetAnnouncemenntByID(announcement.Id);
+            var GetData = await _AnnouncementRepo.RecentAnnouncement();
 
-            if (announcement.Title != null)
+
+            return GetData.Select(a => new AnnouncementResponseDTO()
             {
-                GetData.Title = announcement.Title;
-            }
-
-            if(announcement.Description != null)
-            {
-                GetData.Description = announcement.Description;
-            }
-
-            if (announcement.ExpirationDate.HasValue)
-            {
-                GetData.ExpirationDate = announcement.ExpirationDate.Value;
-            }
-
-            if (announcement.AudienceType != null)
-            {
-                GetData.AudienceType = announcement.AudienceType.Value;
-            };
-
-            GetData.DatePosted = DateTime.Now;
-
-            var data = await _AnnouncementRepo.UpdateAnnouncement(GetData);
-
-            var AnnouncementReturn = new AnnouncementResponseDTO
-            {
-                Id = data.Id,
-                Title = data.Title,
-                Description = data.Description,
-                DatePosted = data.DatePosted,
-                ExpirationDate = data.ExpirationDate,
-                AudienceType = ((AudienceType)data.AudienceType).ToString(),
-                IsActive = data.IsActive
-            };
-
-            return AnnouncementReturn;
+                Id = a.Id,
+                Title = a.Title,
+                Description = a.Description,
+                DatePosted = a.DatePosted,
+                ExpirationDate = a.ExpirationDate,
+                AudienceType = ((AudienceType)a.AudienceType).ToString(),
+                IsActive = a.IsActive
+            }).ToList();
 
         }
 
@@ -173,10 +149,10 @@ namespace MS3_Back_End.Service
             var data = await _AnnouncementRepo.DeleteAnnouncement(GetData);
             return data;
         }
-        public async Task<PaginationResponseDTO<AnnouncementResponseDTO>> GetPaginatedAnnouncement(int pageNumber, int pageSize)
+        public async Task<PaginationResponseDTO<AnnouncementResponseDTO>> GetPaginatedAnnouncement(int pageNumber, int pageSize ,string role)
         {
             var AllAnouncements= await _AnnouncementRepo.GetAllAnnouncement();
-            var data = await _AnnouncementRepo.GetPaginatedAnnouncement(pageNumber, pageSize);
+            var data = await _AnnouncementRepo.GetPaginatedAnnouncement(pageNumber, pageSize, role);
             var returndata = data.Select(x => new AnnouncementResponseDTO
             {
                 Id = x.Id,
