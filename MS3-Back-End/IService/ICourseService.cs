@@ -14,6 +14,6 @@ namespace MS3_Back_End.IService
         Task<string> DeleteCourse(Guid Id);
         Task<PaginationResponseDTO<CourseResponseDTO>> GetPaginatedCourses(int pageNumber, int pageSize);
         Task<string> UploadImage(Guid CourseId, IFormFile? image);
-
+        Task<ICollection<Top3CourseDTO>> GetTop3Courses();
     }
 }

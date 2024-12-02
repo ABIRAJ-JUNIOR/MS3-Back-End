@@ -359,5 +359,10 @@ namespace MS3_Back_End.Service
 
             return "Image upload successfully";
         }
+
+        public async Task<ICollection<Top3CourseDTO>> GetTop3Courses()
+        {
+            return await _courseRepository.GetTop3Courses();
+        }
     }
 }

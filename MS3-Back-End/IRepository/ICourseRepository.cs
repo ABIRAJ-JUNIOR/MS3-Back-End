@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.Entities;
+﻿using MS3_Back_End.DTOs.ResponseDTOs.Course;
+using MS3_Back_End.Entities;
 
 namespace MS3_Back_End.IRepository
 {
@@ -11,5 +12,6 @@ namespace MS3_Back_End.IRepository
         Task<Course> UpdateCourse(Course course);
         Task<string> DeleteCourse(Course course);
         Task<ICollection<Course>> GetPaginatedCourses(int pageNumber, int pageSize);
+        Task<ICollection<Top3CourseDTO>> GetTop3Courses();
     }
 }
