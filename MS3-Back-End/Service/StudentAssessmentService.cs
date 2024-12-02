@@ -51,6 +51,25 @@ namespace MS3_Back_End.Service
             return "Completed Assessment Successfully";
         }
 
+        public async Task<List<StudentAssessmentResponseDTO>> GetStudentAssesmentById(Guid studentId)
+        {
+            var studentAssement = await _repository.GetStudentAssesmentById(studentId);
+            var response = studentAssement.Select(item => new StudentAssessmentResponseDTO
+            {
+                Id = item.Id,
+                StudentId = item.StudentId,
+                MarksObtaines = item.MarksObtaines,
+                AssessmentId = item.AssessmentId,
+                Grade = item.Grade?.ToString(),
+                FeedBack = item.FeedBack,
+                DateEvaluated = item.DateEvaluated,
+                DateSubmitted = item.DateSubmitted,
+                StudentAssessmentStatus = item.StudentAssessmentStatus.ToString()
+            }).ToList();
+
+            return response;
+
+        }
         public async Task<string> EvaluateStudentAssessment(Guid id , EvaluationRequestDTO request)
         {
             var studentAssessmentData = await _repository.StudentAssessmentGetById(id);
