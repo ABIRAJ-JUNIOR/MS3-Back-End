@@ -8,9 +8,10 @@ namespace MS3_Back_End.IRepository
         Task<ICollection<Announcement>> SearchAnnouncements(string SearchText);
         Task<ICollection<Announcement>> GetAllAnnouncement();
         Task<Announcement> GetAnnouncemenntByID(Guid AnnouncementId);
-        Task<Announcement> UpdateAnnouncement(Announcement announcement);
+        Task<ICollection<Announcement>> RecentAnnouncement();
         Task<string> DeleteAnnouncement(Announcement announcement);
-        Task<ICollection<Announcement>> GetPaginatedAnnouncement(int pageNumber, int pageSize);
+        Task<ICollection<Announcement>> GetPaginatedAnnouncement(int pageNumber, int pageSize, string Role);
+        Task<ICollection<Announcement>> GetAnnouncementsByRole(string role);
 
     }
 }

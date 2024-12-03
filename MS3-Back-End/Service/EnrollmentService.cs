@@ -7,6 +7,7 @@ using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
 using MS3_Back_End.Repository;
+using NuGet.Frameworks;
 
 namespace MS3_Back_End.Service
 {
@@ -14,11 +15,17 @@ namespace MS3_Back_End.Service
     {
         private readonly IEnrollmentRepository _enrollmentRepository;
         private readonly ICourseScheduleRepository _courseScheduleRepository;
+        private readonly INotificationRepository _notificationRepository;
+        private readonly IStudentRepository _studentRepository;
+        private readonly ICourseRepository _courseRepository;
 
-        public EnrollmentService(IEnrollmentRepository enrollmentRepository, ICourseScheduleRepository courseScheduleRepository)
+        public EnrollmentService(IEnrollmentRepository enrollmentRepository, ICourseScheduleRepository courseScheduleRepository, INotificationRepository notificationRepository, IStudentRepository studentRepository, ICourseRepository courseRepository)
         {
             _enrollmentRepository = enrollmentRepository;
             _courseScheduleRepository = courseScheduleRepository;
+            _notificationRepository = notificationRepository;
+            _studentRepository = studentRepository;
+            _courseRepository = courseRepository;
         }
 
         public async Task<EnrollmentResponseDTO> AddEnrollment(EnrollmentRequestDTO EnrollmentReq)
@@ -65,6 +72,47 @@ namespace MS3_Back_End.Service
             };
 
             var data = await _enrollmentRepository.AddEnrollment(Enrollment);
+            var StudentData = await _studentRepository.GetStudentById(data.StudentId);
+            var CourseScheduleData = await _courseScheduleRepository.GetCourseScheduleById(data.CourseScheduleId);
+            var CourseData = await _courseRepository.GetCourseById(CourseScheduleData.CourseId); 
+
+            string NotificationMessage = $@"
+  <b>Subject:</b> 🎓 Course Enrollment Confirmation<br><br>
+
+  Dear {StudentData.FirstName} {StudentData.LastName},<br><br>
+
+  Congratulations! You have successfully enrolled in the course:<br><br>
+
+  <b>Course Name:</b> {CourseData.CourseName}<br>
+  📅 <b>Start Date:</b> {(CourseScheduleData.StartDate).ToString()}<br>
+  ⏳ <b>Duration:</b> {CourseScheduleData.Duration} Days<br><br>
+
+  We are excited to have you in this course and can't wait to see you excel! Here's what you need to do next:<br><br>
+
+  1. Log in to your account <br>
+  2. Check the course schedule and upcoming sessions.<br>
+  3. Prepare yourself for an enriching learning journey.<br><br>
+
+
+  If you have any questions, feel free to contact us at <a href=""mailto:noreply.way.makers@gmail.com"">noreply.way.makers@gmail.com</a> or call <b>0702274212</b>.<br><br>
+
+  Welcome to the path of learning and success! 🎓<br><br>
+
+  <b>Best regards,</b><br>
+  Way Makers<br>
+  Empowering learners, shaping futures.  
+";
+
+            var Message = new Notification
+            {
+                Message = NotificationMessage,
+                NotificationType = NotificationType.Enrollment,
+                StudentId = data.StudentId,
+                DateSent = DateTime.Now,
+                IsRead = false
+            };
+
+            await _notificationRepository.AddNotification(Message);
 
             var EnrollmentResponse = new EnrollmentResponseDTO
             {
