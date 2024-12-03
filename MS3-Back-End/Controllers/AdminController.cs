@@ -67,47 +67,6 @@ namespace MS3_Back_End.Controllers
             return Ok(updateresponse);
         }
 
-        [HttpPut("Update-Personal-Details/{id}")]
-        public async Task<IActionResult> UpdateAdminPersonalDetails(Guid id, AdminUpdateRequestDTO request)
-        {
-            try
-            {
-                var updatedData = await _adminService.UpdateAdminPersonalDetails(id, request);
-                return Ok(updatedData);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPut("Update-Email")]
-        public async Task<IActionResult>  UpdateEmail(UpdateEmailRequestDTO request)
-        {
-            try
-            {
-                var updateEmail = await _adminService.UpdateEmail(request);
-                return Ok(updateEmail);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPut("Update-Password")]
-        public async Task<IActionResult> UpdatePassword(UpdatePasswordRequestDTO request)
-        {
-            try
-            {
-                var updatePassword = await _adminService.UpdatePassword(request);
-                return Ok(updatePassword);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
 
         [HttpPost("Image/{adminId}/${isCoverImage}")]
         public async Task<IActionResult> UploadImage(Guid adminId, IFormFile? ImageFile, bool isCoverImage)
@@ -151,7 +110,7 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut("AdminProfile{ID}")]
+        [HttpPut("AdminProfile/{ID}")]
         public async Task<IActionResult> UpdateAdminProfile(Guid ID, AdminProfileUpdateDTO admindata)
         {
 
