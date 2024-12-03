@@ -11,6 +11,7 @@ namespace MS3_Back_End.IRepository
         Task<ICollection<Announcement>> RecentAnnouncement();
         Task<string> DeleteAnnouncement(Announcement announcement);
         Task<ICollection<Announcement>> GetPaginatedAnnouncement(int pageNumber, int pageSize, string Role);
+        Task<ICollection<Announcement>> GetAnnouncementsByRole(string role);
 
     }
 }

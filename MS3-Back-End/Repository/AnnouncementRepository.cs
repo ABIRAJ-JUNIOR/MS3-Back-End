@@ -45,6 +45,21 @@ namespace MS3_Back_End.Repository
             await _Db.SaveChangesAsync();
             return "Delete Announcement SucessFully";
         }
+
+        public async Task<ICollection<Announcement>> GetAnnouncementsByRole(string role)
+        {
+            if (role == "Admin")
+            {
+                var announcementData = await _Db.Announcements.Where(a => a.IsActive == true && (a.AudienceType == AudienceType.Everyone || a.AudienceType == AudienceType.Admins)).ToListAsync();
+                return announcementData!;
+            }
+            else if (role == "Student")
+            {
+                var announcementData = await _Db.Announcements.Where(a => a.IsActive == true && (a.AudienceType == AudienceType.Everyone || a.AudienceType == AudienceType.Students)).ToListAsync();
+                return announcementData!;
+            }
+            return null!;
+        }
         public async Task<ICollection<Announcement>> GetPaginatedAnnouncement(int pageNumber, int pageSize , string Role)
         {
             if (Role == "Admin")

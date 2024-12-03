@@ -14,7 +14,7 @@ namespace MS3_Back_End.IService
         Task<AnnouncementResponseDTO> GetAnnouncementById(Guid id);
         Task<ICollection<AnnouncementResponseDTO>> RecentAnnouncement();
         Task<string> DeleteAnnouncement(Guid Id);
-        Task<PaginationResponseDTO<AnnouncementResponseDTO>> GetPaginatedAnnouncement(int pageNumber, int pageSize, string role);
+        Task<PaginationResponseDTO<AnnouncementResponseDTO>> GetPaginatedAnnouncement(int pageNumber, int pageSize, string? role);
 
 
     }

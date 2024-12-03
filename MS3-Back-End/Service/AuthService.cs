@@ -6,6 +6,7 @@ using MS3_Back_End.IService;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MS3_Back_End.Service
 {
@@ -13,11 +14,13 @@ namespace MS3_Back_End.Service
     {
         private readonly IAuthRepository _authRepository;
         private readonly IConfiguration _configuration;
+        private readonly INotificationRepository _notificationRepository;
 
-        public AuthService(IAuthRepository authRepository, IConfiguration configuration)
+        public AuthService(IAuthRepository authRepository, IConfiguration configuration, INotificationRepository notificationRepository)
         {
             _authRepository = authRepository;
             _configuration = configuration;
+            this._notificationRepository = notificationRepository;
         }
 
         public async Task<string> SignUp(SignUpRequestDTO request)
@@ -25,61 +28,94 @@ namespace MS3_Back_End.Service
             var nicCheck = await _authRepository.GetStudentByNic(request.Nic);
             var emailCheck = await _authRepository.GetUserByEmail(request.Email);
 
-            if (nicCheck == null)
-            {
-                if (emailCheck == null)
-                {
-                    var user = new User()
-                    {
-                        Email = request.Email,
-                        IsConfirmEmail = false,
-                        Password = BCrypt.Net.BCrypt.HashPassword(request.Password),
-
-                    };
-
-                    var userData = await _authRepository.AddUser(user);
-                    var roleData = await _authRepository.GetRoleByName("Student");
-                    if (roleData == null)
-                    {
-                        throw new Exception("Role not found");
-                    }
-
-                    var userRole = new UserRole()
-                    {
-                        UserId = userData.Id,
-                        RoleId = roleData.Id
-                    };
-
-                    var userRoleData = await _authRepository.AddUserRole(userRole);
-
-                    var student = new Student()
-                    {
-                        Id = userData.Id,
-                        Nic = request.Nic,
-                        FirstName = request.FirstName,
-                        LastName = request.LastName,
-                        DateOfBirth = request.DateOfBirth,
-                        Gender = request.Gender,
-                        Phone = request.Phone,
-                        ImageUrl = "",
-                        CteatedDate = DateTime.Now,
-                        UpdatedDate = DateTime.Now,
-                        IsActive = true,
-                    };
-
-                    var studentData = await _authRepository.SignUp(student);
-
-                    return "SignUp Successfully";
-                }
-                else
-                {
-                    throw new Exception("Email already used");
-                }
-            }
-            else
+            if (nicCheck != null)
             {
                 throw new Exception("Nic already used");
             }
+            if (emailCheck != null)
+            {
+                throw new Exception("Email already used");
+            }
+
+            var user = new User()
+            {
+                Email = request.Email,
+                IsConfirmEmail = false,
+                Password = BCrypt.Net.BCrypt.HashPassword(request.Password),
+
+            };
+
+            var userData = await _authRepository.AddUser(user);
+            var roleData = await _authRepository.GetRoleByName("Student");
+            if (roleData == null)
+            {
+                throw new Exception("Role not found");
+            }
+
+            var userRole = new UserRole()
+            {
+                UserId = userData.Id,
+                RoleId = roleData.Id
+            };
+
+            var userRoleData = await _authRepository.AddUserRole(userRole);
+
+            var student = new Student()
+            {
+                Id = userData.Id,
+                Nic = request.Nic,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                DateOfBirth = request.DateOfBirth,
+                Gender = request.Gender,
+                Phone = request.Phone,
+                ImageUrl = "",
+                CteatedDate = DateTime.Now,
+                UpdatedDate = DateTime.Now,
+                IsActive = true,
+            };
+
+            var studentData = await _authRepository.SignUp(student);
+
+            string NotificationMessage = $@"
+Subject: 🎉 Welcome to Way Makers!<br><br>
+
+Dear {studentData.FirstName} {studentData.LastName},<br><br>
+
+We are thrilled to welcome you to Way Makers, where learning meets excellence!<br><br>
+
+As a valued student, you now have access to:<br>
+✅ A wide range of industry-relevant courses.<br>
+✅ Expert instructors to guide your learning journey.<br><br>
+
+Here’s how to get started:<br>
+1. Log in to your account using your credentials.<br>
+2. Explore available courses.<br>
+3. Stay updated with announcements.<br><br>
+
+We are committed to empowering your educational journey and helping you achieve your goals.<br><br>
+
+For assistance, feel free to contact us at noreply.way.makers@gmail.com or call 0702274212.<br><br>
+
+Once again, welcome to the Way Makers family! 🎓<br><br>
+
+Warm regards,<br>
+Way Makers<br>
+Empowering learners, shaping futures.
+";
+
+            var Message = new Notification
+            {
+                Message = NotificationMessage,
+                NotificationType = NotificationType.WelCome,
+                StudentId = studentData.Id,
+                DateSent = DateTime.Now,
+                IsRead = false
+            };
+
+            await _notificationRepository.AddNotification(Message);
+
+            return "SignUp Successfully";
 
         }
 
@@ -107,6 +143,10 @@ namespace MS3_Back_End.Service
             if (roleData.Name == "Student")
             {
                 var studentData = await _authRepository.GetStudentById(userData.Id);
+                if(studentData.IsActive == false)
+                {
+                    throw new Exception("Account Deactivated");
+                }
                 var tokenRequest = new TokenRequestDTO()
                 {
                     Id = studentData.Id,
@@ -120,6 +160,11 @@ namespace MS3_Back_End.Service
             else if (roleData.Name == "Administrator" || roleData.Name == "Instructor")
             {
                 var adminData = await _authRepository.GetAdminById(userData.Id);
+                if (adminData.IsActive == false)
+                {
+                    throw new Exception("Account Deactivated");
+                }
+
                 var tokenRequest = new TokenRequestDTO()
                 {
                     Id = adminData.Id,

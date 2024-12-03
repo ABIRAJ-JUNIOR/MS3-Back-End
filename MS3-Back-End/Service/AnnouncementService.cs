@@ -149,10 +149,20 @@ namespace MS3_Back_End.Service
             var data = await _AnnouncementRepo.DeleteAnnouncement(GetData);
             return data;
         }
-        public async Task<PaginationResponseDTO<AnnouncementResponseDTO>> GetPaginatedAnnouncement(int pageNumber, int pageSize ,string role)
+        public async Task<PaginationResponseDTO<AnnouncementResponseDTO>> GetPaginatedAnnouncement(int pageNumber, int pageSize ,string? role)
         {
-            var AllAnouncements= await _AnnouncementRepo.GetAllAnnouncement();
-            var data = await _AnnouncementRepo.GetPaginatedAnnouncement(pageNumber, pageSize, role);
+            ICollection<Announcement> AllAnouncements;
+
+            if (role == null)
+            {
+                AllAnouncements = await _AnnouncementRepo.GetAllAnnouncement();
+            }
+            else
+            {
+                AllAnouncements = await _AnnouncementRepo.GetAnnouncementsByRole(role);
+            }
+
+            var data = await _AnnouncementRepo.GetPaginatedAnnouncement(pageNumber, pageSize, role!);
             var returndata = data.Select(x => new AnnouncementResponseDTO
             {
                 Id = x.Id,
