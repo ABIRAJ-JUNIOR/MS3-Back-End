@@ -18,6 +18,7 @@
         WelCome = 1,
         Enrollment,
         Payment,
+        Results,
         ScheduleUpdate,
         CourseOffering,
     }
