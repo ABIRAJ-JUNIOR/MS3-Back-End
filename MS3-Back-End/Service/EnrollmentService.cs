@@ -138,6 +138,7 @@ namespace MS3_Back_End.Service
                     PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
+                    DueDate = payment.DueDate,
                     InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber:null,
                     EnrollmentId = payment.EnrollmentId
                 }).ToList();
@@ -172,6 +173,7 @@ namespace MS3_Back_End.Service
                     PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
+                    DueDate = payment.DueDate,
                     InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber : null,
                     EnrollmentId = payment.EnrollmentId
                 }).ToList() : []
@@ -203,6 +205,7 @@ namespace MS3_Back_End.Service
                     PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
+                    DueDate = payment.DueDate,
                     InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber : null,
                     EnrollmentId = payment.EnrollmentId
                 }).ToList() : []
@@ -238,6 +241,7 @@ namespace MS3_Back_End.Service
                     PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
+                    DueDate = payment.DueDate,
                     InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber : null,
                     EnrollmentId = payment.EnrollmentId
                 }).ToList();

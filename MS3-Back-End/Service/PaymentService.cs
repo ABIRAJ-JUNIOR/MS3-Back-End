@@ -102,6 +102,7 @@ namespace MS3_Back_End.Service
                 PaymentMethod = ((PaymentMethots)createdPayment.PaymentMethod).ToString(),
                 AmountPaid = createdPayment.AmountPaid,
                 PaymentDate = createdPayment.PaymentDate,
+                DueDate = createdPayment.DueDate,
                 InstallmentNumber = createdPayment.InstallmentNumber,
                 EnrollmentId = createdPayment.EnrollmentId
             };
@@ -117,6 +118,7 @@ namespace MS3_Back_End.Service
                 PaymentMethod = ((PaymentMethots)p.PaymentMethod).ToString(),
                 AmountPaid = p.AmountPaid,
                 PaymentDate = p.PaymentDate,
+                DueDate= p.DueDate,
                 InstallmentNumber = p.InstallmentNumber,
                 EnrollmentId = p.EnrollmentId
             }).ToList();
@@ -134,6 +136,7 @@ namespace MS3_Back_End.Service
                 PaymentMethod = ((PaymentMethots)p.PaymentMethod).ToString(),
                 AmountPaid = p.AmountPaid,
                 PaymentDate = p.PaymentDate,
+                DueDate = p.DueDate,
                 InstallmentNumber = p.InstallmentNumber,
                 EnrollmentId = p.EnrollmentId
             }).ToList();
@@ -141,9 +144,9 @@ namespace MS3_Back_End.Service
             return response;
         }
 
-            public DateTime CalculateInstallmentDueDate(DateTime paymentdate,int courseDuration)
-            {
-                return  paymentdate.AddDays((courseDuration/3));
-            }
+        public DateTime CalculateInstallmentDueDate(DateTime paymentdate, int courseDuration)
+        {
+            return paymentdate.AddDays((courseDuration / 3));
+        }
     }
 }
