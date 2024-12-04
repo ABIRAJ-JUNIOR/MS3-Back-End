@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.StudentAssessment;
 using MS3_Back_End.DTOs.ResponseDTOs.Assessment;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
@@ -206,5 +207,39 @@ Way Makers
 
             return response;
         }
+
+
+        public async Task<PaginationResponseDTO<StudentAssessmentResponseDTO>> PaginationGetByStudentID(Guid studentId, int pageNumber, int PageSize)
+        {
+            var AllAssesments = await _repository.GetAllAssessments();
+            var response = await _repository.PaginationGetByStudentID(studentId, pageNumber, PageSize);
+
+            var responseList = response.Select(item => new StudentAssessmentResponseDTO
+            {
+                Id = item.Id,
+                StudentId = item.StudentId,
+                MarksObtaines = item.MarksObtaines,
+                AssessmentId = item.AssessmentId,
+                Grade = item.Grade?.ToString(),
+                FeedBack = item.FeedBack,
+                DateEvaluated = item.DateEvaluated,
+                DateSubmitted = item.DateSubmitted,
+                StudentAssessmentStatus = item.StudentAssessmentStatus.ToString(),
+
+            }).ToList();
+
+            var paginationResponseDto = new PaginationResponseDTO<StudentAssessmentResponseDTO>
+
+            {
+                Items = responseList,
+                CurrentPage = pageNumber,
+                PageSize = PageSize,
+                TotalPages = (int)Math.Ceiling(AllAssesments.Count / (double)PageSize),
+                TotalItem = AllAssesments.Count,
+            };
+
+            return paginationResponseDto;
+        }
+
     }
 }
