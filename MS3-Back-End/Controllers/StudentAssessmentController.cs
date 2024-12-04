@@ -64,6 +64,19 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getByPagination${id}")]
+        public async Task<IActionResult> GetPaginationByStudentId(Guid studentId, int PageNumber, int PageSize)
+        {
+            try
+            {
+                var response = await _service.PaginationGetByStudentID(studentId, PageNumber, PageSize);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }
