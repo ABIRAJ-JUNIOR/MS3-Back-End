@@ -8,5 +8,6 @@ namespace MS3_Back_End.IService
         Task<PaymentResponseDTO> CreatePayment(PaymentRequestDTO paymentRequest);
         Task<ICollection<PaymentResponseDTO>> GetAllPayments();
         Task<ICollection<PaymentResponseDTO>> RecentPayments();
+        DateTime CalculateInstallmentDueDate(DateTime paymentdate, int courseDuration);
     }
 }
