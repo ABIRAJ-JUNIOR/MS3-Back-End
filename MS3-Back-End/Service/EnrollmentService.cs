@@ -61,8 +61,8 @@ namespace MS3_Back_End.Service
                     PaymentMethod = EnrollmentReq.PaymentRequest.PaymentMethod,
                     AmountPaid = EnrollmentReq.PaymentRequest.AmountPaid,
                     PaymentDate = DateTime.Now,
-                    DueDate = _paymentService.CalculateInstallmentDueDate(today , courseScheduleData.Duration),
-                    InstallmentNumber = EnrollmentReq.PaymentRequest.InstallmentNumber != null ? EnrollmentReq.PaymentRequest.InstallmentNumber:null,
+                    DueDate = EnrollmentReq.PaymentRequest.PaymentType == PaymentTypes.Installment ? _paymentService.CalculateInstallmentDueDate(today, courseScheduleData.Duration) : null,
+                    InstallmentNumber = EnrollmentReq.PaymentRequest.PaymentType == PaymentTypes.Installment ? EnrollmentReq.PaymentRequest.InstallmentNumber:null,
                 }
             };
 
