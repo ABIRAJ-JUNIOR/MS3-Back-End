@@ -209,10 +209,11 @@ Way Makers
         }
 
 
-        public async Task<PaginationResponseDTO<StudentAssessmentResponseDTO>> PaginationGetByStudentID(Guid studentId, int pageNumber, int PageSize)
+        public async Task<PaginationResponseDTO<StudentAssessmentResponseDTO>> PaginationGetByStudentID(Guid studentId, int pageNumber, int pageSize)
         {
-            var AllAssesments = await _repository.GetAllAssessments();
-            var response = await _repository.PaginationGetByStudentID(studentId, pageNumber, PageSize);
+            var students = await _repository.GetStudentAssesmentById(studentId);
+
+            var response = await _repository.PaginationGetByStudentID(studentId, pageNumber, pageSize);
 
             var responseList = response.Select(item => new StudentAssessmentResponseDTO
             {
@@ -225,21 +226,18 @@ Way Makers
                 DateEvaluated = item.DateEvaluated,
                 DateSubmitted = item.DateSubmitted,
                 StudentAssessmentStatus = item.StudentAssessmentStatus.ToString(),
-
             }).ToList();
 
-            var paginationResponseDto = new PaginationResponseDTO<StudentAssessmentResponseDTO>
-
+            return new PaginationResponseDTO<StudentAssessmentResponseDTO>
             {
                 Items = responseList,
                 CurrentPage = pageNumber,
-                PageSize = PageSize,
-                TotalPages = (int)Math.Ceiling(AllAssesments.Count / (double)PageSize),
-                TotalItem = AllAssesments.Count,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling(students.Count() / (double)pageSize),
+                TotalItem = students.Count(),
             };
-
-            return paginationResponseDto;
         }
+
 
     }
 }

@@ -64,7 +64,7 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("getByPagination${id}")]
+        [HttpGet("getByPagination${studentId}")]
         public async Task<IActionResult> GetPaginationByStudentId(Guid studentId, int PageNumber, int PageSize)
         {
             try

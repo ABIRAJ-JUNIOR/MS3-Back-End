@@ -12,5 +12,7 @@ namespace MS3_Back_End.IRepository
         Task<List<StudentAssessment>> GetStudentAssesmentById(Guid studentId);
         Task<StudentAssessment> EvaluateStudentAssessment(StudentAssessment studentAssessment);
         Task<StudentAssessment> StudentAssessmentGetById(Guid id);
+        Task<ICollection<StudentAssessment>> PaginationGetByStudentID(Guid studentId, int pageNumber, int PageSize);
+
     }
 }
