@@ -266,6 +266,14 @@ namespace MS3_Back_End.Repository
             var stusentAssessmentData = await _dbcontext.StudentAssessments.SingleOrDefaultAsync(sa => sa.Id == id);
             return stusentAssessmentData!;
         }
+        public async Task<ICollection<StudentAssessment>> PaginationGetByStudentID(Guid studentId, int pageNumber, int PageSize)
+        {
+            var assessment = await _dbcontext.StudentAssessments.Where(s => s.StudentId == studentId)
+                                                                .Skip((pageNumber - 1) * PageSize)
+                                                                .Take(PageSize).ToListAsync();
+            return assessment;
+
+        }
 
     }
 }
