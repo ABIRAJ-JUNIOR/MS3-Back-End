@@ -17,14 +17,16 @@ namespace MS3_Back_End.Service
         private readonly INotificationRepository _notificationRepository;
         private readonly IStudentRepository _studentRepository;
         private readonly ICourseRepository _courseRepository;
+        private readonly IPaymentService _paymentService;
 
-        public EnrollmentService(IEnrollmentRepository enrollmentRepository, ICourseScheduleRepository courseScheduleRepository, INotificationRepository notificationRepository, IStudentRepository studentRepository, ICourseRepository courseRepository)
+        public EnrollmentService(IEnrollmentRepository enrollmentRepository, ICourseScheduleRepository courseScheduleRepository, INotificationRepository notificationRepository, IStudentRepository studentRepository, ICourseRepository courseRepository, IPaymentService paymentService)
         {
             _enrollmentRepository = enrollmentRepository;
             _courseScheduleRepository = courseScheduleRepository;
             _notificationRepository = notificationRepository;
             _studentRepository = studentRepository;
             _courseRepository = courseRepository;
+            _paymentService = paymentService;
         }
 
         public async Task<EnrollmentResponseDTO> AddEnrollment(EnrollmentRequestDTO EnrollmentReq)
@@ -48,6 +50,8 @@ namespace MS3_Back_End.Service
             courseScheduleData.EnrollCount = courseScheduleData.EnrollCount + 1;
             await _courseScheduleRepository.UpdateCourseSchedule(courseScheduleData);
 
+            var today = DateTime.Now;
+
             var Payment = new List<Payment>()
             {
                 new Payment()
@@ -56,7 +60,8 @@ namespace MS3_Back_End.Service
                     PaymentMethod = EnrollmentReq.PaymentRequest.PaymentMethod,
                     AmountPaid = EnrollmentReq.PaymentRequest.AmountPaid,
                     PaymentDate = DateTime.Now,
-                    InstallmentNumber = EnrollmentReq.PaymentRequest.InstallmentNumber != null ? EnrollmentReq.PaymentRequest.InstallmentNumber:null,
+                    DueDate = EnrollmentReq.PaymentRequest.PaymentType == PaymentTypes.Installment ? _paymentService.CalculateInstallmentDueDate(today, courseScheduleData.Duration) : null,
+                    InstallmentNumber = EnrollmentReq.PaymentRequest.PaymentType == PaymentTypes.Installment ? EnrollmentReq.PaymentRequest.InstallmentNumber:null,
                 }
             };
 
@@ -132,6 +137,7 @@ namespace MS3_Back_End.Service
                     PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
+                    DueDate = payment.DueDate,
                     InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber:null,
                     EnrollmentId = payment.EnrollmentId
                 }).ToList();
@@ -166,6 +172,7 @@ namespace MS3_Back_End.Service
                     PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
+                    DueDate = payment.DueDate,
                     InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber : null,
                     EnrollmentId = payment.EnrollmentId
                 }).ToList() : []
@@ -197,6 +204,7 @@ namespace MS3_Back_End.Service
                     PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
+                    DueDate = payment.DueDate,
                     InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber : null,
                     EnrollmentId = payment.EnrollmentId
                 }).ToList() : []
@@ -232,6 +240,7 @@ namespace MS3_Back_End.Service
                     PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                     AmountPaid = payment.AmountPaid,
                     PaymentDate = payment.PaymentDate,
+                    DueDate = payment.DueDate,
                     InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber : null,
                     EnrollmentId = payment.EnrollmentId
                 }).ToList();

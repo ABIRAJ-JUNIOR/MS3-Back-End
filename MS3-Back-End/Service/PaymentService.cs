@@ -40,6 +40,16 @@ namespace MS3_Back_End.Service
                 await _enrollmentRepository.UpdateEnrollment(enrollmentData);
             }
 
+            var enrollmentDetails = await _enrollmentRepository.GetEnrollmentById(paymentRequest.EnrollmentId);
+            if(enrollmentDetails == null)
+            {
+                throw new Exception("Enrollment Data No Found");
+            }
+            var courseScheduleData = await _courseScheduleRepository.GetCourseScheduleById(enrollmentDetails.CourseScheduleId);
+            var courseData = await _courseRepository.GetCourseById(courseScheduleData.CourseId);
+            var StudentData = await _studentRepository.GetStudentById(enrollmentDetails.StudentId);
+
+            var today = DateTime.Now;
             var payment = new Payment
             {
                 Id = Guid.NewGuid(),
@@ -47,16 +57,12 @@ namespace MS3_Back_End.Service
                 PaymentMethod = paymentRequest.PaymentMethod,
                 AmountPaid = paymentRequest.AmountPaid,
                 PaymentDate = DateTime.Now,
-                InstallmentNumber = paymentRequest.InstallmentNumber,
+                DueDate = paymentRequest.PaymentType == PaymentTypes.Installment ? CalculateInstallmentDueDate(today, courseScheduleData.Duration) : null,
+                InstallmentNumber = paymentRequest.PaymentType == PaymentTypes.Installment ? paymentRequest.InstallmentNumber : null,
                 EnrollmentId = paymentRequest.EnrollmentId
             };
 
-
             var createdPayment = await _paymentRepository.CreatePayment(payment);
-            var enrollmentDetails = await _enrollmentRepository.GetEnrollmentById(createdPayment.EnrollmentId);
-            var courseScheduleData = await _courseScheduleRepository.GetCourseScheduleById(enrollmentDetails.CourseScheduleId);
-            var courseData = await _courseRepository.GetCourseById(courseScheduleData.CourseId);
-            var StudentData = await _studentRepository.GetStudentById(enrollmentDetails.StudentId);
 
 
             string NotificationMessage = $@"  <b>Subject:</b> 💳 Payment Confirmation<br><br>
@@ -96,6 +102,7 @@ namespace MS3_Back_End.Service
                 PaymentMethod = ((PaymentMethots)createdPayment.PaymentMethod).ToString(),
                 AmountPaid = createdPayment.AmountPaid,
                 PaymentDate = createdPayment.PaymentDate,
+                DueDate = createdPayment.DueDate,
                 InstallmentNumber = createdPayment.InstallmentNumber,
                 EnrollmentId = createdPayment.EnrollmentId
             };
@@ -111,6 +118,7 @@ namespace MS3_Back_End.Service
                 PaymentMethod = ((PaymentMethots)p.PaymentMethod).ToString(),
                 AmountPaid = p.AmountPaid,
                 PaymentDate = p.PaymentDate,
+                DueDate= p.DueDate,
                 InstallmentNumber = p.InstallmentNumber,
                 EnrollmentId = p.EnrollmentId
             }).ToList();
@@ -128,11 +136,17 @@ namespace MS3_Back_End.Service
                 PaymentMethod = ((PaymentMethots)p.PaymentMethod).ToString(),
                 AmountPaid = p.AmountPaid,
                 PaymentDate = p.PaymentDate,
+                DueDate = p.DueDate,
                 InstallmentNumber = p.InstallmentNumber,
                 EnrollmentId = p.EnrollmentId
             }).ToList();
 
             return response;
+        }
+
+        public DateTime CalculateInstallmentDueDate(DateTime paymentdate, int courseDuration)
+        {
+            return paymentdate.AddDays((courseDuration / 3));
         }
     }
 }
