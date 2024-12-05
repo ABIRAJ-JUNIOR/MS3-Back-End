@@ -7,7 +7,6 @@ using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
 using MS3_Back_End.Repository;
-using NuGet.Frameworks;
 
 namespace MS3_Back_End.Service
 {

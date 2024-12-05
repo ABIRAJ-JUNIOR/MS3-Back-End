@@ -1,8 +1,10 @@
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MS3_Back_End.DBContext;
+using MS3_Back_End.DTOs.Email;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
 using MS3_Back_End.Repository;
@@ -24,6 +26,14 @@ namespace MS3_Back_End
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<AppDBContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
+
+            builder.Services.AddScoped<SendMailService>();
+            builder.Services.AddScoped<SendMailRepository>();
+            builder.Services.AddScoped<EmailServiceProvider>();
+
+
+            // Register EmailConfig
+            builder.Services.Configure<EmailConfig>(builder.Configuration.GetSection("EmailConfig"));
 
             //Authentication
             builder.Services.AddScoped<IAuthRepository,AuthRepository>();
@@ -89,7 +99,8 @@ namespace MS3_Back_End
             builder.Services.AddScoped<IFeedbacksRepository, FeedbacksRepository>();
             builder.Services.AddScoped<IFeedbacksService, FeedbacksService>();
 
-
+            // Ensure EmailConfig is available as a singleton if needed
+            builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<EmailConfig>>().Value);
 
             var jwtSettings = builder.Configuration.GetSection("Jwt");
             var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]!);
@@ -151,11 +162,15 @@ namespace MS3_Back_End
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            //if (app.Environment.IsDevelopment())
+            //{
+            //    app.UseSwagger();
+            //    app.UseSwaggerUI();
+            //}
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI();
 
             app.UseCors();
 
@@ -164,7 +179,6 @@ namespace MS3_Back_End
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
