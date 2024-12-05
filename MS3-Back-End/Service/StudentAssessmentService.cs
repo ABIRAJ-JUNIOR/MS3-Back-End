@@ -1,5 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using MS3_Back_End.DTOs.Pagination;
+﻿using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.StudentAssessment;
 using MS3_Back_End.DTOs.ResponseDTOs.Assessment;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
@@ -174,7 +173,7 @@ Congratulations! Your results for the Assessment <b>{assessmentData.AssessmentTi
 
 You have successfully completed the assessment and are one step closer to achieving your learning goals!<br><br>
 
-If you need any feedback or have questions, feel free to contact us at <a href='mailto:noreply.way.makers@gmail.com'>noreply.way.makers@gmail.com</a> or call <b>0702274212</b>.<br><br>
+If you need any feedback or have questions, feel free to contact us at <a href='mailto:info.way.mmakers@gmail.com'>info.way.mmakers@gmail.com</a> or call <b>0702274212</b>.<br><br>
 
 Best regards,<br>
 Way Makers

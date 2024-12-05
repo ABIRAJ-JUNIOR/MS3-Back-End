@@ -16,7 +16,7 @@ namespace MS3_Back_End.Controllers
             _sendMailService = sendmailService;
         }
 
-        [HttpPost("Send-Mail")]
+        [HttpPost("OTP")]
         public async Task<IActionResult> Sendmail(SendMailRequest sendMailRequest)
         {
             var res = await _sendMailService.Sendmail(sendMailRequest).ConfigureAwait(false);

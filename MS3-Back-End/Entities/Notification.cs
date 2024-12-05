@@ -17,8 +17,9 @@
     {
         WelCome = 1,
         Enrollment,
-        Payment,
         Results,
+        Payment,
+        PaymentReminder,
         ScheduleUpdate,
         CourseOffering,
     }
