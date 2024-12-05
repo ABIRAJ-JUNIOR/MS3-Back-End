@@ -17,21 +17,21 @@ namespace MS3_Back_End.Controllers
             _service = studentAssessmentService;
         }
 
-        [HttpGet("StudentAssessments")]
+        [HttpGet("GetAll")]
         public async  Task<IActionResult> GetAllAssessments()
         {
             var assessmentList = await _service.GetAllAssessments();
             return Ok(assessmentList);
         }
 
-        [HttpGet("Evaluated-Assessments")]
+        [HttpGet("Evaluated")]
         public async Task<IActionResult> GetAllEvaluatedAssessments()
         {
             var assessmentList = await _service.GetAllEvaluatedAssessments();
             return Ok(assessmentList);
         }
 
-        [HttpGet("Non-Evaluate-Assessments")]
+        [HttpGet("Non-Evaluate")]
         public async Task<IActionResult> GetAllNonEvaluateAssessments()
         {
             var assessmentList = await _service.GetAllNonEvaluateAssessments();
@@ -44,6 +44,12 @@ namespace MS3_Back_End.Controllers
             var studentAssessmentData = await _service.AddStudentAssessment(request);
             return Ok(studentAssessmentData);
         }
+        [HttpGet("studentAssesment/{id}")]
+        public async Task<IActionResult> GetAllNonEvaluateAssessments(Guid id)
+        {
+            var assessmentList = await _service.GetStudentAssesmentById(id);
+            return Ok(assessmentList);
+        }
 
         [HttpPut("Evaluate-Assessment/{id}")]
         public async Task<IActionResult> EvaluateStudentAssessment(Guid id, EvaluationRequestDTO request)
@@ -52,6 +58,19 @@ namespace MS3_Back_End.Controllers
             {
                 var evaluateAssessment = await _service.EvaluateStudentAssessment(id, request);
                 return Ok(evaluateAssessment);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getByPagination/{studentId}")]
+        public async Task<IActionResult> GetPaginationByStudentId(Guid studentId, int PageNumber, int PageSize)
+        {
+            try
+            {
+                var response = await _service.PaginationGetByStudentID(studentId, PageNumber, PageSize);
+                return Ok(response);
             }
             catch (Exception ex)
             {

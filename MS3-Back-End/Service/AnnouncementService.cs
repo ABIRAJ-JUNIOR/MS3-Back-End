@@ -8,6 +8,7 @@ using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
 using MS3_Back_End.Repository;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MS3_Back_End.Service
 {
@@ -26,6 +27,7 @@ namespace MS3_Back_End.Service
             var Announcement = new Announcement
             {
                 Title = AnnouncementReq.Title,
+                Description = AnnouncementReq.Description,
                 DatePosted = DateTime.Now,
                 ExpirationDate = AnnouncementReq.ExpirationDate,
                 AudienceType = AnnouncementReq.AudienceType,
@@ -38,6 +40,7 @@ namespace MS3_Back_End.Service
             {
                 Id = data.Id,
                 Title = data.Title,
+                Description = data.Description,
                 DatePosted = data.DatePosted,
                 ExpirationDate = data.ExpirationDate,
                 AudienceType = ((AudienceType)data.AudienceType).ToString(),
@@ -60,6 +63,7 @@ namespace MS3_Back_End.Service
             {
                 Id = item.Id,
                 Title = item.Title,
+                Description = item.Description,
                 DatePosted = item.DatePosted,
                 AudienceType = ((AudienceType)item.AudienceType).ToString(),
                 ExpirationDate = item.ExpirationDate,
@@ -81,6 +85,7 @@ namespace MS3_Back_End.Service
             {
                 Id = item.Id,
                 Title = item.Title,
+                Description = item.Description,
                 DatePosted = item.DatePosted,
                 AudienceType = ((AudienceType)item.AudienceType).ToString(),
                 ExpirationDate = item.ExpirationDate,
@@ -102,6 +107,7 @@ namespace MS3_Back_End.Service
             {
                 Id = data.Id,
                 Title = data.Title,
+                Description = data.Description,
                 DatePosted = data.DatePosted,
                 AudienceType = ((AudienceType)data.AudienceType).ToString(),
                 ExpirationDate = data.ExpirationDate,
@@ -112,41 +118,22 @@ namespace MS3_Back_End.Service
 
 
 
-        public async Task<AnnouncementResponseDTO> UpdateAnnouncement(AnnounceUpdateDTO announcement)
+        public async Task<ICollection<AnnouncementResponseDTO>> RecentAnnouncement()
         {
 
-            var GetData = await _AnnouncementRepo.GetAnnouncemenntByID(announcement.Id);
+            var GetData = await _AnnouncementRepo.RecentAnnouncement();
 
-            if (announcement.Title != null)
+
+            return GetData.Select(a => new AnnouncementResponseDTO()
             {
-                GetData.Title = announcement.Title;
-            }
-
-            if (announcement.ExpirationDate.HasValue)
-            {
-                GetData.ExpirationDate = announcement.ExpirationDate.Value;
-            }
-
-            if (announcement.AudienceType != null)
-            {
-                GetData.AudienceType = announcement.AudienceType.Value;
-            };
-
-            GetData.DatePosted = DateTime.Now;
-
-            var data = await _AnnouncementRepo.UpdateAnnouncement(GetData);
-
-            var AnnouncementReturn = new AnnouncementResponseDTO
-            {
-                Id = data.Id,
-                Title = data.Title,
-                DatePosted = data.DatePosted,
-                ExpirationDate = data.ExpirationDate,
-                AudienceType = ((AudienceType)data.AudienceType).ToString(),
-                IsActive = data.IsActive
-            };
-
-            return AnnouncementReturn;
+                Id = a.Id,
+                Title = a.Title,
+                Description = a.Description,
+                DatePosted = a.DatePosted,
+                ExpirationDate = a.ExpirationDate,
+                AudienceType = ((AudienceType)a.AudienceType).ToString(),
+                IsActive = a.IsActive
+            }).ToList();
 
         }
 
@@ -162,14 +149,25 @@ namespace MS3_Back_End.Service
             var data = await _AnnouncementRepo.DeleteAnnouncement(GetData);
             return data;
         }
-        public async Task<PaginationResponseDTO<AnnouncementResponseDTO>> GetPaginatedAnnouncement(int pageNumber, int pageSize)
+        public async Task<PaginationResponseDTO<AnnouncementResponseDTO>> GetPaginatedAnnouncement(int pageNumber, int pageSize ,string? role)
         {
-            var AllAnouncements= await _AnnouncementRepo.GetAllAnnouncement();
-            var data = await _AnnouncementRepo.GetPaginatedAnnouncement(pageNumber, pageSize);
+            ICollection<Announcement> AllAnouncements;
+
+            if (role == null)
+            {
+                AllAnouncements = await _AnnouncementRepo.GetAllAnnouncement();
+            }
+            else
+            {
+                AllAnouncements = await _AnnouncementRepo.GetAnnouncementsByRole(role);
+            }
+
+            var data = await _AnnouncementRepo.GetPaginatedAnnouncement(pageNumber, pageSize, role!);
             var returndata = data.Select(x => new AnnouncementResponseDTO
             {
                 Id = x.Id,
                 Title = x.Title,
+                Description = x.Description,
                 DatePosted = x.DatePosted,
                 ExpirationDate = x.ExpirationDate,
                 AudienceType = ((AudienceType)x.AudienceType).ToString(),
@@ -183,9 +181,6 @@ namespace MS3_Back_End.Service
                 CurrentPage = pageNumber,  
                 TotalPages = (int)Math.Ceiling(AllAnouncements.Count / (double)pageSize),
                 TotalItem = AllAnouncements.Count,
-
-
-
             };
             return PaginationResponseDTO;
         }

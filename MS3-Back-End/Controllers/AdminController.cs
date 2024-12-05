@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MS3_Back_End.DTOs.Image;
 using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.__Password__;
 using MS3_Back_End.DTOs.RequestDTOs.Admin;
@@ -67,54 +66,13 @@ namespace MS3_Back_End.Controllers
             return Ok(updateresponse);
         }
 
-        [HttpPut("Update-Personal-Details/{id}")]
-        public async Task<IActionResult> UpdateAdminPersonalDetails(Guid id, AdminUpdateRequestDTO request)
-        {
-            try
-            {
-                var updatedData = await _adminService.UpdateAdminPersonalDetails(id, request);
-                return Ok(updatedData);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
 
-        [HttpPut("Update-Email")]
-        public async Task<IActionResult>  UpdateEmail(UpdateEmailRequestDTO request)
+        [HttpPost("Image/{adminId}/${isCoverImage}")]
+        public async Task<IActionResult> UploadImage(Guid adminId, IFormFile? ImageFile, bool isCoverImage)
         {
             try
             {
-                var updateEmail = await _adminService.UpdateEmail(request);
-                return Ok(updateEmail);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPut("Update-Password")]
-        public async Task<IActionResult> UpdatePassword(UpdatePasswordRequestDTO request)
-        {
-            try
-            {
-                var updatePassword = await _adminService.UpdatePassword(request);
-                return Ok(updatePassword);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost("Image/{adminId}")]
-        public async Task<IActionResult> UploadImage(Guid adminId,IFormFile? ImageFile)
-        {
-            try
-            {
-                var response = await _adminService.UploadImage(adminId, ImageFile);
+                var response = await _adminService.UploadImage(adminId, ImageFile,isCoverImage);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -151,7 +109,7 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut("AdminProfile{ID}")]
+        [HttpPut("AdminProfile/{ID}")]
         public async Task<IActionResult> UpdateAdminProfile(Guid ID, AdminProfileUpdateDTO admindata)
         {
 

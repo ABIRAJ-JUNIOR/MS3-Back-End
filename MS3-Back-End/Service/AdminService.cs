@@ -1,6 +1,5 @@
 ﻿using CloudinaryDotNet.Actions;
 using CloudinaryDotNet;
-using MS3_Back_End.DTOs.Image;
 using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.__Password__;
 using MS3_Back_End.DTOs.RequestDTOs.Admin;
@@ -12,6 +11,7 @@ using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
 using Microsoft.SqlServer.Server;
 using System.Runtime.InteropServices;
+using Azure.Core;
 
 namespace MS3_Back_End.Service
 {
@@ -195,75 +195,7 @@ namespace MS3_Back_End.Service
             return response;
         }
 
-        public async Task<AdminResponseDTO> UpdateAdminPersonalDetails(Guid id , AdminUpdateRequestDTO request)
-        {
-            var adminData = await _adminRepository.GetAdminById(id);
-            if(adminData == null)
-            {
-                throw new Exception("Admin not found");
-            }
-
-            adminData.FirstName = request.FirstName;
-            adminData.LastName = request.LastName;
-            adminData.Phone = request.Phone;
-            adminData.UpdatedDate = DateTime.Now;
-
-            var updatedData = await _adminRepository.UpdateAdmin(adminData);
-
-            var response = new AdminResponseDTO()
-            {
-                Id = updatedData.Id,
-                Nic = updatedData.Nic,
-                FirstName = updatedData.FirstName,
-                LastName = updatedData.LastName,
-                Phone = updatedData.Phone,
-                ImageUrl = updatedData.ImageUrl,
-                CteatedDate = updatedData.CteatedDate,
-                UpdatedDate = updatedData.UpdatedDate,
-                IsActive = updatedData.IsActive,
-            };
-
-            return response;
-        }
-
-        public async Task<string> UpdateEmail(UpdateEmailRequestDTO request)
-        {
-            var userData = await _authRepository.GetUserById(request.Id);
-            if(userData == null)
-            {
-                throw new Exception("User not found");
-            }
-            if (!BCrypt.Net.BCrypt.Verify(request.Password , userData.Password))
-            {
-                throw new Exception("Wrong Password");
-            }
-
-            userData.Email = request.Email;
-
-            var updatedData = await _authRepository.UpdateUser(userData);
-
-            return "Update email successfully";
-        }
-
-        public async Task<string> UpdatePassword(UpdatePasswordRequestDTO request)
-        {
-            var userData = await _authRepository.GetUserById(request.Id);
-            if (userData == null)
-            {
-                throw new Exception("User not found");
-            }
-            if (!BCrypt.Net.BCrypt.Verify(request.oldPassword, userData.Password))
-            {
-                throw new Exception("Old password is incorrect");
-            }
-
-            userData.Password = BCrypt.Net.BCrypt.HashPassword(request.newPassword);
-            var updatedData = await _authRepository.UpdateUser(userData);
-
-            return "Update password successfully";
-        }
-
-        public async Task<string> UploadImage(Guid adminId ,IFormFile? image)
+        public async Task<string> UploadImage(Guid adminId, IFormFile? ImageFile, bool isCoverImage)
         {
             var adminData = await _adminRepository.GetAdminById(adminId);
             if(adminData == null)
@@ -271,7 +203,7 @@ namespace MS3_Back_End.Service
                 throw new Exception("Admin not found");
             }
 
-            if (image == null)
+            if (ImageFile == null)
             {
                 throw new Exception($"Could not upload image");
             }
@@ -280,18 +212,25 @@ namespace MS3_Back_End.Service
 
             Cloudinary cloudinary = new Cloudinary(cloudinaryUrl);
 
-            using (var stream = image.OpenReadStream())
+            using (var stream = ImageFile.OpenReadStream())
             {
                 var uploadParams = new ImageUploadParams
                 {
-                    File = new FileDescription(image.FileName, stream),
+                    File = new FileDescription(ImageFile.FileName, stream),
                     UseFilename = true,
                     UniqueFilename = true,
                     Overwrite = true
                 };
 
                 var uploadResult = await cloudinary.UploadAsync(uploadParams);
-                adminData.ImageUrl = (uploadResult.SecureUrl).ToString();
+                if(isCoverImage)
+                {
+                    adminData.CoverImageUrl = (uploadResult.SecureUrl).ToString();
+                }
+                else
+                {
+                    adminData.ImageUrl = (uploadResult.SecureUrl).ToString();
+                }
             }
 
             var updatedData = await _adminRepository.UpdateAdmin(adminData);
@@ -347,41 +286,47 @@ namespace MS3_Back_End.Service
 
             return response;
         }
-        public async Task<AdminProfileUpdateresDTO> UpdateAdminProfile(Guid ID,AdminProfileUpdateDTO admindata)
+        public async Task<string> UpdateAdminProfile(Guid ID,AdminProfileUpdateDTO request)
         {
-            var admin = await _adminRepository.GetAdminById(ID);
-            if (admin == null)
+            var adminData = await _adminRepository.GetAdminById(ID);
+            if (adminData == null)
             {
                 throw new Exception("Admin not found");
             }
 
-            var user = await _authRepository.GetUserById(ID);
 
-            if (user == null)
+            adminData.FirstName = request.FirstName;
+            adminData.LastName = request.LastName;
+            adminData.Phone = request.Phone;
+            adminData.UpdatedDate = DateTime.Now;
+
+            var updatedAdminData = await _adminRepository.UpdateAdmin(adminData);
+
+            var userData = await _authRepository.GetUserById(ID);
+            if (userData == null)
             {
-
                 throw new Exception("User not found");
-
             }
-            admin.FirstName = admindata.FirstName;
-            admin.LastName = admindata.LastName;
-            admin.Phone = admindata.Phone;
 
-            var data1 = await _adminRepository.UpdateAdmin(admin);
-           
-            user.Email = admindata.Email;
-            var data2=await _authRepository.UpdateUser(user);
-           
+            userData.Email = request.Email;
+
+            var updatedUserData = await _authRepository.UpdateUser(userData);
+
+            if (request.CurrentPassword != null && request.NewPassword != null)
+            {
+                if (!BCrypt.Net.BCrypt.Verify(request.CurrentPassword, userData.Password))
+                {
+                    throw new Exception("Old password is incorrect");
+                }
+
+                userData.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+                var updatedData = await _authRepository.UpdateUser(userData);
+            }
+
             
-            var returdata = new AdminProfileUpdateresDTO()
-            { 
-                    FirstName = data1.FirstName,
-                    LastName = data1.LastName,
-                    Phone = data1.Phone,
-                    Email=data2.Email
-            };
-             return returdata;
+             return "Account Update Successfull";
             
         }
+
     }
 }

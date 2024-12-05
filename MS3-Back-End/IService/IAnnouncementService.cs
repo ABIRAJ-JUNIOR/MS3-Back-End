@@ -12,9 +12,9 @@ namespace MS3_Back_End.IService
         Task<ICollection<AnnouncementResponseDTO>> SearchAnnouncement(string SearchText);
         Task<ICollection<AnnouncementResponseDTO>> GetAllAnnouncement();
         Task<AnnouncementResponseDTO> GetAnnouncementById(Guid id);
-        Task<AnnouncementResponseDTO> UpdateAnnouncement(AnnounceUpdateDTO announcement);
+        Task<ICollection<AnnouncementResponseDTO>> RecentAnnouncement();
         Task<string> DeleteAnnouncement(Guid Id);
-        Task<PaginationResponseDTO<AnnouncementResponseDTO>> GetPaginatedAnnouncement(int pageNumber, int pageSize);
+        Task<PaginationResponseDTO<AnnouncementResponseDTO>> GetPaginatedAnnouncement(int pageNumber, int pageSize, string? role);
 
 
     }

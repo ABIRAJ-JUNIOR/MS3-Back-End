@@ -23,7 +23,7 @@ namespace MS3_Back_End.Repository
 
         public async Task<ICollection<Notification>> GetAllNotification(Guid id)
         {
-            var getAllNotification = await _appDBContext.Notifications.Where(n => n.StudentId == id).ToListAsync();
+            var getAllNotification = await _appDBContext.Notifications.Where(n => n.StudentId == id && n.IsRead==false).ToListAsync();
             return getAllNotification;
         }
 

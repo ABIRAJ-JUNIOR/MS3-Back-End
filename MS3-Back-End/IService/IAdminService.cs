@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MS3_Back_End.DTOs.Image;
 using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.__Password__;
 using MS3_Back_End.DTOs.RequestDTOs.Admin;
@@ -14,13 +13,10 @@ namespace MS3_Back_End.IService
         Task<AdminAllDataResponseDTO> GetAdminFulldetailsById(Guid id);
         Task<ICollection<AdminResponseDTO>> GetAllAdmins();
         Task<AdminResponseDTO> UpdateAdminFullDetails(Guid id, AdminFullUpdateDTO request);
-        Task<AdminResponseDTO> UpdateAdminPersonalDetails(Guid id, AdminUpdateRequestDTO request);
-        Task<string> UpdateEmail(UpdateEmailRequestDTO request);
-        Task<string> UploadImage(Guid adminId,IFormFile? ImageFile);
-        Task<string> UpdatePassword(UpdatePasswordRequestDTO request);
+        Task<string> UploadImage(Guid adminId, IFormFile? ImageFile, bool isCoverImage);
         Task<PaginationResponseDTO<AdminWithRoleDTO>> GetPaginatedAdmin(int pageNumber, int pageSize);
         Task<AdminResponseDTO> DeleteAdmin(Guid Id);
-        Task<AdminProfileUpdateresDTO> UpdateAdminProfile(Guid ID, AdminProfileUpdateDTO admindata);
+        Task<string> UpdateAdminProfile(Guid ID, AdminProfileUpdateDTO request);
 
     }
 }

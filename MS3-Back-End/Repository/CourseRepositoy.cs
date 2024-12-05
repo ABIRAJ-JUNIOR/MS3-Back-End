@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MS3_Back_End.DBContext;
+using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 
@@ -78,6 +79,26 @@ namespace MS3_Back_End.Repository
 
             return courses;
         }
-     
+
+        public async Task<ICollection<Top3CourseDTO>> GetTop3Courses()
+        {
+            return await _Db.Courses
+                .Include(c => c.Feedbacks)
+                .Select(c => new Top3CourseDTO()
+                {
+                    Id = c.Id,
+                    CourseName = c.CourseName,
+                    Level = c.Level,
+                    Description = c.Description,
+                    ImageUrl = c.ImageUrl,
+                    FeedBackCount = c.Feedbacks!.Count(),
+                    FeedBackRate = c.Feedbacks!.Any() ? Math.Round(c.Feedbacks!.Average(f => f.Rating),1) : 0
+                })
+                .OrderByDescending(c => c.FeedBackRate)
+                .ThenByDescending(c => c.FeedBackCount)
+                .Take(3)
+                .ToListAsync();
+        }
+
     }
 }
