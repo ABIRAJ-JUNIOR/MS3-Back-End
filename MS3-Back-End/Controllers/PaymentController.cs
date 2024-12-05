@@ -44,5 +44,13 @@ namespace MS3_Back_End.Controllers
             var recentPayments = await _paymentService.RecentPayments();
             return Ok(recentPayments);
         }
+
+        [HttpGet("PaymentReminder")]
+
+        public async Task<IActionResult> PaymentReminderSend()
+        {
+            var response = await _paymentService.PaymentReminderSend();
+            return Ok(response);
+        }
     }
 }
