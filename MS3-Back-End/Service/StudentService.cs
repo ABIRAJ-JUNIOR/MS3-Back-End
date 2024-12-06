@@ -460,5 +460,28 @@ namespace MS3_Back_End.Service
             return StudentReponse;
         }
 
+         
+        public async Task<string> UpdateStudentPassword(Guid studentId , string password ,string confirmPassword)
+        {
+
+            var GetData = await _authRepository.GetUserById(studentId);
+            if (GetData == null)
+            {
+                throw new Exception("User is not valid");
+
+            }
+            if (password == confirmPassword)
+            {
+                GetData.Password = BCrypt.Net.BCrypt.HashPassword(password);
+                var response = await _authRepository.UpdateUser(GetData);
+            }
+            else
+            {
+                throw new Exception("your new password is not match please Try again Later");
+            }
+           
+            return "Your Password Change Succesfully.";
+
+        }
     }
 }
