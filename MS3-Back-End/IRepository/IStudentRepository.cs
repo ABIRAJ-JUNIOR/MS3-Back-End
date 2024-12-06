@@ -15,6 +15,5 @@ namespace MS3_Back_End.IRepository
         Task<Student> UpdateStudent(Student Students);
         Task<string> DeleteStudent(Student Student);
         Task<ICollection<StudentWithUserResponseDTO>> GetPaginatedStudent(int pageNumber, int pageSize);
-        Task<StudentResponseDTO> UpdateStudentInfoDetails(Guid id, StudentFullUpdateDTO request);
     }
 }

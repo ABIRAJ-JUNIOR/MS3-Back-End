@@ -141,6 +141,19 @@ namespace MS3_Back_End.Controllers
             }
 
         }
+        [HttpPut("Update-info-Details/{id}")]
+        public async Task<IActionResult> UpdateStudentInfoDetails(Guid id, StudentFullUpdateDTO request)
+        {
+            try
+            {
+                var updatedData = await _studentService.updateStudentI(id, request);
+                return Ok(updatedData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }

@@ -16,5 +16,7 @@ namespace MS3_Back_End.IService
         Task<string> DeleteStudent(Guid Id);
         Task<PaginationResponseDTO<StudentWithUserResponseDTO>> GetPaginatedStudent(int pageNumber, int pageSize);
         Task<string> UploadImage(Guid studentId, IFormFile? image);
+        Task<StudentResponseDTO> UpdateStudentInfoDetails(Guid id, StudentFullUpdateDTO request);
+
     }
 }
