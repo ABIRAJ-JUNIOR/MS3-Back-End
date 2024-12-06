@@ -20,6 +20,7 @@ using MS3_Back_End.Repository;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using MS3_Back_End.DTOs.RequestDTOs.Admin;
 using MS3_Back_End.DTOs.ResponseDTOs.Admin;
+using MS3_Back_End.DTOs.RequestDTOs.password_student;
 
 namespace MS3_Back_End.Service
 {
@@ -461,7 +462,7 @@ namespace MS3_Back_End.Service
         }
 
          
-        public async Task<string> UpdateStudentPassword(Guid studentId , string Oldpassword ,string confirmPassword)
+        public async Task<string> UpdateStudentPassword(Guid studentId , PasswordRequest auth)
         {
 
             var GetData = await _authRepository.GetUserById(studentId);
@@ -470,10 +471,10 @@ namespace MS3_Back_End.Service
                 throw new Exception("User is not valid");
 
             }
-            var PasswordChecking=BCrypt.Net.BCrypt.Verify(Oldpassword , GetData.Password);
+            var PasswordChecking = BCrypt.Net.BCrypt.Verify(auth.OldPassword, GetData.Password);
             if (PasswordChecking)
             {
-                GetData.Password = BCrypt.Net.BCrypt.HashPassword(confirmPassword);
+                GetData.Password = BCrypt.Net.BCrypt.HashPassword(auth.ConfirmPassword);
                 var response = await _authRepository.UpdateUser(GetData);
             }
             else

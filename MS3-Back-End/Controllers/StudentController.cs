@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.Pagination;
+using MS3_Back_End.DTOs.RequestDTOs.password_student;
 using MS3_Back_End.DTOs.RequestDTOs.Student;
 using MS3_Back_End.DTOs.ResponseDTOs.Student;
 using MS3_Back_End.IService;
@@ -156,11 +157,11 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPut("changeStudentPassword/{id}")]
-        public async Task<IActionResult> UpdateStudentInfoDetails(Guid id, string oldPassword , string confirmPassword)
+        public async Task<IActionResult> UpdateStudentInfoDetails(Guid id, PasswordRequest auth)
         {
             try
             {
-                var updatedData = await _studentService.UpdateStudentPassword(id, oldPassword, confirmPassword);
+                var updatedData = await _studentService.UpdateStudentPassword(id, auth);
                 return Ok(updatedData);
             }
             catch (Exception ex)
