@@ -34,25 +34,37 @@ namespace MS3_Back_End.Repository
             return recentPayments;
         }
 
-        //public async Task<PaymentOverview> GetPaymentOverview()
-        //{
-        //    var paymentOverview = await (from payment in _context.Payments
-        //                                 join enrollment in _context.Enrollments
-        //                                     on payment.EnrollmentId equals enrollment.Id into enrollmentGroup
-        //                                 from enrollment in enrollmentGroup.DefaultIfEmpty()
-        //                                 join courseSchedule in _context.CourseSchedules
-        //                                     on enrollment.CourseScheduleId equals courseSchedule.Id into courseScheduleGroup
-        //                                 from courseSchedule in courseScheduleGroup.DefaultIfEmpty()
-        //                                 join course in _context.Courses
-        //                                     on courseSchedule.CourseId equals course.Id into courseGroup
-        //                                 from course in courseGroup.DefaultIfEmpty()
-        //                                 select new PaymentOverview
-        //                                 {
-                                            
-        //                                 }).ToListAsync();
+        public async Task<PaymentOverview> GetPaymentOverview()
+        {
+            var paymentOverview = new PaymentOverview();
 
-        //    return paymentOverview;
-        //}
+            paymentOverview.TotalAmount = await _context.Payments
+                .SumAsync(p => (decimal)p.AmountPaid);
+
+            paymentOverview.FullPayment = await _context.Payments
+                .Where(p => p.PaymentType == PaymentTypes.FullPayment)
+                .SumAsync(p => (decimal)p.AmountPaid);
+
+            paymentOverview.Installment = await _context.Payments
+                .Where(p => p.PaymentType == PaymentTypes.Installment)
+                .SumAsync(p => (decimal)p.AmountPaid);
+
+            var overdueAmounts = await _context.Enrollments
+                .Where(e => e.PaymentStatus == PaymentStatus.InProcess)
+                .Select(e => new
+                {
+                    courseFee = e.CourseSchedule!.Course!.CourseFee,
+                    TotalPaid = _context.Payments
+                    .Where(p => p.EnrollmentId == e.Id)
+                    .Sum(p => (decimal?)p.AmountPaid) ?? 0
+                })
+                .ToListAsync();
+
+            paymentOverview.OverDue = overdueAmounts
+                .Sum(e => e.courseFee - e.TotalPaid);
+
+            return paymentOverview;
+        }
 
     }
 }

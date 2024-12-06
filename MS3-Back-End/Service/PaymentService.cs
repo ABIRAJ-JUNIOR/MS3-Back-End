@@ -193,6 +193,12 @@ namespace MS3_Back_End.Service
 
         }
 
+        public async Task<PaymentOverview> GetPaymentOverview()
+        {
+            var paymentOverview = await _paymentRepository.GetPaymentOverview();
+            return paymentOverview;
+        }
+
         public DateTime CalculateInstallmentDueDate(DateTime paymentdate, int courseDuration)
         {
             return paymentdate.AddDays((courseDuration / 3));
