@@ -17,7 +17,7 @@ namespace MS3_Back_End.IService
         Task<PaginationResponseDTO<StudentWithUserResponseDTO>> GetPaginatedStudent(int pageNumber, int pageSize);
         Task<string> UploadImage(Guid studentId, IFormFile? image);
         Task<StudentResponseDTO> UpdateStudentInfoDetails(Guid id, StudentFullUpdateDTO request);
-        Task<string> UpdateStudentPassword(Guid studentId, string password, string confirmPassword);
+        Task<string> UpdateStudentPassword(Guid studentId, string Oldpassword, string confirmPassword);
 
     }
 }

@@ -155,12 +155,12 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpPut("/{id}")]
-        public async Task<IActionResult> UpdateStudentInfoDetails(Guid id, string password , string confirmPassword)
+        [HttpPut("changeStudentPassword/{id}")]
+        public async Task<IActionResult> UpdateStudentInfoDetails(Guid id, string oldPassword , string confirmPassword)
         {
             try
             {
-                var updatedData = await _studentService.UpdateStudentPassword(id, password, confirmPassword);
+                var updatedData = await _studentService.UpdateStudentPassword(id, oldPassword, confirmPassword);
                 return Ok(updatedData);
             }
             catch (Exception ex)

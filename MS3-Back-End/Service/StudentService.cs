@@ -461,7 +461,7 @@ namespace MS3_Back_End.Service
         }
 
          
-        public async Task<string> UpdateStudentPassword(Guid studentId , string password ,string confirmPassword)
+        public async Task<string> UpdateStudentPassword(Guid studentId , string Oldpassword ,string confirmPassword)
         {
 
             var GetData = await _authRepository.GetUserById(studentId);
@@ -470,14 +470,15 @@ namespace MS3_Back_End.Service
                 throw new Exception("User is not valid");
 
             }
-            if (password == confirmPassword)
+            var PasswordChecking=BCrypt.Net.BCrypt.Verify(Oldpassword , GetData.Password);
+            if (PasswordChecking)
             {
-                GetData.Password = BCrypt.Net.BCrypt.HashPassword(password);
+                GetData.Password = BCrypt.Net.BCrypt.HashPassword(confirmPassword);
                 var response = await _authRepository.UpdateUser(GetData);
             }
             else
             {
-                throw new Exception("your new password is not match please Try again Later");
+                throw new Exception("your  password is not match please Try again Later");
             }
            
             return "Your Password Change Succesfully.";
