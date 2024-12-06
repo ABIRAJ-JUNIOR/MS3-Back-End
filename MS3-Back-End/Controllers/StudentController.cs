@@ -146,7 +146,7 @@ namespace MS3_Back_End.Controllers
         {
             try
             {
-                var updatedData = await _studentService.updateStudentI(id, request);
+                var updatedData = await _studentService.UpdateStudentInfoDetails(id, request);
                 return Ok(updatedData);
             }
             catch (Exception ex)
