@@ -249,7 +249,7 @@ namespace MS3_Back_End.Repository
         }
         public async Task<List<StudentAssessment>> GetStudentAssesmentById(Guid studentId)
         {
-            var assesmentData = await _dbcontext.StudentAssessments.Where(student=>student.StudentId==studentId).Include(a=>a.Assessment).Include(s=>s.Student).ToListAsync();
+            var assesmentData = await _dbcontext.StudentAssessments.Where(student=>student.StudentId==studentId).Include(s => s.Student).Include(a=>a.Assessment).ThenInclude(c => c.Course).ToListAsync();
             return assesmentData;
 
         }
