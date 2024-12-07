@@ -1,4 +1,5 @@
 ﻿using MS3_Back_End.DTOs.Pagination;
+using MS3_Back_End.DTOs.RequestDTOs.password_student;
 using MS3_Back_End.DTOs.RequestDTOs.Student;
 using MS3_Back_End.DTOs.ResponseDTOs.Student;
 using MS3_Back_End.IRepository;
@@ -16,5 +17,8 @@ namespace MS3_Back_End.IService
         Task<string> DeleteStudent(Guid Id);
         Task<PaginationResponseDTO<StudentWithUserResponseDTO>> GetPaginatedStudent(int pageNumber, int pageSize);
         Task<string> UploadImage(Guid studentId, IFormFile? image);
+        Task<StudentResponseDTO> UpdateStudentInfoDetails(Guid id, StudentFullUpdateDTO request);
+        Task<string> UpdateStudentPassword(Guid studentId, PasswordRequest auth);
+
     }
 }

@@ -1,4 +1,4 @@
-﻿  using Azure.Core;
+﻿using Azure.Core;
 using CloudinaryDotNet.Actions;
 using CloudinaryDotNet;
 using Microsoft.AspNetCore.Hosting;
@@ -20,6 +20,7 @@ using MS3_Back_End.Repository;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using MS3_Back_End.DTOs.RequestDTOs.Admin;
 using MS3_Back_End.DTOs.ResponseDTOs.Admin;
+using MS3_Back_End.DTOs.RequestDTOs.password_student;
 
 namespace MS3_Back_End.Service
 {
@@ -339,7 +340,7 @@ namespace MS3_Back_End.Service
             var data = await _StudentRepo.DeleteStudent(GetData);
             return data;
         }
-                
+
         public async Task<PaginationResponseDTO<StudentWithUserResponseDTO>> GetPaginatedStudent(int pageNumber, int pageSize)
 
         {
@@ -398,6 +399,91 @@ namespace MS3_Back_End.Service
             var updatedData = await _StudentRepo.UpdateStudent(studentData);
 
             return "Image upload successfully";
+        }
+        public async Task<StudentResponseDTO> UpdateStudentInfoDetails(Guid id, StudentFullUpdateDTO request)
+        {
+            var studentData = await _StudentRepo.GetStudentById(id);
+
+            if (studentData == null)
+            {
+                throw new Exception("Student not found");
+            }
+
+            studentData.FirstName = request.FirstName;
+            studentData.Gender = request.Gender;
+            studentData.LastName = request.LastName;
+            studentData.Phone = request.Phone;
+            studentData.UpdatedDate = DateTime.Now;
+            if (request.Address != null)
+            {
+                studentData.Address = new Address
+                {
+                    AddressLine1 = request.Address.AddressLine1,
+                    AddressLine2 = request.Address.AddressLine2,
+                    PostalCode = request.Address.PostalCode,
+                    City = request.Address.City,
+                    Country = request.Address.Country,
+                };
+            }
+
+            var updatedData = await _StudentRepo.UpdateStudent(studentData);
+
+
+            var StudentReponse = new StudentResponseDTO
+            {
+                Id = updatedData.Id,
+                Nic = updatedData.Nic,
+                FirstName = updatedData.FirstName,
+                LastName = updatedData.LastName,
+                DateOfBirth = updatedData.DateOfBirth,
+                Gender = ((Gender)updatedData.Gender).ToString(),
+                Phone = updatedData.Phone,
+                ImageUrl = updatedData.ImageUrl!,
+                CteatedDate = updatedData.CteatedDate,
+                UpdatedDate = updatedData.UpdatedDate,
+            };
+
+            if (updatedData.Address != null)
+            {
+                var AddressResponse = new AddressResponseDTO
+                {
+                    StudentId = updatedData.Address.StudentId,
+                    AddressLine1 = updatedData.Address.AddressLine1,
+                    AddressLine2 = updatedData.Address.AddressLine2,
+                    PostalCode = updatedData.Address.PostalCode,
+                    City = updatedData.Address.City,
+                    Country = updatedData.Address.Country,
+                };
+
+                StudentReponse.Address = AddressResponse;
+            }
+
+            return StudentReponse;
+        }
+
+         
+        public async Task<string> UpdateStudentPassword(Guid studentId , PasswordRequest auth)
+        {
+
+            var GetData = await _authRepository.GetUserById(studentId);
+            if (GetData == null)
+            {
+                throw new Exception("User is not valid");
+
+            }
+            var PasswordChecking = BCrypt.Net.BCrypt.Verify(auth.OldPassword, GetData.Password);
+            if (PasswordChecking)
+            {
+                GetData.Password = BCrypt.Net.BCrypt.HashPassword(auth.ConfirmPassword);
+                var response = await _authRepository.UpdateUser(GetData);
+            }
+            else
+            {
+                throw new Exception("your  password is not match please Try again Later");
+            }
+           
+            return "Your Password Change Succesfully.";
+
         }
     }
 }
