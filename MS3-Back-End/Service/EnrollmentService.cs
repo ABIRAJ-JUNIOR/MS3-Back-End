@@ -1,5 +1,6 @@
 ﻿using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.DTOs.RequestDTOs.Ènrollment;
+using MS3_Back_End.DTOs.ResponseDTOs.Assessment;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Enrollment;
 using MS3_Back_End.DTOs.ResponseDTOs.Payment;
@@ -149,36 +150,15 @@ namespace MS3_Back_End.Service
         }
 
 
-        public async Task<ICollection<EnrollmentResponseDTO>> SearchEnrollmentByUserId(Guid SearchUserId)
+        public async Task<ICollection<EnrollmentResponseDTO>> GetEnrollmentsByStudentId(Guid studentId)
         {
-            var data = await _enrollmentRepository.SearchEnrollments(SearchUserId);
+            var data = await _enrollmentRepository.GetEnrollmentsByStudentId(studentId);
             if (data == null)
             {
-                throw new Exception("Search Not Found");
+                throw new Exception("Enrollments Not Found");
             }
 
-            var ListEnrollment = data.Select(item => new EnrollmentResponseDTO()
-            {
-                Id = item.Id,
-                StudentId = item.StudentId,
-                CourseScheduleId = item.CourseScheduleId,
-                EnrollmentDate = item.EnrollmentDate,
-                PaymentStatus = ((PaymentStatus)item.PaymentStatus).ToString(),
-                IsActive = item.IsActive,
-                PaymentResponse = item.Payments != null ? item.Payments.Select(payment => new PaymentResponseDTO()
-                {
-                    Id = payment.Id,
-                    PaymentType = ((PaymentTypes)payment.PaymentType).ToString(),
-                    PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
-                    AmountPaid = payment.AmountPaid,
-                    PaymentDate = payment.PaymentDate,
-                    DueDate = payment.DueDate,
-                    InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber : null,
-                    EnrollmentId = payment.EnrollmentId
-                }).ToList() : []
-            }).ToList();    
-
-            return ListEnrollment;
+            return data;
         }
 
 

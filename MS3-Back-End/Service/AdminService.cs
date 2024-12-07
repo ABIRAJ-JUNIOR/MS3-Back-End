@@ -312,19 +312,23 @@ namespace MS3_Back_End.Service
 
             var updatedUserData = await _authRepository.UpdateUser(userData);
 
-            if (request.CurrentPassword != null && request.NewPassword != null)
+            if (request.NewPassword != null)
             {
+                if (request.CurrentPassword == null)
+                {
+                    throw new Exception("Required Current Password");
+                }
                 if (!BCrypt.Net.BCrypt.Verify(request.CurrentPassword, userData.Password))
                 {
-                    throw new Exception("Old password is incorrect");
+                    throw new Exception("Current password is incorrect");
                 }
 
                 userData.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
                 var updatedData = await _authRepository.UpdateUser(userData);
             }
 
-            
-             return "Account Update Successfull";
+
+            return "Account Update Successfull";
             
         }
 

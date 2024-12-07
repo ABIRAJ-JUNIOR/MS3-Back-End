@@ -22,9 +22,6 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Student
 
         public AddressResponseDTO? Address { get; set; }
         public ICollection<EnrollmentResponseDTO>? Enrollments { get; set; }
-        public ICollection<StudentAssessmentResponseDTO>? StudentAssessments { get; set; }
         public ICollection<NotificationResponseDTO>? Notification { get; set; }
-
-
     }
 }   

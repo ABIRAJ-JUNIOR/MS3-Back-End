@@ -83,8 +83,6 @@ namespace MS3_Back_End.Repository
                               join assessment in _Db.Assessments on studentAssessment.AssessmentId equals assessment.Id into assessmentGroup
                               from assessment in assessmentGroup.DefaultIfEmpty()
 
-                              join notification in _Db.Notifications on student.Id equals notification.StudentId into notificationGroup
-                              from notification in notificationGroup.DefaultIfEmpty()
 
                               where student.Id == StudentId && student.IsActive == true
 
@@ -182,36 +180,7 @@ namespace MS3_Back_End.Repository
                                       NotificationType = ((NotificationType)n.NotificationType).ToString(),
                                       IsRead = n.IsRead,
                                       StudentId = n.StudentId
-                                  }).ToList() : null,
-                                  StudentAssessments = student.StudentAssessments != null ? student.StudentAssessments!.Select(sa => new StudentAssessmentResponseDTO()
-                                  {
-                                      Id = sa.Id,
-                                      MarksObtaines = sa.MarksObtaines,
-                                      Grade = sa.Grade != null ? ((Grade)sa.Grade).ToString() : null,
-                                      FeedBack = sa.FeedBack,
-                                      DateEvaluated = sa.DateEvaluated,
-                                      DateSubmitted = sa.DateSubmitted,
-                                      StudentAssessmentStatus = ((StudentAssessmentStatus)sa.StudentAssessmentStatus).ToString(),
-                                      StudentId = sa.StudentId,
-                                      AssessmentId = sa.AssessmentId,
-                                      AssessmentResponse = sa.Assessment != null ? new AssessmentResponseDTO()
-                                      {
-                                          Id = sa.Assessment.Id,
-                                          CourseId = sa.Assessment.CourseId,
-                                          AssessmentTitle = sa.Assessment.AssessmentTitle,
-                                          AssessmentType = ((AssessmentType)sa.Assessment.AssessmentType).ToString(),
-                                          StartDate = sa.Assessment.StartDate,
-                                          EndDate = sa.Assessment.EndDate,
-                                          TotalMarks = sa.Assessment.TotalMarks,
-                                          PassMarks = sa.Assessment.PassMarks,
-                                          AssessmentLink = sa.Assessment.AssessmentLink,
-                                          CreatedDate = sa.Assessment.CreatedDate,
-                                          UpdateDate = sa.Assessment.UpdateDate,
-                                          AssessmentStatus = ((AssessmentStatus)sa.Assessment.Status).ToString(),
-                                          courseResponse = null!,
-                                          studentAssessmentResponses = null!
-                                      } : new AssessmentResponseDTO()
-                                  }).ToList() : null,
+                                  }).ToList() : null
                               }).FirstOrDefaultAsync();
                               
             return data!;
