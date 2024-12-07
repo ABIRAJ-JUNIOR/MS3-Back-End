@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DTOs.RequestDTOs.Course;
+﻿using CloudinaryDotNet;
+using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.DTOs.RequestDTOs.Ènrollment;
 using MS3_Back_End.DTOs.ResponseDTOs.Assessment;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
@@ -158,7 +159,73 @@ namespace MS3_Back_End.Service
                 throw new Exception("Enrollments Not Found");
             }
 
-            return data;
+            var response = data.Select( enrollment => new EnrollmentResponseDTO()
+            {
+                Id = enrollment.Id,
+                StudentId = enrollment.StudentId,
+                CourseScheduleId = enrollment.CourseScheduleId,
+                EnrollmentDate = enrollment.EnrollmentDate,
+                PaymentStatus = ((PaymentStatus)enrollment.PaymentStatus).ToString(),
+                IsActive = enrollment.IsActive,
+                PaymentResponse = enrollment.Payments != null ? enrollment.Payments!.Select(payment => new PaymentResponseDTO()
+                {
+                    Id = payment.Id,
+                    PaymentType = ((PaymentTypes)payment.PaymentType).ToString(),
+                    PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
+                    AmountPaid = payment.AmountPaid,
+                    PaymentDate = payment.PaymentDate,
+                    DueDate = payment.DueDate,
+                    InstallmentNumber = payment.InstallmentNumber != null ? payment.InstallmentNumber : null,
+                    EnrollmentId = payment.EnrollmentId
+                }).ToList() : null,
+                CourseScheduleResponse = enrollment.CourseSchedule != null ? new CourseScheduleResponseDTO()
+                {
+                    Id = enrollment.CourseSchedule.Id,
+                    CourseId = enrollment.CourseSchedule.CourseId,
+                    StartDate = enrollment.CourseSchedule.StartDate,
+                    EndDate = enrollment.CourseSchedule.EndDate,
+                    Duration = enrollment.CourseSchedule.Duration,
+                    Time = enrollment.CourseSchedule.Time,
+                    Location = enrollment.CourseSchedule.Location,
+                    MaxStudents = enrollment.CourseSchedule.MaxStudents,
+                    EnrollCount = enrollment.CourseSchedule.EnrollCount,
+                    CreatedDate = enrollment.CourseSchedule.CreatedDate,
+                    UpdatedDate = enrollment.CourseSchedule.UpdatedDate,
+                    ScheduleStatus = ((ScheduleStatus)enrollment.CourseSchedule.ScheduleStatus).ToString(),
+                    CourseResponse = enrollment.CourseSchedule.Course != null ? new CourseResponseDTO()
+                    {
+                        Id = enrollment.CourseSchedule.Course.Id,
+                        CourseCategoryId = enrollment.CourseSchedule.Course.CourseCategoryId,
+                        CourseName = enrollment.CourseSchedule.Course.CourseName,
+                        Level = ((CourseLevel)enrollment.CourseSchedule.Course.Level).ToString(),
+                        CourseFee = enrollment.CourseSchedule.Course.CourseFee,
+                        Description = enrollment.CourseSchedule.Course.Description,
+                        Prerequisites = enrollment.CourseSchedule.Course.Prerequisites,
+                        ImageUrl = enrollment.CourseSchedule.Course.ImageUrl!,
+                        CreatedDate = enrollment.CourseSchedule.Course.CreatedDate,
+                        UpdatedDate = enrollment.CourseSchedule.Course.UpdatedDate,
+                        AssessmentResponse = enrollment.CourseSchedule.Course.Assessment != null ? enrollment.CourseSchedule.Course.Assessment.Select(a => new AssessmentResponseDTO()
+                        {
+                            Id = a.Id,
+                            CourseId = a.CourseId,
+                            AssessmentTitle = a.AssessmentTitle,
+                            AssessmentType = ((AssessmentType)a.AssessmentType).ToString(),
+                            StartDate = a.StartDate,
+                            EndDate = a.EndDate,
+                            TotalMarks = a.TotalMarks,
+                            PassMarks = a.PassMarks,
+                            AssessmentLink = a.AssessmentLink,
+                            CreatedDate = a.CreatedDate,
+                            UpdateDate = a.UpdateDate,
+                            AssessmentStatus = ((AssessmentStatus)a.Status).ToString(),
+                            courseResponse = null!,
+                            studentAssessmentResponses = null!
+                        }).ToList() : null
+                    } : null,
+                } : null
+            }).ToList();
+
+            return response;
         }
 
 

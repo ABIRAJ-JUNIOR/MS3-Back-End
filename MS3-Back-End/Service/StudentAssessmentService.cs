@@ -82,9 +82,7 @@ namespace MS3_Back_End.Service
                     Id = item.Assessment.Id,
                     CourseId = item.Assessment.CourseId,
                     AssessmentTitle = item.Assessment.AssessmentTitle,
-
                     AssessmentType = item.Assessment.AssessmentType.ToString() ?? string.Empty,
-
                     StartDate = item.Assessment.StartDate,
                     EndDate = item.Assessment.EndDate,
                     TotalMarks = item.Assessment.TotalMarks,
@@ -92,9 +90,7 @@ namespace MS3_Back_End.Service
                     AssessmentLink = item.Assessment.AssessmentLink,
                     CreatedDate = item.Assessment.CreatedDate,
                     UpdateDate = item.Assessment.UpdateDate,
-
                     AssessmentStatus = item.Assessment.Status.ToString() ?? string.Empty,
-
                     courseResponse = item.Assessment.Course != null ? new CourseResponseDTO
                     {
                         Id = item.Assessment.Course.Id,
