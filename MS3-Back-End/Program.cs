@@ -119,7 +119,7 @@ namespace MS3_Back_End
                 q.AddTrigger(opts => opts
                     .ForJob(jobKey)
                     .WithIdentity("DailyApiTrigger")
-                    .WithCronSchedule("0 * * * * ?")); // CRON expression for 8:00 AM daily
+                    .WithCronSchedule("0 0 8 * * ?"));
             });
 
             // Register Quartz as a hosted service

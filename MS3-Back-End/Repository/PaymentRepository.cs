@@ -104,5 +104,11 @@ namespace MS3_Back_End.Repository
 
         }
 
+        public async Task<Payment> GetLastPaymentOfEnrollment(Guid EnrollId)
+        {
+            var lastPayment = await _context.Payments.Where(p => p.EnrollmentId == EnrollId).OrderByDescending(p => p.PaymentDate).FirstOrDefaultAsync();
+            return lastPayment!;
+        }
+
     }
 }

@@ -13,7 +13,7 @@ namespace MS3_Back_End.Auto_API_Run
 
         public async Task Execute(IJobExecutionContext context)
         {
-            //await _apiService.ReminderAPI();
+            await _apiService.ReminderAPI();
         }
     }
 }
