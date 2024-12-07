@@ -174,7 +174,7 @@ namespace MS3_Back_End.Repository
                                           } : null,
                                       } : null
                                   }).ToList() : null,
-                                  Notification = student.Notifications != null ? student.Notifications.Select(n => new NotificationResponseDTO()
+                                  Notification = student.Notifications != null ? student.Notifications!.Select(n => new NotificationResponseDTO()
                                   {
                                       Id = n.Id,
                                       Message = n.Message,

@@ -98,7 +98,7 @@ namespace MS3_Back_End.Service
   3. Prepare yourself for an enriching learning journey.<br><br>
 
 
-  If you have any questions, feel free to contact us at <a href=""mailto:noreply.way.makers@gmail.com"">noreply.way.makers@gmail.com</a> or call <b>0702274212</b>.<br><br>
+  If you have any questions, feel free to contact us at <a href=""mailto:info.way.mmakers@gmail.com"">info.way.mmakers@gmail.com</a> or call <b>0702274212</b>.<br><br>
 
   Welcome to the path of learning and success! 🎓<br><br>
 

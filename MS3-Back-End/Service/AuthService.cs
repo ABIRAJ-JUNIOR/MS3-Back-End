@@ -95,7 +95,7 @@ Here’s how to get started:<br>
 
 We are committed to empowering your educational journey and helping you achieve your goals.<br><br>
 
-For assistance, feel free to contact us at noreply.way.makers@gmail.com or call 0702274212.<br><br>
+For assistance, feel free to contact us at info.way.mmakers@gmail.com or call 0702274212.<br><br>
 
 Once again, welcome to the Way Makers family! 🎓<br><br>
 
