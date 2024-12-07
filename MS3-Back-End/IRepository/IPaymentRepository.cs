@@ -9,5 +9,6 @@ namespace MS3_Back_End.IRepository
         Task<ICollection<Payment>> GetAllPayments();
         Task<ICollection<Payment>> RecentPayments();
         Task<PaymentOverview> GetPaymentOverview();
+        Task<ICollection<PaymentFullDetails>> GetPaginatedPayments(int pageNumber, int pageSize);
     }
 }

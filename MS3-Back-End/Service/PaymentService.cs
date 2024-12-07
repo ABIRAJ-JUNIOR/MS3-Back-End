@@ -1,4 +1,6 @@
-﻿using MS3_Back_End.DTOs.RequestDTOs.Payment;
+﻿using MS3_Back_End.DTOs.Pagination;
+using MS3_Back_End.DTOs.RequestDTOs.Payment;
+using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Payment;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
@@ -202,6 +204,24 @@ namespace MS3_Back_End.Service
         public DateTime CalculateInstallmentDueDate(DateTime paymentdate, int courseDuration)
         {
             return paymentdate.AddDays((courseDuration / 3));
+        }
+
+        public async Task<PaginationResponseDTO<PaymentFullDetails>> GetPaginatedPayments(int pageNumber, int pageSize)
+        {
+            var AllPayments = await _paymentRepository.GetAllPayments();
+
+            var paginatedPayments = await _paymentRepository.GetPaginatedPayments(pageNumber, pageSize);
+
+            var paginationResponseDto = new PaginationResponseDTO<PaymentFullDetails>
+            {
+                Items = paginatedPayments,
+                CurrentPage = pageNumber,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling(AllPayments.Count / (double)pageSize),
+                TotalItem = AllPayments.Count,
+            };
+
+            return paginationResponseDto;
         }
     }
 }

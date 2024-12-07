@@ -38,7 +38,7 @@ namespace MS3_Back_End.Repository
         {
             var paymentOverview = new PaymentOverview();
 
-            paymentOverview.TotalAmount = await _context.Payments
+            paymentOverview.TotalPayment = await _context.Payments
                 .SumAsync(p => (decimal)p.AmountPaid);
 
             paymentOverview.FullPayment = await _context.Payments
@@ -64,6 +64,44 @@ namespace MS3_Back_End.Repository
                 .Sum(e => e.courseFee - e.TotalPaid);
 
             return paymentOverview;
+        }
+
+        public async Task<ICollection<PaymentFullDetails>> GetPaginatedPayments(int pageNumber, int pageSize)
+        {
+            var paymentOverview = await (from payment in _context.Payments
+                                         join enrollment in _context.Enrollments
+                                             on payment.EnrollmentId equals enrollment.Id into enrollmentGroup
+                                         from enrollment in enrollmentGroup.DefaultIfEmpty()
+
+                                         join courseSchedule in _context.CourseSchedules
+                                             on enrollment.CourseScheduleId equals courseSchedule.Id into courseScheduleGroup
+                                         from courseSchedule in courseScheduleGroup.DefaultIfEmpty()
+
+                                         join course in _context.Courses
+                                             on courseSchedule.CourseId equals course.Id into courseGroup
+                                         from course in courseGroup.DefaultIfEmpty()
+
+                                         join student in _context.Students
+                                             on enrollment.StudentId equals student.Id into studentGroup
+                                         from student in studentGroup.DefaultIfEmpty()
+                                         orderby payment.PaymentDate descending
+
+                                         select new PaymentFullDetails
+                                         {
+                                             Id = payment.Id,
+                                             StudentName = student.FirstName + student.LastName,
+                                             CourseName = course.CourseName,
+                                             AmountPaid = payment.AmountPaid,
+                                             PaymentType = ((PaymentTypes)payment.PaymentType).ToString(),
+                                             PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
+                                             TransactionDate = payment.PaymentDate,
+                                         })
+                                        .Skip((pageNumber - 1) * pageSize)
+                                        .Take(pageSize)
+                                        .ToListAsync();
+
+            return paymentOverview;
+
         }
 
     }
