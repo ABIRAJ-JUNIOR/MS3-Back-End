@@ -17,9 +17,16 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPost("OTP")]
-        public async Task<IActionResult> Sendmail(SendMailRequest sendMailRequest)
+        public async Task<IActionResult> OtpMail(SendOtpMailRequest sendMailRequest)
         {
-            var res = await _sendMailService.Sendmail(sendMailRequest).ConfigureAwait(false);
+            var res = await _sendMailService.OtpMail(sendMailRequest).ConfigureAwait(false);
+            return Ok(res);
+        }
+
+        [HttpPost("Invoice")]
+        public async Task<IActionResult> InvoiceMail(SendInvoiceMailRequest sendMailRequest)
+        {
+            var res = await _sendMailService.InvoiceMail(sendMailRequest).ConfigureAwait(false);
             return Ok(res);
         }
 

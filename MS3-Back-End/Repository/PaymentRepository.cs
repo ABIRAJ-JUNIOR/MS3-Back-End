@@ -89,12 +89,14 @@ namespace MS3_Back_End.Repository
                                          select new PaymentFullDetails
                                          {
                                              Id = payment.Id,
+                                             StudentId = student.Id,
                                              StudentName = student.FirstName + student.LastName,
                                              CourseName = course.CourseName,
                                              AmountPaid = payment.AmountPaid,
                                              PaymentType = ((PaymentTypes)payment.PaymentType).ToString(),
                                              PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                                              TransactionDate = payment.PaymentDate,
+                                             DueDate = payment.DueDate != null ? payment.DueDate : null,
                                          })
                                         .Skip((pageNumber - 1) * pageSize)
                                         .Take(pageSize)
