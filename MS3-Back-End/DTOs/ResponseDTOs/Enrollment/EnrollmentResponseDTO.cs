@@ -17,6 +17,5 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.Enrollment
 
         public ICollection<PaymentResponseDTO>? PaymentResponse { get; set; }
         public CourseScheduleResponseDTO? CourseScheduleResponse { get; set; } 
-        public ICollection<StudentAssessmentResponseDTO>? StudentAssesmentResponse { get; set; }
     }
 }

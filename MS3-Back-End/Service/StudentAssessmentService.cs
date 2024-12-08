@@ -82,9 +82,7 @@ namespace MS3_Back_End.Service
                     Id = item.Assessment.Id,
                     CourseId = item.Assessment.CourseId,
                     AssessmentTitle = item.Assessment.AssessmentTitle,
-
                     AssessmentType = item.Assessment.AssessmentType.ToString() ?? string.Empty,
-
                     StartDate = item.Assessment.StartDate,
                     EndDate = item.Assessment.EndDate,
                     TotalMarks = item.Assessment.TotalMarks,
@@ -92,9 +90,7 @@ namespace MS3_Back_End.Service
                     AssessmentLink = item.Assessment.AssessmentLink,
                     CreatedDate = item.Assessment.CreatedDate,
                     UpdateDate = item.Assessment.UpdateDate,
-
                     AssessmentStatus = item.Assessment.Status.ToString() ?? string.Empty,
-
                     courseResponse = item.Assessment.Course != null ? new CourseResponseDTO
                     {
                         Id = item.Assessment.Course.Id,
@@ -173,7 +169,7 @@ Congratulations! Your results for the Assessment <b>{assessmentData.AssessmentTi
 
 You have successfully completed the assessment and are one step closer to achieving your learning goals!<br><br>
 
-If you need any feedback or have questions, feel free to contact us at <a href='mailto:noreply.way.makers@gmail.com'>noreply.way.makers@gmail.com</a> or call <b>0702274212</b>.<br><br>
+If you need any feedback or have questions, feel free to contact us at <a href='mailto:info.way.mmakers@gmail.com'>info.way.mmakers@gmail.com</a> or call <b>0702274212</b>.<br><br>
 
 Best regards,<br>
 Way Makers

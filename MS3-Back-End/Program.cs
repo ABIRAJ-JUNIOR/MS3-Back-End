@@ -3,12 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MS3_Back_End.Auto_API_Run;
 using MS3_Back_End.DBContext;
 using MS3_Back_End.DTOs.Email;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
 using MS3_Back_End.Repository;
 using MS3_Back_End.Service;
+using Quartz;
 using System.Text;
 
 namespace MS3_Back_End
@@ -101,6 +103,33 @@ namespace MS3_Back_End
 
             // Ensure EmailConfig is available as a singleton if needed
             builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<EmailConfig>>().Value);
+
+            builder.Services.AddScoped<ApiService>();
+
+            // Add Quartz services
+            builder.Services.AddQuartz(q =>
+            {
+                q.UseMicrosoftDependencyInjectionJobFactory();
+
+                // Define a job
+                var jobKey = new JobKey("DailyApiJob");
+                q.AddJob<ApiJob>(opts => opts.WithIdentity(jobKey));
+
+                // Schedule the job to run daily at 8:00 AM
+                q.AddTrigger(opts => opts
+                    .ForJob(jobKey)
+                    .WithIdentity("DailyApiTrigger")
+                    .WithCronSchedule("0 0 8 * * ?"));
+            });
+
+            // Register Quartz as a hosted service
+            builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+
+            // Add HTTP client for API calls
+            builder.Services.AddHttpClient<ApiService>();
+
+
+
 
             var jwtSettings = builder.Configuration.GetSection("Jwt");
             var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]!);

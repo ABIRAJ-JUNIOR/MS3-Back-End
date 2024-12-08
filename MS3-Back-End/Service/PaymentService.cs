@@ -1,4 +1,7 @@
-﻿using MS3_Back_End.DTOs.RequestDTOs.Payment;
+﻿using MS3_Back_End.DTOs.Email;
+using MS3_Back_End.DTOs.Pagination;
+using MS3_Back_End.DTOs.RequestDTOs.Payment;
+using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Payment;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
@@ -15,8 +18,9 @@ namespace MS3_Back_End.Service
         private readonly ICourseScheduleRepository _courseScheduleRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly INotificationRepository _notificationRepository;
+        private readonly SendMailService _sendMailService;
 
-        public PaymentService(IPaymentRepository paymentRepository, IEnrollmentRepository enrollmentRepository, IStudentRepository studentRepository, ICourseScheduleRepository courseScheduleRepository, ICourseRepository courseRepository, INotificationRepository notificationRepository)
+        public PaymentService(IPaymentRepository paymentRepository, IEnrollmentRepository enrollmentRepository, IStudentRepository studentRepository, ICourseScheduleRepository courseScheduleRepository, ICourseRepository courseRepository, INotificationRepository notificationRepository, SendMailService sendMailService)
         {
             _paymentRepository = paymentRepository;
             _enrollmentRepository = enrollmentRepository;
@@ -24,6 +28,7 @@ namespace MS3_Back_End.Service
             _courseScheduleRepository = courseScheduleRepository;
             _courseRepository = courseRepository;
             _notificationRepository = notificationRepository;
+            _sendMailService = sendMailService;
         }
 
         public async Task<PaymentResponseDTO> CreatePayment(PaymentRequestDTO paymentRequest)
@@ -47,7 +52,7 @@ namespace MS3_Back_End.Service
             }
             var courseScheduleData = await _courseScheduleRepository.GetCourseScheduleById(enrollmentDetails.CourseScheduleId);
             var courseData = await _courseRepository.GetCourseById(courseScheduleData.CourseId);
-            var StudentData = await _studentRepository.GetStudentById(enrollmentDetails.StudentId);
+            var StudentData = await _studentRepository.GetStudentFullDetailsById(enrollmentDetails.StudentId);
 
             var today = DateTime.Now;
             var payment = new Payment
@@ -57,7 +62,7 @@ namespace MS3_Back_End.Service
                 PaymentMethod = paymentRequest.PaymentMethod,
                 AmountPaid = paymentRequest.AmountPaid,
                 PaymentDate = DateTime.Now,
-                DueDate = paymentRequest.PaymentType == PaymentTypes.Installment ? CalculateInstallmentDueDate(today, courseScheduleData.Duration) : null,
+                DueDate = paymentRequest.PaymentType == PaymentTypes.Installment && paymentRequest.InstallmentNumber != 3 ? CalculateInstallmentDueDate(today, courseScheduleData.Duration) : null,
                 InstallmentNumber = paymentRequest.PaymentType == PaymentTypes.Installment ? paymentRequest.InstallmentNumber : null,
                 EnrollmentId = paymentRequest.EnrollmentId
             };
@@ -78,7 +83,7 @@ namespace MS3_Back_End.Service
 
   You can now access your course materials and start your learning journey!<br><br>
 
-  For any questions, feel free to contact us at <a href=""mailto:noreply.way.makers@gmail.com"">noreply.way.makers@gmail.com</a> or call <b>0702274212</b>.<br><br>
+  For any questions, feel free to contact us at <a href=""mailto:info.way.mmakers@gmail.com"">info.way.mmakers@gmail.com</a> or call <b>0702274212</b>.<br><br>
 
   Best regards,<br>
   Way Makers  
@@ -94,6 +99,21 @@ namespace MS3_Back_End.Service
             };
 
             await _notificationRepository.AddNotification(Message);
+
+            var invoiceDetails = new SendInvoiceMailRequest()
+            {
+                InvoiceId = createdPayment.Id,
+                StudentId = StudentData.Id,
+                StudentName = StudentData.FirstName + " " + StudentData.LastName,
+                Email = StudentData.Email,
+                Address = $"{StudentData.Address!.AddressLine1}, {StudentData.Address!.AddressLine2}, {StudentData.Address!.City}, {StudentData.Address!.Country}",
+                CourseName = courseData.CourseName,
+                AmountPaid = createdPayment.AmountPaid,
+                PaymentType = ((PaymentTypes)createdPayment.PaymentType).ToString(),
+                EmailType = EmailTypes.Invoice,
+            };
+
+            await _sendMailService.InvoiceMail(invoiceDetails);
 
             return new PaymentResponseDTO
             {
@@ -144,9 +164,80 @@ namespace MS3_Back_End.Service
             return response;
         }
 
+        public async Task<string> PaymentReminderSend()
+        {
+            var enrollments = await _enrollmentRepository.GetEnrollments();
+
+            foreach (var enrollment in enrollments)
+            {
+                if(enrollment.PaymentStatus == PaymentStatus.InProcess)
+                {
+                    var payment = await _paymentRepository.GetLastPaymentOfEnrollment(enrollment.Id);
+                    if (payment.PaymentType == PaymentTypes.Installment && payment.DueDate != null && payment.DueDate <= DateTime.UtcNow)
+                    {
+                        var studentData = await _studentRepository.GetStudentById(enrollment.StudentId);
+                        var courseScheduleData = await _courseScheduleRepository.GetCourseScheduleById(enrollment.CourseScheduleId);
+                        var courseData = await _courseRepository.GetCourseById(courseScheduleData.CourseId);
+                        string NotificationMessage = $@"  <b>Subject:</b> 🔔 Payment Reminder<br><br>
+                                                 Dear {studentData.FirstName} {studentData.LastName},<br><br>
+                                                 This is a gentle reminder regarding your pending payment for the course <b>{courseData.CourseName}</b>.<br><br>
+                                              <b>Outstanding Amount:</b> {payment.AmountPaid} Rs<br>
+                                              <b>Due Date:</b> {payment.DueDate}<br>
+                                              <b>Payment ID:</b> {payment.Id}<br><br>
+                                                 Kindly make the payment before the due date to avoid any interruptions in your course access.<br><br>
+                                              <b>Payment Instructions:</b><br>
+                                                 You can complete your payment through our online portal or visit our office. If you have already made the payment, please disregard this message.<br><br>
+                                                 For any questions, feel free to contact us at <a href=""mailto:info.way.mmakers@gmail.com"">info.way.mmakers@gmail.com</a> or call <b>0702274212</b>.<br><br>
+                                                 Best regards,<br>
+                                                 Way Makers  
+                                           ";
+
+
+                        var Message = new Notification
+                        {
+                            Message = NotificationMessage,
+                            NotificationType = NotificationType.PaymentReminder,
+                            StudentId = enrollment.StudentId,
+                            DateSent = DateTime.Now,
+                            IsRead = false
+                        };
+
+                        await _notificationRepository.AddNotification(Message);
+                    }
+                }
+            }
+
+            return "Reminder Send Successfull";
+
+        }
+
+        public async Task<PaymentOverview> GetPaymentOverview()
+        {
+            var paymentOverview = await _paymentRepository.GetPaymentOverview();
+            return paymentOverview;
+        }
+
         public DateTime CalculateInstallmentDueDate(DateTime paymentdate, int courseDuration)
         {
             return paymentdate.AddDays((courseDuration / 3));
+        }
+
+        public async Task<PaginationResponseDTO<PaymentFullDetails>> GetPaginatedPayments(int pageNumber, int pageSize)
+        {
+            var AllPayments = await _paymentRepository.GetAllPayments();
+
+            var paginatedPayments = await _paymentRepository.GetPaginatedPayments(pageNumber, pageSize);
+
+            var paginationResponseDto = new PaginationResponseDTO<PaymentFullDetails>
+            {
+                Items = paginatedPayments,
+                CurrentPage = pageNumber,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling(AllPayments.Count / (double)pageSize),
+                TotalItem = AllPayments.Count,
+            };
+
+            return paginationResponseDto;
         }
     }
 }

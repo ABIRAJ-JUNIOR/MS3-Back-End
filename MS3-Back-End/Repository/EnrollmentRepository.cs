@@ -1,5 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MS3_Back_End.DBContext;
+using MS3_Back_End.DTOs.ResponseDTOs.Assessment;
+using MS3_Back_End.DTOs.ResponseDTOs.Course;
+using MS3_Back_End.DTOs.ResponseDTOs.Enrollment;
+using MS3_Back_End.DTOs.ResponseDTOs.Payment;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 
@@ -20,21 +24,22 @@ namespace MS3_Back_End.Repository
                 await _Db.SaveChangesAsync();
                 return data.Entity;
         }
-        public async Task<ICollection<Enrollment>> SearchEnrollments(Guid SearchId)
+        public async Task<ICollection<Enrollment>> GetEnrollmentsByStudentId(Guid studentId)
         {
-            var data = await _Db.Enrollments.Include(p => p.Payments).Where(x=>x.StudentId == SearchId).ToListAsync();
+            var data = await _Db.Enrollments.Include(p => p.Payments).Include(cs => cs.CourseSchedule).ThenInclude(c => c.Course).ThenInclude(a => a.Assessment).Where(e => e.StudentId == studentId && e.IsActive == true).ToListAsync();
             return data;
+
         }
 
         public async Task<ICollection<Enrollment>> GetEnrollments()
         {
-            var data = await _Db.Enrollments.Include(p => p.Payments).ToListAsync();
+            var data = await _Db.Enrollments.Include(p => p.Payments).Where(e => e.IsActive == true).ToListAsync();
             return data;
         }
         public async Task<Enrollment> GetEnrollmentById(Guid EnrollmentId)
         {
             var data = await _Db.Enrollments.Include(p => p.Payments).SingleOrDefaultAsync(c => c.Id == EnrollmentId);
-            return data;
+            return data!;
         }
 
         public async Task<Enrollment> UpdateEnrollment(Enrollment Enrollment)
