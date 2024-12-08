@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DTOs.RequestDTOs.ContactUs;
+﻿using MS3_Back_End.DTOs.Email;
+using MS3_Back_End.DTOs.RequestDTOs.ContactUs;
 using MS3_Back_End.DTOs.ResponseDTOs.ContactUs;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
@@ -10,10 +11,12 @@ namespace MS3_Back_End.Service
     public class ContactUsService: IContactUsService
     {
         public readonly IContactUsRepository _contactUsRepository;
+        public readonly SendMailService _sendMailService;
 
-        public ContactUsService(IContactUsRepository contactUsRepository)
+        public ContactUsService(IContactUsRepository contactUsRepository, SendMailService sendMailService)
         {
             _contactUsRepository = contactUsRepository;
+            _sendMailService = sendMailService;
         }
 
         public async Task<ContactUsResponseDTO> AddMessage(ContactUsRequestDTO requestDTO)
@@ -28,6 +31,16 @@ namespace MS3_Back_End.Service
             };
 
             var data = await _contactUsRepository.AddMessage(Message);
+
+            var messageDetails = new SendMessageMailRequest()
+            {
+                Name = data.Name,
+                Email = data.Email,
+                UserMessage = data.Message,
+                EmailType = EmailTypes.Message,
+            };
+
+            await _sendMailService.MessageMail(messageDetails);
 
             var newContactUs = new ContactUsResponseDTO
             {
@@ -76,6 +89,16 @@ namespace MS3_Back_End.Service
             GetData.IsRead = true;
 
             var UpdatedData = await _contactUsRepository.UpdateMessage(GetData);
+
+            var messageDetails = new SendResponseMailRequest()
+            {
+                Name = UpdatedData.Name,
+                Email = UpdatedData.Email,
+                AdminResponse = UpdatedData.Response,
+                EmailType = EmailTypes.Response,
+            };
+
+            await _sendMailService.ResponseMail(messageDetails);
 
             var newUpdateMessage = new ContactUsResponseDTO
             {

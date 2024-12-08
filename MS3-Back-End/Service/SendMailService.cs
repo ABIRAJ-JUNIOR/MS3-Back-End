@@ -146,5 +146,46 @@ namespace MS3_Back_End.Service
             }
             return emailbody;
         }
+
+
+        //Contact Us Response
+        public async Task<string> ResponseMail(SendResponseMailRequest sendMailRequest)
+        {
+            if (sendMailRequest == null) throw new ArgumentNullException(nameof(sendMailRequest));
+
+            var template = await _sendMailRepository.GetTemplate(sendMailRequest.EmailType).ConfigureAwait(false);
+            if (template == null) throw new Exception("Template not found");
+
+            var bodyGenerated = await ResponseEmailBodyGenerate(template.Body, sendMailRequest).ConfigureAwait(false);
+
+            MailModel mailModel = new MailModel
+            {
+                Subject = template.Title ?? string.Empty,
+                Body = bodyGenerated ?? string.Empty,
+                SenderName = "Way Makers",
+                To = sendMailRequest.Email ?? throw new Exception("Recipient email address is required")
+            };
+
+            await _emailServiceProvider.SendMail(mailModel).ConfigureAwait(false);
+            return "email was sent successfully";
+        }
+
+        public async Task<string> ResponseEmailBodyGenerate(string emailbody, SendResponseMailRequest sendMailRequest)
+        {
+            var replacements = new Dictionary<string, string?>()
+            {
+                {"{Name}", sendMailRequest.Name},
+                {"{AdminResponse}", sendMailRequest.AdminResponse},
+            };
+
+            foreach (var replace in replacements)
+            {
+                if (!string.IsNullOrEmpty(replace.Value))
+                {
+                    emailbody = emailbody.Replace(replace.Key, replace.Value, StringComparison.OrdinalIgnoreCase);
+                }
+            }
+            return emailbody;
+        }
     }
 }
