@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DTOs.Pagination;
+﻿using MS3_Back_End.DTOs.Email;
+using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Payment;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Payment;
@@ -17,8 +18,9 @@ namespace MS3_Back_End.Service
         private readonly ICourseScheduleRepository _courseScheduleRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly INotificationRepository _notificationRepository;
+        private readonly SendMailService _sendMailService;
 
-        public PaymentService(IPaymentRepository paymentRepository, IEnrollmentRepository enrollmentRepository, IStudentRepository studentRepository, ICourseScheduleRepository courseScheduleRepository, ICourseRepository courseRepository, INotificationRepository notificationRepository)
+        public PaymentService(IPaymentRepository paymentRepository, IEnrollmentRepository enrollmentRepository, IStudentRepository studentRepository, ICourseScheduleRepository courseScheduleRepository, ICourseRepository courseRepository, INotificationRepository notificationRepository, SendMailService sendMailService)
         {
             _paymentRepository = paymentRepository;
             _enrollmentRepository = enrollmentRepository;
@@ -26,6 +28,7 @@ namespace MS3_Back_End.Service
             _courseScheduleRepository = courseScheduleRepository;
             _courseRepository = courseRepository;
             _notificationRepository = notificationRepository;
+            _sendMailService = sendMailService;
         }
 
         public async Task<PaymentResponseDTO> CreatePayment(PaymentRequestDTO paymentRequest)
@@ -49,7 +52,7 @@ namespace MS3_Back_End.Service
             }
             var courseScheduleData = await _courseScheduleRepository.GetCourseScheduleById(enrollmentDetails.CourseScheduleId);
             var courseData = await _courseRepository.GetCourseById(courseScheduleData.CourseId);
-            var StudentData = await _studentRepository.GetStudentById(enrollmentDetails.StudentId);
+            var StudentData = await _studentRepository.GetStudentFullDetailsById(enrollmentDetails.StudentId);
 
             var today = DateTime.Now;
             var payment = new Payment
@@ -96,6 +99,21 @@ namespace MS3_Back_End.Service
             };
 
             await _notificationRepository.AddNotification(Message);
+
+            var invoiceDetails = new SendInvoiceMailRequest()
+            {
+                InvoiceId = createdPayment.Id,
+                StudentId = StudentData.Id,
+                StudentName = StudentData.FirstName + " " + StudentData.LastName,
+                Email = StudentData.Email,
+                Address = $"{StudentData.Address!.AddressLine1}, {StudentData.Address!.AddressLine2}, {StudentData.Address!.City}, {StudentData.Address!.Country}",
+                CourseName = courseData.CourseName,
+                AmountPaid = createdPayment.AmountPaid,
+                PaymentType = ((PaymentTypes)createdPayment.PaymentType).ToString(),
+                EmailType = EmailTypes.Invoice,
+            };
+
+            await _sendMailService.InvoiceMail(invoiceDetails);
 
             return new PaymentResponseDTO
             {
