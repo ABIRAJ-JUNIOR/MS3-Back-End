@@ -14,5 +14,7 @@ public enum EmailTypes
     None = 0,
     Otp,
     Invoice,
+    Message,
+    Response,
     EmailVerification
 }
