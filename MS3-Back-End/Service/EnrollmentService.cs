@@ -1,4 +1,5 @@
 ﻿using CloudinaryDotNet;
+using MS3_Back_End.DTOs.Email;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.DTOs.RequestDTOs.Ènrollment;
 using MS3_Back_End.DTOs.ResponseDTOs.Assessment;
@@ -20,8 +21,17 @@ namespace MS3_Back_End.Service
         private readonly IStudentRepository _studentRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly IPaymentService _paymentService;
+        private readonly SendMailService _sendMailService;
 
-        public EnrollmentService(IEnrollmentRepository enrollmentRepository, ICourseScheduleRepository courseScheduleRepository, INotificationRepository notificationRepository, IStudentRepository studentRepository, ICourseRepository courseRepository, IPaymentService paymentService)
+        public EnrollmentService(
+            IEnrollmentRepository enrollmentRepository, 
+            ICourseScheduleRepository courseScheduleRepository, 
+            INotificationRepository notificationRepository, 
+            IStudentRepository studentRepository, 
+            ICourseRepository courseRepository, 
+            IPaymentService paymentService, 
+            SendMailService sendMailService
+            )
         {
             _enrollmentRepository = enrollmentRepository;
             _courseScheduleRepository = courseScheduleRepository;
@@ -29,6 +39,7 @@ namespace MS3_Back_End.Service
             _studentRepository = studentRepository;
             _courseRepository = courseRepository;
             _paymentService = paymentService;
+            _sendMailService = sendMailService;
         }
 
         public async Task<EnrollmentResponseDTO> AddEnrollment(EnrollmentRequestDTO EnrollmentReq)
@@ -78,7 +89,7 @@ namespace MS3_Back_End.Service
             };
 
             var data = await _enrollmentRepository.AddEnrollment(Enrollment);
-            var StudentData = await _studentRepository.GetStudentById(data.StudentId);
+            var StudentData = await _studentRepository.GetStudentFullDetailsById(data.StudentId);
             var CourseScheduleData = await _courseScheduleRepository.GetCourseScheduleById(data.CourseScheduleId);
             var CourseData = await _courseRepository.GetCourseById(CourseScheduleData.CourseId); 
 
@@ -129,7 +140,6 @@ namespace MS3_Back_End.Service
                 PaymentStatus = ((PaymentStatus)data.PaymentStatus).ToString(),
                 IsActive = data.IsActive
             };
-
             if(data.Payments != null)
             {
                 var PaymentResponse = data.Payments.Select(payment => new PaymentResponseDTO()
@@ -146,6 +156,22 @@ namespace MS3_Back_End.Service
 
                 EnrollmentResponse.PaymentResponse = PaymentResponse;
             }
+
+
+            var invoiceDetails = new SendInvoiceMailRequest()
+            {
+                InvoiceId = data.Payments!.First().Id,
+                StudentId = StudentData.Id,
+                StudentName = StudentData.FirstName + " " + StudentData.LastName,
+                Email = StudentData.Email,
+                Address = $"{StudentData.Address!.AddressLine1}, {StudentData.Address!.AddressLine2}, {StudentData.Address!.City}, {StudentData.Address!.Country}",
+                CourseName = CourseData.CourseName,
+                AmountPaid = data.Payments!.First().AmountPaid,
+                PaymentType = ((PaymentTypes)data.Payments!.First().PaymentType).ToString(),
+                EmailType = EmailTypes.Invoice,
+            };
+
+            await _sendMailService.InvoiceMail(invoiceDetails);
 
             return EnrollmentResponse;
         }

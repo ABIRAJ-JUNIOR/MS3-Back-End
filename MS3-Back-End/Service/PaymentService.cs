@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DTOs.Pagination;
+﻿using MS3_Back_End.DTOs.Email;
+using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Payment;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Payment;
@@ -17,8 +18,9 @@ namespace MS3_Back_End.Service
         private readonly ICourseScheduleRepository _courseScheduleRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly INotificationRepository _notificationRepository;
+        private readonly SendMailService _sendMailService;
 
-        public PaymentService(IPaymentRepository paymentRepository, IEnrollmentRepository enrollmentRepository, IStudentRepository studentRepository, ICourseScheduleRepository courseScheduleRepository, ICourseRepository courseRepository, INotificationRepository notificationRepository)
+        public PaymentService(IPaymentRepository paymentRepository, IEnrollmentRepository enrollmentRepository, IStudentRepository studentRepository, ICourseScheduleRepository courseScheduleRepository, ICourseRepository courseRepository, INotificationRepository notificationRepository, SendMailService sendMailService)
         {
             _paymentRepository = paymentRepository;
             _enrollmentRepository = enrollmentRepository;
@@ -26,6 +28,7 @@ namespace MS3_Back_End.Service
             _courseScheduleRepository = courseScheduleRepository;
             _courseRepository = courseRepository;
             _notificationRepository = notificationRepository;
+            _sendMailService = sendMailService;
         }
 
         public async Task<PaymentResponseDTO> CreatePayment(PaymentRequestDTO paymentRequest)
@@ -49,7 +52,7 @@ namespace MS3_Back_End.Service
             }
             var courseScheduleData = await _courseScheduleRepository.GetCourseScheduleById(enrollmentDetails.CourseScheduleId);
             var courseData = await _courseRepository.GetCourseById(courseScheduleData.CourseId);
-            var StudentData = await _studentRepository.GetStudentById(enrollmentDetails.StudentId);
+            var StudentData = await _studentRepository.GetStudentFullDetailsById(enrollmentDetails.StudentId);
 
             var today = DateTime.Now;
             var payment = new Payment
@@ -59,7 +62,7 @@ namespace MS3_Back_End.Service
                 PaymentMethod = paymentRequest.PaymentMethod,
                 AmountPaid = paymentRequest.AmountPaid,
                 PaymentDate = DateTime.Now,
-                DueDate = paymentRequest.PaymentType == PaymentTypes.Installment ? CalculateInstallmentDueDate(today, courseScheduleData.Duration) : null,
+                DueDate = paymentRequest.PaymentType == PaymentTypes.Installment && paymentRequest.InstallmentNumber != 3 ? CalculateInstallmentDueDate(today, courseScheduleData.Duration) : null,
                 InstallmentNumber = paymentRequest.PaymentType == PaymentTypes.Installment ? paymentRequest.InstallmentNumber : null,
                 EnrollmentId = paymentRequest.EnrollmentId
             };
@@ -96,6 +99,21 @@ namespace MS3_Back_End.Service
             };
 
             await _notificationRepository.AddNotification(Message);
+
+            var invoiceDetails = new SendInvoiceMailRequest()
+            {
+                InvoiceId = createdPayment.Id,
+                StudentId = StudentData.Id,
+                StudentName = StudentData.FirstName + " " + StudentData.LastName,
+                Email = StudentData.Email,
+                Address = $"{StudentData.Address!.AddressLine1}, {StudentData.Address!.AddressLine2}, {StudentData.Address!.City}, {StudentData.Address!.Country}",
+                CourseName = courseData.CourseName,
+                AmountPaid = createdPayment.AmountPaid,
+                PaymentType = ((PaymentTypes)createdPayment.PaymentType).ToString(),
+                EmailType = EmailTypes.Invoice,
+            };
+
+            await _sendMailService.InvoiceMail(invoiceDetails);
 
             return new PaymentResponseDTO
             {
@@ -152,16 +170,15 @@ namespace MS3_Back_End.Service
 
             foreach (var enrollment in enrollments)
             {
-                if(enrollment.Payments!.Count() < 3)
+                if(enrollment.PaymentStatus == PaymentStatus.InProcess)
                 {
-                    foreach (var payment in enrollment.Payments!)
+                    var payment = await _paymentRepository.GetLastPaymentOfEnrollment(enrollment.Id);
+                    if (payment.PaymentType == PaymentTypes.Installment && payment.DueDate != null && payment.DueDate <= DateTime.UtcNow)
                     {
-                        if(payment.PaymentType == PaymentTypes.Installment && payment.DueDate <= DateTime.UtcNow)
-                        {
-                            var studentData = await _studentRepository.GetStudentById(enrollment.StudentId);
-                            var courseScheduleData = await _courseScheduleRepository.GetCourseScheduleById(enrollment.CourseScheduleId);
-                            var courseData = await _courseRepository.GetCourseById(courseScheduleData.CourseId);
-                            string NotificationMessage = $@"  <b>Subject:</b> 🔔 Payment Reminder<br><br>
+                        var studentData = await _studentRepository.GetStudentById(enrollment.StudentId);
+                        var courseScheduleData = await _courseScheduleRepository.GetCourseScheduleById(enrollment.CourseScheduleId);
+                        var courseData = await _courseRepository.GetCourseById(courseScheduleData.CourseId);
+                        string NotificationMessage = $@"  <b>Subject:</b> 🔔 Payment Reminder<br><br>
                                                  Dear {studentData.FirstName} {studentData.LastName},<br><br>
                                                  This is a gentle reminder regarding your pending payment for the course <b>{courseData.CourseName}</b>.<br><br>
                                               <b>Outstanding Amount:</b> {payment.AmountPaid} Rs<br>
@@ -176,17 +193,16 @@ namespace MS3_Back_End.Service
                                            ";
 
 
-                            var Message = new Notification
-                            {
-                                Message = NotificationMessage,
-                                NotificationType = NotificationType.PaymentReminder,
-                                StudentId = enrollment.StudentId,
-                                DateSent = DateTime.Now,
-                                IsRead = false
-                            };
+                        var Message = new Notification
+                        {
+                            Message = NotificationMessage,
+                            NotificationType = NotificationType.PaymentReminder,
+                            StudentId = enrollment.StudentId,
+                            DateSent = DateTime.Now,
+                            IsRead = false
+                        };
 
-                            await _notificationRepository.AddNotification(Message);
-                        }
+                        await _notificationRepository.AddNotification(Message);
                     }
                 }
             }
