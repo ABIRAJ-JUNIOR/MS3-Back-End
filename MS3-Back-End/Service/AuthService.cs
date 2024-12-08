@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using MS3_Back_End.DTOs.Email;
 using MS3_Back_End.DTOs.RequestDTOs.Auth;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
@@ -15,12 +16,14 @@ namespace MS3_Back_End.Service
         private readonly IAuthRepository _authRepository;
         private readonly IConfiguration _configuration;
         private readonly INotificationRepository _notificationRepository;
+        private readonly SendMailService _sendMailService;
 
-        public AuthService(IAuthRepository authRepository, IConfiguration configuration, INotificationRepository notificationRepository)
+        public AuthService(IAuthRepository authRepository, IConfiguration configuration, INotificationRepository notificationRepository, SendMailService sendMailService)
         {
             _authRepository = authRepository;
             _configuration = configuration;
-            this._notificationRepository = notificationRepository;
+            _notificationRepository = notificationRepository;
+            _sendMailService = sendMailService;
         }
 
         public async Task<string> SignUp(SignUpRequestDTO request)
@@ -115,6 +118,16 @@ Empowering learners, shaping futures.
 
             await _notificationRepository.AddNotification(Message);
 
+            var invoiceDetails = new SendVerifyMailRequest()
+            {
+                Name = studentData.FirstName + " " + studentData.LastName,
+                Email = userData.Email,
+                VerificationLink = $"http://localhost:4200/email-verified/{userData.Id}",
+                EmailType = EmailTypes.EmailVerification,
+            };
+
+            await _sendMailService.VerifyMail(invoiceDetails);
+
             return "SignUp Successfully";
 
         }
@@ -126,6 +139,11 @@ Empowering learners, shaping futures.
             if (userData == null)
             {
                 throw new Exception("User Not Found");
+            }
+
+            if (userData.IsConfirmEmail == false)
+            {
+                throw new InvalidOperationException("Email is not verify. Please verify your email to proceed.");
             }
 
             if (!BCrypt.Net.BCrypt.Verify(request.password, userData.Password))
@@ -176,6 +194,19 @@ Empowering learners, shaping futures.
             }
 
             return null!;
+        }
+
+        public async Task<string> EmailVerify(Guid userId)
+        {
+            var userData = await _authRepository.GetUserById(userId);
+            if(userData == null)
+            {
+                throw new Exception("User Not Found");
+            }
+
+            userData.IsConfirmEmail = true;
+            await _authRepository.UpdateUser(userData);
+            return "Email Verified Successfully";
         }
 
         private string CreateToken(TokenRequestDTO request)

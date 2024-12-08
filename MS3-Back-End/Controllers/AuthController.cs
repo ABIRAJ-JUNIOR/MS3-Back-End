@@ -43,5 +43,19 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("Verify/{userId}")]
+        public async Task<IActionResult> EmailVerify(Guid userId)
+        {
+            try
+            {
+                var data = await _authService.EmailVerify(userId);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
