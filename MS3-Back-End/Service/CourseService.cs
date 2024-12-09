@@ -13,6 +13,7 @@ using MS3_Back_End.DTOs.ResponseDTOs.FeedBack;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
+using MS3_Back_End.DTOs.ResponseDTOs.Student;
 
 namespace MS3_Back_End.Service
 {
@@ -144,7 +145,15 @@ namespace MS3_Back_End.Service
                     Rating = fb.Rating,
                     FeedBackDate = fb.FeedBackDate,
                     StudentId = fb.StudentId,
-                    CourseId = fb.CourseId
+                    CourseId = fb.CourseId,
+                    Student = new StudentResponseDTO
+                    {
+                        Id = fb.Student.Id,
+                        FirstName = fb.Student.FirstName,
+                        LastName = fb.Student.LastName,
+                        Phone = fb.Student.Phone,
+                        ImageUrl = fb.Student.ImageUrl
+                    }
                 }).ToList() ?? new List<FeedbacksResponceDTO>()
             }).ToList();
 

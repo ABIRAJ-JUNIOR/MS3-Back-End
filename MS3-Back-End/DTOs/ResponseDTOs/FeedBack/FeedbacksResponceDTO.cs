@@ -1,4 +1,6 @@
-﻿namespace MS3_Back_End.DTOs.ResponseDTOs.FeedBack
+﻿using MS3_Back_End.DTOs.ResponseDTOs.Student;
+
+namespace MS3_Back_End.DTOs.ResponseDTOs.FeedBack
 {
     public class FeedbacksResponceDTO
     {
@@ -8,5 +10,7 @@
         public DateTime FeedBackDate { get; set; }
         public Guid StudentId { get; set; }
         public Guid CourseId { get; set; }
+
+        public StudentResponseDTO Student {  get; set; }
     }
 }
