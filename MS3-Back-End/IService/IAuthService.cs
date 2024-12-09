@@ -7,5 +7,6 @@ namespace MS3_Back_End.IService
     {
         Task<string> SignUp(SignUpRequestDTO request);
         Task<string> SignIn(SignInRequestDTO request);
+        Task<string> EmailVerify(Guid userId);
     }
 }
