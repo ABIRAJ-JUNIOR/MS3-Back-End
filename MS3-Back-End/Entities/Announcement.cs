@@ -15,8 +15,8 @@ namespace MS3_Back_End.Entities
 
     public enum AudienceType
     {
-        Admins = 1,
-        Students = 2,
+        Admin = 1,
+        Student = 2,
         Everyone = 3
     }
 }
