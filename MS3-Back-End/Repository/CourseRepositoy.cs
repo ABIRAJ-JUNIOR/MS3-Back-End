@@ -51,6 +51,7 @@ namespace MS3_Back_End.Repository
             var data = await _Db.Courses
                                  .Include(c => c.CourseSchedules)
                                  .Include(c => c.Feedbacks)
+                                 .ThenInclude(f => f.Student)
                                  .SingleOrDefaultAsync(c => c.Id == CourseId && c.IsDeleted == false);
 
             return data;
