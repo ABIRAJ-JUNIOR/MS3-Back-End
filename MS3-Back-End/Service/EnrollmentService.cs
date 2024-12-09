@@ -164,7 +164,7 @@ namespace MS3_Back_End.Service
                 StudentId = StudentData.Id,
                 StudentName = StudentData.FirstName + " " + StudentData.LastName,
                 Email = StudentData.Email,
-                Address = $"{StudentData.Address!.AddressLine1}, {StudentData.Address!.AddressLine2}, {StudentData.Address!.City}, {StudentData.Address!.Country}",
+                Address = StudentData.Address != null ? $"{StudentData.Address!.AddressLine1}, {StudentData.Address!.AddressLine2}, {StudentData.Address!.City}, {StudentData.Address!.Country}" : null,
                 CourseName = CourseData.CourseName,
                 AmountPaid = data.Payments!.First().AmountPaid,
                 PaymentType = ((PaymentTypes)data.Payments!.First().PaymentType).ToString(),
