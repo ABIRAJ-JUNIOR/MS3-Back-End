@@ -11,6 +11,6 @@ namespace MS3_Back_End.DTOs.ResponseDTOs.FeedBack
         public Guid StudentId { get; set; }
         public Guid CourseId { get; set; }
 
-        public StudentResponseDTO Student {  get; set; }
+        public StudentResponseDTO? Student {  get; set; }
     }
 }

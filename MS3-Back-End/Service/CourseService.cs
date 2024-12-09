@@ -145,15 +145,7 @@ namespace MS3_Back_End.Service
                     Rating = fb.Rating,
                     FeedBackDate = fb.FeedBackDate,
                     StudentId = fb.StudentId,
-                    CourseId = fb.CourseId,
-                    Student = new StudentResponseDTO
-                    {
-                        Id = fb.Student.Id,
-                        FirstName = fb.Student.FirstName,
-                        LastName = fb.Student.LastName,
-                        Phone = fb.Student.Phone,
-                        ImageUrl = fb.Student.ImageUrl
-                    }
+                    CourseId = fb.CourseId
                 }).ToList() ?? new List<FeedbacksResponceDTO>()
             }).ToList();
 
@@ -204,7 +196,15 @@ namespace MS3_Back_End.Service
                     Rating = fb.Rating,
                     FeedBackDate = fb.FeedBackDate,
                     StudentId = fb.StudentId,
-                    CourseId = fb.CourseId
+                    CourseId = fb.CourseId,
+                    Student = new StudentResponseDTO
+                    {
+                        Id = fb.Student.Id,
+                        FirstName = fb.Student.FirstName,
+                        LastName = fb.Student.LastName,
+                        Phone = fb.Student.Phone,
+                        ImageUrl = fb.Student.ImageUrl
+                    }
                 }).ToList()
             };
 
