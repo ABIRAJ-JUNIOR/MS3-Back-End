@@ -2,6 +2,7 @@
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
+using Org.BouncyCastle.Bcpg.OpenPgp;
 using System;
 using static Org.BouncyCastle.Asn1.Cmp.Challenge;
 
@@ -30,6 +31,35 @@ namespace MS3_Back_End.Service
             var responseData = await _repository.SaveGeneratedOtp(otpObject);
             return responseData;
 
+        }
+
+        public async Task<string> OtpVerification(verifyOtp verifyDetails)
+        {
+            var data = await _repository.CheckOtpVerification(verifyDetails);
+            if (data == null)
+            {
+               
+                if (verifyDetails.Otp == data.Otpdata)
+                {
+                    if ((DateTime.Now - data.OtpGenerated).TotalMinutes > 5)
+                    {
+                        await _repository.DeleteOtpDetails(data);
+                        return "OTP expired";
+                    }
+
+                    data.IsUsed = true;
+                   await _repository.DeleteOtpDetails(data);
+                    return "OtpVerified SuccesFull";
+                }
+                else
+                {
+                    throw new Exception("Otp is invalid");
+
+                }
+            }else
+            {
+                return "Otp verified invalid";
+            }       
         }
 
     }
