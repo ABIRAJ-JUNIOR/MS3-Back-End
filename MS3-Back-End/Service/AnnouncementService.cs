@@ -187,15 +187,22 @@ namespace MS3_Back_End.Service
 
         public async Task<ICollection<AnnouncementResponseDTO>> AnnouncementValidCheck()
         {
-            var announcements =await GetAllAnnouncement();
+            var announcements = await GetAllAnnouncement();
+            var announcementsToDelete = new List<AnnouncementResponseDTO>();
+
             foreach (var item in announcements)
             {
-                if (item.DatePosted >  DateTime.Now)
+                if (item.DatePosted > DateTime.UtcNow)
                 {
-                    await DeleteAnnouncement(item.Id);
+                    announcementsToDelete.Add(item);
                 }
             }
-            return announcements;
+
+            var deleteTasks = announcementsToDelete.Select(item => DeleteAnnouncement(item.Id));
+            await Task.WhenAll(deleteTasks);
+
+            return announcements.Where(a => a.DatePosted <= DateTime.UtcNow).ToList();
         }
+
     }
 }
