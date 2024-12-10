@@ -5,7 +5,7 @@ namespace MS3_Back_End.IRepository
 {
     public interface IOtpRepository
     {
-        Task<bool> emailVerification(GenerateOtp otpDetail);
-        Task<string> SaveGeneratedOtp(otp otpRequest);
+        Task<User> EmailVerification(GenerateOtp otpDetail);
+        Task<string> SaveGeneratedOtp(Otp otpRequest);
     }
 }

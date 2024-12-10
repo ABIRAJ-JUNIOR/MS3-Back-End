@@ -12,7 +12,7 @@ namespace MS3_Back_End.Entities
 
         //Reference
         public UserRole? UserRole { get; set; }
-        public ICollection<otp>? OtpRequests { get; set; }
+        public ICollection<Otp>? OtpRequests { get; set; }
 
     }
 }

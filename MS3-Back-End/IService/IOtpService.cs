@@ -1,6 +1,9 @@
-﻿namespace MS3_Back_End.IService
+﻿using MS3_Back_End.DTOs.Otp;
+
+namespace MS3_Back_End.IService
 {
     public interface IOtpService
     {
+         Task<string> EmailVerification(GenerateOtp otpDetails);
     }
 }

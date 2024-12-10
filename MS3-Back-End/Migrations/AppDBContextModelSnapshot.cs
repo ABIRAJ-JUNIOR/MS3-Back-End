@@ -458,6 +458,36 @@ namespace MS3_Back_End.Migrations
                     b.ToTable("Notifications");
                 });
 
+            modelBuilder.Entity("MS3_Back_End.Entities.Otp", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("OtpGenerated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Otpdata")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Otps");
+                });
+
             modelBuilder.Entity("MS3_Back_End.Entities.Payment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -637,39 +667,6 @@ namespace MS3_Back_End.Migrations
                     b.ToTable("UserRoles");
                 });
 
-            modelBuilder.Entity("MS3_Back_End.Entities.otp", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsUsed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Otp")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("OtpExpire")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("OtpGenerated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("otp");
-                });
-
             modelBuilder.Entity("MS3_Back_End.Entities.Address", b =>
                 {
                     b.HasOne("MS3_Back_End.Entities.Student", "Student")
@@ -774,6 +771,17 @@ namespace MS3_Back_End.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("MS3_Back_End.Entities.Otp", b =>
+                {
+                    b.HasOne("MS3_Back_End.Entities.User", "User")
+                        .WithMany("OtpRequests")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("MS3_Back_End.Entities.Payment", b =>
                 {
                     b.HasOne("MS3_Back_End.Entities.Enrollment", "Enrollment")
@@ -819,17 +827,6 @@ namespace MS3_Back_End.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("MS3_Back_End.Entities.otp", b =>
-                {
-                    b.HasOne("MS3_Back_End.Entities.User", "User")
-                        .WithMany("OtpRequests")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("User");
                 });

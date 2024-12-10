@@ -15,23 +15,24 @@ namespace MS3_Back_End.Repository
             _Db = db;
         }
 
-        public async Task<bool> emailVerification(GenerateOtp otpDetail)
+        public async Task<User> EmailVerification(GenerateOtp otpDetail)
         {
             var responseData = await _Db.Users.SingleOrDefaultAsync(user=>user.Email==otpDetail.Email);
             if (responseData != null)
             {
-                return true;
+                return responseData;
             }
             else
             {
-                return false;
+                throw new Exception("Email not valid");
             }
 
         }
 
-        public async Task<string> SaveGeneratedOtp(otp otpRequest)
+        public async Task<string> SaveGeneratedOtp(Otp otpRequest)
         {
             var ResponseData = await _Db.Otps.AddAsync(otpRequest);
+            await _Db.SaveChangesAsync();
             return "Email Verfication SuccesFully.";
 
         }
