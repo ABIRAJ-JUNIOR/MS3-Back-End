@@ -28,6 +28,7 @@ namespace MS3_Back_End.DBContext
         public DbSet<Assessment> Assessments { get; set; }
         public DbSet<StudentAssessment> StudentAssessments { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
+        public DbSet<otp> Otps { get; set; }
 
     }
 }
