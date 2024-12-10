@@ -3,10 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using MS3_Back_End.DBContext;
 using MS3_Back_End.DTOs.Otp;
 using MS3_Back_End.Entities;
+using MS3_Back_End.IRepository;
 
 namespace MS3_Back_End.Repository
 {
-    public class OtpRepository
+    public class OtpRepository : IOtpRepository
     {
         private readonly AppDBContext _Db;
         public OtpRepository(AppDBContext db)
@@ -23,7 +24,7 @@ namespace MS3_Back_End.Repository
             }
             else
             {
-                throw new Exception("Email Not Valid");
+                return false;
             }
 
         }
