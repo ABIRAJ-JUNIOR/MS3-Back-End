@@ -28,12 +28,17 @@ namespace MS3_Back_End.Service
                     Otp=Convert.ToString(random.Next(1000, 10000)),
                     OtpGenerated = DateTime.Now,
                 };
-
+                var responseData = await _repository.SaveGeneratedOtp(otpObject);
+                return responseData;
             }
+            else
+            {
+                return "Email Invalid Please Try Again Later";
+            }
+            
             
 
         }
-        public async Task<>
 
     }
 }
