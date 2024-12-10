@@ -75,6 +75,7 @@ namespace MS3_Back_End.Service
                     PaymentDate = DateTime.Now,
                     DueDate = EnrollmentReq.PaymentRequest.PaymentType == PaymentTypes.Installment ? _paymentService.CalculateInstallmentDueDate(today, courseScheduleData.Duration) : null,
                     InstallmentNumber = EnrollmentReq.PaymentRequest.PaymentType == PaymentTypes.Installment ? EnrollmentReq.PaymentRequest.InstallmentNumber:null,
+                    isReminder = false,
                 }
             };
 

@@ -278,12 +278,12 @@ namespace MS3_Back_End.Service
         }
 
 
-        public async Task<PaginationResponseDTO<CourseResponseDTO>> GetPaginatedCourses(int pageNumber, int pageSize)
+        public async Task<PaginationResponseDTO<CoursePaginateResponseDTO>> GetPaginatedCourses(int pageNumber, int pageSize)
         {
             var courses = await _courseRepository.GetPaginatedCourses(pageNumber, pageSize);
             var allCourses = await _courseRepository.GetAllCourse();
 
-            var courseResponses = courses.Select(course => new CourseResponseDTO
+            var courseResponses = courses.Select(course => new CoursePaginateResponseDTO
             {
                 Id = course.Id,
                 CourseCategoryId = course.CourseCategoryId,
@@ -293,6 +293,7 @@ namespace MS3_Back_End.Service
                 Description = course.Description,
                 Prerequisites = course.Prerequisites,
                 ImageUrl = course.ImageUrl!,
+                FeedBackRate = course.Feedbacks!.Any() ? (int)Math.Round(course.Feedbacks!.Average(f => f.Rating), 1) : 0,
                 CreatedDate = course.CreatedDate,
                 UpdatedDate = course.UpdatedDate,
 
@@ -323,7 +324,7 @@ namespace MS3_Back_End.Service
                 }).ToList() ?? new List<FeedbacksResponceDTO>()
             }).ToList();
 
-            var paginationResponseDto = new PaginationResponseDTO<CourseResponseDTO>
+            var paginationResponseDto = new PaginationResponseDTO<CoursePaginateResponseDTO>
             {
                 Items = courseResponses,
                 CurrentPage = pageNumber,

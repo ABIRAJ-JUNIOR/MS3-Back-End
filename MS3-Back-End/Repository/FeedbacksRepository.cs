@@ -24,6 +24,12 @@ namespace MS3_Back_End.Repository
             var datas= await _dbContext.Feedbacks.ToListAsync();
             return datas;
         }
+
+        public async Task<ICollection<Feedbacks>> GetTopFeetbacks()
+        {
+            var datas = await _dbContext.Feedbacks.Include(s => s.Student).OrderByDescending(f => f.FeedBackDate).Take(4).ToListAsync();
+            return datas;
+        }
     }
     
 }
