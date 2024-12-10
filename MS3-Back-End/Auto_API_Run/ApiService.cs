@@ -22,5 +22,19 @@
                 Console.WriteLine("API call failed.");
             }
         }
+
+        public async Task AnnouncementExpiry()
+        {
+            var response = await _httpClient.GetAsync("https://localhost:7044/api/Announcement/ValidAnouncements");
+
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("API call succeeded.");
+            }
+            else
+            {
+                Console.WriteLine("API call failed.");
+            }
+        }
     }
 }
