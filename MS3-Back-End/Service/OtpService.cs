@@ -18,19 +18,17 @@ namespace MS3_Back_End.Service
         public async Task<string> EmailVerification(GenerateOtp otpDetails)
         {
             var response = await _repository.EmailVerification(otpDetails);
-                Random random = new Random();
+            Random random = new Random();
 
-                var otpObject = new Otp
-                {
-                    UserId = response.Id,
-                    Email = otpDetails.Email,
-                    Otpdata = Convert.ToString(random.Next(1000, 10000)),
-                    OtpGenerated = DateTime.Now,
-                };
-                var responseData = await _repository.SaveGeneratedOtp(otpObject);
-                return responseData;
-            
-            
+            var otpObject = new Otp
+            {
+                UserId = response.Id,
+                Email = otpDetails.Email,
+                Otpdata = Convert.ToString(random.Next(1000, 10000)),
+                OtpGenerated = DateTime.Now,
+            };
+            var responseData = await _repository.SaveGeneratedOtp(otpObject);
+            return responseData;
 
         }
 

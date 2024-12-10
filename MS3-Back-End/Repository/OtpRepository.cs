@@ -17,7 +17,7 @@ namespace MS3_Back_End.Repository
 
         public async Task<User> EmailVerification(GenerateOtp otpDetail)
         {
-            var responseData = await _Db.Users.SingleOrDefaultAsync(user=>user.Email==otpDetail.Email);
+            var responseData = await _Db.Users.SingleOrDefaultAsync(user => user.Email == otpDetail.Email);
             if (responseData != null)
             {
                 return responseData;
@@ -35,6 +35,17 @@ namespace MS3_Back_End.Repository
             await _Db.SaveChangesAsync();
             return "Email Verfication SuccesFully.";
 
+        }
+        public async Task<Otp> CheckOtpVerification(verifyOtp otpDetail)
+        {
+            var ResponseData = await _Db.Otps.SingleOrDefaultAsync(otp => otp.Email == otpDetail.Email);
+            return ResponseData;
+        }
+        public async Task<string> DeleteOtpDetails(Otp OtpDetails)
+        {
+            _Db.Otps.Update(OtpDetails);
+            await _Db.SaveChangesAsync();
+            return "Otp Deleted Successfully.";
         }
 
 
