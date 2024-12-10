@@ -5,9 +5,8 @@
         public Guid Id { get; set; }
         public string Email { get; set; }
         public string Otp { get; set; }
-        public  DateTime OtpGenerated{ get; set; }
-        public  DateTime OtpExpire{ get; set; }
-        public  bool IsUsed { get; set; }
-        public User User { get; set; }
+        public  DateTime OtpGenerated{ get; set; } = DateTime.Now;
+        public  bool IsUsed { get; set; } = false;
+        public User User { get; set; } 
     }
 }

@@ -29,6 +29,13 @@ namespace MS3_Back_End.Repository
 
         }
 
+        public async Task<string> SaveGeneratedOtp(otp otpRequest)
+        {
+            var ResponseData = await _Db.Otps.AddAsync(otpRequest);
+            return "Email Verfication SuccesFully.";
+
+        }
+
 
     }
 }
