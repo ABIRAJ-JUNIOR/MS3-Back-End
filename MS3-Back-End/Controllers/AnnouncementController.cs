@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.RequestDTOs;
 using MS3_Back_End.DTOs.RequestDTOs.Announcement;
 using MS3_Back_End.DTOs.ResponseDTOs.Announcement;
+using MS3_Back_End.Entities;
 using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Controllers
@@ -64,12 +65,12 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("Recent")]
-        public async Task<IActionResult> RecentAnnouncement()
+        [HttpGet("Recent/{Type}")]
+        public async Task<IActionResult> RecentAnnouncement(AudienceType Type)
         {
             try
             {
-                var response = await _announcementService.RecentAnnouncement();
+                var response = await _announcementService.RecentAnnouncement(Type);
                 return Ok(response);
             }
             catch (Exception ex)
