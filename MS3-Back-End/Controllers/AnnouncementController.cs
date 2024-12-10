@@ -5,6 +5,7 @@ using MS3_Back_End.DTOs.RequestDTOs;
 using MS3_Back_End.DTOs.RequestDTOs.Announcement;
 using MS3_Back_End.DTOs.ResponseDTOs.Announcement;
 using MS3_Back_End.IService;
+using MS3_Back_End.Service;
 
 namespace MS3_Back_End.Controllers
 {
@@ -120,6 +121,19 @@ namespace MS3_Back_End.Controllers
                 return Ok(Anouncements);
             }
             catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("ValidAnouncements")]
+        public async Task<IActionResult> ValidAnnoncement()
+        {
+            try
+            {
+                var updatedData = await _announcementService.AnnouncementValidCheck();
+                return Ok(updatedData);
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
