@@ -35,7 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\Otp\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 
