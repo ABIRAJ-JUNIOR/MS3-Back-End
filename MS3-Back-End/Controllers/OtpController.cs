@@ -29,5 +29,20 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("otpVerification")]
+        public async Task<IActionResult> VerifyOtp(verifyOtp otpDetailDetails)
+        {
+            try
+            {
+
+                var data = await _service.OtpVerification(otpDetailDetails);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
