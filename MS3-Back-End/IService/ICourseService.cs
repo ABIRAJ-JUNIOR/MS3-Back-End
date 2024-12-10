@@ -12,7 +12,7 @@ namespace MS3_Back_End.IService
         Task<CourseResponseDTO> GetCourseById(Guid CourseId);
         Task<CourseResponseDTO> UpdateCourse(Guid id, UpdateCourseRequestDTO courseRequest);
         Task<string> DeleteCourse(Guid Id);
-        Task<PaginationResponseDTO<CourseResponseDTO>> GetPaginatedCourses(int pageNumber, int pageSize);
+        Task<PaginationResponseDTO<CoursePaginateResponseDTO>> GetPaginatedCourses(int pageNumber, int pageSize);
         Task<string> UploadImage(Guid CourseId, IFormFile? image);
         Task<ICollection<Top3CourseDTO>> GetTop3Courses();
     }

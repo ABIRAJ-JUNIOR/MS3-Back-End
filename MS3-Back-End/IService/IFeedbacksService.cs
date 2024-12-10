@@ -7,5 +7,6 @@ namespace MS3_Back_End.IService
     {
         Task<FeedbacksResponceDTO> AddFeedbacks(FeedbacksRequestDTO reqfeedback);
         Task<ICollection<FeedbacksResponceDTO>> GetAllFeedbacks();
+        Task<ICollection<FeedbacksResponceDTO>> GetTopFeetbacks();
     }
 }
