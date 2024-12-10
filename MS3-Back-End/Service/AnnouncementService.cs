@@ -192,14 +192,13 @@ namespace MS3_Back_End.Service
 
             foreach (var item in announcements)
             {
-                if (item.DatePosted > DateTime.UtcNow)
+                if (item.ExpirationDate > DateTime.UtcNow)
                 {
                     announcementsToDelete.Add(item);
                 }
             }
 
             var deleteTasks = announcementsToDelete.Select(item => DeleteAnnouncement(item.Id));
-            await Task.WhenAll(deleteTasks);
 
             return announcements.Where(a => a.DatePosted <= DateTime.UtcNow).ToList();
         }
