@@ -185,22 +185,19 @@ namespace MS3_Back_End.Service
             return PaginationResponseDTO;
         }
 
-        public async Task<ICollection<AnnouncementResponseDTO>> AnnouncementValidCheck()
+        public async Task<string> AnnouncementValidCheck()
         {
             var announcements = await GetAllAnnouncement();
-            var announcementsToDelete = new List<AnnouncementResponseDTO>();
 
             foreach (var item in announcements)
             {
-                if (item.ExpirationDate > DateTime.UtcNow)
+                if (item.ExpirationDate <= DateTime.UtcNow)
                 {
-                    announcementsToDelete.Add(item);
+                    await DeleteAnnouncement(item.Id);
                 }
             }
 
-            var deleteTasks = announcementsToDelete.Select(item => DeleteAnnouncement(item.Id));
-
-            return announcements.Where(a => a.DatePosted <= DateTime.UtcNow).ToList();
+            return "Announcement validation Successfull.";
         }
 
     }
