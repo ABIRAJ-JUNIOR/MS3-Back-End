@@ -413,6 +413,7 @@ namespace MS3_Back_End.Service
             studentData.Gender = request.Gender;
             studentData.LastName = request.LastName;
             studentData.Phone = request.Phone;
+            studentData.DateOfBirth = request.DateOfBirth;
             studentData.UpdatedDate = DateTime.Now;
             if (request.Address != null)
             {
