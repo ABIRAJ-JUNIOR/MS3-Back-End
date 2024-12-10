@@ -36,7 +36,7 @@ namespace MS3_Back_End.Service
         public async Task<string> OtpVerification(verifyOtp verifyDetails)
         {
             var data = await _repository.CheckOtpVerification(verifyDetails);
-            if (data == null)
+            if (data != null)
             {
                
                 if (verifyDetails.Otp == data.Otpdata)
@@ -61,6 +61,7 @@ namespace MS3_Back_End.Service
                 return "Otp verified invalid";
             }       
         }
+       
 
     }
 }

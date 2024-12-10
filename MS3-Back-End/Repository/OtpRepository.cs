@@ -38,7 +38,7 @@ namespace MS3_Back_End.Repository
         }
         public async Task<Otp> CheckOtpVerification(verifyOtp otpDetail)
         {
-            var ResponseData = await _Db.Otps.SingleOrDefaultAsync(otp => otp.Email == otpDetail.Email);
+            var ResponseData = await _Db.Otps.Where(a=>a.IsUsed==false).SingleOrDefaultAsync(otp=>otp.Email== otpDetail.Email && otp.Otpdata == otpDetail.Otp);
             return ResponseData;
         }
         public async Task<string> DeleteOtpDetails(Otp OtpDetails)
