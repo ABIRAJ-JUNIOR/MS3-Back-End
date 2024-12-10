@@ -185,5 +185,20 @@ namespace MS3_Back_End.Service
             return PaginationResponseDTO;
         }
 
+        public async Task<string> AnnouncementValidCheck()
+        {
+            var announcements = await GetAllAnnouncement();
+
+            foreach (var item in announcements)
+            {
+                if (item.ExpirationDate <= DateTime.UtcNow)
+                {
+                    await DeleteAnnouncement(item.Id);
+                }
+            }
+
+            return "Announcement validation Successfull.";
+        }
+
     }
 }
