@@ -118,7 +118,7 @@ Empowering learners, shaping futures.
 
             await _notificationRepository.AddNotification(Message);
 
-            var invoiceDetails = new SendVerifyMailRequest()
+            var verifyMail = new SendVerifyMailRequest()
             {
                 Name = studentData.FirstName + " " + studentData.LastName,
                 Email = userData.Email,
@@ -126,7 +126,7 @@ Empowering learners, shaping futures.
                 EmailType = EmailTypes.EmailVerification,
             };
 
-            await _sendMailService.VerifyMail(invoiceDetails);
+            await _sendMailService.VerifyMail(verifyMail);
 
             return "SignUp Successfully";
 
