@@ -185,5 +185,17 @@ namespace MS3_Back_End.Service
             return PaginationResponseDTO;
         }
 
+        public async Task<ICollection<AnnouncementResponseDTO>> AnnouncementValidCheck()
+        {
+            var announcements =await GetAllAnnouncement();
+            foreach (var item in announcements)
+            {
+                if (item.DatePosted >  DateTime.Now)
+                {
+                    await DeleteAnnouncement(item.Id);
+                }
+            }
+            return announcements;
+        }
     }
 }
