@@ -11,9 +11,11 @@ namespace MS3_Back_End.Service
     public class OtpService : IOtpService
     {
         private readonly IOtpRepository _repository;
-        public OtpService(IOtpRepository repo)
+        private readonly IAuthRepository _Authrepository;
+        public OtpService(IOtpRepository repo, IAuthRepository authrepository)
         {
             _repository = repo;
+            _Authrepository = authrepository;
         }
 
         public async Task<string> EmailVerification(GenerateOtp otpDetails)
@@ -60,6 +62,14 @@ namespace MS3_Back_End.Service
             {
                 return "Otp verified invalid";
             }       
+        }
+
+        public async Task<string> ChangePassword(ChangePassword otpDetails)
+        {
+            var response = await _Authrepository.GetUserByEmail(otpDetails.Email);
+            response.Password = otpDetails.NewPassword;
+            var data = await _Authrepository.UpdateUser(response);
+            return "Password  Changed Succesfully.";
         }
        
 
