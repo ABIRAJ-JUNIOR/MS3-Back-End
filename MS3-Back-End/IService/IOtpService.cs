@@ -6,5 +6,6 @@ namespace MS3_Back_End.IService
     {
         Task<string> EmailVerification(GenerateOtp otpDetails);
         Task<string> OtpVerification(verifyOtp verifyDetails);
+        Task<string> ChangePassword(ChangePassword otpDetails);
     }
 }

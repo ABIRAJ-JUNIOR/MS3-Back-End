@@ -9,5 +9,6 @@ namespace MS3_Back_End.IRepository
         Task<string> SaveGeneratedOtp(Otp otpRequest);
         Task<Otp> CheckOtpVerification(verifyOtp otpDetail);
         Task<string> DeleteOtpDetails(Otp OtpDetails);
+
     }
 }

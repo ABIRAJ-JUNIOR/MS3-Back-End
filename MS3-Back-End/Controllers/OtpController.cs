@@ -44,5 +44,21 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("changePassword")]
+        public async Task<IActionResult> ChangeUserPassword(ChangePassword ChangeUserPassword)
+        {
+            try
+            {
+                var data = await _service.ChangePassword(ChangeUserPassword);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
     }
 }

@@ -67,7 +67,7 @@ namespace MS3_Back_End.Service
         public async Task<string> ChangePassword(ChangePassword otpDetails)
         {
             var response = await _Authrepository.GetUserByEmail(otpDetails.Email);
-            response.Password = otpDetails.NewPassword;
+            response.Password = BCrypt.Net.BCrypt.HashPassword(otpDetails.NewPassword);
             var data = await _Authrepository.UpdateUser(response);
             return "Password  Changed Succesfully.";
         }
