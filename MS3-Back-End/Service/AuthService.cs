@@ -141,8 +141,20 @@ Empowering learners, shaping futures.
                 throw new Exception("User Not Found");
             }
 
+            var studentData = await _authRepository.GetStudentById(userData.Id);
+
             if (userData.IsConfirmEmail == false)
             {
+                var verifyMail = new SendVerifyMailRequest()
+                {
+                    Name = studentData.FirstName + " " + studentData.LastName,
+                    Email = userData.Email,
+                    VerificationLink = $"http://localhost:4200/email-verified/{userData.Id}",
+                    EmailType = EmailTypes.EmailVerification,
+                };
+
+                await _sendMailService.VerifyMail(verifyMail);
+
                 throw new InvalidOperationException("Email is not verify. Please verify your email to proceed.");
             }
 
@@ -160,11 +172,11 @@ Empowering learners, shaping futures.
 
             if (roleData.Name == "Student")
             {
-                var studentData = await _authRepository.GetStudentById(userData.Id);
-                if(studentData.IsActive == false)
+                if (studentData.IsActive == false)
                 {
                     throw new Exception("Account Deactivated");
                 }
+
                 var tokenRequest = new TokenRequestDTO()
                 {
                     Id = studentData.Id,

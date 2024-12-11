@@ -1,4 +1,5 @@
-﻿using MS3_Back_End.DTOs.Otp;
+﻿using MS3_Back_End.DTOs.Email;
+using MS3_Back_End.DTOs.Otp;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
@@ -12,17 +13,28 @@ namespace MS3_Back_End.Service
     {
         private readonly IOtpRepository _repository;
         private readonly IAuthRepository _Authrepository;
-        public OtpService(IOtpRepository repo, IAuthRepository authrepository)
+        private readonly SendMailService _sendmailservice;
+        private readonly IStudentRepository _studentrepository;
+
+        public OtpService(IOtpRepository repository, IAuthRepository authrepository, SendMailService sendmailservice, IStudentRepository studentrepository)
         {
-            _repository = repo;
+            _repository = repository;
             _Authrepository = authrepository;
+            _sendmailservice = sendmailservice;
+            _studentrepository = studentrepository;
         }
 
         public async Task<string> EmailVerification(GenerateOtp otpDetails)
         {
             var response = await _repository.EmailVerification(otpDetails);
-            Random random = new Random();
+            var studentData = await _studentrepository.GetStudentById(response.Id);
 
+            if(studentData.IsActive == false)
+            {
+                throw new Exception("InActive Account");
+            }
+
+            Random random = new Random();
             var otpObject = new Otp
             {
                 UserId = response.Id,
@@ -30,7 +42,20 @@ namespace MS3_Back_End.Service
                 Otpdata = Convert.ToString(random.Next(1000, 10000)),
                 OtpGenerated = DateTime.Now,
             };
+
             var responseData = await _repository.SaveGeneratedOtp(otpObject);
+
+
+            var Otp = new SendOtpMailRequest()
+            {
+                Name =  studentData.FirstName + " " + studentData.LastName,
+                Otp = otpObject.Otpdata,
+                Email = otpDetails.Email,
+                EmailType = EmailTypes.ResetPasswordOTP,
+            };
+
+            await _sendmailservice.OtpMail(Otp);
+
             return responseData;
 
         }
@@ -71,7 +96,5 @@ namespace MS3_Back_End.Service
             var data = await _Authrepository.UpdateUser(response);
             return "Password  Changed Succesfully.";
         }
-       
-
     }
 }
