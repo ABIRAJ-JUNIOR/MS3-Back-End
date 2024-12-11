@@ -46,7 +46,7 @@ namespace MS3_Back_End.Service
                     if ((DateTime.Now - data.OtpGenerated).TotalMinutes > 5)
                     {
                         await _repository.DeleteOtpDetails(data);
-                        return "OTP expired";
+                        throw new Exception("OTP expired");
                     }
 
                     data.IsUsed = true;
@@ -60,7 +60,7 @@ namespace MS3_Back_End.Service
                 }
             }else
             {
-                return "Otp verified invalid";
+                throw new Exception("Otp verified invalid");
             }       
         }
 
