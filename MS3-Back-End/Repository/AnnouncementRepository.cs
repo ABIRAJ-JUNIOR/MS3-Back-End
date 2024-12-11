@@ -34,9 +34,9 @@ namespace MS3_Back_End.Repository
             var data = await _Db.Announcements.SingleOrDefaultAsync(c => c.Id == AnnouncementId && c.IsActive == true);
             return data!;
         }
-        public async Task<ICollection<Announcement>> RecentAnnouncement()
+        public async Task<ICollection<Announcement>> RecentAnnouncement(AudienceType Type)
         {
-            return await _Db.Announcements.OrderByDescending(a => a.DatePosted).Take(3).ToListAsync();
+            return await _Db.Announcements.OrderByDescending(a => a.DatePosted).Where(a => a.AudienceType == AudienceType.Everyone || a.AudienceType == Type && a.IsActive == true).Take(3).ToListAsync();
         }
 
         public async Task<string> DeleteAnnouncement(Announcement announcement)
@@ -50,12 +50,12 @@ namespace MS3_Back_End.Repository
         {
             if (role == "Admin")
             {
-                var announcementData = await _Db.Announcements.Where(a => a.IsActive == true && (a.AudienceType == AudienceType.Everyone || a.AudienceType == AudienceType.Admins)).ToListAsync();
+                var announcementData = await _Db.Announcements.Where(a => a.IsActive == true && (a.AudienceType == AudienceType.Everyone || a.AudienceType == AudienceType.Admin)).ToListAsync();
                 return announcementData!;
             }
             else if (role == "Student")
             {
-                var announcementData = await _Db.Announcements.Where(a => a.IsActive == true && (a.AudienceType == AudienceType.Everyone || a.AudienceType == AudienceType.Students)).ToListAsync();
+                var announcementData = await _Db.Announcements.Where(a => a.IsActive == true && (a.AudienceType == AudienceType.Everyone || a.AudienceType == AudienceType.Student)).ToListAsync();
                 return announcementData!;
             }
             return null!;
@@ -65,7 +65,7 @@ namespace MS3_Back_End.Repository
             if (Role == "Admin")
             {
                 var announcementData = await _Db.Announcements
-                    .Where(a => a.IsActive == true && (a.AudienceType == AudienceType.Everyone || a.AudienceType == AudienceType.Admins))
+                    .Where(a => a.IsActive == true && (a.AudienceType == AudienceType.Everyone || a.AudienceType == AudienceType.Admin))
                     .OrderByDescending(a => a.DatePosted)
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
@@ -75,7 +75,7 @@ namespace MS3_Back_End.Repository
             else if(Role == "Student")
             {
                 var announcementData = await _Db.Announcements
-                    .Where(a => a.IsActive == true && (a.AudienceType == AudienceType.Everyone || a.AudienceType == AudienceType.Students))
+                    .Where(a => a.IsActive == true && (a.AudienceType == AudienceType.Everyone || a.AudienceType == AudienceType.Student))
                     .OrderByDescending(a => a.DatePosted)
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
@@ -91,7 +91,6 @@ namespace MS3_Back_End.Repository
                     .ToListAsync();
                 return announcementData;
             }
-
             return null!;
         }
     }

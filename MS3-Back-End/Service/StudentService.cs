@@ -21,6 +21,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using MS3_Back_End.DTOs.RequestDTOs.Admin;
 using MS3_Back_End.DTOs.ResponseDTOs.Admin;
 using MS3_Back_End.DTOs.RequestDTOs.password_student;
+using MS3_Back_End.DTOs.Email;
 
 namespace MS3_Back_End.Service
 {
@@ -28,11 +29,15 @@ namespace MS3_Back_End.Service
     {
         private readonly IStudentRepository _StudentRepo;
         private readonly IAuthRepository _authRepository;
+        private readonly INotificationRepository _notificationRepository;
+        private readonly SendMailService _sendMailService;
 
-        public StudentService(IStudentRepository studentRepo, IAuthRepository authRepository)
+        public StudentService(IStudentRepository studentRepo, IAuthRepository authRepository, INotificationRepository notificationRepository, SendMailService sendMailService)
         {
             _StudentRepo = studentRepo;
             _authRepository = authRepository;
+            _notificationRepository = notificationRepository;
+            _sendMailService = sendMailService;
         }
 
         public async Task<StudentResponseDTO> AddStudent(StudentRequestDTO StudentReq)
@@ -103,6 +108,54 @@ namespace MS3_Back_End.Service
             }
 
             var data = await _StudentRepo.AddStudent(Student);
+
+            string NotificationMessage = $@"
+Subject: 🎉 Welcome to Way Makers!<br><br>
+
+Dear {data.FirstName} {data.LastName},<br><br>
+
+We are thrilled to welcome you to Way Makers, where learning meets excellence!<br><br>
+
+As a valued student, you now have access to:<br>
+✅ A wide range of industry-relevant courses.<br>
+✅ Expert instructors to guide your learning journey.<br><br>
+
+Here’s how to get started:<br>
+1. Log in to your account using your credentials.<br>
+2. Explore available courses.<br>
+3. Stay updated with announcements.<br><br>
+
+We are committed to empowering your educational journey and helping you achieve your goals.<br><br>
+
+For assistance, feel free to contact us at info.way.mmakers@gmail.com or call 0702274212.<br><br>
+
+Once again, welcome to the Way Makers family! 🎓<br><br>
+
+Warm regards,<br>
+Way Makers<br>
+Empowering learners, shaping futures.
+";
+
+            var Message = new Notification
+            {
+                Message = NotificationMessage,
+                NotificationType = NotificationType.WelCome,
+                StudentId = data.Id,
+                DateSent = DateTime.Now,
+                IsRead = false
+            };
+
+            await _notificationRepository.AddNotification(Message);
+
+            var verifyMail = new SendVerifyMailRequest()
+            {
+                Name = data.FirstName + " " + data.LastName,
+                Email = userData.Email,
+                VerificationLink = $"http://localhost:4200/email-verified/{userData.Id}",
+                EmailType = EmailTypes.EmailVerification,
+            };
+
+            await _sendMailService.VerifyMail(verifyMail);
 
             var StudentReponse = new StudentResponseDTO
             {
@@ -413,6 +466,7 @@ namespace MS3_Back_End.Service
             studentData.Gender = request.Gender;
             studentData.LastName = request.LastName;
             studentData.Phone = request.Phone;
+            studentData.DateOfBirth = request.DateOfBirth;
             studentData.UpdatedDate = DateTime.Now;
             if (request.Address != null)
             {

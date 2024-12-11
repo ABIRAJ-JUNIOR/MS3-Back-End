@@ -75,6 +75,7 @@ namespace MS3_Back_End.Service
                     PaymentDate = DateTime.Now,
                     DueDate = EnrollmentReq.PaymentRequest.PaymentType == PaymentTypes.Installment ? _paymentService.CalculateInstallmentDueDate(today, courseScheduleData.Duration) : null,
                     InstallmentNumber = EnrollmentReq.PaymentRequest.PaymentType == PaymentTypes.Installment ? EnrollmentReq.PaymentRequest.InstallmentNumber:null,
+                    isReminder = false,
                 }
             };
 
@@ -164,7 +165,7 @@ namespace MS3_Back_End.Service
                 StudentId = StudentData.Id,
                 StudentName = StudentData.FirstName + " " + StudentData.LastName,
                 Email = StudentData.Email,
-                Address = $"{StudentData.Address!.AddressLine1}, {StudentData.Address!.AddressLine2}, {StudentData.Address!.City}, {StudentData.Address!.Country}",
+                Address = StudentData.Address != null ? $"{StudentData.Address!.AddressLine1}, {StudentData.Address!.AddressLine2}, {StudentData.Address!.City}, {StudentData.Address!.Country}" : null,
                 CourseName = CourseData.CourseName,
                 AmountPaid = data.Payments!.First().AmountPaid,
                 PaymentType = ((PaymentTypes)data.Payments!.First().PaymentType).ToString(),

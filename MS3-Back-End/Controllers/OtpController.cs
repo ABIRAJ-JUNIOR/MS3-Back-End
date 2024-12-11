@@ -1,27 +1,27 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MS3_Back_End.DTOs.RequestDTOs.Auth;
+using MS3_Back_End.DTOs.Otp;
 using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class OtpController : ControllerBase
     {
-        private readonly IAuthService _authService;
-
-        public AuthController(IAuthService authService)
+        private readonly IOtpService _service;
+        public OtpController(IOtpService service)
         {
-            _authService = authService;
+            _service = service;
         }
 
-        [HttpPost("SignUp")]
-        public async Task<IActionResult> SignUp(SignUpRequestDTO request)
+        [HttpPost("emailVerfication")]
+        public async Task<IActionResult> verifyEmail(GenerateOtp otpDetailDetails)
         {
             try
             {
-                var data = await _authService.SignUp(request);
+
+                var data = await _service.EmailVerification(otpDetailDetails);
                 return Ok(data);
             }
             catch (Exception ex)
@@ -30,12 +30,13 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpPost("SignIn")]
-        public async Task<IActionResult> SignIn(SignInRequestDTO request)
+        [HttpPost("otpVerification")]
+        public async Task<IActionResult> VerifyOtp(verifyOtp otpDetailDetails)
         {
             try
             {
-                var data = await _authService.SignIn(request);
+
+                var data = await _service.OtpVerification(otpDetailDetails);
                 return Ok(data);
             }
             catch (Exception ex)
@@ -44,12 +45,12 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("Verify/{userId}")]
-        public async Task<IActionResult> EmailVerify(Guid userId)
+        [HttpPost("changePassword")]
+        public async Task<IActionResult> ChangeUserPassword(ChangePassword ChangeUserPassword)
         {
             try
             {
-                var data = await _authService.EmailVerify(userId);
+                var data = await _service.ChangePassword(ChangeUserPassword);
                 return Ok(data);
             }
             catch (Exception ex)
@@ -57,5 +58,7 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
     }
 }

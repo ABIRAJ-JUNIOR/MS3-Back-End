@@ -12,8 +12,8 @@ namespace MS3_Back_End.Entities
         public DateTime PaymentDate { get; set; }
         public DateTime? DueDate { get; set; }
         public int? InstallmentNumber { get; set; }
-
         public Guid EnrollmentId { get; set; }
+        public bool isReminder {  get; set; }
 
         //Reference
         public Enrollment? Enrollment { get; set; }

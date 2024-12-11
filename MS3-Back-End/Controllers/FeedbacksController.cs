@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.RequestDTOs.Feedbacks;
+using MS3_Back_End.DTOs.ResponseDTOs.FeedBack;
 using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Controllers
@@ -36,6 +37,20 @@ namespace MS3_Back_End.Controllers
             try
             {
                 var data = await _feedbackService.GetAllFeedbacks();
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("TopFeedBacks")]
+        public async Task<IActionResult> GetTopFeetbacks()
+        {
+            try
+            {
+                var data = await _feedbackService.GetTopFeetbacks();
                 return Ok(data);
             }
             catch (Exception ex)

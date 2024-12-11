@@ -4,15 +4,19 @@
     {
         public Guid Id { get; set; }
         public EmailTypes emailTypes { get; set; }
-        public string Title { get; set; }
-        public string Body { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Body { get; set; } = string.Empty;
     }
 }
 
 public enum EmailTypes
 {
     None = 0,
-    Otp,
+    PaymentOtp,
     Invoice,
-    EmailVerification
+    Message,
+    Response,
+    EmailVerification,
+    ResetPasswordOTP
+    
 }

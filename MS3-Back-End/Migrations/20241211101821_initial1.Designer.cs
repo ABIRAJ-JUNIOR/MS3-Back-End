@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MS3_Back_End.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20241204181004_initial7")]
-    partial class initial7
+    [Migration("20241211101821_initial1")]
+    partial class initial1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -461,6 +461,36 @@ namespace MS3_Back_End.Migrations
                     b.ToTable("Notifications");
                 });
 
+            modelBuilder.Entity("MS3_Back_End.Entities.Otp", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("OtpGenerated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Otpdata")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Otps");
+                });
+
             modelBuilder.Entity("MS3_Back_End.Entities.Payment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -469,6 +499,9 @@ namespace MS3_Back_End.Migrations
 
                     b.Property<decimal>("AmountPaid")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("EnrollmentId")
                         .HasColumnType("uniqueidentifier");
@@ -484,6 +517,9 @@ namespace MS3_Back_End.Migrations
 
                     b.Property<int>("PaymentType")
                         .HasColumnType("int");
+
+                    b.Property<bool>("isReminder")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -738,6 +774,17 @@ namespace MS3_Back_End.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("MS3_Back_End.Entities.Otp", b =>
+                {
+                    b.HasOne("MS3_Back_End.Entities.User", "User")
+                        .WithMany("OtpRequests")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("MS3_Back_End.Entities.Payment", b =>
                 {
                     b.HasOne("MS3_Back_End.Entities.Enrollment", "Enrollment")
@@ -841,6 +888,8 @@ namespace MS3_Back_End.Migrations
 
             modelBuilder.Entity("MS3_Back_End.Entities.User", b =>
                 {
+                    b.Navigation("OtpRequests");
+
                     b.Navigation("UserRole");
                 });
 #pragma warning restore 612, 618

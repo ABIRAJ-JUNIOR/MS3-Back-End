@@ -22,6 +22,13 @@ namespace MS3_Back_End.Repository
             return paymentData.Entity;
         }
 
+        public async Task<Payment> UpdatePayment(Payment payment)
+        {
+            var updateData =  _context.Payments.Update(payment);
+            await _context.SaveChangesAsync();
+            return updateData.Entity;
+        }
+
         public async Task<ICollection<Payment>> GetAllPayments()
         {
             var paymentLists = await _context.Payments.ToListAsync();

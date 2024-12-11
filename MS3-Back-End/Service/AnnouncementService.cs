@@ -118,10 +118,10 @@ namespace MS3_Back_End.Service
 
 
 
-        public async Task<ICollection<AnnouncementResponseDTO>> RecentAnnouncement()
+        public async Task<ICollection<AnnouncementResponseDTO>> RecentAnnouncement(AudienceType Type)
         {
 
-            var GetData = await _AnnouncementRepo.RecentAnnouncement();
+            var GetData = await _AnnouncementRepo.RecentAnnouncement(Type);
 
 
             return GetData.Select(a => new AnnouncementResponseDTO()
@@ -183,6 +183,21 @@ namespace MS3_Back_End.Service
                 TotalItem = AllAnouncements.Count,
             };
             return PaginationResponseDTO;
+        }
+
+        public async Task<string> AnnouncementValidCheck()
+        {
+            var announcements = await GetAllAnnouncement();
+
+            foreach (var item in announcements)
+            {
+                if (item.ExpirationDate <= DateTime.UtcNow)
+                {
+                    await DeleteAnnouncement(item.Id);
+                }
+            }
+
+            return "Announcement validation Successfull.";
         }
 
     }

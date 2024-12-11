@@ -64,7 +64,8 @@ namespace MS3_Back_End.Service
                 PaymentDate = DateTime.Now,
                 DueDate = paymentRequest.PaymentType == PaymentTypes.Installment && paymentRequest.InstallmentNumber != 3 ? CalculateInstallmentDueDate(today, courseScheduleData.Duration) : null,
                 InstallmentNumber = paymentRequest.PaymentType == PaymentTypes.Installment ? paymentRequest.InstallmentNumber : null,
-                EnrollmentId = paymentRequest.EnrollmentId
+                EnrollmentId = paymentRequest.EnrollmentId,
+                isReminder = false,
             };
 
             var createdPayment = await _paymentRepository.CreatePayment(payment);
@@ -106,7 +107,7 @@ namespace MS3_Back_End.Service
                 StudentId = StudentData.Id,
                 StudentName = StudentData.FirstName + " " + StudentData.LastName,
                 Email = StudentData.Email,
-                Address = $"{StudentData.Address!.AddressLine1}, {StudentData.Address!.AddressLine2}, {StudentData.Address!.City}, {StudentData.Address!.Country}",
+                Address = StudentData.Address != null ? $"{StudentData.Address!.AddressLine1}, {StudentData.Address!.AddressLine2}, {StudentData.Address!.City}, {StudentData.Address!.Country}" : null,
                 CourseName = courseData.CourseName,
                 AmountPaid = createdPayment.AmountPaid,
                 PaymentType = ((PaymentTypes)createdPayment.PaymentType).ToString(),
@@ -173,7 +174,7 @@ namespace MS3_Back_End.Service
                 if(enrollment.PaymentStatus == PaymentStatus.InProcess)
                 {
                     var payment = await _paymentRepository.GetLastPaymentOfEnrollment(enrollment.Id);
-                    if (payment.PaymentType == PaymentTypes.Installment && payment.DueDate != null && payment.DueDate <= DateTime.UtcNow)
+                    if (payment.PaymentType == PaymentTypes.Installment && payment.DueDate != null && payment.DueDate <= DateTime.UtcNow && payment.isReminder == false)
                     {
                         var studentData = await _studentRepository.GetStudentById(enrollment.StudentId);
                         var courseScheduleData = await _courseScheduleRepository.GetCourseScheduleById(enrollment.CourseScheduleId);
@@ -201,6 +202,9 @@ namespace MS3_Back_End.Service
                             DateSent = DateTime.Now,
                             IsRead = false
                         };
+
+                        payment.isReminder = true;
+                        await _paymentRepository.UpdatePayment(payment);
 
                         await _notificationRepository.AddNotification(Message);
                     }

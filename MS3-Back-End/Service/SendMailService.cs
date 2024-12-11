@@ -104,5 +104,129 @@ namespace MS3_Back_End.Service
 
             return emailbody;
         }
+
+
+
+        //Contact Us Message
+        public async Task<string> MessageMail(SendMessageMailRequest sendMailRequest)
+        {
+            if (sendMailRequest == null) throw new ArgumentNullException(nameof(sendMailRequest));
+
+            var template = await _sendMailRepository.GetTemplate(sendMailRequest.EmailType).ConfigureAwait(false);
+            if (template == null) throw new Exception("Template not found");
+
+            var bodyGenerated = await MessageEmailBodyGenerate(template.Body, sendMailRequest).ConfigureAwait(false);
+
+            MailModel mailModel = new MailModel
+            {
+                Subject = template.Title ?? string.Empty,
+                Body = bodyGenerated ?? string.Empty,
+                SenderName = "Way Makers",
+                To = sendMailRequest.Email ?? throw new Exception("Recipient email address is required")
+            };
+
+            await _emailServiceProvider.SendMail(mailModel).ConfigureAwait(false);
+            return "email was sent successfully";
+        }
+
+        public async Task<string> MessageEmailBodyGenerate(string emailbody, SendMessageMailRequest sendMailRequest)
+        {
+            var replacements = new Dictionary<string, string?>()
+            {
+                {"{Name}", sendMailRequest.Name},
+                {"{UserMessage}", sendMailRequest.UserMessage},
+            };
+
+            foreach (var replace in replacements)
+            {
+                if (!string.IsNullOrEmpty(replace.Value))
+                {
+                    emailbody = emailbody.Replace(replace.Key, replace.Value, StringComparison.OrdinalIgnoreCase);
+                }
+            }
+            return emailbody;
+        }
+
+
+        //Contact Us Response
+        public async Task<string> ResponseMail(SendResponseMailRequest sendMailRequest)
+        {
+            if (sendMailRequest == null) throw new ArgumentNullException(nameof(sendMailRequest));
+
+            var template = await _sendMailRepository.GetTemplate(sendMailRequest.EmailType).ConfigureAwait(false);
+            if (template == null) throw new Exception("Template not found");
+
+            var bodyGenerated = await ResponseEmailBodyGenerate(template.Body, sendMailRequest).ConfigureAwait(false);
+
+            MailModel mailModel = new MailModel
+            {
+                Subject = template.Title ?? string.Empty,
+                Body = bodyGenerated ?? string.Empty,
+                SenderName = "Way Makers",
+                To = sendMailRequest.Email ?? throw new Exception("Recipient email address is required")
+            };
+
+            await _emailServiceProvider.SendMail(mailModel).ConfigureAwait(false);
+            return "email was sent successfully";
+        }
+
+        public async Task<string> ResponseEmailBodyGenerate(string emailbody, SendResponseMailRequest sendMailRequest)
+        {
+            var replacements = new Dictionary<string, string?>()
+            {
+                {"{Name}", sendMailRequest.Name},
+                {"{AdminResponse}", sendMailRequest.AdminResponse},
+            };
+
+            foreach (var replace in replacements)
+            {
+                if (!string.IsNullOrEmpty(replace.Value))
+                {
+                    emailbody = emailbody.Replace(replace.Key, replace.Value, StringComparison.OrdinalIgnoreCase);
+                }
+            }
+            return emailbody;
+        }
+
+
+        //Email Verify
+        public async Task<string> VerifyMail(SendVerifyMailRequest sendMailRequest)
+        {
+            if (sendMailRequest == null) throw new ArgumentNullException(nameof(sendMailRequest));
+
+            var template = await _sendMailRepository.GetTemplate(sendMailRequest.EmailType).ConfigureAwait(false);
+            if (template == null) throw new Exception("Template not found");
+
+            var bodyGenerated = await VerifyEmailBodyGenerate(template.Body, sendMailRequest).ConfigureAwait(false);
+
+            MailModel mailModel = new MailModel
+            {
+                Subject = template.Title ?? string.Empty,
+                Body = bodyGenerated ?? string.Empty,
+                SenderName = "Way Makers",
+                To = sendMailRequest.Email ?? throw new Exception("Recipient email address is required")
+            };
+
+            await _emailServiceProvider.SendMail(mailModel).ConfigureAwait(false);
+            return "email was sent successfully";
+        }
+
+        public async Task<string> VerifyEmailBodyGenerate(string emailbody, SendVerifyMailRequest sendMailRequest)
+        {
+            var replacements = new Dictionary<string, string?>()
+            {
+                {"{Name}", sendMailRequest.Name},
+                {"{VerificationLink}", sendMailRequest.VerificationLink},
+            };
+
+            foreach (var replace in replacements)
+            {
+                if (!string.IsNullOrEmpty(replace.Value))
+                {
+                    emailbody = emailbody.Replace(replace.Key, replace.Value, StringComparison.OrdinalIgnoreCase);
+                }
+            }
+            return emailbody;
+        }
     }
 }
