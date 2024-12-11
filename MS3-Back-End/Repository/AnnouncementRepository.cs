@@ -36,7 +36,7 @@ namespace MS3_Back_End.Repository
         }
         public async Task<ICollection<Announcement>> RecentAnnouncement(AudienceType Type)
         {
-            return await _Db.Announcements.OrderByDescending(a => a.DatePosted).Where(a => a.AudienceType == AudienceType.Everyone || a.AudienceType == Type).Take(3).ToListAsync();
+            return await _Db.Announcements.OrderByDescending(a => a.DatePosted).Where(a => a.AudienceType == AudienceType.Everyone || a.AudienceType == Type && a.IsActive == true).Take(3).ToListAsync();
         }
 
         public async Task<string> DeleteAnnouncement(Announcement announcement)

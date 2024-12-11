@@ -12,6 +12,8 @@ using MS3_Back_End.IService;
 using Microsoft.SqlServer.Server;
 using System.Runtime.InteropServices;
 using Azure.Core;
+using MS3_Back_End.DTOs.Email;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MS3_Back_End.Service
 {
@@ -19,11 +21,13 @@ namespace MS3_Back_End.Service
     {
         private readonly IAdminRepository _adminRepository;
         private readonly IAuthRepository _authRepository;
+        private readonly SendMailService _sendMailService;
 
-        public AdminService(IAdminRepository adminRepository, IAuthRepository authRepository)
+        public AdminService(IAdminRepository adminRepository, IAuthRepository authRepository, SendMailService sendMailService)
         {
             _adminRepository = adminRepository;
             _authRepository = authRepository;
+            _sendMailService = sendMailService;
         }
 
         public async Task<AdminResponseDTO> AddAdmin(AdminRequestDTO request)
@@ -93,6 +97,16 @@ namespace MS3_Back_End.Service
                 UpdatedDate = adminData.UpdatedDate,
                 IsActive = adminData.IsActive,
             };
+
+            var verifyMail = new SendVerifyMailRequest()
+            {
+                Name = adminData.FirstName + " " + adminData.LastName,
+                Email = userData.Email,
+                VerificationLink = $"http://localhost:4200/email-verified/{userData.Id}",
+                EmailType = EmailTypes.EmailVerification,
+            };
+
+            await _sendMailService.VerifyMail(verifyMail);
 
             return response;
         }
