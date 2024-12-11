@@ -100,6 +100,9 @@ namespace MS3_Back_End
             //FeedBack
             builder.Services.AddScoped<IFeedbacksRepository, FeedbacksRepository>();
             builder.Services.AddScoped<IFeedbacksService, FeedbacksService>();
+            //Otp
+            builder.Services.AddScoped<IOtpRepository, OtpRepository>();
+            builder.Services.AddScoped<IOtpService, OtpService>();
 
             // Ensure EmailConfig is available as a singleton if needed
             builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<EmailConfig>>().Value);
