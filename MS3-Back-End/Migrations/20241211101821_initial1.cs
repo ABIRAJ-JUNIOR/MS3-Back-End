@@ -21,6 +21,7 @@ namespace MS3_Back_End.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CoverImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CteatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
@@ -36,6 +37,7 @@ namespace MS3_Back_End.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DatePosted = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AudienceType = table.Column<int>(type: "int", nullable: false),
@@ -74,6 +76,20 @@ namespace MS3_Back_End.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CourseCategories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmailTemplates",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    emailTypes = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Body = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmailTemplates", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -212,6 +228,28 @@ namespace MS3_Back_End.Migrations
                         name: "FK_Notifications_Students_StudentId",
                         column: x => x.StudentId,
                         principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Otps",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Otpdata = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OtpGenerated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsUsed = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Otps", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Otps_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -393,8 +431,10 @@ namespace MS3_Back_End.Migrations
                     PaymentMethod = table.Column<int>(type: "int", nullable: false),
                     AmountPaid = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     InstallmentNumber = table.Column<int>(type: "int", nullable: true),
-                    EnrollmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    EnrollmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    isReminder = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -459,6 +499,11 @@ namespace MS3_Back_End.Migrations
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Otps_UserId",
+                table: "Otps",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Payments_EnrollmentId",
                 table: "Payments",
                 column: "EnrollmentId");
@@ -501,10 +546,16 @@ namespace MS3_Back_End.Migrations
                 name: "ContactUs");
 
             migrationBuilder.DropTable(
+                name: "EmailTemplates");
+
+            migrationBuilder.DropTable(
                 name: "Feedbacks");
 
             migrationBuilder.DropTable(
                 name: "Notifications");
+
+            migrationBuilder.DropTable(
+                name: "Otps");
 
             migrationBuilder.DropTable(
                 name: "Payments");

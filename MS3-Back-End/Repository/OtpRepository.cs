@@ -33,7 +33,7 @@ namespace MS3_Back_End.Repository
         {
             var ResponseData = await _Db.Otps.AddAsync(otpRequest);
             await _Db.SaveChangesAsync();
-            return "Email Verfication SuccesFully.Your Otp is "+otpRequest.Otpdata;
+            return "Email Verfication SuccesFully.";
 
         }
         public async Task<Otp> CheckOtpVerification(verifyOtp otpDetail)
