@@ -41,6 +41,7 @@ namespace MS3_Back_End.Repository
         {
             var feedbacks = await _dbContext.Feedbacks
                       .Include(s => s.Student)
+                      .Include(c => c.Course)
                       .OrderByDescending(f => f.FeedBackDate)
                       .Skip((pageNumber - 1) * pageSize)
                       .Take(pageSize)

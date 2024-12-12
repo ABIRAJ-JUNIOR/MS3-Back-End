@@ -10,6 +10,6 @@ namespace MS3_Back_End.IService
         Task<ICollection<FeedbacksResponceDTO>> GetAllFeedbacks();
         Task<ICollection<FeedbacksResponceDTO>> GetTopFeetbacks();
         Task<ICollection<FeedbacksResponceDTO>> GetFeedBacksByStudentId(Guid Id);
-        Task<PaginationResponseDTO<FeedbacksResponceDTO>> GetPaginatedFeedBack(int pageNumber, int pageSize);
+        Task<PaginationResponseDTO<PaginatedFeedbackResponseDTO>> GetPaginatedFeedBack(int pageNumber, int pageSize);
     }
 }

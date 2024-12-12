@@ -111,12 +111,12 @@ namespace MS3_Back_End.Service
         }
 
 
-        public async Task<PaginationResponseDTO<FeedbacksResponceDTO>> GetPaginatedFeedBack(int pageNumber, int pageSize)
+        public async Task<PaginationResponseDTO<PaginatedFeedbackResponseDTO>> GetPaginatedFeedBack(int pageNumber, int pageSize)
         {
             var feedbacks = await _feedbacksRepository.GetPaginatedFeedBack(pageNumber, pageSize);
             var allFeedbacks = await _feedbacksRepository.getAllFeedbacks();
 
-            var retundatas = feedbacks.Select(data => new FeedbacksResponceDTO()
+            var retundatas = feedbacks.Select(data => new PaginatedFeedbackResponseDTO()
             {
                 CourseId = data.CourseId,
                 FeedBackDate = data.FeedBackDate,
@@ -124,6 +124,19 @@ namespace MS3_Back_End.Service
                 Rating = data.Rating,
                 StudentId = data.StudentId,
                 Id = data.Id,
+                Course = data.Course != null ? new CourseResponseDTO()
+                {
+                    Id = data.Course.Id,
+                    CourseCategoryId = data.Course.CourseCategoryId,
+                    CourseName = data.Course.CourseName,
+                    Level = ((CourseLevel)data.Course.Level).ToString(),
+                    CourseFee = data.Course.CourseFee,
+                    Description = data.Course.Description,
+                    Prerequisites = data.Course.Prerequisites,
+                    ImageUrl = data.Course.ImageUrl!,
+                    CreatedDate = data.Course.CreatedDate,
+                    UpdatedDate = data.Course.UpdatedDate,
+                } : new CourseResponseDTO(),
                 Student = data.Student != null ? new StudentResponseDTO()
                 {
                     Id = data.Student.Id,
@@ -139,7 +152,7 @@ namespace MS3_Back_End.Service
                 } : new StudentResponseDTO()
             }).ToList();
 
-            var paginationResponseDto = new PaginationResponseDTO<FeedbacksResponceDTO>
+            var paginationResponseDto = new PaginationResponseDTO<PaginatedFeedbackResponseDTO>
             {
                 Items = retundatas,
                 CurrentPage = pageNumber,
