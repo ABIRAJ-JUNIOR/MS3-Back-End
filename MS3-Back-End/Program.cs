@@ -182,15 +182,19 @@ namespace MS3_Back_End
             });
 
 
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
             builder.Services.AddCors(options =>
             {
-                options.AddDefaultPolicy(policy =>
-                {
-                    policy.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-                });
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:4200") 
+                              .AllowAnyHeader()
+                              .AllowAnyMethod();
+                    });
             });
+
 
             var app = builder.Build();
 
@@ -205,7 +209,7 @@ namespace MS3_Back_End
 
             app.UseSwaggerUI();
 
-            app.UseCors();
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseStaticFiles();
 
