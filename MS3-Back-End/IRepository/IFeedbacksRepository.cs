@@ -7,5 +7,6 @@ namespace MS3_Back_End.IRepository
         Task<Feedbacks> AddFeedbacks(Feedbacks feedbacks);
         Task<ICollection<Feedbacks>> getAllFeedbacks();
         Task<ICollection<Feedbacks>> GetTopFeetbacks();
+        Task<ICollection<Feedbacks>> GetFeedBacksBySrudentId(Guid Id);
     }
 }

@@ -30,6 +30,12 @@ namespace MS3_Back_End.Repository
             var datas = await _dbContext.Feedbacks.Include(s => s.Student).OrderByDescending(f => f.FeedBackDate).Take(4).ToListAsync();
             return datas;
         }
+
+        public async Task<ICollection<Feedbacks>> GetFeedBacksBySrudentId(Guid Id)
+        {
+            var data = await _dbContext.Feedbacks.Where( f => f.StudentId == Id).ToListAsync();
+            return data;
+        }
     }
     
 }

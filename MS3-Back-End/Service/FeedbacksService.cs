@@ -62,29 +62,46 @@ namespace MS3_Back_End.Service
 
         public async Task<ICollection<FeedbacksResponceDTO>> GetTopFeetbacks()
         {
-            var datas = await _feedbacksRepository.GetTopFeetbacks();
+            var data = await _feedbacksRepository.GetTopFeetbacks();
 
-            var retundatas = datas.Select(datas => new FeedbacksResponceDTO()
+            var retundatas = data.Select(data => new FeedbacksResponceDTO()
             {
-                CourseId = datas.CourseId,
-                FeedBackDate = datas.FeedBackDate,
-                FeedBackText = datas.FeedBackText,
-                Rating = datas.Rating,
-                StudentId = datas.StudentId,
-                Id = datas.Id,
-                Student = datas.Student !=  null ? new StudentResponseDTO()
+                CourseId = data.CourseId,
+                FeedBackDate = data.FeedBackDate,
+                FeedBackText = data.FeedBackText,
+                Rating = data.Rating,
+                StudentId = data.StudentId,
+                Id = data.Id,
+                Student = data.Student !=  null ? new StudentResponseDTO()
                 {
-                    Id = datas.Student.Id,
-                    Nic = datas.Student.Nic,
-                    FirstName = datas.Student.FirstName,
-                    LastName = datas.Student.LastName,
-                    DateOfBirth = datas.Student.DateOfBirth,
-                    Gender = ((Gender)datas.Student.Gender).ToString(),
-                    Phone = datas.Student.Phone,
-                    ImageUrl = datas.Student.ImageUrl!,
-                    CteatedDate = datas.Student.CteatedDate,
-                    UpdatedDate = datas.Student.UpdatedDate,
+                    Id = data.Student.Id,
+                    Nic = data.Student.Nic,
+                    FirstName = data.Student.FirstName,
+                    LastName = data.Student.LastName,
+                    DateOfBirth = data.Student.DateOfBirth,
+                    Gender = ((Gender)data.Student.Gender).ToString(),
+                    Phone = data.Student.Phone,
+                    ImageUrl = data.Student.ImageUrl!,
+                    CteatedDate = data.Student.CteatedDate,
+                    UpdatedDate = data.Student.UpdatedDate,
                 } : new StudentResponseDTO()
+            }).ToList();
+
+            return retundatas;
+        }
+
+        public async Task<ICollection<FeedbacksResponceDTO>> GetFeedBacksBySrudentId(Guid Id)
+        {
+            var data = await _feedbacksRepository.GetFeedBacksBySrudentId(Id);
+            var retundatas = data.Select(data => new FeedbacksResponceDTO()
+            {
+                CourseId = data.CourseId,
+                FeedBackDate = data.FeedBackDate,
+                FeedBackText = data.FeedBackText,
+                Rating = data.Rating,
+                StudentId = data.StudentId,
+                Id = data.Id,
+                Student = null,
             }).ToList();
 
             return retundatas;

@@ -58,5 +58,20 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("Students")]
+
+        public async Task<IActionResult> GetFeedBacksBySrudentId(Guid Id)
+        {
+            try
+            {
+                var data = await _feedbackService.GetFeedBacksBySrudentId(Id);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
