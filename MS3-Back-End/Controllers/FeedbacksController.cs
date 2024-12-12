@@ -59,7 +59,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("Students/{Id}")]
+        [HttpGet("Student/{Id}")]
         public async Task<IActionResult> GetFeedBacksByStudentId(Guid Id)
         {
             try
