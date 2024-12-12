@@ -59,13 +59,26 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpGet("Students")]
-
-        public async Task<IActionResult> GetFeedBacksBySrudentId(Guid Id)
+        [HttpGet("Students/{Id}")]
+        public async Task<IActionResult> GetFeedBacksByStudentId(Guid Id)
         {
             try
             {
-                var data = await _feedbackService.GetFeedBacksBySrudentId(Id);
+                var data = await _feedbackService.GetFeedBacksByStudentId(Id);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("Pagination/{pageNumber}/{pageSize}")]
+        public async Task<IActionResult>  GetPaginatedFeedBack(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var data = await _feedbackService.GetPaginatedFeedBack(pageNumber, pageSize);
                 return Ok(data);
             }
             catch (Exception ex)

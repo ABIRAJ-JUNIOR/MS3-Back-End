@@ -1,9 +1,12 @@
-﻿using MS3_Back_End.DTOs.RequestDTOs.Feedbacks;
+﻿using MS3_Back_End.DTOs.Pagination;
+using MS3_Back_End.DTOs.RequestDTOs.Feedbacks;
+using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.FeedBack;
 using MS3_Back_End.DTOs.ResponseDTOs.Student;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IRepository;
 using MS3_Back_End.IService;
+using MS3_Back_End.Repository;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MS3_Back_End.Service
@@ -90,9 +93,9 @@ namespace MS3_Back_End.Service
             return retundatas;
         }
 
-        public async Task<ICollection<FeedbacksResponceDTO>> GetFeedBacksBySrudentId(Guid Id)
+        public async Task<ICollection<FeedbacksResponceDTO>> GetFeedBacksByStudentId(Guid Id)
         {
-            var data = await _feedbacksRepository.GetFeedBacksBySrudentId(Id);
+            var data = await _feedbacksRepository.GetFeedBacksByStudentId(Id);
             var retundatas = data.Select(data => new FeedbacksResponceDTO()
             {
                 CourseId = data.CourseId,
@@ -107,5 +110,45 @@ namespace MS3_Back_End.Service
             return retundatas;
         }
 
+
+        public async Task<PaginationResponseDTO<FeedbacksResponceDTO>> GetPaginatedFeedBack(int pageNumber, int pageSize)
+        {
+            var feedbacks = await _feedbacksRepository.GetPaginatedFeedBack(pageNumber, pageSize);
+            var allFeedbacks = await _feedbacksRepository.getAllFeedbacks();
+
+            var retundatas = feedbacks.Select(data => new FeedbacksResponceDTO()
+            {
+                CourseId = data.CourseId,
+                FeedBackDate = data.FeedBackDate,
+                FeedBackText = data.FeedBackText,
+                Rating = data.Rating,
+                StudentId = data.StudentId,
+                Id = data.Id,
+                Student = data.Student != null ? new StudentResponseDTO()
+                {
+                    Id = data.Student.Id,
+                    Nic = data.Student.Nic,
+                    FirstName = data.Student.FirstName,
+                    LastName = data.Student.LastName,
+                    DateOfBirth = data.Student.DateOfBirth,
+                    Gender = ((Gender)data.Student.Gender).ToString(),
+                    Phone = data.Student.Phone,
+                    ImageUrl = data.Student.ImageUrl!,
+                    CteatedDate = data.Student.CteatedDate,
+                    UpdatedDate = data.Student.UpdatedDate,
+                } : new StudentResponseDTO()
+            }).ToList();
+
+            var paginationResponseDto = new PaginationResponseDTO<FeedbacksResponceDTO>
+            {
+                Items = retundatas,
+                CurrentPage = pageNumber,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling(allFeedbacks.Count / (double)pageSize),
+                TotalItem = allFeedbacks.Count,
+            };
+
+            return paginationResponseDto;
+        }
     }
 }
