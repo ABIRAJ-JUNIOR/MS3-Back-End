@@ -23,7 +23,7 @@ namespace MS3_Back_End.Repository
 
         public async Task<ICollection<Notification>> GetAllNotification(Guid id)
         {
-            var getAllNotification = await _appDBContext.Notifications.Where(n => n.StudentId == id && n.IsRead==false).ToListAsync();
+            var getAllNotification = await _appDBContext.Notifications.Where(n => n.StudentId == id).ToListAsync();
             return getAllNotification;
         }
 
@@ -33,9 +33,16 @@ namespace MS3_Back_End.Repository
             return getNotificationById!;
         }
 
-        public async Task<Notification> DeleteNotification(Notification notification)
+        public async Task<Notification> ReadNotification(Notification notification)
         {
             var data = _appDBContext.Notifications.Update(notification);
+            await _appDBContext.SaveChangesAsync();
+            return data.Entity;
+        }
+
+        public async Task<Notification> DeleteNotification(Notification notification)
+        {
+            var data = _appDBContext.Notifications.Remove(notification);
             await _appDBContext.SaveChangesAsync();
             return data.Entity;
         }
