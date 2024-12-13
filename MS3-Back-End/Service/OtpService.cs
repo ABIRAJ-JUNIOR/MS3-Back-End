@@ -15,49 +15,90 @@ namespace MS3_Back_End.Service
         private readonly IAuthRepository _Authrepository;
         private readonly SendMailService _sendmailservice;
         private readonly IStudentRepository _studentrepository;
+        private readonly IAdminRepository _adminrepository;
 
-        public OtpService(IOtpRepository repository, IAuthRepository authrepository, SendMailService sendmailservice, IStudentRepository studentrepository)
+        public OtpService(IOtpRepository repository, IAuthRepository authrepository, SendMailService sendmailservice, IStudentRepository studentrepository, IAdminRepository adminrepository)
         {
             _repository = repository;
             _Authrepository = authrepository;
             _sendmailservice = sendmailservice;
             _studentrepository = studentrepository;
+            _adminrepository = adminrepository;
         }
 
         public async Task<string> EmailVerification(GenerateOtp otpDetails)
         {
             var response = await _repository.EmailVerification(otpDetails);
-            var studentData = await _studentrepository.GetStudentById(response.Id);
-
-            if(studentData.IsActive == false)
+            if (response == null)
             {
-                throw new Exception("InActive Account");
+                throw new Exception("Email not valid");
+
             }
 
-            Random random = new Random();
-            var otpObject = new Otp
+            if(response.UserRole!.Role!.Name == "Student")
             {
-                UserId = response.Id,
-                Email = otpDetails.Email,
-                Otpdata = Convert.ToString(random.Next(1000, 10000)),
-                OtpGenerated = DateTime.Now,
-            };
+                var studentData = await _studentrepository.GetStudentById(response.Id);
+                if (studentData.IsActive == false)
+                {
+                    throw new Exception("InActive Account");
+                }
 
-            var responseData = await _repository.SaveGeneratedOtp(otpObject);
+                Random random = new Random();
+                var otpObject = new Otp
+                {
+                    UserId = response.Id,
+                    Email = otpDetails.Email,
+                    Otpdata = Convert.ToString(random.Next(1000, 10000)),
+                    OtpGenerated = DateTime.Now,
+                };
+
+                var responseData = await _repository.SaveGeneratedOtp(otpObject);
 
 
-            var Otp = new SendOtpMailRequest()
+                var Otp = new SendOtpMailRequest()
+                {
+                    Name = studentData.FirstName + " " + studentData.LastName,
+                    Otp = otpObject.Otpdata,
+                    Email = otpDetails.Email,
+                    EmailType = EmailTypes.ResetPasswordOTP,
+                };
+
+                await _sendmailservice.OtpMail(Otp);
+
+            }else if(response.UserRole!.Role!.Name == "Administrator" || response.UserRole!.Role!.Name == "Instructor")
             {
-                Name =  studentData.FirstName + " " + studentData.LastName,
-                Otp = otpObject.Otpdata,
-                Email = otpDetails.Email,
-                EmailType = EmailTypes.ResetPasswordOTP,
-            };
+                var AdminData = await _adminrepository.GetAdminById(response.Id);
 
-            await _sendmailservice.OtpMail(Otp);
+                if (AdminData.IsActive == false)
+                {
+                    throw new Exception("InActive Account");
+                }
 
-            return responseData;
+                Random random = new Random();
+                var otpObject = new Otp
+                {
+                    UserId = response.Id,
+                    Email = otpDetails.Email,
+                    Otpdata = Convert.ToString(random.Next(1000, 10000)),
+                    OtpGenerated = DateTime.Now,
+                };
 
+                var responseData = await _repository.SaveGeneratedOtp(otpObject);
+
+
+                var Otp = new SendOtpMailRequest()
+                {
+                    Name = AdminData.FirstName + " " + AdminData.LastName,
+                    Otp = otpObject.Otpdata,
+                    Email = otpDetails.Email,
+                    EmailType = EmailTypes.ResetPasswordOTP,
+                };
+
+                await _sendmailservice.OtpMail(Otp);
+
+            }
+
+            return "Email Verfication SuccesFully.";
         }
 
         public async Task<string> OtpVerification(verifyOtp verifyDetails)
