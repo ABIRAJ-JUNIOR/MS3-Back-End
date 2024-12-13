@@ -47,13 +47,26 @@ namespace MS3_Back_End.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-
-        public async Task<IActionResult> DeleteNotification(Guid id)
+        [HttpGet("Read/{id}")]
+        public async Task<IActionResult> ReadNotification(Guid id)
         {
-            var response = await _notificationService.DeleteNotification(id);
+            var response = await _notificationService.ReadNotification(id);
             return Ok(response);
         }
 
+        [HttpDelete("Delete/{id}")]
+
+        public async Task<IActionResult> DeleteNotification(Guid id)
+        {
+            try
+            {
+                var respose = await _notificationService.DeleteNotification(id);
+                return Ok(respose);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
