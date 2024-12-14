@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.RequestDTOs.AuditLog;
@@ -32,6 +33,8 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [Authorize]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetallAuditlogs()
         {
@@ -47,6 +50,7 @@ namespace MS3_Back_End.Controllers
         
         }
 
+        [Authorize]
         [HttpGet("Get-AuditLogs-By/{adminId}")]
         public async Task<IActionResult> GetAuditLogsbyAdminId(Guid adminId)
         {
@@ -61,6 +65,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("Get-AuditLog-By/{id}")]
         public async Task<IActionResult> GetAuditLogByID(Guid id)
         {

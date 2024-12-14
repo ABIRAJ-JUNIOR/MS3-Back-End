@@ -74,7 +74,7 @@ namespace MS3_Back_End.Service
             return NotificationResponse;
         }
         
-        public async Task<string> DeleteNotification(Guid id)
+        public async Task<string> ReadNotification(Guid id)
         {
             var notificationData = await _notificationRepository.GetNotificationById(id);
             if(notificationData == null)
@@ -83,9 +83,22 @@ namespace MS3_Back_End.Service
             }
 
             notificationData.IsRead = true;
+            await _notificationRepository.ReadNotification(notificationData);
+
+            return "Read Successfully";
+        }
+
+        public async Task<string> DeleteNotification(Guid id)
+        {
+            var notificationData = await _notificationRepository.GetNotificationById(id);
+            if (notificationData == null)
+            {
+                throw new Exception("Not found");
+            }
+
             await _notificationRepository.DeleteNotification(notificationData);
 
-            return "Deleted Successfully";
+            return "Delete Successfully";
         }
     }
 }

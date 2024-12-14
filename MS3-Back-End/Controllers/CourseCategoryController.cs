@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.RequestDTOs.CourseCategory;
 using MS3_Back_End.DTOs.ResponseDTOs.CourseCategory;
@@ -58,8 +59,8 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("GetAllCategory")]
 
+        [HttpGet("GetAllCategory")]
         public async Task<IActionResult> GetAllGetCourseCategory()
         {
 

@@ -13,6 +13,7 @@ using System.Drawing;
 namespace MS3_Back_End.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class AdminController : ControllerBase
     {
@@ -96,7 +97,6 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpDelete("{Id}")]
-
         public async Task<IActionResult> DeleteAdmin(Guid Id)
         {
             try

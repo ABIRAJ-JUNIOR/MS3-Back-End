@@ -11,6 +11,7 @@
         public string PaymentMethod { get; set; } = string.Empty;
         public DateTime TransactionDate {  get; set; }
         public DateTime? DueDate { get; set; }
+        public bool isReminder { get; set; }
 
     }
 }
