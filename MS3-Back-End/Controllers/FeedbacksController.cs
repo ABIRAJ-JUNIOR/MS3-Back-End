@@ -9,7 +9,6 @@ using MS3_Back_End.IService;
 namespace MS3_Back_End.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
     public class FeedbacksController : ControllerBase
     {
@@ -19,6 +18,8 @@ namespace MS3_Back_End.Controllers
         {
             _feedbackService = feedbackService;
         }
+
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddFeedback(FeedbacksRequestDTO feedbacksRequestDTO) 
         {
@@ -75,6 +76,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("Pagination/{pageNumber}/{pageSize}")]
         public async Task<IActionResult>  GetPaginatedFeedBack(int pageNumber, int pageSize)
         {
