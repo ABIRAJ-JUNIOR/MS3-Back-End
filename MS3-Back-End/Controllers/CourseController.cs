@@ -138,7 +138,6 @@ namespace MS3_Back_End.Controller
         }
 
         [HttpGet("Top3")]
-
         public async Task<IActionResult> GetTop3Courses()
         {
             var data = await _courseService.GetTop3Courses();

@@ -97,7 +97,6 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpDelete("{Id}")]
-
         public async Task<IActionResult> DeleteAdmin(Guid Id)
         {
             try
