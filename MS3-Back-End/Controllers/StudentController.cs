@@ -10,7 +10,6 @@ using MS3_Back_End.IService;
 namespace MS3_Back_End.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
     public class StudentController : ControllerBase
     {
@@ -20,7 +19,7 @@ namespace MS3_Back_End.Controllers
             _studentService = studentService;
         }
 
-
+        [Authorize]
         [HttpPost("student")]
         public async Task<IActionResult> AddStudent(StudentRequestDTO studentRequest)
         {
@@ -54,6 +53,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStudentFullDetailsById(Guid id)
         {
@@ -68,6 +68,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("Update-Full-Details/{id}")]
         public async Task<IActionResult> UpdateStudentFullDetails(Guid id, StudentFullUpdateDTO request)
         {
@@ -82,6 +83,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("Update-Personal-Details")]
         public async Task<IActionResult> UpdateStudent(StudentUpdateDTO studentUpdate)
         {
@@ -101,6 +103,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteStudent(Guid id)
         {
@@ -115,6 +118,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("Image/{studentId}")]
         public async Task<IActionResult> UploadImage(Guid studentId, IFormFile? image)
         {
@@ -129,6 +133,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("Pagination/{pageNumber}/{pageSize}")]
         public async Task<IActionResult> GetStudentByPagination(int pageNumber, int pageSize)
         {
@@ -143,6 +148,8 @@ namespace MS3_Back_End.Controllers
             }
 
         }
+
+        [Authorize]
         [HttpPut("Update-info-Details/{id}")]
         public async Task<IActionResult> UpdateStudentInfoDetails(Guid id, StudentFullUpdateDTO request)
         {
@@ -157,6 +164,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("changeStudentPassword/{id}")]
         public async Task<IActionResult> UpdateStudentInfoDetails(Guid id, PasswordRequest auth)
         {
