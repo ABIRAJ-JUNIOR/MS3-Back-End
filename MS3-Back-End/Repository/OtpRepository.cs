@@ -17,16 +17,8 @@ namespace MS3_Back_End.Repository
 
         public async Task<User> EmailVerification(GenerateOtp otpDetail)
         {
-            var responseData = await _Db.Users.SingleOrDefaultAsync(user => user.Email == otpDetail.Email);
-            if (responseData != null)
-            {
-                return responseData;
-            }
-            else
-            {
-                throw new Exception("Email not valid");
-            }
-
+            var responseData = await _Db.Users.Include(ur => ur.UserRole).ThenInclude(r => r.Role).SingleOrDefaultAsync(user => user.Email == otpDetail.Email);
+            return responseData!;
         }
 
         public async Task<string> SaveGeneratedOtp(Otp otpRequest)
@@ -39,7 +31,7 @@ namespace MS3_Back_End.Repository
         public async Task<Otp> CheckOtpVerification(verifyOtp otpDetail)
         {
             var ResponseData = await _Db.Otps.Where(a=>a.IsUsed==false).SingleOrDefaultAsync(otp=>otp.Email== otpDetail.Email && otp.Otpdata == otpDetail.Otp);
-            return ResponseData;
+            return ResponseData!;
         }
         public async Task<string> DeleteOtpDetails(Otp OtpDetails)
         {
@@ -47,7 +39,5 @@ namespace MS3_Back_End.Repository
             await _Db.SaveChangesAsync();
             return "Otp Deleted Successfully.";
         }
-
-
     }
 }

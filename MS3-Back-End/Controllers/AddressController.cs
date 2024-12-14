@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.RequestDTOs.Address;
 using MS3_Back_End.DTOs.ResponseDTOs.Address;
@@ -8,6 +9,7 @@ using System.Runtime.InteropServices;
 namespace MS3_Back_End.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class AddressController : ControllerBase
     {

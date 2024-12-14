@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MS3_Back_End.DTOs.RequestDTOs.ContactUs;
@@ -33,6 +34,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllMessages()
         {
@@ -47,6 +49,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut]
         public async Task<IActionResult> UpdateMessage(UpdateResponseRequestDTO request)
         {
@@ -61,6 +64,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("Delete/{Id}")]
         public async Task<IActionResult> DeleteMessage(Guid id)
         {

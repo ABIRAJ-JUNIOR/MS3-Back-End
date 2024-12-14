@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.Email;
 using MS3_Back_End.Service;
@@ -6,6 +7,7 @@ using MS3_Back_End.Service;
 namespace MS3_Back_End.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class SendMailController : ControllerBase
     {

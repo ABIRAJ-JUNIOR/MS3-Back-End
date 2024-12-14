@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.RequestDTOs.Feedbacks;
@@ -17,6 +18,8 @@ namespace MS3_Back_End.Controllers
         {
             _feedbackService = feedbackService;
         }
+
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddFeedback(FeedbacksRequestDTO feedbacksRequestDTO) 
         {
@@ -73,6 +76,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("Pagination/{pageNumber}/{pageSize}")]
         public async Task<IActionResult>  GetPaginatedFeedBack(int pageNumber, int pageSize)
         {

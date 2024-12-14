@@ -13,6 +13,7 @@ using System.Drawing;
 namespace MS3_Back_End.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class AdminController : ControllerBase
     {
