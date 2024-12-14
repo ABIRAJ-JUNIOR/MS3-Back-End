@@ -8,7 +8,6 @@ using MS3_Back_End.IService;
 namespace MS3_Back_End.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
     public class CourseCategoryController : ControllerBase
     {

@@ -48,7 +48,6 @@ namespace MS3_Back_End.Controllers
         }
 
         [Authorize]
-        [HttpGet]
         public async Task<IActionResult> GetAllCourseSchedule()
         {
             try
