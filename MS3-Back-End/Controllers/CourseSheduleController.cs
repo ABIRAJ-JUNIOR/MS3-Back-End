@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.IService;
@@ -17,6 +18,7 @@ namespace MS3_Back_End.Controllers
             _courseScheduleService = courseScheduleService;
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddCourseSchedule(CourseScheduleRequestDTO courseReq)
         {
@@ -45,6 +47,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllCourseSchedule()
         {
@@ -78,6 +81,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("Update/{id}")]
         public async Task<IActionResult> UpdateCourseSchedule(Guid id, UpdateCourseScheduleDTO courseReq)
         {
@@ -92,6 +96,7 @@ namespace MS3_Back_End.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("Pagination/{pageNumber}/{pageSize}")]
         public async Task<IActionResult> GetPaginatedCoursesSchedules(int pageNumber, int pageSize)
         {
