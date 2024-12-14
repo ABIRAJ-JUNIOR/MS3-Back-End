@@ -104,6 +104,7 @@ namespace MS3_Back_End.Repository
                                              PaymentMethod = ((PaymentMethots)payment.PaymentMethod).ToString(),
                                              TransactionDate = payment.PaymentDate,
                                              DueDate = payment.DueDate != null ? payment.DueDate : null,
+                                             isReminder = payment.isReminder,
                                          })
                                         .Skip((pageNumber - 1) * pageSize)
                                         .Take(pageSize)
