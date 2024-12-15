@@ -59,8 +59,8 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("GetAllCategory")]
 
+        [HttpGet("GetAllCategory")]
         public async Task<IActionResult> GetAllGetCourseCategory()
         {
 
