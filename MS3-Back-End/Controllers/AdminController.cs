@@ -97,7 +97,6 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpDelete("{Id}")]
-
         public async Task<IActionResult> DeleteAdmin(Guid Id)
         {
             try
@@ -110,6 +109,7 @@ namespace MS3_Back_End.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpPut("AdminProfile/{ID}")]
         public async Task<IActionResult> UpdateAdminProfile(Guid ID, AdminProfileUpdateDTO admindata)
         {
