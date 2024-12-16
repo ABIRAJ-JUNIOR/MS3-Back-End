@@ -189,7 +189,7 @@ namespace MS3_Back_End
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:4200" , "https://waymakers-front-end-f0fnexg3ete4e0gm.uksouth-01.azurewebsites.net" , "https://waymakers-front-end-v2-gsgpbydzdqe9ebfm.uksouth-01.azurewebsites.net") 
+                        policy.WithOrigins("http://localhost:4200" , "https://waymakers-front-end-f0fnexg3ete4e0gm.uksouth-01.azurewebsites.net") 
                               .AllowAnyHeader()
                               .AllowAnyMethod();
                     });
