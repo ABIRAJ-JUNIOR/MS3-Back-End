@@ -18,14 +18,16 @@ namespace MS3_Back_End.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IAdminService _adminService;
+        private readonly ILogger<AdminController> _logger;
 
-        public AdminController(IAdminService adminService)
+        public AdminController(IAdminService adminService, ILogger<AdminController> logger)
         {
             _adminService = adminService;
+            _logger = logger;
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAdmin(AdminRequestDTO request)
+        public async Task<ActionResult<AdminResponseDTO>> AddAdmin(AdminRequestDTO request)
         {
             try
             {
@@ -34,56 +36,73 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error adding admin");
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("Get/{id}")]
-        public async Task<IActionResult> GetAdminFulldetailsById(Guid id)
+        public async Task<ActionResult<AdminAllDataResponseDTO>> GetAdminFullDetailsById(Guid id)
         {
             try
             {
-                var adminData = await _adminService.GetAdminFulldetailsById(id);
+                var adminData = await _adminService.GetAdminFullDetailsById(id);
                 return Ok(adminData);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error getting admin details");
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAllAdmins()
-        {
-            var adminsList = await _adminService.GetAllAdmins();
-            return Ok(adminsList);
-
-        }
-
-        [HttpPut("Update-Full-Details/{id}")]
-        public async Task<IActionResult> UpdateAdminFullDetails(Guid id, AdminFullUpdateDTO request)
-        {
-            var updateresponse = await _adminService.UpdateAdminFullDetails(id, request);
-            return Ok(updateresponse);
-        }
-
-
-        [HttpPost("Image/{adminId}/${isCoverImage}")]
-        public async Task<IActionResult> UploadImage(Guid adminId, IFormFile? ImageFile, bool isCoverImage)
+        public async Task<ActionResult<IEnumerable<AdminWithRoleDTO>>> GetAllAdmins()
         {
             try
             {
-                var response = await _adminService.UploadImage(adminId, ImageFile,isCoverImage);
+                var adminsList = await _adminService.GetAllAdmins();
+                return Ok(adminsList);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all admins");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("Update-Full-Details/{id}")]
+        public async Task<ActionResult<AdminResponseDTO>> UpdateAdminFullDetails(Guid id, AdminFullUpdateDTO request)
+        {
+            try
+            {
+                var updateResponse = await _adminService.UpdateAdminFullDetails(id, request);
+                return Ok(updateResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating admin details");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("Image/{adminId}/{isCoverImage}")]
+        public async Task<ActionResult<string>> UploadImage(Guid adminId, IFormFile? imageFile, bool isCoverImage)
+        {
+            try
+            {
+                var response = await _adminService.UploadImage(adminId, imageFile, isCoverImage);
                 return Ok(response);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error uploading image");
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("Pagination/{pageNumber}/{pageSize}")]
-        public async Task<IActionResult> GetPaginatedAdmin(int pageNumber, int pageSize)
+        public async Task<ActionResult<PaginationResponseDTO<AdminWithRoleDTO>>> GetPaginatedAdmin(int pageNumber, int pageSize)
         {
             try
             {
@@ -92,38 +111,39 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error getting paginated admins");
                 return BadRequest(ex.Message);
             }
         }
 
-        [HttpDelete("{Id}")]
-        public async Task<IActionResult> DeleteAdmin(Guid Id)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<AdminResponseDTO>> DeleteAdmin(Guid id)
         {
             try
             {
-                var rsponse = await _adminService.DeleteAdmin(Id);
-                return Ok(rsponse);
+                var response = await _adminService.DeleteAdmin(id);
+                return Ok(response);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error deleting admin");
                 return BadRequest(ex.Message);
             }
         }
 
-        [HttpPut("AdminProfile/{ID}")]
-        public async Task<IActionResult> UpdateAdminProfile(Guid ID, AdminProfileUpdateDTO admindata)
+        [HttpPut("AdminProfile/{id}")]
+        public async Task<ActionResult<string>> UpdateAdminProfile(Guid id, AdminProfileUpdateDTO adminData)
         {
-
             try
             {
-                var data = await _adminService.UpdateAdminProfile(ID, admindata);
+                var data = await _adminService.UpdateAdminProfile(id, adminData);
                 return Ok(data);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error updating admin profile");
                 return BadRequest(ex.Message);
             }
         }
-
     }
 }

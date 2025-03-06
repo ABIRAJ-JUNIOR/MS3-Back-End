@@ -36,7 +36,7 @@ namespace MS3_Back_End.Repository
             return adminData!;
         }
 
-        public async Task<AdminAllDataResponseDTO> GetAdminFulldetailsById(Guid id)
+        public async Task<AdminAllDataResponseDTO> GetAdminFullDetailsById(Guid id)
         {
             var adminData = await (
                 from admin in _dbContext.Admins

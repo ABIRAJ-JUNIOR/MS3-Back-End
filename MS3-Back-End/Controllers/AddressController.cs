@@ -14,45 +14,46 @@ namespace MS3_Back_End.Controllers
     public class AddressController : ControllerBase
     {
         private readonly IAddressService _addressService;
+        private readonly ILogger<AddressController> _logger;
 
-        public AddressController(IAddressService addressService)
+        public AddressController(IAddressService addressService, ILogger<AddressController> logger)
         {
             _addressService = addressService;
+            _logger = logger;
         }
 
-        [HttpPost("Add-Addrees")]
-        public async Task<IActionResult> AddAddress(AddressRequestDTO address)
+        [HttpPost("Add-Address")]
+        public async Task<ActionResult<AddressResponseDTO>> AddAddress(AddressRequestDTO address)
         {
             try
             {
-
                 var data = await _addressService.AddAddress(address);
                 return Ok(data);
-
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error adding address");
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpPut("Update-Address/{id}")]
-        public async  Task<IActionResult> UpdateAddress(Guid id, AddressUpdateRequestDTO Updateaddress)
+        public async Task<ActionResult<AddressResponseDTO>> UpdateAddress(Guid id, AddressUpdateRequestDTO updateAddress)
         {
             try
             {
-                var data = await _addressService.UpdateAddress(id,Updateaddress);
+                var data = await _addressService.UpdateAddress(id, updateAddress);
                 return Ok(data);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error updating address");
                 return BadRequest(ex.Message);
             }
         }
 
-
         [HttpDelete("Delete-Address/{id}")]
-        public async Task<IActionResult> DeleteAddress(Guid id)
+        public async Task<ActionResult<AddressResponseDTO>> DeleteAddress(Guid id)
         {
             try
             {
@@ -61,9 +62,9 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error deleting address");
                 return BadRequest(ex.Message);
             }
         }
-
     }
 }

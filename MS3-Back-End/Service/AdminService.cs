@@ -111,9 +111,9 @@ namespace MS3_Back_End.Service
             return response;
         }
 
-        public async Task<AdminAllDataResponseDTO> GetAdminFulldetailsById(Guid id)
+        public async Task<AdminAllDataResponseDTO> GetAdminFullDetailsById(Guid id)
         {
-            var adminData = await _adminRepository.GetAdminFulldetailsById(id);
+            var adminData = await _adminRepository.GetAdminFullDetailsById(id);
             if(adminData == null)
             {
                 throw new Exception("Not found");
