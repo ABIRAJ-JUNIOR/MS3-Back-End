@@ -14,14 +14,22 @@ namespace MS3_Back_End.Controllers
     public class EnrollmentController : ControllerBase
     {
         private readonly IEnrollementService _enrollmentService;
-        public EnrollmentController(IEnrollementService enrollement)
+        private readonly ILogger<EnrollmentController> _logger;
+
+        public EnrollmentController(IEnrollementService enrollmentService, ILogger<EnrollmentController> logger)
         {
-            _enrollmentService = enrollement;
+            _enrollmentService = enrollmentService;
+            _logger = logger;
         }
 
         [HttpPost]
         public async Task<ActionResult<EnrollmentResponseDTO>> AddEnrollment(EnrollmentRequestDTO enrollmentReq)
         {
+            if (enrollmentReq == null)
+            {
+                return BadRequest("Enrollment data is required.");
+            }
+
             try
             {
                 var enrollment = await _enrollmentService.AddEnrollment(enrollmentReq);
@@ -29,6 +37,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error adding enrollment");
                 return BadRequest(ex.Message);
             }
         }
@@ -43,26 +52,28 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Error getting enrollment by id {id}");
                 return NotFound(ex.Message);
             }
         }
 
-        [HttpGet("Enrollments/{StudentId}")]
-        public async Task<ActionResult<ICollection<EnrollmentResponseDTO>>> GetEnrollmentsByStudentId(Guid StudentId)
+        [HttpGet("Enrollments/{studentId}")]
+        public async Task<ActionResult<IEnumerable<EnrollmentResponseDTO>>> GetEnrollmentsByStudentId(Guid studentId)
         {
             try
             {
-                var enrollments = await _enrollmentService.GetEnrollmentsByStudentId(StudentId);
+                var enrollments = await _enrollmentService.GetEnrollmentsByStudentId(studentId);
                 return Ok(enrollments);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Error getting enrollments by student id {studentId}");
                 return NotFound(ex.Message);
             }
         }
 
         [HttpGet("Enrollments")]
-        public async Task<ActionResult<ICollection<EnrollmentResponseDTO>>> GetAllEnrollments()
+        public async Task<ActionResult<IEnumerable<EnrollmentResponseDTO>>> GetAllEnrollments()
         {
             try
             {
@@ -71,6 +82,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error getting all enrollments");
                 return NotFound(ex.Message);
             }
         }
@@ -85,6 +97,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Error deleting enrollment with id {id}");
                 return NotFound(ex.Message);
             }
         }
