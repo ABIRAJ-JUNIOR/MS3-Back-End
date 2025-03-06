@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -22,96 +21,127 @@ namespace MS3_Back_End
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            ConfigureServices(builder);
 
+            var app = builder.Build();
+
+            // Configure the HTTP request pipeline.
+            ConfigurePipeline(app);
+
+            app.Run();
+        }
+
+        private static void ConfigureServices(WebApplicationBuilder builder)
+        {
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddDbContext<AppDBContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
-
-            builder.Services.AddScoped<SendMailService>();
-            builder.Services.AddScoped<SendMailRepository>();
-            builder.Services.AddScoped<EmailServiceProvider>();
-
+            builder.Services.AddDbContext<AppDBContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
 
             // Register EmailConfig
             builder.Services.Configure<EmailConfig>(builder.Configuration.GetSection("EmailConfig"));
-
-            //Authentication
-            builder.Services.AddScoped<IAuthRepository,AuthRepository>();
-            builder.Services.AddScoped<IAuthService,AuthService>();
-
-            //Address
-            builder.Services.AddScoped<IAddressRepository,AddressRepository>();
-            builder.Services.AddScoped<IAddressService,AddressServise>();
-
-            //course
-            builder.Services.AddScoped<ICourseRepository, CourseRepositoy>();
-            builder.Services.AddScoped<ICourseService,CourseService>();
-
-            //CourseSchedule
-            builder.Services.AddScoped<ICourseScheduleRepository,CourseScheduleRepository>();
-            builder.Services.AddScoped<ICourseScheduleService,CourseScheduleService>();
-          
-            //ContactUs
-            builder.Services.AddScoped<IContactUsRepository, ContactUsRepository>();
-            builder.Services.AddScoped<IContactUsService, ContactUsService>();
-
-            //CourseCategory
-            builder.Services.AddScoped<ICourseCategoryRepository, CourseCategoryRepository>();
-            builder.Services.AddScoped<ICourseCategoryService, CourseCategoryService>();
-
-            //Notification
-            builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
-            builder.Services.AddScoped<INotificationService, NotificationService>();
-
-            //Assessment
-            builder.Services.AddScoped<IAssessmentRepository,AssessmentRepository>();
-            builder.Services.AddScoped<IAssessmentService,AssessmentService>();
-          
-            //enrollements 
-            builder.Services.AddScoped<IEnrollmentRepository,EnrollmentRepository>();
-            builder.Services.AddScoped<IEnrollementService, EnrollmentService>();
-
-            //StudentAssessment
-            builder.Services.AddScoped<IStudentAssessmentRepository, StudentAssessmentRepository>();
-            builder.Services.AddScoped<IStudentAssessmentService, StudentAssessmentService>();
-
-            //Announcement
-            builder.Services.AddScoped<IAnnouncementRepository,AnnouncementRepository>();   
-            builder.Services.AddScoped<IAnnouncementService,AnnouncementService>();
-
-            //Payment
-            builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
-            builder.Services.AddScoped<IPaymentService, PaymentService>();
-          
-            //Student
-            builder.Services.AddScoped<IStudentRepository,StudentRepository>();
-            builder.Services.AddScoped<IStudentService,StudentService>();
-
-            //Admin
-            builder.Services.AddScoped<IAdminRepository, AdminRepository>();
-            builder.Services.AddScoped<IAdminService, AdminService>();
-
-            //Audit Log
-            builder.Services.AddScoped<IAuditLogRepository,AuditLogRepository>();
-            builder.Services.AddScoped<IAuditLogService,AuditLogService>();
-
-            //FeedBack
-            builder.Services.AddScoped<IFeedbacksRepository, FeedbacksRepository>();
-            builder.Services.AddScoped<IFeedbacksService, FeedbacksService>();
-
-            //Otp
-            builder.Services.AddScoped<IOtpRepository, OtpRepository>();
-            builder.Services.AddScoped<IOtpService, OtpService>();
-
-            // Ensure EmailConfig is available as a singleton if needed
             builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<EmailConfig>>().Value);
 
-            builder.Services.AddScoped<ApiService>();
+            // Register services
+            RegisterServices(builder.Services);
 
             // Add Quartz services
-            builder.Services.AddQuartz(q =>
+            ConfigureQuartz(builder.Services);
+
+            // Add HTTP client for API calls
+            builder.Services.AddHttpClient<ApiService>();
+
+            // Configure JWT authentication
+            ConfigureAuthentication(builder);
+
+            // Configure CORS
+            ConfigureCors(builder);
+
+            // Configure Swagger
+            ConfigureSwagger(builder);
+        }
+
+        private static void RegisterServices(IServiceCollection services)
+        {
+            services.AddScoped<SendMailService>();
+            services.AddScoped<SendMailRepository>();
+            services.AddScoped<EmailServiceProvider>();
+
+            // Authentication
+            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IAuthService, AuthService>();
+
+            // Address
+            services.AddScoped<IAddressRepository, AddressRepository>();
+            services.AddScoped<IAddressService, AddressServise>();
+
+            // Course
+            services.AddScoped<ICourseRepository, CourseRepositoy>();
+            services.AddScoped<ICourseService, CourseService>();
+
+            // CourseSchedule
+            services.AddScoped<ICourseScheduleRepository, CourseScheduleRepository>();
+            services.AddScoped<ICourseScheduleService, CourseScheduleService>();
+
+            // ContactUs
+            services.AddScoped<IContactUsRepository, ContactUsRepository>();
+            services.AddScoped<IContactUsService, ContactUsService>();
+
+            // CourseCategory
+            services.AddScoped<ICourseCategoryRepository, CourseCategoryRepository>();
+            services.AddScoped<ICourseCategoryService, CourseCategoryService>();
+
+            // Notification
+            services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<INotificationService, NotificationService>();
+
+            // Assessment
+            services.AddScoped<IAssessmentRepository, AssessmentRepository>();
+            services.AddScoped<IAssessmentService, AssessmentService>();
+
+            // Enrollments
+            services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
+            services.AddScoped<IEnrollementService, EnrollmentService>();
+
+            // StudentAssessment
+            services.AddScoped<IStudentAssessmentRepository, StudentAssessmentRepository>();
+            services.AddScoped<IStudentAssessmentService, StudentAssessmentService>();
+
+            // Announcement
+            services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
+            services.AddScoped<IAnnouncementService, AnnouncementService>();
+
+            // Payment
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IPaymentService, PaymentService>();
+
+            // Student
+            services.AddScoped<IStudentRepository, StudentRepository>();
+            services.AddScoped<IStudentService, StudentService>();
+
+            // Admin
+            services.AddScoped<IAdminRepository, AdminRepository>();
+            services.AddScoped<IAdminService, AdminService>();
+
+            // Audit Log
+            services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+            services.AddScoped<IAuditLogService, AuditLogService>();
+
+            // Feedback
+            services.AddScoped<IFeedbacksRepository, FeedbacksRepository>();
+            services.AddScoped<IFeedbacksService, FeedbacksService>();
+
+            // OTP
+            services.AddScoped<IOtpRepository, OtpRepository>();
+            services.AddScoped<IOtpService, OtpService>();
+
+            services.AddScoped<ApiService>();
+        }
+
+        private static void ConfigureQuartz(IServiceCollection services)
+        {
+            services.AddQuartz(q =>
             {
                 q.UseMicrosoftDependencyInjectionJobFactory();
 
@@ -127,14 +157,11 @@ namespace MS3_Back_End
             });
 
             // Register Quartz as a hosted service
-            builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+            services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+        }
 
-            // Add HTTP client for API calls
-            builder.Services.AddHttpClient<ApiService>();
-
-
-
-
+        private static void ConfigureAuthentication(WebApplicationBuilder builder)
+        {
             var jwtSettings = builder.Configuration.GetSection("Jwt");
             var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]!);
 
@@ -151,8 +178,27 @@ namespace MS3_Back_End
                         IssuerSigningKey = new SymmetricSecurityKey(key)
                     };
                 });
+        }
 
+        private static void ConfigureCors(WebApplicationBuilder builder)
+        {
+            var corsPolicyName = "AllowSpecificOrigins";
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: corsPolicyName,
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:4200")
+                              .AllowAnyHeader()
+                              .AllowAnyMethod()
+                              .SetPreflightMaxAge(TimeSpan.FromMinutes(10));
+                    });
+            });
+        }
+
+        private static void ConfigureSwagger(WebApplicationBuilder builder)
+        {
             builder.Services.AddSwaggerGen(c =>
             {
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -168,7 +214,7 @@ namespace MS3_Back_End
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
-                         new OpenApiSecurityScheme
+                        new OpenApiSecurityScheme
                         {
                             Reference = new OpenApiReference
                             {
@@ -180,42 +226,26 @@ namespace MS3_Back_End
                     }
                 });
             });
+        }
 
-
-            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy(name: MyAllowSpecificOrigins,
-                    policy =>
-                    {
-                        policy.WithOrigins("http://localhost:4200")
-                              .AllowAnyHeader()
-                              .AllowAnyMethod();
-                    });
-            });
-
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
+        private static void ConfigurePipeline(WebApplication app)
+        {
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
-            app.UseCors(MyAllowSpecificOrigins);
+            app.UseCors("AllowSpecificOrigins");
 
             app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
-
-            app.Run();
         }
     }
 }

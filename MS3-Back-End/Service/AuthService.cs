@@ -18,6 +18,10 @@ namespace MS3_Back_End.Service
         private readonly INotificationRepository _notificationRepository;
         private readonly SendMailService _sendMailService;
 
+        private const string StudentRole = "Student";
+        private const string AdminRole = "Administrator";
+        private const string InstructorRole = "Instructor";
+
         public AuthService(IAuthRepository authRepository, IConfiguration configuration, INotificationRepository notificationRepository, SendMailService sendMailService)
         {
             _authRepository = authRepository;
@@ -28,42 +32,27 @@ namespace MS3_Back_End.Service
 
         public async Task<string> SignUp(SignUpRequestDTO request)
         {
-            var nicCheck = await _authRepository.GetStudentByNic(request.Nic);
-            var emailCheck = await _authRepository.GetUserByEmail(request.Email);
+            await ValidateSignUpRequest(request);
 
-            if (nicCheck != null)
-            {
-                throw new Exception("Nic already used");
-            }
-            if (emailCheck != null)
-            {
-                throw new Exception("Email already used");
-            }
-
-            var user = new User()
+            var user = new User
             {
                 Email = request.Email,
                 IsConfirmEmail = false,
                 Password = BCrypt.Net.BCrypt.HashPassword(request.Password),
-
             };
 
             var userData = await _authRepository.AddUser(user);
-            var roleData = await _authRepository.GetRoleByName("Student");
-            if (roleData == null)
-            {
-                throw new Exception("Role not found");
-            }
+            var roleData = await _authRepository.GetRoleByName(StudentRole) ?? throw new RoleNotFoundException(StudentRole);
 
-            var userRole = new UserRole()
+            var userRole = new UserRole
             {
                 UserId = userData.Id,
                 RoleId = roleData.Id
             };
 
-            var userRoleData = await _authRepository.AddUserRole(userRole);
+            await _authRepository.AddUserRole(userRole);
 
-            var student = new Student()
+            var student = new Student
             {
                 Id = userData.Id,
                 Nic = request.Nic,
@@ -80,7 +69,63 @@ namespace MS3_Back_End.Service
 
             var studentData = await _authRepository.SignUp(student);
 
-            string NotificationMessage = $@"
+            await SendWelcomeNotification(studentData);
+            await SendVerificationEmail(userData, studentData);
+
+            return "SignUp Successfully";
+        }
+
+        public async Task<string> SignIn(SignInRequestDTO request)
+        {
+            var userData = await _authRepository.GetUserByEmail(request.email) ?? throw new UserNotFoundException(request.email);
+            var studentData = await _authRepository.GetStudentById(userData.Id);
+
+            if (!userData.IsConfirmEmail)
+            {
+                await SendVerificationEmail(userData, studentData);
+                throw new EmailNotVerifiedException();
+            }
+
+            if (!BCrypt.Net.BCrypt.Verify(request.password, userData.Password))
+            {
+                throw new InvalidPasswordException();
+            }
+
+            var userRoleData = await _authRepository.GetUserRoleByUserId(userData.Id);
+            var roleData = await _authRepository.GetRoleById(userRoleData.RoleId) ?? throw new RoleNotFoundException(userRoleData.RoleId.ToString());
+
+            return roleData.Name switch
+            {
+                StudentRole => await HandleStudentSignIn(studentData, userData, roleData),
+                AdminRole or InstructorRole => await HandleAdminOrInstructorSignIn(userData, roleData),
+                _ => throw new RoleNotFoundException(roleData.Name)
+            };
+        }
+
+        public async Task<string> EmailVerify(Guid userId)
+        {
+            var userData = await _authRepository.GetUserById(userId) ?? throw new UserNotFoundException(userId.ToString());
+            userData.IsConfirmEmail = true;
+            await _authRepository.UpdateUser(userData);
+            return "Email Verified Successfully";
+        }
+
+        private async Task ValidateSignUpRequest(SignUpRequestDTO request)
+        {
+            if (await _authRepository.GetStudentByNic(request.Nic) != null)
+            {
+                throw new NicAlreadyUsedException(request.Nic);
+            }
+
+            if (await _authRepository.GetUserByEmail(request.Email) != null)
+            {
+                throw new EmailAlreadyUsedException(request.Email);
+            }
+        }
+
+        private async Task SendWelcomeNotification(Student studentData)
+        {
+            string notificationMessage = $@"
 Subject: 🎉 Welcome to Way Makers!<br><br>
 
 Dear {studentData.FirstName} {studentData.LastName},<br><br>
@@ -107,139 +152,122 @@ Way Makers<br>
 Empowering learners, shaping futures.
 ";
 
-            var Message = new Notification
+            var message = new Notification
             {
-                Message = NotificationMessage,
+                Message = notificationMessage,
                 NotificationType = NotificationType.WelCome,
                 StudentId = studentData.Id,
                 DateSent = DateTime.Now,
                 IsRead = false
             };
 
-            await _notificationRepository.AddNotification(Message);
+            await _notificationRepository.AddNotification(message);
+        }
 
-            var verifyMail = new SendVerifyMailRequest()
+        private async Task SendVerificationEmail(User userData, Student studentData)
+        {
+            var verifyMail = new SendVerifyMailRequest
             {
-                Name = studentData.FirstName + " " + studentData.LastName,
+                Name = $"{studentData.FirstName} {studentData.LastName}",
                 Email = userData.Email,
-                //VerificationLink = $"https://waymakers-front-end-f0fnexg3ete4e0gm.uksouth-01.azurewebsites.net/email-verified/{userData.Id}",
                 VerificationLink = $"http://localhost:4200/email-verified/{userData.Id}",
                 EmailType = EmailTypes.EmailVerification,
             };
 
             await _sendMailService.VerifyMail(verifyMail);
-
-            return "SignUp Successfully";
-
         }
 
-        public async Task<string> SignIn(SignInRequestDTO request)
+        private async Task<string> HandleStudentSignIn(Student studentData, User userData, Role roleData)
         {
-            var userData = await _authRepository.GetUserByEmail(request.email);
-
-            if (userData == null)
+            if (!studentData.IsActive)
             {
-                throw new Exception("User Not Found");
+                throw new AccountDeactivatedException();
             }
 
-            var studentData = await _authRepository.GetStudentById(userData.Id);
-
-            if (userData.IsConfirmEmail == false)
+            var tokenRequest = new TokenRequestDTO
             {
-                var verifyMail = new SendVerifyMailRequest()
-                {
-                    Name = studentData.FirstName + " " + studentData.LastName,
-                    Email = userData.Email,
-                    //VerificationLink = $"https://waymakers-front-end-f0fnexg3ete4e0gm.uksouth-01.azurewebsites.net/email-verified/{userData.Id}",
-                    VerificationLink = $"http://localhost:4200/email-verified/{userData.Id}",
-                    EmailType = EmailTypes.EmailVerification,
-                };
+                Id = studentData.Id,
+                Name = studentData.FirstName,
+                Email = userData.Email,
+                Role = roleData.Name
+            };
 
-                await _sendMailService.VerifyMail(verifyMail);
-
-                throw new InvalidOperationException("Email is not verify. Please verify your email to proceed.");
-            }
-
-            if (!BCrypt.Net.BCrypt.Verify(request.password, userData.Password))
-            {
-                throw new Exception("Wrong password.");
-            }
-
-            var userRoleData = await _authRepository.GetUserRoleByUserId(userData.Id);
-            var roleData = await _authRepository.GetRoleById(userRoleData.RoleId);
-            if (roleData == null)
-            {
-                throw new Exception("Role not found");
-            }
-
-            if (roleData.Name == "Student")
-            {
-                if (studentData.IsActive == false)
-                {
-                    throw new Exception("Account Deactivated");
-                }
-
-                var tokenRequest = new TokenRequestDTO()
-                {
-                    Id = studentData.Id,
-                    Name = studentData.FirstName,
-                    Email = userData.Email,
-                    Role = roleData.Name
-                };
-
-                return CreateToken(tokenRequest);
-            }
-            else if (roleData.Name == "Administrator" || roleData.Name == "Instructor")
-            {
-                var adminData = await _authRepository.GetAdminById(userData.Id);
-                if (adminData.IsActive == false)
-                {
-                    throw new Exception("Account Deactivated");
-                }
-
-                var tokenRequest = new TokenRequestDTO()
-                {
-                    Id = adminData.Id,
-                    Name = adminData.FirstName,
-                    Email = userData.Email,
-                    Role = roleData.Name
-                };
-                return CreateToken(tokenRequest);
-            }
-
-            return null!;
+            return CreateToken(tokenRequest);
         }
 
-        public async Task<string> EmailVerify(Guid userId)
+        private async Task<string> HandleAdminOrInstructorSignIn(User userData, Role roleData)
         {
-            var userData = await _authRepository.GetUserById(userId);
-            if(userData == null)
+            var adminData = await _authRepository.GetAdminById(userData.Id);
+            if (!adminData.IsActive)
             {
-                throw new Exception("User Not Found");
+                throw new AccountDeactivatedException();
             }
 
-            userData.IsConfirmEmail = true;
-            await _authRepository.UpdateUser(userData);
-            return "Email Verified Successfully";
+            var tokenRequest = new TokenRequestDTO
+            {
+                Id = adminData.Id,
+                Name = adminData.FirstName,
+                Email = userData.Email,
+                Role = roleData.Name
+            };
+
+            return CreateToken(tokenRequest);
         }
 
         private string CreateToken(TokenRequestDTO request)
         {
-            var claimsList = new List<Claim>();
-            claimsList.Add(new Claim("Id", request.Id.ToString()));
-            claimsList.Add(new Claim("Name", request.Name));
-            claimsList.Add(new Claim("Email", request.Email));
-            claimsList.Add(new Claim("Role", request.Role.ToString()));
-
+            var claimsList = new List<Claim>
+            {
+                new Claim("Id", request.Id.ToString()),
+                new Claim("Name", request.Name),
+                new Claim("Email", request.Email),
+                new Claim("Role", request.Role)
+            };
 
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]!));
-            var credintials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], _configuration["Jwt:Audience"],
                 claims: claimsList,
                 expires: DateTime.Now.AddDays(1),
-                signingCredentials: credintials
-                );
+                signingCredentials: credentials
+            );
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+    }
+
+    // Custom exceptions
+    public class NicAlreadyUsedException : Exception
+    {
+        public NicAlreadyUsedException(string nic) : base($"NIC '{nic}' is already used.") { }
+    }
+
+    public class EmailAlreadyUsedException : Exception
+    {
+        public EmailAlreadyUsedException(string email) : base($"Email '{email}' is already used.") { }
+    }
+
+    public class UserNotFoundException : Exception
+    {
+        public UserNotFoundException(string identifier) : base($"User with identifier '{identifier}' not found.") { }
+    }
+
+    public class RoleNotFoundException : Exception
+    {
+        public RoleNotFoundException(string role) : base($"Role '{role}' not found.") { }
+    }
+
+    public class EmailNotVerifiedException : Exception
+    {
+        public EmailNotVerifiedException() : base("Email is not verified. Please verify your email to proceed.") { }
+    }
+
+    public class InvalidPasswordException : Exception
+    {
+        public InvalidPasswordException() : base("Wrong password.") { }
+    }
+
+    public class AccountDeactivatedException : Exception
+    {
+        public AccountDeactivatedException() : base("Account is deactivated.") { }
     }
 }
