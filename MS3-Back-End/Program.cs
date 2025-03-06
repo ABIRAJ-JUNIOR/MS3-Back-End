@@ -189,7 +189,7 @@ namespace MS3_Back_End
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:4200" , "https://waymakers-front-end-f0fnexg3ete4e0gm.uksouth-01.azurewebsites.net") 
+                        policy.WithOrigins("http://localhost:4200")
                               .AllowAnyHeader()
                               .AllowAnyMethod();
                     });
@@ -199,15 +199,11 @@ namespace MS3_Back_End
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            //if (app.Environment.IsDevelopment())
-            //{
-            //    app.UseSwagger();
-            //    app.UseSwaggerUI();
-            //}
-
-            app.UseSwagger();
-
-            app.UseSwaggerUI();
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 
             app.UseCors(MyAllowSpecificOrigins);
 

@@ -122,7 +122,8 @@ Empowering learners, shaping futures.
             {
                 Name = studentData.FirstName + " " + studentData.LastName,
                 Email = userData.Email,
-                VerificationLink = $"https://waymakers-front-end-f0fnexg3ete4e0gm.uksouth-01.azurewebsites.net/email-verified/{userData.Id}",
+                //VerificationLink = $"https://waymakers-front-end-f0fnexg3ete4e0gm.uksouth-01.azurewebsites.net/email-verified/{userData.Id}",
+                VerificationLink = $"http://localhost:4200/email-verified/{userData.Id}",
                 EmailType = EmailTypes.EmailVerification,
             };
 
@@ -149,7 +150,8 @@ Empowering learners, shaping futures.
                 {
                     Name = studentData.FirstName + " " + studentData.LastName,
                     Email = userData.Email,
-                    VerificationLink = $"https://waymakers-front-end-f0fnexg3ete4e0gm.uksouth-01.azurewebsites.net/email-verified/{userData.Id}",
+                    //VerificationLink = $"https://waymakers-front-end-f0fnexg3ete4e0gm.uksouth-01.azurewebsites.net/email-verified/{userData.Id}",
+                    VerificationLink = $"http://localhost:4200/email-verified/{userData.Id}",
                     EmailType = EmailTypes.EmailVerification,
                 };
 
