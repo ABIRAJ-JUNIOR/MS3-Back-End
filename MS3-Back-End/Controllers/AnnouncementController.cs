@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs;
 using MS3_Back_End.DTOs.RequestDTOs.Announcement;
 using MS3_Back_End.DTOs.ResponseDTOs.Announcement;
@@ -17,13 +18,16 @@ namespace MS3_Back_End.Controllers
     public class AnnouncementController : ControllerBase
     {
         private readonly IAnnouncementService _announcementService;
-        public AnnouncementController(IAnnouncementService announcementService)
+        private readonly ILogger<AnnouncementController> _logger;
+
+        public AnnouncementController(IAnnouncementService announcementService, ILogger<AnnouncementController> logger)
         {
             _announcementService = announcementService;
+            _logger = logger;
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAnnouncement(AnnouncementRequestDTO announcementRequest)
+        public async Task<ActionResult<AnnouncementResponseDTO>> AddAnnouncement(AnnouncementRequestDTO announcementRequest)
         {
             if (announcementRequest == null)
             {
@@ -37,11 +41,13 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error adding announcement");
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpGet]
-        public async Task<IActionResult> GetAllAnnouncements()
+        public async Task<ActionResult<IEnumerable<AnnouncementResponseDTO>>> GetAllAnnouncements()
         {
             try
             {
@@ -50,12 +56,13 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error getting all announcements");
                 return BadRequest(ex.Message);
             }
         }
 
-        [HttpGet("Announcement{id}")]
-        public async Task<IActionResult> GetAnnouncementById(Guid id)
+        [HttpGet("Announcement/{id}")]
+        public async Task<ActionResult<AnnouncementResponseDTO>> GetAnnouncementById(Guid id)
         {
             try
             {
@@ -64,40 +71,43 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Error getting announcement with id {id}");
                 return NotFound($"Announcement with id {id} not found: {ex.Message}");
             }
         }
 
-        [HttpGet("Recent/{Type}")]
-        public async Task<IActionResult> RecentAnnouncement(AudienceType Type)
+        [HttpGet("Recent/{type}")]
+        public async Task<ActionResult<IEnumerable<AnnouncementResponseDTO>>> RecentAnnouncement(AudienceType type)
         {
             try
             {
-                var response = await _announcementService.RecentAnnouncement(Type);
+                var response = await _announcementService.RecentAnnouncement(type);
                 return Ok(response);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);  
+                _logger.LogError(ex, "Error getting recent announcements");
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAnnouncement(Guid id)
+        public async Task<ActionResult<string>> DeleteAnnouncement(Guid id)
         {
             try
             {
                 var result = await _announcementService.DeleteAnnouncement(id);
-                return Ok(result); 
+                return Ok(result);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Error deleting announcement with id {id}");
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("search")]
-        public async Task<IActionResult> SearchAnnouncement(string searchText)
+        public async Task<ActionResult<IEnumerable<AnnouncementResponseDTO>>> SearchAnnouncement(string searchText)
         {
             if (string.IsNullOrEmpty(searchText))
             {
@@ -111,25 +121,28 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-               return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpGet("Pagination/{pagenumber}/{pagesize}")]
-        public async Task<IActionResult> GetPaginatedAnnouncement(int pagenumber,int pagesize,string? role)
-        {
-            try
-            {
-                var Anouncements = await _announcementService.GetPaginatedAnnouncement(pagenumber, pagesize, role);
-                return Ok(Anouncements);
-            }
-            catch (Exception ex) 
-            {
+                _logger.LogError(ex, "Error searching announcements");
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("ValidAnouncements")]
-        public async Task<IActionResult> ValidAnnoncement()
+
+        [HttpGet("Pagination/{pageNumber}/{pageSize}")]
+        public async Task<ActionResult<PaginationResponseDTO<AnnouncementResponseDTO>>> GetPaginatedAnnouncement(int pageNumber, int pageSize, string? role)
+        {
+            try
+            {
+                var announcements = await _announcementService.GetPaginatedAnnouncement(pageNumber, pageSize, role);
+                return Ok(announcements);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting paginated announcements");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("ValidAnnouncements")]
+        public async Task<ActionResult<string>> ValidAnnouncement()
         {
             try
             {
@@ -138,9 +151,9 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error validating announcements");
                 return BadRequest(ex.Message);
             }
         }
-
     }
 }

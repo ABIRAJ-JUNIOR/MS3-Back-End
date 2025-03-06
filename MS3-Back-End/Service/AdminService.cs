@@ -143,6 +143,7 @@ namespace MS3_Back_End.Service
                     ActionDate = data.ActionDate,
                     Details = data.Details,
                     Action = data.Action,
+                    AdminResponse = null!
                 }).ToList() : null
             }).ToList();
 
