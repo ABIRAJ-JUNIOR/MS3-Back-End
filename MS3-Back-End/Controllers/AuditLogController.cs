@@ -14,60 +14,69 @@ namespace MS3_Back_End.Controllers
     public class AuditLogController : ControllerBase
     {
         private readonly IAuditLogService _auditLogService;
+        private readonly ILogger<AuditLogController> _logger;
 
-        public AuditLogController(IAuditLogService auditLogService)
+        public AuditLogController(IAuditLogService auditLogService, ILogger<AuditLogController> logger)
         {
             _auditLogService = auditLogService;
+            _logger = logger;
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAuditLog(AuditLogRequestDTO auditLogRequestDTO) 
+        public async Task<ActionResult<AuditLogResponceDTO>> AddAuditLog(AuditLogRequestDTO auditLogRequestDTO)
         {
+            if (auditLogRequestDTO == null)
+            {
+                return BadRequest("Audit log data is required.");
+            }
+
             try
             {
                 var data = await _auditLogService.AddAuditLog(auditLogRequestDTO);
                 return Ok(data);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error adding audit log");
                 return BadRequest(ex.Message);
             }
         }
 
         [Authorize]
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetallAuditlogs()
+        public async Task<ActionResult<IEnumerable<AuditLogResponceDTO>>> GetAllAuditLogs()
         {
             try
             {
                 var data = await _auditLogService.GetAllAuditlogs();
                 return Ok(data);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
-              return Ok(ex.Message);
+                _logger.LogError(ex, "Error getting all audit logs");
+                return BadRequest(ex.Message);
             }
-        
         }
 
         [Authorize]
         [HttpGet("Get-AuditLogs-By/{adminId}")]
-        public async Task<IActionResult> GetAuditLogsbyAdminId(Guid adminId)
+        public async Task<ActionResult<IEnumerable<AuditLogResponceDTO>>> GetAuditLogsByAdminId(Guid adminId)
         {
             try
             {
                 var data = await _auditLogService.GetAuditLogsbyAdminId(adminId);
                 return Ok(data);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
+                _logger.LogError(ex, $"Error getting audit logs by admin id {adminId}");
                 return BadRequest(ex.Message);
             }
         }
 
         [Authorize]
         [HttpGet("Get-AuditLog-By/{id}")]
-        public async Task<IActionResult> GetAuditLogByID(Guid id)
+        public async Task<ActionResult<AuditLogResponceDTO>> GetAuditLogById(Guid id)
         {
             try
             {
@@ -76,6 +85,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Error getting audit log by id {id}");
                 return BadRequest(ex.Message);
             }
         }
