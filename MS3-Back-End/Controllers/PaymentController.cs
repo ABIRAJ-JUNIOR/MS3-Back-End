@@ -14,15 +14,22 @@ namespace MS3_Back_End.Controllers
     public class PaymentController : ControllerBase
     {
         private readonly IPaymentService _paymentService;
+        private readonly ILogger<PaymentController> _logger;
 
-        public PaymentController(IPaymentService paymentService)
+        public PaymentController(IPaymentService paymentService, ILogger<PaymentController> logger)
         {
             _paymentService = paymentService;
+            _logger = logger;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePayment( PaymentRequestDTO paymentRequest)
+        public async Task<ActionResult<PaymentResponseDTO>> CreatePayment(PaymentRequestDTO paymentRequest)
         {
+            if (paymentRequest == null)
+            {
+                return BadRequest("Payment data is required.");
+            }
+
             try
             {
                 var paymentResponse = await _paymentService.CreatePayment(paymentRequest);
@@ -30,44 +37,84 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error creating payment");
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAllPayments()
+        public async Task<ActionResult<IEnumerable<PaymentResponseDTO>>> GetAllPayments()
         {
-            var paymentsList = await _paymentService.GetAllPayments();
-            return Ok(paymentsList);
+            try
+            {
+                var paymentsList = await _paymentService.GetAllPayments();
+                return Ok(paymentsList);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all payments");
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("Recent")]
-        public async Task<IActionResult> RecentPayments()
+        public async Task<ActionResult<IEnumerable<PaymentResponseDTO>>> RecentPayments()
         {
-            var recentPayments = await _paymentService.RecentPayments();
-            return Ok(recentPayments);
+            try
+            {
+                var recentPayments = await _paymentService.RecentPayments();
+                return Ok(recentPayments);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting recent payments");
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("PaymentReminder")]
-        public async Task<IActionResult> PaymentReminderSend()
+        public async Task<ActionResult<string>> PaymentReminderSend()
         {
-            var response = await _paymentService.PaymentReminderSend();
-            return Ok(response);
+            try
+            {
+                var response = await _paymentService.PaymentReminderSend();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error sending payment reminder");
+                return BadRequest(ex.Message);
+            }
         }
 
-        [HttpGet("PaymentOverView")]
-        public async Task<IActionResult> GetPaymentOverview()
+        [HttpGet("PaymentOverview")]
+        public async Task<ActionResult<PaymentOverview>> GetPaymentOverview()
         {
-            var paymentOverview = await _paymentService.GetPaymentOverview();
-            return Ok(paymentOverview);
+            try
+            {
+                var paymentOverview = await _paymentService.GetPaymentOverview();
+                return Ok(paymentOverview);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting payment overview");
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("Pagination/{pageNumber}/{pageSize}")]
-
-        public async Task<IActionResult> GetPaginatedPayments(int pageNumber, int pageSize)
+        public async Task<ActionResult<PaginationResponseDTO<PaymentFullDetails>>> GetPaginatedPayments(int pageNumber, int pageSize)
         {
-            var response = await _paymentService.GetPaginatedPayments(pageNumber, pageSize);
-            return Ok(response);
+            try
+            {
+                var response = await _paymentService.GetPaginatedPayments(pageNumber, pageSize);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting paginated payments");
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
