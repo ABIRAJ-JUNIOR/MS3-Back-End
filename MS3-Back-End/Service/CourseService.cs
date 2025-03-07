@@ -20,16 +20,22 @@ namespace MS3_Back_End.Service
     public class CourseService : ICourseService
     {
         private readonly ICourseRepository _courseRepository;
+        private readonly ILogger<CourseService> _logger;
 
-        public CourseService(ICourseRepository courseRepository)
+        public CourseService(ICourseRepository courseRepository, ILogger<CourseService> logger)
         {
             _courseRepository = courseRepository;
+            _logger = logger;
         }
 
         public async Task<CourseResponseDTO> AddCourse(CourseRequestDTO courseReq)
         {
+            if (courseReq == null)
+            {
+                throw new ArgumentNullException(nameof(courseReq));
+            }
 
-            var Course = new Course
+            var course = new Course
             {
                 CourseCategoryId = courseReq.CourseCategoryId,
                 CourseName = courseReq.CourseName,
@@ -43,9 +49,9 @@ namespace MS3_Back_End.Service
                 IsDeleted = false,
             };
 
-            var data = await _courseRepository.AddCourse(Course);
+            var data = await _courseRepository.AddCourse(course);
 
-            var CourseResponse = new CourseResponseDTO
+            var courseResponse = new CourseResponseDTO
             {
                 Id = data.Id,
                 CourseCategoryId = data.CourseCategoryId,
@@ -59,19 +65,26 @@ namespace MS3_Back_End.Service
                 UpdatedDate = data.UpdatedDate,
             };
 
-            return CourseResponse;
+            _logger.LogInformation("Course added successfully with Id: {Id}", data.Id);
 
+            return courseResponse;
         }
 
-        public async Task<ICollection<CourseResponseDTO>> SearchCourse(string SearchText)
+        public async Task<ICollection<CourseResponseDTO>> SearchCourse(string searchText)
         {
-            var data = await _courseRepository.SearchCourse(SearchText);
-            if (data == null)
+            if (string.IsNullOrWhiteSpace(searchText))
             {
-                throw new Exception("Search Not Found");
+                throw new ArgumentException("Search text cannot be null or empty", nameof(searchText));
             }
 
-            var CourseResponse = data.Select(item => new CourseResponseDTO()
+            var data = await _courseRepository.SearchCourse(searchText);
+            if (data == null || !data.Any())
+            {
+                _logger.LogWarning("No courses found for search text: {SearchText}", searchText);
+                throw new KeyNotFoundException("Search not found");
+            }
+
+            var courseResponse = data.Select(item => new CourseResponseDTO
             {
                 Id = item.Id,
                 CourseCategoryId = item.CourseCategoryId,
@@ -83,7 +96,7 @@ namespace MS3_Back_End.Service
                 ImageUrl = item.ImageUrl!,
                 CreatedDate = item.CreatedDate,
                 UpdatedDate = item.UpdatedDate,
-                Schedules = item.CourseSchedules != null ? item.CourseSchedules.Select(cs => new CourseScheduleResponseDTO()
+                Schedules = item.CourseSchedules?.Select(cs => new CourseScheduleResponseDTO
                 {
                     Id = cs.Id,
                     CourseId = cs.CourseId,
@@ -97,21 +110,31 @@ namespace MS3_Back_End.Service
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
                     ScheduleStatus = ((ScheduleStatus)cs.ScheduleStatus).ToString()
-                }).ToList() : null
+                }).ToList(),
+                Feedbacks = item.Feedbacks?.Select(fb => new FeedbacksResponceDTO
+                {
+                    Id = fb.Id,
+                    FeedBackText = fb.FeedBackText,
+                    Rating = fb.Rating,
+                    FeedBackDate = fb.FeedBackDate,
+                    StudentId = fb.StudentId,
+                    CourseId = fb.CourseId
+                }).ToList()
             }).ToList();
 
-            return CourseResponse;
+            return courseResponse;
         }
 
         public async Task<ICollection<CourseResponseDTO>> GetAllCourse()
         {
             var data = await _courseRepository.GetAllCourse();
-            if (data == null)
+            if (data == null || !data.Any())
             {
-                throw new Exception("Courses Not Available");
+                _logger.LogWarning("No courses available");
+                throw new KeyNotFoundException("Courses not available");
             }
 
-            var CourseResponse = data.Select(course => new CourseResponseDTO
+            var courseResponse = data.Select(course => new CourseResponseDTO
             {
                 Id = course.Id,
                 CourseCategoryId = course.CourseCategoryId,
@@ -123,7 +146,7 @@ namespace MS3_Back_End.Service
                 ImageUrl = course.ImageUrl!,
                 CreatedDate = course.CreatedDate,
                 UpdatedDate = course.UpdatedDate,
-                Schedules = course.CourseSchedules != null ? course.CourseSchedules.Select(cs => new CourseScheduleResponseDTO()
+                Schedules = course.CourseSchedules?.Select(cs => new CourseScheduleResponseDTO
                 {
                     Id = cs.Id,
                     CourseId = cs.CourseId,
@@ -137,7 +160,7 @@ namespace MS3_Back_End.Service
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
                     ScheduleStatus = ((ScheduleStatus)cs.ScheduleStatus).ToString()
-                }).ToList() : null,
+                }).ToList(),
                 Feedbacks = course.Feedbacks?.Select(fb => new FeedbacksResponceDTO
                 {
                     Id = fb.Id,
@@ -145,24 +168,31 @@ namespace MS3_Back_End.Service
                     Rating = fb.Rating,
                     FeedBackDate = fb.FeedBackDate,
                     StudentId = fb.StudentId,
-                    CourseId = fb.CourseId
-                }).ToList() ?? new List<FeedbacksResponceDTO>()
+                    CourseId = fb.CourseId,
+                    Student = new StudentResponseDTO
+                    {
+                        Id = fb.Student.Id,
+                        FirstName = fb.Student.FirstName,
+                        LastName = fb.Student.LastName,
+                        Phone = fb.Student.Phone,
+                        ImageUrl = fb.Student.ImageUrl
+                    }
+                }).ToList()
             }).ToList();
 
-            return CourseResponse;
+            return courseResponse;
         }
 
-
-        public async Task<CourseResponseDTO> GetCourseById(Guid CourseId)
+        public async Task<CourseResponseDTO> GetCourseById(Guid courseId)
         {
-            var data = await _courseRepository.GetCourseById(CourseId);
-
+            var data = await _courseRepository.GetCourseById(courseId);
             if (data == null)
             {
-                throw new Exception("course not found");  
+                _logger.LogWarning("Course not found for Id: {Id}", courseId);
+                throw new KeyNotFoundException("Course not found");
             }
 
-            var CourseResponse = new CourseResponseDTO
+            var courseResponse = new CourseResponseDTO
             {
                 Id = data.Id,
                 CourseCategoryId = data.CourseCategoryId,
@@ -174,7 +204,7 @@ namespace MS3_Back_End.Service
                 ImageUrl = data.ImageUrl!,
                 CreatedDate = data.CreatedDate,
                 UpdatedDate = data.UpdatedDate,
-                Schedules = data.CourseSchedules?.Select(cs => new CourseScheduleResponseDTO()
+                Schedules = data.CourseSchedules?.Select(cs => new CourseScheduleResponseDTO
                 {
                     Id = cs.Id,
                     CourseId = cs.CourseId,
@@ -188,8 +218,8 @@ namespace MS3_Back_End.Service
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
                     ScheduleStatus = ((ScheduleStatus)cs.ScheduleStatus).ToString()
-                }).ToList(), 
-                Feedbacks = data.Feedbacks?.Select(fb => new FeedbacksResponceDTO()
+                }).ToList(),
+                Feedbacks = data.Feedbacks?.Select(fb => new FeedbacksResponceDTO
                 {
                     Id = fb.Id,
                     FeedBackText = fb.FeedBackText,
@@ -208,43 +238,49 @@ namespace MS3_Back_End.Service
                 }).ToList()
             };
 
-            return CourseResponse;
+            return courseResponse;
         }
-
 
         public async Task<CourseResponseDTO> UpdateCourse(Guid id, UpdateCourseRequestDTO course)
         {
-          
+            if (course == null)
+            {
+                throw new ArgumentNullException(nameof(course));
+            }
 
-            var GetData =await _courseRepository.GetCourseById(id);
+            var getData = await _courseRepository.GetCourseById(id);
+            if (getData == null)
+            {
+                _logger.LogWarning("Course not found for Id: {Id}", id);
+                throw new KeyNotFoundException("Course not found");
+            }
 
             if (course.CategoryId.HasValue)
-                GetData.CourseCategoryId = course.CategoryId.Value;
+                getData.CourseCategoryId = course.CategoryId.Value;
 
             if (!string.IsNullOrEmpty(course.CourseName))
-                GetData.CourseName = course.CourseName;
+                getData.CourseName = course.CourseName;
 
             if (course.Level.HasValue)
-                GetData.Level = course.Level.Value;
+                getData.Level = course.Level.Value;
 
             if (course.CourseFee.HasValue)
-                GetData.CourseFee = course.CourseFee.Value;
+                getData.CourseFee = course.CourseFee.Value;
 
             if (!string.IsNullOrEmpty(course.Description))
-                GetData.Description = course.Description;
+                getData.Description = course.Description;
 
             if (!string.IsNullOrEmpty(course.Prerequisites))
-                GetData.Prerequisites = course.Prerequisites;
+                getData.Prerequisites = course.Prerequisites;
 
             if (course.ImageUrl != null)
-                GetData.ImageUrl = course.ImageUrl;
+                getData.ImageUrl = course.ImageUrl;
 
+            getData.UpdatedDate = DateTime.Now;
 
-            GetData.UpdatedDate=DateTime.Now;
+            var data = await _courseRepository.UpdateCourse(getData);
 
-            var data =await _courseRepository.UpdateCourse(GetData);
-
-            var CourseReturn = new CourseResponseDTO
+            var courseReturn = new CourseResponseDTO
             {
                 Id = data.Id,
                 CourseCategoryId = data.CourseCategoryId,
@@ -256,27 +292,30 @@ namespace MS3_Back_End.Service
                 ImageUrl = data.ImageUrl!,
                 UpdatedDate = data.UpdatedDate,
                 CreatedDate = data.CreatedDate,
-
             };
-            return CourseReturn;
 
+            _logger.LogInformation("Course updated successfully with Id: {Id}", data.Id);
+
+            return courseReturn;
         }
 
-
-        public async Task<string> DeleteCourse(Guid Id)
+        public async Task<string> DeleteCourse(Guid id)
         {
-            var GetData = await _courseRepository.GetCourseById(Id);
-            if(GetData == null)
+            var getData = await _courseRepository.GetCourseById(id);
+            if (getData == null)
             {
-                throw new Exception("Course not Found");
+                _logger.LogWarning("Course not found for Id: {Id}", id);
+                throw new KeyNotFoundException("Course not found");
             }
 
-            GetData.IsDeleted = true;
+            getData.IsDeleted = true;
 
-            var data = await _courseRepository.DeleteCourse(GetData);
+            var data = await _courseRepository.DeleteCourse(getData);
+
+            _logger.LogInformation("Course deleted successfully with Id: {Id}", id);
+
             return data;
         }
-
 
         public async Task<PaginationResponseDTO<CoursePaginateResponseDTO>> GetPaginatedCourses(int pageNumber, int pageSize)
         {
@@ -296,7 +335,6 @@ namespace MS3_Back_End.Service
                 FeedBackRate = course.Feedbacks!.Any() ? (int)Math.Round(course.Feedbacks!.Average(f => f.Rating), 1) : 0,
                 CreatedDate = course.CreatedDate,
                 UpdatedDate = course.UpdatedDate,
-
                 Schedules = course.CourseSchedules?.Select(cs => new CourseScheduleResponseDTO
                 {
                     Id = cs.Id,
@@ -311,8 +349,7 @@ namespace MS3_Back_End.Service
                     CreatedDate = cs.CreatedDate,
                     UpdatedDate = cs.UpdatedDate,
                     ScheduleStatus = ((ScheduleStatus)cs.ScheduleStatus).ToString()
-                }).ToList() ?? new List<CourseScheduleResponseDTO>(),  
-
+                }).ToList() ?? new List<CourseScheduleResponseDTO>(),
                 Feedbacks = course.Feedbacks?.Select(fb => new FeedbacksResponceDTO
                 {
                     Id = fb.Id,
@@ -335,17 +372,19 @@ namespace MS3_Back_End.Service
 
             return paginationResponseDto;
         }
-        public async Task<string> UploadImage(Guid CourseId, IFormFile? image)
+
+        public async Task<string> UploadImage(Guid courseId, IFormFile? image)
         {
-            var courseData = await _courseRepository.GetCourseById(CourseId);
+            var courseData = await _courseRepository.GetCourseById(courseId);
             if (courseData == null)
             {
-                throw new Exception("Course not found");
+                _logger.LogWarning("Course not found for Id: {Id}", courseId);
+                throw new KeyNotFoundException("Course not found");
             }
 
-            if(image == null)
+            if (image == null)
             {
-                throw new Exception($"Could not upload image");
+                throw new ArgumentNullException(nameof(image), "Image file cannot be null");
             }
 
             var cloudinaryUrl = "cloudinary://779552958281786:JupUDaXM2QyLcruGYFayOI1U9JI@dgpyq5til";
@@ -363,11 +402,14 @@ namespace MS3_Back_End.Service
                 };
 
                 var uploadResult = await cloudinary.UploadAsync(uploadParams);
-                courseData.ImageUrl = (uploadResult.SecureUrl).ToString();
+                courseData.ImageUrl = uploadResult.SecureUrl.ToString();
             }
-            var updatedData = await _courseRepository.UpdateCourse(courseData);
 
-            return "Image upload successfully";
+            await _courseRepository.UpdateCourse(courseData);
+
+            _logger.LogInformation("Image uploaded successfully for CourseId: {CourseId}", courseId);
+
+            return "Image uploaded successfully";
         }
 
         public async Task<ICollection<Top3CourseDTO>> GetTop3Courses()
