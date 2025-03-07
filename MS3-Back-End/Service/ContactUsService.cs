@@ -8,20 +8,27 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MS3_Back_End.Service
 {
-    public class ContactUsService: IContactUsService
+    public class ContactUsService : IContactUsService
     {
-        public readonly IContactUsRepository _contactUsRepository;
-        public readonly SendMailService _sendMailService;
+        private readonly IContactUsRepository _contactUsRepository;
+        private readonly SendMailService _sendMailService;
+        private readonly ILogger<ContactUsService> _logger;
 
-        public ContactUsService(IContactUsRepository contactUsRepository, SendMailService sendMailService)
+        public ContactUsService(IContactUsRepository contactUsRepository, SendMailService sendMailService, ILogger<ContactUsService> logger)
         {
             _contactUsRepository = contactUsRepository;
             _sendMailService = sendMailService;
+            _logger = logger;
         }
 
         public async Task<ContactUsResponseDTO> AddMessage(ContactUsRequestDTO requestDTO)
         {
-            var Message = new ContactUs
+            if (requestDTO == null)
+            {
+                throw new ArgumentNullException(nameof(requestDTO));
+            }
+
+            var message = new ContactUs
             {
                 Name = requestDTO.Name,
                 Email = requestDTO.Email,
@@ -30,9 +37,9 @@ namespace MS3_Back_End.Service
                 IsRead = false
             };
 
-            var data = await _contactUsRepository.AddMessage(Message);
+            var data = await _contactUsRepository.AddMessage(message);
 
-            var messageDetails = new SendMessageMailRequest()
+            var messageDetails = new SendMessageMailRequest
             {
                 Name = data.Name,
                 Email = data.Email,
@@ -52,49 +59,59 @@ namespace MS3_Back_End.Service
                 DateSubmited = data.DateSubmited,
                 IsRead = data.IsRead
             };
+
+            _logger.LogInformation("Message added successfully with Id: {Id}", data.Id);
+
             return newContactUs;
         }
 
         public async Task<ICollection<ContactUsResponseDTO>> GetAllMessages()
         {
             var allMessages = await _contactUsRepository.GetAllMessages();
-            if (allMessages == null)
+            if (allMessages == null || !allMessages.Any())
             {
-                throw new Exception("No messages");
+                _logger.LogWarning("No messages found");
+                throw new KeyNotFoundException("No messages found");
             }
-            
-            var ContactUsResponse = allMessages.Select(message => new ContactUsResponseDTO()
+
+            var contactUsResponse = allMessages.Select(message => new ContactUsResponseDTO
             {
                 Id = message.Id,
                 Name = message.Name,
                 Email = message.Email,
                 Message = message.Message,
                 Response = message.Response,
-                DateSubmited = DateTime.Now,
+                DateSubmited = message.DateSubmited,
                 IsRead = message.IsRead
             }).ToList();
 
-            return ContactUsResponse;
+            return contactUsResponse;
         }
 
         public async Task<ContactUsResponseDTO> UpdateMessage(UpdateResponseRequestDTO request)
         {
-            var GetData = await _contactUsRepository.GetMessageById(request.Id);
-            if(GetData == null)
+            if (request == null)
             {
-                throw new Exception("Not found");
+                throw new ArgumentNullException(nameof(request));
             }
 
-            GetData.Response = request.Response;
-            GetData.IsRead = true;
-
-            var UpdatedData = await _contactUsRepository.UpdateMessage(GetData);
-
-            var messageDetails = new SendResponseMailRequest()
+            var getData = await _contactUsRepository.GetMessageById(request.Id);
+            if (getData == null)
             {
-                Name = UpdatedData.Name,
-                Email = UpdatedData.Email,
-                AdminResponse = UpdatedData.Response,
+                _logger.LogWarning("Message not found for Id: {Id}", request.Id);
+                throw new KeyNotFoundException("Message not found");
+            }
+
+            getData.Response = request.Response;
+            getData.IsRead = true;
+
+            var updatedData = await _contactUsRepository.UpdateMessage(getData);
+
+            var messageDetails = new SendResponseMailRequest
+            {
+                Name = updatedData.Name,
+                Email = updatedData.Email,
+                AdminResponse = updatedData.Response,
                 EmailType = EmailTypes.Response,
             };
 
@@ -102,27 +119,32 @@ namespace MS3_Back_End.Service
 
             var newUpdateMessage = new ContactUsResponseDTO
             {
-                Id = UpdatedData.Id,
-                Name = UpdatedData.Name,
-                Email = UpdatedData.Email,
-                Response = UpdatedData.Response,
-                DateSubmited = DateTime.Now,
-                Message = UpdatedData.Message,
-                IsRead = UpdatedData.IsRead
+                Id = updatedData.Id,
+                Name = updatedData.Name,
+                Email = updatedData.Email,
+                Response = updatedData.Response,
+                DateSubmited = updatedData.DateSubmited,
+                Message = updatedData.Message,
+                IsRead = updatedData.IsRead
             };
+
+            _logger.LogInformation("Message updated successfully with Id: {Id}", updatedData.Id);
+
             return newUpdateMessage;
         }
 
         public async Task<ContactUsResponseDTO> DeleteMessage(Guid id)
         {
             var message = await _contactUsRepository.GetMessageById(id);
-            if(message == null)
+            if (message == null)
             {
-                throw new Exception("message not found");
+                _logger.LogWarning("Message not found for Id: {Id}", id);
+                throw new KeyNotFoundException("Message not found");
             }
 
             var data = await _contactUsRepository.DeleteMessage(message);
-            var deleteddata = new ContactUsResponseDTO
+
+            var deletedData = new ContactUsResponseDTO
             {
                 Id = data.Id,
                 Name = data.Name,
@@ -132,8 +154,10 @@ namespace MS3_Back_End.Service
                 DateSubmited = data.DateSubmited,
                 IsRead = data.IsRead
             };
-            return deleteddata;
-        }
 
+            _logger.LogInformation("Message deleted successfully with Id: {Id}", data.Id);
+
+            return deletedData;
+        }
     }
 }
