@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.StudentAssessment;
 using MS3_Back_End.DTOs.ResponseDTOs.StudentAssessment;
 using MS3_Back_End.IService;
@@ -13,49 +14,102 @@ namespace MS3_Back_End.Controllers
     public class StudentAssessmentController : ControllerBase
     {
         private readonly IStudentAssessmentService _service;
+        private readonly ILogger<StudentAssessmentController> _logger;
 
-        public StudentAssessmentController(IStudentAssessmentService studentAssessmentService)
+        public StudentAssessmentController(IStudentAssessmentService studentAssessmentService, ILogger<StudentAssessmentController> logger)
         {
             _service = studentAssessmentService;
+            _logger = logger;
         }
 
         [HttpGet("GetAll")]
-        public async  Task<IActionResult> GetAllAssessments()
+        public async Task<ActionResult<IEnumerable<StudentAssessmentResponseDTO>>> GetAllAssessments()
         {
-            var assessmentList = await _service.GetAllAssessments();
-            return Ok(assessmentList);
+            try
+            {
+                var assessmentList = await _service.GetAllAssessments();
+                return Ok(assessmentList);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all assessments");
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("Evaluated")]
-        public async Task<IActionResult> GetAllEvaluatedAssessments()
+        public async Task<ActionResult<IEnumerable<StudentAssessmentResponseDTO>>> GetAllEvaluatedAssessments()
         {
-            var assessmentList = await _service.GetAllEvaluatedAssessments();
-            return Ok(assessmentList);
+            try
+            {
+                var assessmentList = await _service.GetAllEvaluatedAssessments();
+                return Ok(assessmentList);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all evaluated assessments");
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("Non-Evaluate")]
-        public async Task<IActionResult> GetAllNonEvaluateAssessments()
+        public async Task<ActionResult<IEnumerable<StudentAssessmentResponseDTO>>> GetAllNonEvaluateAssessments()
         {
-            var assessmentList = await _service.GetAllNonEvaluateAssessments();
-            return Ok(assessmentList);
+            try
+            {
+                var assessmentList = await _service.GetAllNonEvaluateAssessments();
+                return Ok(assessmentList);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all non-evaluated assessments");
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddStudentAssessment(StudentAssessmentRequestDTO request)
+        public async Task<ActionResult<string>> AddStudentAssessment(StudentAssessmentRequestDTO request)
         {
-            var studentAssessmentData = await _service.AddStudentAssessment(request);
-            return Ok(studentAssessmentData);
+            if (request == null)
+            {
+                return BadRequest("Student assessment data is required.");
+            }
+
+            try
+            {
+                var studentAssessmentData = await _service.AddStudentAssessment(request);
+                return Ok(studentAssessmentData);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding student assessment");
+                return BadRequest(ex.Message);
+            }
         }
-        [HttpGet("studentAssesment/{id}")]
-        public async Task<IActionResult> GetAllNonEvaluateAssessments(Guid id)
+
+        [HttpGet("studentAssessment/{id}")]
+        public async Task<ActionResult<StudentAssessmentResponseDTO>> GetStudentAssessmentById(Guid id)
         {
-            var assessmentList = await _service.GetStudentAssesmentById(id);
-            return Ok(assessmentList);
+            try
+            {
+                var assessment = await _service.GetStudentAssesmentById(id);
+                return Ok(assessment);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error getting student assessment by id {id}");
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("Evaluate-Assessment/{id}")]
-        public async Task<IActionResult> EvaluateStudentAssessment(Guid id, EvaluationRequestDTO request)
+        public async Task<ActionResult<StudentAssessmentResponseDTO>> EvaluateStudentAssessment(Guid id, EvaluationRequestDTO request)
         {
+            if (request == null)
+            {
+                return BadRequest("Evaluation data is required.");
+            }
+
             try
             {
                 var evaluateAssessment = await _service.EvaluateStudentAssessment(id, request);
@@ -63,22 +117,24 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpGet("getByPagination/{studentId}")]
-        public async Task<IActionResult> GetPaginationByStudentId(Guid studentId, int PageNumber, int PageSize)
-        {
-            try
-            {
-                var response = await _service.PaginationGetByStudentID(studentId, PageNumber, PageSize);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
+                _logger.LogError(ex, $"Error evaluating student assessment with id {id}");
                 return BadRequest(ex.Message);
             }
         }
 
+        [HttpGet("getByPagination/{studentId}")]
+        public async Task<ActionResult<PaginationResponseDTO<StudentAssessmentResponseDTO>>> GetPaginationByStudentId(Guid studentId, int pageNumber, int pageSize)
+        {
+            try
+            {
+                var response = await _service.PaginationGetByStudentID(studentId, pageNumber, pageSize);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error getting paginated assessments for student id {studentId}");
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
