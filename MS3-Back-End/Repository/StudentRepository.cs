@@ -78,7 +78,7 @@ namespace MS3_Back_End.Repository
                                   Phone = student.Phone,
                                   Email = user.Email,
                                   ImageUrl = student.ImageUrl!,
-                                  CteatedDate = student.CteatedDate,
+                                  CreatedDate = student.CreatedDate,
                                   UpdatedDate = student.UpdatedDate,
                                   Address = student.Address != null ? new AddressResponseDTO()
                                   {
@@ -119,7 +119,7 @@ namespace MS3_Back_End.Repository
                                     on student.Id equals user.Id into userGroup
                                   from user in userGroup.DefaultIfEmpty() 
                                   where student.IsActive != false
-                                  orderby student.CteatedDate descending
+                                  orderby student.CreatedDate descending
                                   select new StudentWithUserResponseDTO
                                   {
                                       Id = student.Id,
@@ -131,7 +131,7 @@ namespace MS3_Back_End.Repository
                                       Phone = student.Phone,
                                       Email = user.Email,
                                       ImageUrl = student.ImageUrl!,
-                                      CteatedDate = student.CteatedDate,
+                                      CreatedDate = student.CreatedDate,
                                       UpdatedDate = student.UpdatedDate,
                                       Address = address != null ? new AddressResponseDTO()
                                       {

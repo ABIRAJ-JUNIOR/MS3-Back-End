@@ -15,7 +15,7 @@
     }
     public enum NotificationType
     {
-        WelCome = 1,
+        Welcome = 1,
         Enrollment,
         Results,
         Payment,

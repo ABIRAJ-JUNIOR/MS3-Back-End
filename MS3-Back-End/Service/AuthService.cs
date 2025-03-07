@@ -17,17 +17,19 @@ namespace MS3_Back_End.Service
         private readonly IConfiguration _configuration;
         private readonly INotificationRepository _notificationRepository;
         private readonly SendMailService _sendMailService;
+        private readonly ILogger<AuthService> _logger;
 
         private const string StudentRole = "Student";
         private const string AdminRole = "Administrator";
         private const string InstructorRole = "Instructor";
 
-        public AuthService(IAuthRepository authRepository, IConfiguration configuration, INotificationRepository notificationRepository, SendMailService sendMailService)
+        public AuthService(IAuthRepository authRepository, IConfiguration configuration, INotificationRepository notificationRepository, SendMailService sendMailService, ILogger<AuthService> logger)
         {
             _authRepository = authRepository;
             _configuration = configuration;
             _notificationRepository = notificationRepository;
             _sendMailService = sendMailService;
+            _logger = logger;
         }
 
         public async Task<string> SignUp(SignUpRequestDTO request)
@@ -62,7 +64,7 @@ namespace MS3_Back_End.Service
                 Gender = request.Gender,
                 Phone = request.Phone,
                 ImageUrl = "",
-                CteatedDate = DateTime.Now,
+                CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
                 IsActive = true,
             };
@@ -71,6 +73,8 @@ namespace MS3_Back_End.Service
 
             await SendWelcomeNotification(studentData);
             await SendVerificationEmail(userData, studentData);
+
+            _logger.LogInformation("User signed up successfully with Id: {Id}", userData.Id);
 
             return "SignUp Successfully";
         }
@@ -94,6 +98,8 @@ namespace MS3_Back_End.Service
             var userRoleData = await _authRepository.GetUserRoleByUserId(userData.Id);
             var roleData = await _authRepository.GetRoleById(userRoleData.RoleId) ?? throw new RoleNotFoundException(userRoleData.RoleId.ToString());
 
+            _logger.LogInformation("User signed in successfully with Id: {Id}", userData.Id);
+
             return roleData.Name switch
             {
                 StudentRole => await HandleStudentSignIn(studentData, userData, roleData),
@@ -107,6 +113,9 @@ namespace MS3_Back_End.Service
             var userData = await _authRepository.GetUserById(userId) ?? throw new UserNotFoundException(userId.ToString());
             userData.IsConfirmEmail = true;
             await _authRepository.UpdateUser(userData);
+
+            _logger.LogInformation("Email verified successfully for UserId: {UserId}", userId);
+
             return "Email Verified Successfully";
         }
 
@@ -126,36 +135,36 @@ namespace MS3_Back_End.Service
         private async Task SendWelcomeNotification(Student studentData)
         {
             string notificationMessage = $@"
-Subject: 🎉 Welcome to Way Makers!<br><br>
+    Subject: 🎉 Welcome to Way Makers!<br><br>
 
-Dear {studentData.FirstName} {studentData.LastName},<br><br>
+    Dear {studentData.FirstName} {studentData.LastName},<br><br>
 
-We are thrilled to welcome you to Way Makers, where learning meets excellence!<br><br>
+    We are thrilled to welcome you to Way Makers, where learning meets excellence!<br><br>
 
-As a valued student, you now have access to:<br>
-✅ A wide range of industry-relevant courses.<br>
-✅ Expert instructors to guide your learning journey.<br><br>
+    As a valued student, you now have access to:<br>
+    ✅ A wide range of industry-relevant courses.<br>
+    ✅ Expert instructors to guide your learning journey.<br><br>
 
-Here’s how to get started:<br>
-1. Log in to your account using your credentials.<br>
-2. Explore available courses.<br>
-3. Stay updated with announcements.<br><br>
+    Here’s how to get started:<br>
+    1. Log in to your account using your credentials.<br>
+    2. Explore available courses.<br>
+    3. Stay updated with announcements.<br><br>
 
-We are committed to empowering your educational journey and helping you achieve your goals.<br><br>
+    We are committed to empowering your educational journey and helping you achieve your goals.<br><br>
 
-For assistance, feel free to contact us at info.way.mmakers@gmail.com or call 0702274212.<br><br>
+    For assistance, feel free to contact us at info.way.mmakers@gmail.com or call 0702274212.<br><br>
 
-Once again, welcome to the Way Makers family! 🎓<br><br>
+    Once again, welcome to the Way Makers family! 🎓<br><br>
 
-Warm regards,<br>
-Way Makers<br>
-Empowering learners, shaping futures.
-";
+    Warm regards,<br>
+    Way Makers<br>
+    Empowering learners, shaping futures.
+    ";
 
             var message = new Notification
             {
                 Message = notificationMessage,
-                NotificationType = NotificationType.WelCome,
+                NotificationType = NotificationType.Welcome,
                 StudentId = studentData.Id,
                 DateSent = DateTime.Now,
                 IsRead = false
@@ -217,12 +226,12 @@ Empowering learners, shaping futures.
         private string CreateToken(TokenRequestDTO request)
         {
             var claimsList = new List<Claim>
-            {
-                new Claim("Id", request.Id.ToString()),
-                new Claim("Name", request.Name),
-                new Claim("Email", request.Email),
-                new Claim("Role", request.Role)
-            };
+                {
+                    new Claim("Id", request.Id.ToString()),
+                    new Claim("Name", request.Name),
+                    new Claim("Email", request.Email),
+                    new Claim("Role", request.Role)
+                };
 
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]!));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -231,6 +240,9 @@ Empowering learners, shaping futures.
                 expires: DateTime.Now.AddDays(1),
                 signingCredentials: credentials
             );
+
+            _logger.LogInformation("Token created successfully for UserId: {UserId}", request.Id);
+
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }

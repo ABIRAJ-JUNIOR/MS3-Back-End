@@ -125,7 +125,7 @@ namespace MS3_Back_End.Repository
                                     Phone = admin.Phone,
                                     Email = user.Email,
                                     ImageUrl = admin.ImageUrl,
-                                    CteatedDate = admin.CreatedDate,
+                                    CreatedDate = admin.CreatedDate,
                                     UpdatedDate = admin.UpdatedDate,
                                     IsActive = admin.IsActive,
                                     AuditLogs = admin.AuditLogs!.Select(a => new AuditLogResponseDTO
