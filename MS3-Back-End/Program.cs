@@ -74,7 +74,7 @@ namespace MS3_Back_End
 
             // Address
             services.AddScoped<IAddressRepository, AddressRepository>();
-            services.AddScoped<IAddressService, AddressServise>();
+            services.AddScoped<IAddressService, AddressService>();
 
             // Course
             services.AddScoped<ICourseRepository, CourseRepositoy>();

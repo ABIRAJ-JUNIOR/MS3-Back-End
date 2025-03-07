@@ -23,7 +23,7 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<AuditLogResponceDTO>> AddAuditLog(AuditLogRequestDTO auditLogRequestDTO)
+        public async Task<ActionResult<AuditLogResponseDTO>> AddAuditLog(AuditLogRequestDTO auditLogRequestDTO)
         {
             if (auditLogRequestDTO == null)
             {
@@ -44,7 +44,7 @@ namespace MS3_Back_End.Controllers
 
         [Authorize]
         [HttpGet("GetAll")]
-        public async Task<ActionResult<IEnumerable<AuditLogResponceDTO>>> GetAllAuditLogs()
+        public async Task<ActionResult<IEnumerable<AuditLogResponseDTO>>> GetAllAuditLogs()
         {
             try
             {
@@ -60,7 +60,7 @@ namespace MS3_Back_End.Controllers
 
         [Authorize]
         [HttpGet("Get-AuditLogs-By/{adminId}")]
-        public async Task<ActionResult<IEnumerable<AuditLogResponceDTO>>> GetAuditLogsByAdminId(Guid adminId)
+        public async Task<ActionResult<IEnumerable<AuditLogResponseDTO>>> GetAuditLogsByAdminId(Guid adminId)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace MS3_Back_End.Controllers
 
         [Authorize]
         [HttpGet("Get-AuditLog-By/{id}")]
-        public async Task<ActionResult<AuditLogResponceDTO>> GetAuditLogById(Guid id)
+        public async Task<ActionResult<AuditLogResponseDTO>> GetAuditLogById(Guid id)
         {
             try
             {

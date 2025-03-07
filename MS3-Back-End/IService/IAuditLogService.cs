@@ -5,11 +5,11 @@ namespace MS3_Back_End.IService
 {
     public interface IAuditLogService
     {
-        Task<AuditLogResponceDTO> AddAuditLog(AuditLogRequestDTO auditLog);
-        Task<ICollection<AuditLogResponceDTO>> GetAllAuditlogs();
+        Task<AuditLogResponseDTO> AddAuditLog(AuditLogRequestDTO auditLog);
+        Task<ICollection<AuditLogResponseDTO>> GetAllAuditlogs();
 
-        Task<ICollection<AuditLogResponceDTO>> GetAuditLogsbyAdminId(Guid id);
+        Task<ICollection<AuditLogResponseDTO>> GetAuditLogsbyAdminId(Guid id);
 
-        Task<AuditLogResponceDTO> GetAuditLogByID(Guid id);
+        Task<AuditLogResponseDTO> GetAuditLogByID(Guid id);
     }
 }

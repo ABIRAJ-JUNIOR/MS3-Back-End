@@ -20,7 +20,7 @@ namespace MS3_Back_End.Service
             _adminRepository = adminRepository;
         }
 
-        public async Task<AuditLogResponceDTO> AddAuditLog(AuditLogRequestDTO auditLog)
+        public async Task<AuditLogResponseDTO> AddAuditLog(AuditLogRequestDTO auditLog)
         {
             var adminData = await _adminRepository.GetAdminById(auditLog.AdminId);
             if (adminData == null)
@@ -38,7 +38,7 @@ namespace MS3_Back_End.Service
 
             var data = await _auditLogRepository.AddAuditLog(AuditLog);
 
-            var returndata = new AuditLogResponceDTO()
+            var returndata = new AuditLogResponseDTO()
             {
                 Id = data.Id,
                 AdminId = data.AdminId,
@@ -49,10 +49,10 @@ namespace MS3_Back_End.Service
 
             return returndata;
         }
-        public async Task<ICollection<AuditLogResponceDTO>> GetAllAuditlogs()
+        public async Task<ICollection<AuditLogResponseDTO>> GetAllAuditlogs()
         {
              var datas= await _auditLogRepository.GetAllAuditlogs();
-            var returndatas=datas.Select(x => new AuditLogResponceDTO()
+            var returndatas=datas.Select(x => new AuditLogResponseDTO()
             {
                 Action= x.Action,
                 Details= x.Details,
@@ -66,18 +66,18 @@ namespace MS3_Back_End.Service
                     FirstName = x.Admin.FirstName,
                     LastName = x.Admin.LastName,
                     Phone = x.Admin.Phone,
-                    CteatedDate = x.Admin.CteatedDate,
-                    UpdatedDate = x.Admin.CteatedDate,
+                    CreatedDate = x.Admin.CreatedDate,
+                    UpdatedDate = x.Admin.CreatedDate,
                     IsActive = x.Admin.IsActive,
                 }
             }).ToList();
             return returndatas;
         }
-        public async Task<ICollection<AuditLogResponceDTO>> GetAuditLogsbyAdminId(Guid id)
+        public async Task<ICollection<AuditLogResponseDTO>> GetAuditLogsbyAdminId(Guid id)
         {
             var data =await _auditLogRepository.GetAuditLogsbyAdminId(id);
 
-            var returndata = data.Select(x => new AuditLogResponceDTO()
+            var returndata = data.Select(x => new AuditLogResponseDTO()
             {
                 Details = x.Details,
                 Id = x.Id,
@@ -91,8 +91,8 @@ namespace MS3_Back_End.Service
                     FirstName = x.Admin.FirstName,
                     LastName = x.Admin.LastName,
                     Phone = x.Admin.Phone,
-                    CteatedDate = x.Admin.CteatedDate,
-                    UpdatedDate = x.Admin.CteatedDate,
+                    CreatedDate = x.Admin.CreatedDate,
+                    UpdatedDate = x.Admin.CreatedDate,
                     IsActive = x.Admin.IsActive,
                 }
             }).ToList();
@@ -100,10 +100,10 @@ namespace MS3_Back_End.Service
             return returndata;  
         }
 
-        public async Task<AuditLogResponceDTO> GetAuditLogByID(Guid id)
+        public async Task<AuditLogResponseDTO> GetAuditLogByID(Guid id)
         {
              var data= await _auditLogRepository.GetAuditLogByID(id);
-            var returndata = new AuditLogResponceDTO()
+            var returndata = new AuditLogResponseDTO()
             {
                 Action =data.Action,
                 Details = data.Details,
@@ -117,8 +117,8 @@ namespace MS3_Back_End.Service
                     FirstName = data.Admin.FirstName,
                     LastName = data.Admin.LastName,
                     Phone = data.Admin.Phone,
-                    CteatedDate = data.Admin.CteatedDate,
-                    UpdatedDate = data.Admin.CteatedDate,
+                    CreatedDate = data.Admin.CreatedDate,
+                    UpdatedDate = data.Admin.CreatedDate,
                     IsActive = data.Admin.IsActive,
                 }
             };

@@ -22,27 +22,34 @@ namespace MS3_Back_End.Service
         private readonly IAdminRepository _adminRepository;
         private readonly IAuthRepository _authRepository;
         private readonly SendMailService _sendMailService;
+        private readonly ILogger<AdminService> _logger;
 
-        public AdminService(IAdminRepository adminRepository, IAuthRepository authRepository, SendMailService sendMailService)
+        public AdminService(IAdminRepository adminRepository, IAuthRepository authRepository, SendMailService sendMailService, ILogger<AdminService> logger)
         {
             _adminRepository = adminRepository;
             _authRepository = authRepository;
             _sendMailService = sendMailService;
+            _logger = logger;
         }
 
         public async Task<AdminResponseDTO> AddAdmin(AdminRequestDTO request)
         {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
             var nicCheck = await _adminRepository.GetAdminByNic(request.Nic);
             var emailCheck = await _authRepository.GetUserByEmail(request.Email);
 
-            if(nicCheck != null)
+            if (nicCheck != null)
             {
-                throw new Exception("Nic already used");
+                throw new InvalidOperationException("NIC already used");
             }
 
-            if(emailCheck != null)
+            if (emailCheck != null)
             {
-                throw new Exception("Email already used");
+                throw new InvalidOperationException("Email already used");
             }
 
             var user = new User()
@@ -50,17 +57,15 @@ namespace MS3_Back_End.Service
                 Email = request.Email,
                 IsConfirmEmail = false,
                 Password = BCrypt.Net.BCrypt.HashPassword(request.Password),
-
             };
 
             var userData = await _authRepository.AddUser(user);
             var roleData = request.Role == AdminRole.Administrator ? await _authRepository.GetRoleByName("Administrator") : await _authRepository.GetRoleByName("Instructor");
-            
-            if(roleData == null)
-            {
-                throw new Exception("Role not found");
-            }
 
+            if (roleData == null)
+            {
+                throw new InvalidOperationException("Role not found");
+            }
 
             var userRole = new UserRole()
             {
@@ -68,7 +73,7 @@ namespace MS3_Back_End.Service
                 RoleId = roleData.Id
             };
 
-            var userRoleData = await _authRepository.AddUserRole(userRole);
+            await _authRepository.AddUserRole(userRole);
 
             var admin = new Admin()
             {
@@ -78,7 +83,7 @@ namespace MS3_Back_End.Service
                 LastName = request.LastName,
                 Phone = request.Phone,
                 ImageUrl = null,
-                CteatedDate = DateTime.Now,
+                CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
                 IsActive = true,
             };
@@ -93,14 +98,14 @@ namespace MS3_Back_End.Service
                 LastName = adminData.LastName,
                 Phone = adminData.Phone,
                 ImageUrl = adminData.ImageUrl,
-                CteatedDate = adminData.CteatedDate,
+                CreatedDate = adminData.CreatedDate,
                 UpdatedDate = adminData.UpdatedDate,
                 IsActive = adminData.IsActive,
             };
 
             var verifyMail = new SendVerifyMailRequest()
             {
-                Name = adminData.FirstName + " " + adminData.LastName,
+                Name = $"{adminData.FirstName} {adminData.LastName}",
                 Email = userData.Email,
                 VerificationLink = $"http://localhost:4200/email-verified/{userData.Id}",
                 EmailType = EmailTypes.EmailVerification,
@@ -108,15 +113,18 @@ namespace MS3_Back_End.Service
 
             await _sendMailService.VerifyMail(verifyMail);
 
+            _logger.LogInformation("Admin added successfully with Id: {Id}", adminData.Id);
+
             return response;
         }
 
         public async Task<AdminAllDataResponseDTO> GetAdminFullDetailsById(Guid id)
         {
             var adminData = await _adminRepository.GetAdminFullDetailsById(id);
-            if(adminData == null)
+            if (adminData == null)
             {
-                throw new Exception("Not found");
+                _logger.LogWarning("Admin not found for Id: {Id}", id);
+                throw new KeyNotFoundException("Admin not found");
             }
             return adminData;
         }
@@ -133,10 +141,10 @@ namespace MS3_Back_End.Service
                 LastName = a.LastName,
                 Phone = a.Phone,
                 ImageUrl = a.ImageUrl,
-                CteatedDate = a.CteatedDate,
+                CreatedDate = a.CreatedDate,
                 UpdatedDate = a.UpdatedDate,
                 IsActive = a.IsActive,
-                AuditLogs = a.AuditLogs != null ? a.AuditLogs.Select(data => new AuditLogResponceDTO()
+                AuditLogs = a.AuditLogs?.Select(data => new AuditLogResponseDTO()
                 {
                     Id = data.Id,
                     AdminId = data.AdminId,
@@ -144,19 +152,25 @@ namespace MS3_Back_End.Service
                     Details = data.Details,
                     Action = data.Action,
                     AdminResponse = null!
-                }).ToList() : null
+                }).ToList()
             }).ToList();
 
             return response;
         }
 
-        public async Task<AdminResponseDTO> UpdateAdminFullDetails(Guid id , AdminFullUpdateDTO request)
+        public async Task<AdminResponseDTO> UpdateAdminFullDetails(Guid id, AdminFullUpdateDTO request)
         {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
             var adminData = await _adminRepository.GetAdminById(id);
 
             if (adminData == null)
             {
-                throw new Exception("Admin not found");
+                _logger.LogWarning("Admin not found for Id: {Id}", id);
+                throw new KeyNotFoundException("Admin not found");
             }
 
             adminData.FirstName = request.FirstName;
@@ -169,31 +183,31 @@ namespace MS3_Back_End.Service
             var userData = await _authRepository.GetUserById(id);
             if (userData == null)
             {
-                throw new Exception("User not found");
+                throw new KeyNotFoundException("User not found");
             }
 
-            if(request.Password != null)
+            if (request.Password != null)
             {
                 userData.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
             }
 
-            var userUpdateData = await _authRepository.UpdateUser(userData);
+            await _authRepository.UpdateUser(userData);
 
             var userRoleData = await _authRepository.GetUserRoleByUserId(id);
             if (userRoleData == null)
             {
-                throw new Exception("UserRole not found");
+                throw new KeyNotFoundException("UserRole not found");
             }
 
-            var roleData = await _authRepository.GetRoleByName(((AdminRole)request.Role).ToString());
+            var roleData = await _authRepository.GetRoleByName(request.Role.ToString());
             if (roleData == null)
             {
-                throw new Exception("Role not found");
+                throw new KeyNotFoundException("Role not found");
             }
 
             userRoleData.RoleId = roleData.Id;
 
-            var userRoleUpdateData = await _authRepository.UpdateUserRole(userRoleData);
+            await _authRepository.UpdateUserRole(userRoleData);
 
             var response = new AdminResponseDTO()
             {
@@ -203,54 +217,60 @@ namespace MS3_Back_End.Service
                 LastName = updatedData.LastName,
                 Phone = updatedData.Phone,
                 ImageUrl = updatedData.ImageUrl,
-                CteatedDate = updatedData.CteatedDate,
+                CreatedDate = updatedData.CreatedDate,
                 UpdatedDate = updatedData.UpdatedDate,
                 IsActive = updatedData.IsActive,
             };
+
+            _logger.LogInformation("Admin updated successfully with Id: {Id}", id);
+
             return response;
         }
 
-        public async Task<string> UploadImage(Guid adminId, IFormFile? ImageFile, bool isCoverImage)
+        public async Task<string> UploadImage(Guid adminId, IFormFile? imageFile, bool isCoverImage)
         {
             var adminData = await _adminRepository.GetAdminById(adminId);
-            if(adminData == null)
+            if (adminData == null)
             {
-                throw new Exception("Admin not found");
+                _logger.LogWarning("Admin not found for Id: {Id}", adminId);
+                throw new KeyNotFoundException("Admin not found");
             }
 
-            if (ImageFile == null)
+            if (imageFile == null)
             {
-                throw new Exception($"Could not upload image");
+                throw new ArgumentNullException(nameof(imageFile), "Image file cannot be null");
             }
 
             var cloudinaryUrl = "cloudinary://779552958281786:JupUDaXM2QyLcruGYFayOI1U9JI@dgpyq5til";
 
             Cloudinary cloudinary = new Cloudinary(cloudinaryUrl);
 
-            using (var stream = ImageFile.OpenReadStream())
+            using (var stream = imageFile.OpenReadStream())
             {
                 var uploadParams = new ImageUploadParams
                 {
-                    File = new FileDescription(ImageFile.FileName, stream),
+                    File = new FileDescription(imageFile.FileName, stream),
                     UseFilename = true,
                     UniqueFilename = true,
                     Overwrite = true
                 };
 
                 var uploadResult = await cloudinary.UploadAsync(uploadParams);
-                if(isCoverImage)
+                if (isCoverImage)
                 {
-                    adminData.CoverImageUrl = (uploadResult.SecureUrl).ToString();
+                    adminData.CoverImageUrl = uploadResult.SecureUrl.ToString();
                 }
                 else
                 {
-                    adminData.ImageUrl = (uploadResult.SecureUrl).ToString();
+                    adminData.ImageUrl = uploadResult.SecureUrl.ToString();
                 }
             }
 
-            var updatedData = await _adminRepository.UpdateAdmin(adminData);
+            await _adminRepository.UpdateAdmin(adminData);
 
-            return "Image upload successfully";
+            _logger.LogInformation("Image uploaded successfully for AdminId: {AdminId}", adminId);
+
+            return "Image uploaded successfully";
         }
 
         public async Task<PaginationResponseDTO<AdminWithRoleDTO>> GetPaginatedAdmin(int pageNumber, int pageSize)
@@ -258,7 +278,7 @@ namespace MS3_Back_End.Service
             var allAdmins = await _adminRepository.GetAllAdmins();
             if (allAdmins == null)
             {
-                throw new Exception("Admins Not Found");
+                throw new KeyNotFoundException("Admins not found");
             }
 
             var admins = await _adminRepository.GetPaginatedAdmin(pageNumber, pageSize);
@@ -275,12 +295,13 @@ namespace MS3_Back_End.Service
             return paginationResponseDto;
         }
 
-        public async Task<AdminResponseDTO> DeleteAdmin(Guid Id)
+        public async Task<AdminResponseDTO> DeleteAdmin(Guid id)
         {
-            var adminData = await _adminRepository.GetAdminById(Id);
+            var adminData = await _adminRepository.GetAdminById(id);
             if (adminData == null)
             {
-                throw new Exception("Admin not found");
+                _logger.LogWarning("Admin not found for Id: {Id}", id);
+                throw new KeyNotFoundException("Admin not found");
             }
 
             adminData.IsActive = false;
@@ -294,58 +315,65 @@ namespace MS3_Back_End.Service
                 LastName = deletedAdmin.LastName,
                 Phone = deletedAdmin.Phone,
                 ImageUrl = deletedAdmin.ImageUrl,
-                CteatedDate = deletedAdmin.CteatedDate,
+                CreatedDate = deletedAdmin.CreatedDate,
                 UpdatedDate = deletedAdmin.UpdatedDate,
                 IsActive = deletedAdmin.IsActive,
             };
 
+            _logger.LogInformation("Admin deleted successfully with Id: {Id}", id);
+
             return response;
         }
-        public async Task<string> UpdateAdminProfile(Guid ID,AdminProfileUpdateDTO request)
+
+        public async Task<string> UpdateAdminProfile(Guid id, AdminProfileUpdateDTO request)
         {
-            var adminData = await _adminRepository.GetAdminById(ID);
-            if (adminData == null)
+            if (request == null)
             {
-                throw new Exception("Admin not found");
+                throw new ArgumentNullException(nameof(request));
             }
 
+            var adminData = await _adminRepository.GetAdminById(id);
+            if (adminData == null)
+            {
+                _logger.LogWarning("Admin not found for Id: {Id}", id);
+                throw new KeyNotFoundException("Admin not found");
+            }
 
             adminData.FirstName = request.FirstName;
             adminData.LastName = request.LastName;
             adminData.Phone = request.Phone;
             adminData.UpdatedDate = DateTime.Now;
 
-            var updatedAdminData = await _adminRepository.UpdateAdmin(adminData);
+            await _adminRepository.UpdateAdmin(adminData);
 
-            var userData = await _authRepository.GetUserById(ID);
+            var userData = await _authRepository.GetUserById(id);
             if (userData == null)
             {
-                throw new Exception("User not found");
+                throw new KeyNotFoundException("User not found");
             }
 
             userData.Email = request.Email;
 
-            var updatedUserData = await _authRepository.UpdateUser(userData);
+            await _authRepository.UpdateUser(userData);
 
             if (request.NewPassword != null)
             {
                 if (request.CurrentPassword == null)
                 {
-                    throw new Exception("Required Current Password");
+                    throw new InvalidOperationException("Current password is required");
                 }
                 if (!BCrypt.Net.BCrypt.Verify(request.CurrentPassword, userData.Password))
                 {
-                    throw new Exception("Current password is incorrect");
+                    throw new InvalidOperationException("Current password is incorrect");
                 }
 
                 userData.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
-                var updatedData = await _authRepository.UpdateUser(userData);
+                await _authRepository.UpdateUser(userData);
             }
 
+            _logger.LogInformation("Admin profile updated successfully for Id: {Id}", id);
 
-            return "Account Update Successfull";
-            
+            return "Account update successful";
         }
-
     }
 }
