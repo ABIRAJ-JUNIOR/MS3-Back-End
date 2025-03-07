@@ -6,82 +6,111 @@ using MS3_Back_End.IService;
 
 namespace MS3_Back_End.Service
 {
-    public class CourseCategoryService: ICourseCategoryService
+    public class CourseCategoryService : ICourseCategoryService
     {
         private readonly ICourseCategoryRepository _courseCategoryRepository;
+        private readonly ILogger<CourseCategoryService> _logger;
 
-        public CourseCategoryService(ICourseCategoryRepository courseCategoryRepository)
+        public CourseCategoryService(ICourseCategoryRepository courseCategoryRepository, ILogger<CourseCategoryService> logger)
         {
             _courseCategoryRepository = courseCategoryRepository;
+            _logger = logger;
         }
 
         public async Task<CourseCategoryResponseDTO> AddCategory(CourseCategoryRequestDTO courseCategoryRequestDTO)
         {
-            var Category = new CourseCategory
+            if (courseCategoryRequestDTO == null)
+            {
+                throw new ArgumentNullException(nameof(courseCategoryRequestDTO));
+            }
+
+            var category = new CourseCategory
             {
                 CategoryName = courseCategoryRequestDTO.CategoryName,
                 Description = courseCategoryRequestDTO.Description
             };
 
-            var data = await _courseCategoryRepository.AddCategory(Category);
+            var data = await _courseCategoryRepository.AddCategory(category);
 
-            var CourseCategoryResponse = new CourseCategoryResponseDTO
+            var courseCategoryResponse = new CourseCategoryResponseDTO
             {
                 Id = data.Id,
                 CategoryName = data.CategoryName,
                 Description = data.Description
             };
-            return CourseCategoryResponse;
+
+            _logger.LogInformation("Category added successfully with Id: {Id}", data.Id);
+
+            return courseCategoryResponse;
         }
 
-        public async Task<CourseCategoryResponseDTO> GetCourseCategoryById(Guid Id)
+        public async Task<CourseCategoryResponseDTO> GetCourseCategoryById(Guid id)
         {
-            var data = await _courseCategoryRepository.GetCourseCategoryById(Id);
+            var data = await _courseCategoryRepository.GetCourseCategoryById(id);
             if (data == null)
             {
-                throw new Exception("Category not found");
+                _logger.LogWarning("Category not found for Id: {Id}", id);
+                throw new KeyNotFoundException("Category not found");
             }
-            var CourseCategoryResponse = new CourseCategoryResponseDTO
+
+            var courseCategoryResponse = new CourseCategoryResponseDTO
             {
                 Id = data.Id,
                 CategoryName = data.CategoryName,
                 Description = data.Description
             };
-            return CourseCategoryResponse;
+
+            return courseCategoryResponse;
         }
 
         public async Task<CourseCategoryResponseDTO> UpdateCourseCategory(CategoryUpdateRequestDTO courseCategoryRequestDTO)
         {
-            var GetData = await _courseCategoryRepository.GetCourseCategoryById(courseCategoryRequestDTO.Id);
-            if(GetData == null)
+            if (courseCategoryRequestDTO == null)
             {
-                throw new Exception("Category not found");
+                throw new ArgumentNullException(nameof(courseCategoryRequestDTO));
             }
-            GetData.CategoryName = courseCategoryRequestDTO.CategoryName;
-            GetData.Description = courseCategoryRequestDTO.Description;
 
-            var UpdatedData = await _courseCategoryRepository.UpdateCourseCategory(GetData);
-
-            var CourseCategoryResponse = new CourseCategoryResponseDTO
+            var getData = await _courseCategoryRepository.GetCourseCategoryById(courseCategoryRequestDTO.Id);
+            if (getData == null)
             {
-                Id = UpdatedData.Id,
-                CategoryName = UpdatedData.CategoryName,
-                Description = UpdatedData.Description
+                _logger.LogWarning("Category not found for Id: {Id}", courseCategoryRequestDTO.Id);
+                throw new KeyNotFoundException("Category not found");
+            }
 
+            getData.CategoryName = courseCategoryRequestDTO.CategoryName;
+            getData.Description = courseCategoryRequestDTO.Description;
+
+            var updatedData = await _courseCategoryRepository.UpdateCourseCategory(getData);
+
+            var courseCategoryResponse = new CourseCategoryResponseDTO
+            {
+                Id = updatedData.Id,
+                CategoryName = updatedData.CategoryName,
+                Description = updatedData.Description
             };
-            return CourseCategoryResponse;
+
+            _logger.LogInformation("Category updated successfully with Id: {Id}", updatedData.Id);
+
+            return courseCategoryResponse;
         }
+
         public async Task<List<CourseCategoryResponseDTO>> GetAllGetCourseCategory()
         {
-            var data=await _courseCategoryRepository.GetAllGetCourseCategory();
-            var returndata=data.Select( c => new CourseCategoryResponseDTO() 
+            var data = await _courseCategoryRepository.GetAllGetCourseCategory();
+            if (data == null || !data.Any())
             {
-              CategoryName = c.CategoryName,
-              Description = c.Description,
-              Id = c.Id
-              
+                _logger.LogWarning("No categories found");
+                throw new KeyNotFoundException("No categories found");
+            }
+
+            var returnData = data.Select(c => new CourseCategoryResponseDTO
+            {
+                Id = c.Id,
+                CategoryName = c.CategoryName,
+                Description = c.Description
             }).ToList();
-            return returndata;
+
+            return returnData;
         }
     }
 }
