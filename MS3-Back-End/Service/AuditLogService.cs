@@ -22,7 +22,7 @@ namespace MS3_Back_End.Service
             _logger = logger;
         }
 
-        public async Task<AuditLogResponseDTO> AddAuditLog(AuditLogRequestDTO auditLog)
+        public async Task<string> AddAuditLog(AuditLogRequestDTO auditLog)
         {
             if (auditLog == null)
             {
@@ -46,29 +46,9 @@ namespace MS3_Back_End.Service
 
             var data = await _auditLogRepository.AddAuditLog(newAuditLog);
 
-            var returnData = new AuditLogResponseDTO
-            {
-                Id = data.Id,
-                AdminId = data.AdminId,
-                ActionDate = data.ActionDate,
-                Details = data.Details,
-                Action = data.Action,
-                AdminResponse = new AdminResponseDTO
-                {
-                    Id = adminData.Id,
-                    Nic = adminData.Nic,
-                    FirstName = adminData.FirstName,
-                    LastName = adminData.LastName,
-                    Phone = adminData.Phone,
-                    CreatedDate = adminData.CreatedDate,
-                    UpdatedDate = adminData.UpdatedDate,
-                    IsActive = adminData.IsActive,
-                }
-            };
-
             _logger.LogInformation("Audit log added successfully with Id: {Id}", data.Id);
 
-            return returnData;
+            return "Audit log added successfully";
         }
 
         public async Task<ICollection<AuditLogResponseDTO>> GetAllAuditlogs()
