@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.Email;
 using MS3_Back_End.Service;
+using NLog;
 
 namespace MS3_Back_End.Controllers
 {
@@ -12,12 +13,11 @@ namespace MS3_Back_End.Controllers
     public class SendMailController : ControllerBase
     {
         private readonly SendMailService _sendMailService;
-        private readonly ILogger<SendMailController> _logger;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public SendMailController(SendMailService sendMailService, ILogger<SendMailController> logger)
+        public SendMailController(SendMailService sendMailService)
         {
             _sendMailService = sendMailService;
-            _logger = logger;
         }
 
         [HttpPost("OTP")]
@@ -35,7 +35,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error sending OTP mail");
+                _logger.Error(ex, "Error sending OTP mail");
                 return BadRequest(ex.Message);
             }
         }
@@ -55,7 +55,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error sending invoice mail");
+                _logger.Error(ex, "Error sending invoice mail");
                 return BadRequest(ex.Message);
             }
         }
