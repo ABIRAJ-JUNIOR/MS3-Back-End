@@ -6,6 +6,7 @@ using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Feedbacks;
 using MS3_Back_End.DTOs.ResponseDTOs.FeedBack;
 using MS3_Back_End.IService;
+using NLog;
 
 namespace MS3_Back_End.Controllers
 {
@@ -14,12 +15,11 @@ namespace MS3_Back_End.Controllers
     public class FeedbacksController : ControllerBase
     {
         private readonly IFeedbacksService _feedbackService;
-        private readonly ILogger<FeedbacksController> _logger;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public FeedbacksController(IFeedbacksService feedbackService, ILogger<FeedbacksController> logger)
+        public FeedbacksController(IFeedbacksService feedbackService)
         {
             _feedbackService = feedbackService;
-            _logger = logger;
         }
 
         [Authorize]
@@ -38,7 +38,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error adding feedback");
+                _logger.Error(ex, "Error adding feedback");
                 return BadRequest(ex.Message);
             }
         }
@@ -53,7 +53,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting all feedbacks");
+                _logger.Error(ex, "Error getting all feedbacks");
                 return BadRequest(ex.Message);
             }
         }
@@ -68,7 +68,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting top feedbacks");
+                _logger.Error(ex, "Error getting top feedbacks");
                 return BadRequest(ex.Message);
             }
         }
@@ -83,7 +83,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error getting feedbacks by student id {id}");
+                _logger.Error(ex, $"Error getting feedbacks by student id {id}");
                 return BadRequest(ex.Message);
             }
         }
@@ -99,7 +99,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting paginated feedbacks");
+                _logger.Error(ex, "Error getting paginated feedbacks");
                 return BadRequest(ex.Message);
             }
         }
