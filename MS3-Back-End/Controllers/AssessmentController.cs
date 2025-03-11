@@ -6,6 +6,7 @@ using MS3_Back_End.DTOs.RequestDTOs.Assessment;
 using MS3_Back_End.DTOs.ResponseDTOs.Assessment;
 using MS3_Back_End.IService;
 using MS3_Back_End.Service;
+using NLog;
 
 namespace MS3_Back_End.Controllers
 {
@@ -15,12 +16,11 @@ namespace MS3_Back_End.Controllers
     public class AssessmentController : ControllerBase
     {
         private readonly IAssessmentService _service;
-        private readonly ILogger<AssessmentController> _logger;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public AssessmentController(IAssessmentService service, ILogger<AssessmentController> logger)
+        public AssessmentController(IAssessmentService service)
         {
             _service = service;
-            _logger = logger;
         }
 
         [HttpPost("Add")]
@@ -38,7 +38,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error adding assessment");
+                _logger.Error(ex, "Error adding assessment");
                 return BadRequest(ex.Message);
             }
         }
@@ -53,7 +53,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting all assessments");
+                _logger.Error(ex, "Error getting all assessments");
                 return BadRequest(ex.Message);
             }
         }
@@ -73,7 +73,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error updating assessment with id {id}");
+                _logger.Error(ex, $"Error updating assessment with id {id}");
                 return BadRequest(ex.Message);
             }
         }
@@ -88,7 +88,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting paginated assessments");
+                _logger.Error(ex, "Error getting paginated assessments");
                 return BadRequest(ex.Message);
             }
         }

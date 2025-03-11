@@ -9,6 +9,7 @@ using MS3_Back_End.DTOs.ResponseDTOs.Announcement;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IService;
 using MS3_Back_End.Service;
+using NLog;
 
 namespace MS3_Back_End.Controllers
 {
@@ -18,12 +19,11 @@ namespace MS3_Back_End.Controllers
     public class AnnouncementController : ControllerBase
     {
         private readonly IAnnouncementService _announcementService;
-        private readonly ILogger<AnnouncementController> _logger;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public AnnouncementController(IAnnouncementService announcementService, ILogger<AnnouncementController> logger)
+        public AnnouncementController(IAnnouncementService announcementService)
         {
             _announcementService = announcementService;
-            _logger = logger;
         }
 
         [HttpPost]
@@ -41,7 +41,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error adding announcement");
+                _logger.Error(ex, "Error adding announcement");
                 return BadRequest(ex.Message);
             }
         }
@@ -56,7 +56,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting all announcements");
+                _logger.Error(ex, "Error getting all announcements");
                 return BadRequest(ex.Message);
             }
         }
@@ -71,7 +71,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error getting announcement with id {id}");
+                _logger.Error(ex, $"Error getting announcement with id {id}");
                 return NotFound($"Announcement with id {id} not found: {ex.Message}");
             }
         }
@@ -86,7 +86,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting recent announcements");
+                _logger.Error(ex, "Error getting recent announcements");
                 return BadRequest(ex.Message);
             }
         }
@@ -101,7 +101,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error deleting announcement with id {id}");
+                _logger.Error(ex, $"Error deleting announcement with id {id}");
                 return BadRequest(ex.Message);
             }
         }
@@ -121,7 +121,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error searching announcements");
+                _logger.Error(ex, "Error searching announcements");
                 return BadRequest(ex.Message);
             }
         }
@@ -136,7 +136,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting paginated announcements");
+                _logger.Error(ex, "Error getting paginated announcements");
                 return BadRequest(ex.Message);
             }
         }
@@ -151,7 +151,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error validating announcements");
+                _logger.Error(ex, "Error validating announcements");
                 return BadRequest(ex.Message);
             }
         }
