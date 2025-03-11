@@ -6,6 +6,7 @@ using MS3_Back_End.DTOs.RequestDTOs.ContactUs;
 using MS3_Back_End.DTOs.ResponseDTOs.ContactUs;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IService;
+using NLog;
 
 namespace MS3_Back_End.Controllers
 {
@@ -14,12 +15,11 @@ namespace MS3_Back_End.Controllers
     public class ContactUsController : ControllerBase
     {
         private readonly IContactUsService _contactUsService;
-        private readonly ILogger<ContactUsController> _logger;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public ContactUsController(IContactUsService contactUsService, ILogger<ContactUsController> logger)
+        public ContactUsController(IContactUsService contactUsService)
         {
             _contactUsService = contactUsService;
-            _logger = logger;
         }
 
         [HttpPost]
@@ -37,7 +37,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error adding message");
+                _logger.Error(ex, "Error adding message");
                 return BadRequest(ex.Message);
             }
         }
@@ -53,7 +53,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting all messages");
+                _logger.Error(ex, "Error getting all messages");
                 return BadRequest(ex.Message);
             }
         }
@@ -74,7 +74,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error updating message");
+                _logger.Error(ex, "Error updating message");
                 return BadRequest(ex.Message);
             }
         }
@@ -90,7 +90,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error deleting message with id {id}");
+                _logger.Error(ex, $"Error deleting message with id {id}");
                 return BadRequest(ex.Message);
             }
         }
