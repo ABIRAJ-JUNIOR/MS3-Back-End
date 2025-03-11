@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.Otp;
 using MS3_Back_End.IService;
+using NLog;
 
 namespace MS3_Back_End.Controllers
 {
@@ -10,12 +11,11 @@ namespace MS3_Back_End.Controllers
     public class OtpController : ControllerBase
     {
         private readonly IOtpService _service;
-        private readonly ILogger<OtpController> _logger;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public OtpController(IOtpService service, ILogger<OtpController> logger)
+        public OtpController(IOtpService service)
         {
             _service = service;
-            _logger = logger;
         }
 
         [HttpPost("emailVerification")]
@@ -33,7 +33,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error verifying email");
+                _logger.Error(ex, "Error verifying email");
                 return BadRequest(ex.Message);
             }
         }
@@ -53,7 +53,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error verifying OTP");
+                _logger.Error(ex, "Error verifying OTP");
                 return BadRequest(ex.Message);
             }
         }
@@ -73,7 +73,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error changing user password");
+                _logger.Error(ex, "Error changing user password");
                 return BadRequest(ex.Message);
             }
         }
