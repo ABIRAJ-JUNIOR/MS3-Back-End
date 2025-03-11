@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.RequestDTOs.Auth;
 using MS3_Back_End.IService;
+using NLog;
 
 namespace MS3_Back_End.Controllers
 {
@@ -10,12 +11,11 @@ namespace MS3_Back_End.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        private readonly ILogger<AuthController> _logger;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public AuthController(IAuthService authService, ILogger<AuthController> logger)
+        public AuthController(IAuthService authService)
         {
             _authService = authService;
-            _logger = logger;
         }
 
         [HttpPost("SignUp")]
@@ -33,7 +33,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error during sign up");
+                _logger.Error(ex, "Error during sign up");
                 return BadRequest(ex.Message);
             }
         }
@@ -53,7 +53,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error during sign in");
+                _logger.Error(ex, "Error during sign in");
                 return BadRequest(ex.Message);
             }
         }
@@ -68,7 +68,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error verifying email for user id {userId}");
+                _logger.Error(ex, $"Error verifying email for user id {userId}");
                 return BadRequest(ex.Message);
             }
         }
