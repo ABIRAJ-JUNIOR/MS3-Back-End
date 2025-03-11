@@ -4,22 +4,22 @@ using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.RequestDTOs.Address;
 using MS3_Back_End.DTOs.ResponseDTOs.Address;
 using MS3_Back_End.IService;
+using NLog;
 using System.Runtime.InteropServices;
 
 namespace MS3_Back_End.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     [ApiController]
     public class AddressController : ControllerBase
     {
         private readonly IAddressService _addressService;
-        private readonly ILogger<AddressController> _logger;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public AddressController(IAddressService addressService, ILogger<AddressController> logger)
+        public AddressController(IAddressService addressService)
         {
             _addressService = addressService;
-            _logger = logger;
         }
 
         [HttpPost("Add-Address")]
@@ -32,7 +32,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error adding address");
+                _logger.Error(ex, "Error adding address");
                 return BadRequest(ex.Message);
             }
         }
@@ -47,7 +47,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error updating address");
+                _logger.Error(ex, "Error updating address");
                 return BadRequest(ex.Message);
             }
         }
@@ -62,7 +62,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error deleting address");
+                _logger.Error(ex, "Error deleting address");
                 return BadRequest(ex.Message);
             }
         }

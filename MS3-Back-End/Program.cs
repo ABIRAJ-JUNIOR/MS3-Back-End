@@ -11,6 +11,7 @@ using MS3_Back_End.Repository;
 using MS3_Back_End.Service;
 using Quartz;
 using System.Text;
+using NLog.Web;
 
 namespace MS3_Back_End
 {
@@ -51,6 +52,9 @@ namespace MS3_Back_End
 
             // Add HTTP client for API calls
             builder.Services.AddHttpClient<ApiService>();
+
+            //Add NLog for logging
+            ConfigureNLog(builder);
 
             // Configure JWT authentication
             ConfigureAuthentication(builder);
@@ -158,6 +162,14 @@ namespace MS3_Back_End
 
             // Register Quartz as a hosted service
             services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+        }
+
+        private static void ConfigureNLog(WebApplicationBuilder builder)
+        {
+            builder.Services.AddLogging(loggingBuilders => {
+                loggingBuilders.ClearProviders();
+                loggingBuilders.AddNLogWeb();
+            });
         }
 
         private static void ConfigureAuthentication(WebApplicationBuilder builder)
