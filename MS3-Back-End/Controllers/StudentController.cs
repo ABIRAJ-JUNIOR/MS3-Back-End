@@ -6,6 +6,7 @@ using MS3_Back_End.DTOs.RequestDTOs.password_student;
 using MS3_Back_End.DTOs.RequestDTOs.Student;
 using MS3_Back_End.DTOs.ResponseDTOs.Student;
 using MS3_Back_End.IService;
+using NLog;
 
 namespace MS3_Back_End.Controllers
 {
@@ -14,12 +15,11 @@ namespace MS3_Back_End.Controllers
     public class StudentController : ControllerBase
     {
         private readonly IStudentService _studentService;
-        private readonly ILogger<StudentController> _logger;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public StudentController(IStudentService studentService, ILogger<StudentController> logger)
+        public StudentController(IStudentService studentService)
         {
             _studentService = studentService;
-            _logger = logger;
         }
 
         [Authorize]
@@ -38,7 +38,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error adding student");
+                _logger.Error(ex, "Error adding student");
                 return BadRequest(ex.Message);
             }
         }
@@ -53,7 +53,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting all students");
+                _logger.Error(ex, "Error getting all students");
                 return BadRequest(ex.Message);
             }
         }
@@ -69,7 +69,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error getting student full details by id {id}");
+                _logger.Error(ex, $"Error getting student full details by id {id}");
                 return BadRequest(ex.Message);
             }
         }
@@ -90,7 +90,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error updating student full details with id {id}");
+                _logger.Error(ex, $"Error updating student full details with id {id}");
                 return BadRequest(ex.Message);
             }
         }
@@ -111,7 +111,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error updating student");
+                _logger.Error(ex, "Error updating student");
                 return BadRequest(ex.Message);
             }
         }
@@ -127,7 +127,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error deleting student with id {id}");
+                _logger.Error(ex, $"Error deleting student with id {id}");
                 return BadRequest(ex.Message);
             }
         }
@@ -143,7 +143,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error uploading image for student id {studentId}");
+                _logger.Error(ex, $"Error uploading image for student id {studentId}");
                 return BadRequest(ex.Message);
             }
         }
@@ -159,7 +159,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting paginated students");
+                _logger.Error(ex, "Error getting paginated students");
                 return BadRequest(ex.Message);
             }
         }
@@ -180,7 +180,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error updating student info details with id {id}");
+                _logger.Error(ex, $"Error updating student info details with id {id}");
                 return BadRequest(ex.Message);
             }
         }
@@ -201,7 +201,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error changing student password for id {id}");
+                _logger.Error(ex, $"Error changing student password for id {id}");
                 return BadRequest(ex.Message);
             }
         }
