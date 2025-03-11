@@ -8,6 +8,7 @@ using MS3_Back_End.DTOs.ResponseDTOs.Admin;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IService;
 using MS3_Back_End.Service;
+using NLog;
 using System.Drawing;
 
 namespace MS3_Back_End.Controllers
@@ -18,12 +19,11 @@ namespace MS3_Back_End.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IAdminService _adminService;
-        private readonly ILogger<AdminController> _logger;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public AdminController(IAdminService adminService, ILogger<AdminController> logger)
+        public AdminController(IAdminService adminService)
         {
             _adminService = adminService;
-            _logger = logger;
         }
 
         [HttpPost]
@@ -36,7 +36,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error adding admin");
+                _logger.Error(ex, "Error adding admin");
                 return BadRequest(ex.Message);
             }
         }
@@ -51,7 +51,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting admin details");
+                _logger.Error(ex, "Error getting admin details");
                 return BadRequest(ex.Message);
             }
         }
@@ -66,7 +66,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting all admins");
+                _logger.Error(ex, "Error getting all admins");
                 return BadRequest(ex.Message);
             }
         }
@@ -81,7 +81,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error updating admin details");
+                _logger.Error(ex, "Error updating admin details");
                 return BadRequest(ex.Message);
             }
         }
@@ -96,7 +96,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error uploading image");
+                _logger.Error(ex, "Error uploading image");
                 return BadRequest(ex.Message);
             }
         }
@@ -111,7 +111,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting paginated admins");
+                _logger.Error(ex, "Error getting paginated admins");
                 return BadRequest(ex.Message);
             }
         }
@@ -126,7 +126,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error deleting admin");
+                _logger.Error(ex, "Error deleting admin");
                 return BadRequest(ex.Message);
             }
         }
@@ -141,7 +141,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error updating admin profile");
+                _logger.Error(ex, "Error updating admin profile");
                 return BadRequest(ex.Message);
             }
         }
