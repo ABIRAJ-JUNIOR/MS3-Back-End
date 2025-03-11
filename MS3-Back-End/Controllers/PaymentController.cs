@@ -5,6 +5,7 @@ using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Payment;
 using MS3_Back_End.DTOs.ResponseDTOs.Payment;
 using MS3_Back_End.IService;
+using NLog;
 
 namespace MS3_Back_End.Controllers
 {
@@ -14,12 +15,11 @@ namespace MS3_Back_End.Controllers
     public class PaymentController : ControllerBase
     {
         private readonly IPaymentService _paymentService;
-        private readonly ILogger<PaymentController> _logger;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public PaymentController(IPaymentService paymentService, ILogger<PaymentController> logger)
+        public PaymentController(IPaymentService paymentService)
         {
             _paymentService = paymentService;
-            _logger = logger;
         }
 
         [HttpPost]
@@ -37,7 +37,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error creating payment");
+                _logger.Error(ex, "Error creating payment");
                 return BadRequest(ex.Message);
             }
         }
@@ -52,7 +52,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting all payments");
+                _logger.Error(ex, "Error getting all payments");
                 return BadRequest(ex.Message);
             }
         }
@@ -67,7 +67,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting recent payments");
+                _logger.Error(ex, "Error getting recent payments");
                 return BadRequest(ex.Message);
             }
         }
@@ -82,7 +82,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error sending payment reminder");
+                _logger.Error(ex, "Error sending payment reminder");
                 return BadRequest(ex.Message);
             }
         }
@@ -97,7 +97,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting payment overview");
+                _logger.Error(ex, "Error getting payment overview");
                 return BadRequest(ex.Message);
             }
         }
@@ -112,7 +112,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting paginated payments");
+                _logger.Error(ex, "Error getting paginated payments");
                 return BadRequest(ex.Message);
             }
         }
