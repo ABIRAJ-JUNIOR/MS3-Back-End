@@ -7,6 +7,7 @@ using MS3_Back_End.DTOs.ResponseDTOs.Notification;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IService;
 using MS3_Back_End.Service;
+using NLog;
 
 namespace MS3_Back_End.Controllers
 {
@@ -16,12 +17,11 @@ namespace MS3_Back_End.Controllers
     public class NotificationController : ControllerBase
     {
         private readonly INotificationService _notificationService;
-        private readonly ILogger<NotificationController> _logger;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public NotificationController(INotificationService notificationService, ILogger<NotificationController> logger)
+        public NotificationController(INotificationService notificationService)
         {
             _notificationService = notificationService;
-            _logger = logger;
         }
 
         [HttpPost]
@@ -39,7 +39,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error adding notification");
+                _logger.Error(ex, "Error adding notification");
                 return BadRequest(ex.Message);
             }
         }
@@ -54,7 +54,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error getting notifications for student id {studentId}");
+                _logger.Error(ex, $"Error getting notifications for student id {studentId}");
                 return BadRequest(ex.Message);
             }
         }
@@ -69,7 +69,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error reading notification with id {id}");
+                _logger.Error(ex, $"Error reading notification with id {id}");
                 return BadRequest(ex.Message);
             }
         }
@@ -84,7 +84,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error deleting notification with id {id}");
+                _logger.Error(ex, $"Error deleting notification with id {id}");
                 return BadRequest(ex.Message);
             }
         }
