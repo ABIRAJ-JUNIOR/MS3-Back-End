@@ -5,6 +5,7 @@ using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.StudentAssessment;
 using MS3_Back_End.DTOs.ResponseDTOs.StudentAssessment;
 using MS3_Back_End.IService;
+using NLog;
 
 namespace MS3_Back_End.Controllers
 {
@@ -14,12 +15,11 @@ namespace MS3_Back_End.Controllers
     public class StudentAssessmentController : ControllerBase
     {
         private readonly IStudentAssessmentService _service;
-        private readonly ILogger<StudentAssessmentController> _logger;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public StudentAssessmentController(IStudentAssessmentService studentAssessmentService, ILogger<StudentAssessmentController> logger)
+        public StudentAssessmentController(IStudentAssessmentService studentAssessmentService)
         {
             _service = studentAssessmentService;
-            _logger = logger;
         }
 
         [HttpGet("GetAll")]
@@ -32,7 +32,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting all assessments");
+                _logger.Error(ex, "Error getting all assessments");
                 return BadRequest(ex.Message);
             }
         }
@@ -47,7 +47,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting all evaluated assessments");
+                _logger.Error(ex, "Error getting all evaluated assessments");
                 return BadRequest(ex.Message);
             }
         }
@@ -62,7 +62,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting all non-evaluated assessments");
+                _logger.Error(ex, "Error getting all non-evaluated assessments");
                 return BadRequest(ex.Message);
             }
         }
@@ -82,7 +82,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error adding student assessment");
+                _logger.Error(ex, "Error adding student assessment");
                 return BadRequest(ex.Message);
             }
         }
@@ -97,7 +97,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error getting student assessment by id {id}");
+                _logger.Error(ex, $"Error getting student assessment by id {id}");
                 return BadRequest(ex.Message);
             }
         }
@@ -117,7 +117,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error evaluating student assessment with id {id}");
+                _logger.Error(ex, $"Error evaluating student assessment with id {id}");
                 return BadRequest(ex.Message);
             }
         }
@@ -132,7 +132,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error getting paginated assessments for student id {studentId}");
+                _logger.Error(ex, $"Error getting paginated assessments for student id {studentId}");
                 return BadRequest(ex.Message);
             }
         }
