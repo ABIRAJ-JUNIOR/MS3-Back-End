@@ -6,6 +6,7 @@ using MS3_Back_End.DTOs.RequestDTOs.AuditLog;
 using MS3_Back_End.DTOs.ResponseDTOs.AuditLog;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IService;
+using NLog;
 
 namespace MS3_Back_End.Controllers
 {
@@ -14,12 +15,11 @@ namespace MS3_Back_End.Controllers
     public class AuditLogController : ControllerBase
     {
         private readonly IAuditLogService _auditLogService;
-        private readonly ILogger<AuditLogController> _logger;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public AuditLogController(IAuditLogService auditLogService, ILogger<AuditLogController> logger)
+        public AuditLogController(IAuditLogService auditLogService)
         {
             _auditLogService = auditLogService;
-            _logger = logger;
         }
 
         [HttpPost]
@@ -37,7 +37,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error adding audit log");
+                _logger.Error(ex, "Error adding audit log");
                 return BadRequest(ex.Message);
             }
         }
@@ -53,7 +53,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting all audit logs");
+                _logger.Error(ex, "Error getting all audit logs");
                 return BadRequest(ex.Message);
             }
         }
@@ -69,7 +69,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error getting audit logs by admin id {adminId}");
+                _logger.Error(ex, $"Error getting audit logs by admin id {adminId}");
                 return BadRequest(ex.Message);
             }
         }
@@ -85,7 +85,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error getting audit log by id {id}");
+                _logger.Error(ex, $"Error getting audit log by id {id}");
                 return BadRequest(ex.Message);
             }
         }
