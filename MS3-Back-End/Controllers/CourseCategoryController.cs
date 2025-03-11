@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.RequestDTOs.CourseCategory;
 using MS3_Back_End.DTOs.ResponseDTOs.CourseCategory;
 using MS3_Back_End.IService;
+using NLog;
 
 namespace MS3_Back_End.Controllers
 {
@@ -12,12 +13,11 @@ namespace MS3_Back_End.Controllers
     public class CourseCategoryController : ControllerBase
     {
         private readonly ICourseCategoryService _courseCategoryService;
-        private readonly ILogger<CourseCategoryController> _logger;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public CourseCategoryController(ICourseCategoryService courseCategoryService, ILogger<CourseCategoryController> logger)
+        public CourseCategoryController(ICourseCategoryService courseCategoryService)
         {
             _courseCategoryService = courseCategoryService;
-            _logger = logger;
         }
 
         [HttpPost]
@@ -35,7 +35,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error adding course category");
+                _logger.Error(ex, "Error adding course category");
                 return BadRequest(ex.Message);
             }
         }
@@ -50,7 +50,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error getting course category by id {id}");
+                _logger.Error(ex, $"Error getting course category by id {id}");
                 return BadRequest(ex.Message);
             }
         }
@@ -70,7 +70,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error updating course category");
+                _logger.Error(ex, "Error updating course category");
                 return BadRequest(ex.Message);
             }
         }
@@ -85,7 +85,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting all course categories");
+                _logger.Error(ex, "Error getting all course categories");
                 return BadRequest(ex.Message);
             }
         }
