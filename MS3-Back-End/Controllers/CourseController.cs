@@ -7,6 +7,7 @@ using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IService;
 using MS3_Back_End.Service;
+using NLog;
 
 namespace MS3_Back_End.Controller
 {
@@ -15,12 +16,11 @@ namespace MS3_Back_End.Controller
     public class CourseController : ControllerBase
     {
         private readonly ICourseService _courseService;
-        private readonly ILogger<CourseController> _logger;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public CourseController(ICourseService courseService, ILogger<CourseController> logger)
+        public CourseController(ICourseService courseService)
         {
             _courseService = courseService;
-            _logger = logger;
         }
 
         [HttpPost("Add")]
@@ -38,7 +38,7 @@ namespace MS3_Back_End.Controller
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error adding course");
+                _logger.Error(ex, "Error adding course");
                 return BadRequest(ex.Message);
             }
         }
@@ -58,7 +58,7 @@ namespace MS3_Back_End.Controller
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error searching courses");
+                _logger.Error(ex, "Error searching courses");
                 return BadRequest(ex.Message);
             }
         }
@@ -73,7 +73,7 @@ namespace MS3_Back_End.Controller
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting all courses");
+                _logger.Error(ex, "Error getting all courses");
                 return BadRequest(ex.Message);
             }
         }
@@ -88,7 +88,7 @@ namespace MS3_Back_End.Controller
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error getting course by id {courseId}");
+                _logger.Error(ex, $"Error getting course by id {courseId}");
                 return BadRequest(ex.Message);
             }
         }
@@ -108,7 +108,7 @@ namespace MS3_Back_End.Controller
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error updating course with id {id}");
+                _logger.Error(ex, $"Error updating course with id {id}");
                 return BadRequest(ex.Message);
             }
         }
@@ -123,7 +123,7 @@ namespace MS3_Back_End.Controller
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error deleting course with id {courseId}");
+                _logger.Error(ex, $"Error deleting course with id {courseId}");
                 return BadRequest(ex.Message);
             }
         }
@@ -138,7 +138,7 @@ namespace MS3_Back_End.Controller
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting paginated courses");
+                _logger.Error(ex, "Error getting paginated courses");
                 return BadRequest(ex.Message);
             }
         }
@@ -153,7 +153,7 @@ namespace MS3_Back_End.Controller
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error uploading image for course id {courseId}");
+                _logger.Error(ex, $"Error uploading image for course id {courseId}");
                 return BadRequest(ex.Message);
             }
         }
@@ -168,7 +168,7 @@ namespace MS3_Back_End.Controller
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting top 3 courses");
+                _logger.Error(ex, "Error getting top 3 courses");
                 return BadRequest(ex.Message);
             }
         }

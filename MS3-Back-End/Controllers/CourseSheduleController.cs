@@ -6,6 +6,7 @@ using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.IService;
 using MS3_Back_End.Service;
+using NLog;
 
 namespace MS3_Back_End.Controllers
 {
@@ -14,12 +15,11 @@ namespace MS3_Back_End.Controllers
     public class CourseScheduleController : ControllerBase
     {
         private readonly ICourseScheduleService _courseScheduleService;
-        private readonly ILogger<CourseScheduleController> _logger;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public CourseScheduleController(ICourseScheduleService courseScheduleService, ILogger<CourseScheduleController> logger)
+        public CourseScheduleController(ICourseScheduleService courseScheduleService)
         {
             _courseScheduleService = courseScheduleService;
-            _logger = logger;
         }
 
         [Authorize]
@@ -38,7 +38,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error adding course schedule");
+                _logger.Error(ex, "Error adding course schedule");
                 return BadRequest(ex.Message);
             }
         }
@@ -53,7 +53,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error getting course schedule by id {id}");
+                _logger.Error(ex, $"Error getting course schedule by id {id}");
                 return NotFound(ex.Message);
             }
         }
@@ -69,7 +69,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting all course schedules");
+                _logger.Error(ex, "Error getting all course schedules");
                 return NotFound(ex.Message);
             }
         }
@@ -89,7 +89,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error searching course schedules");
+                _logger.Error(ex, "Error searching course schedules");
                 return NotFound(ex.Message);
             }
         }
@@ -110,7 +110,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error updating course schedule with id {id}");
+                _logger.Error(ex, $"Error updating course schedule with id {id}");
                 return NotFound(ex.Message);
             }
         }
@@ -126,7 +126,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting paginated course schedules");
+                _logger.Error(ex, "Error getting paginated course schedules");
                 return BadRequest(ex.Message);
             }
         }
