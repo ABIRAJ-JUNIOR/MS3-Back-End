@@ -37,8 +37,23 @@ namespace MS3_Back_End
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            // Configure database based on environment and connection string availability
+            var connectionString = builder.Configuration.GetConnectionString("DBConnection");
+            
             builder.Services.AddDbContext<AppDBContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
+            {
+                if (connectionString?.Contains("(localdb)") == true)
+                {
+                    var isWindows = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows);
+                    if (!isWindows)
+                    {
+                        throw new PlatformNotSupportedException(
+                            "LocalDB is not supported on this platform. " +
+                            "Please use SQL Server Docker container, Azure SQL Database, or see DATABASE_MIGRATION_GUIDE.md for alternatives.");
+                    }
+                }
+                options.UseSqlServer(connectionString);
+            });
 
             // Register EmailConfig
             builder.Services.Configure<EmailConfig>(builder.Configuration.GetSection("EmailConfig"));
