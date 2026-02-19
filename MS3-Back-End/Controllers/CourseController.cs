@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.Pagination;
@@ -9,7 +9,7 @@ using MS3_Back_End.IService;
 using MS3_Back_End.Service;
 using NLog;
 
-namespace MS3_Back_End.Controller
+namespace MS3_Back_End.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

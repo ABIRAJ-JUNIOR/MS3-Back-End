@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MS3_Back_End.DTOs.RequestDTOs.Ènrollment;
+using MS3_Back_End.DTOs.RequestDTOs.Enrollment;
 using MS3_Back_End.DTOs.ResponseDTOs.Enrollment;
 using MS3_Back_End.IService;
 using MS3_Back_End.Service;
@@ -14,10 +14,10 @@ namespace MS3_Back_End.Controllers
     [ApiController]
     public class EnrollmentController : ControllerBase
     {
-        private readonly IEnrollementService _enrollmentService;
+        private readonly IEnrollmentService _enrollmentService;
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public EnrollmentController(IEnrollementService enrollmentService)
+        public EnrollmentController(IEnrollmentService enrollmentService)
         {
             _enrollmentService = enrollmentService;
         }

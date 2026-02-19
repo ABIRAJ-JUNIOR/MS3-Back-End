@@ -1,8 +1,8 @@
-﻿using MS3_Back_End.DTOs.RequestDTOs.Enrollment;
+using MS3_Back_End.DTOs.RequestDTOs.Enrollment;
 using MS3_Back_End.DTOs.RequestDTOs.Payment;
 using MS3_Back_End.Entities;
 
-namespace MS3_Back_End.DTOs.RequestDTOs.Ènrollment
+namespace MS3_Back_End.DTOs.RequestDTOs.Enrollment
 {
     public class EnrollmentRequestDTO
     {

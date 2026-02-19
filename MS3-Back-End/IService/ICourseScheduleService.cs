@@ -1,8 +1,8 @@
-﻿using MS3_Back_End.DTOs.Pagination;
+using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
 
-namespace MS3_Back_End.Service
+namespace MS3_Back_End.IService
 {
     public interface ICourseScheduleService
     {

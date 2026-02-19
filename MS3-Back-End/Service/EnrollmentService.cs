@@ -1,7 +1,7 @@
-﻿using CloudinaryDotNet;
+using CloudinaryDotNet;
 using MS3_Back_End.DTOs.Email;
 using MS3_Back_End.DTOs.RequestDTOs.Course;
-using MS3_Back_End.DTOs.RequestDTOs.Ènrollment;
+using MS3_Back_End.DTOs.RequestDTOs.Enrollment;
 using MS3_Back_End.DTOs.ResponseDTOs.Assessment;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.DTOs.ResponseDTOs.Enrollment;
@@ -13,7 +13,7 @@ using MS3_Back_End.Repository;
 
 namespace MS3_Back_End.Service
 {
-    public class EnrollmentService :IEnrollementService
+    public class EnrollmentService : IEnrollmentService
     {
         private readonly IEnrollmentRepository _enrollmentRepository;
         private readonly ICourseScheduleRepository _courseScheduleRepository;
