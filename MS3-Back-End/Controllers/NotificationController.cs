@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MS3_Back_End.DTOs.RequestDTOs.ContactUs;
 using MS3_Back_End.DTOs.RequestDTOs.Notification;
+using MS3_Back_End.DTOs.ResponseDTOs.Notification;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IService;
 using MS3_Back_End.Service;
+using NLog;
 
 namespace MS3_Back_End.Controllers
 {
@@ -15,6 +17,7 @@ namespace MS3_Back_End.Controllers
     public class NotificationController : ControllerBase
     {
         private readonly INotificationService _notificationService;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public NotificationController(INotificationService notificationService)
         {
@@ -22,8 +25,13 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddNotification(NotificationRequest requestDTO)
+        public async Task<ActionResult<NotificationResponseDTO>> AddNotification(NotificationRequest requestDTO)
         {
+            if (requestDTO == null)
+            {
+                return BadRequest("Notification data is required.");
+            }
+
             try
             {
                 var message = await _notificationService.AddNotification(requestDTO);
@@ -31,12 +39,13 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error adding notification");
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("{studentId}")]
-        public async Task<IActionResult> GetAllNotification(Guid studentId)
+        public async Task<ActionResult<IEnumerable<NotificationResponseDTO>>> GetAllNotifications(Guid studentId)
         {
             try
             {
@@ -45,28 +54,37 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, $"Error getting notifications for student id {studentId}");
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("Read/{id}")]
-        public async Task<IActionResult> ReadNotification(Guid id)
-        {
-            var response = await _notificationService.ReadNotification(id);
-            return Ok(response);
-        }
-
-        [HttpDelete("Delete/{id}")]
-
-        public async Task<IActionResult> DeleteNotification(Guid id)
+        public async Task<ActionResult<string>> ReadNotification(Guid id)
         {
             try
             {
-                var respose = await _notificationService.DeleteNotification(id);
-                return Ok(respose);
+                var response = await _notificationService.ReadNotification(id);
+                return Ok(response);
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, $"Error reading notification with id {id}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("Delete/{id}")]
+        public async Task<ActionResult<string>> DeleteNotification(Guid id)
+        {
+            try
+            {
+                var response = await _notificationService.DeleteNotification(id);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Error deleting notification with id {id}");
                 return BadRequest(ex.Message);
             }
         }

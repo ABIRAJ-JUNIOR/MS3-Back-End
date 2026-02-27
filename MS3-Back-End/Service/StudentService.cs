@@ -88,7 +88,7 @@ namespace MS3_Back_End.Service
                 Gender = StudentReq.Gender,
                 Phone = StudentReq.Phone,
                 ImageUrl = null,
-                CteatedDate = DateTime.Now,
+                CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
 
             };
@@ -139,7 +139,7 @@ Empowering learners, shaping futures.
             var Message = new Notification
             {
                 Message = NotificationMessage,
-                NotificationType = NotificationType.WelCome,
+                NotificationType = NotificationType.Welcome,
                 StudentId = data.Id,
                 DateSent = DateTime.Now,
                 IsRead = false
@@ -167,7 +167,7 @@ Empowering learners, shaping futures.
                 Gender = ((Gender)data.Gender).ToString(),
                 Phone = data.Phone,
                 ImageUrl = data.ImageUrl!,
-                CteatedDate = data.CteatedDate,
+                CreatedDate = data.CreatedDate,
                 UpdatedDate = data.UpdatedDate,
             };
 
@@ -207,7 +207,7 @@ Empowering learners, shaping futures.
                 Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
                 ImageUrl = item.ImageUrl!,
-                CteatedDate = item.CteatedDate,
+                CreatedDate = item.CreatedDate,
                 UpdatedDate = item.UpdatedDate,
                 Address = item.Address != null ? new AddressResponseDTO()
                 {
@@ -240,7 +240,7 @@ Empowering learners, shaping futures.
                 Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
                 ImageUrl = item.ImageUrl!,
-                CteatedDate = item.CteatedDate,
+                CreatedDate = item.CreatedDate,
                 UpdatedDate = item.UpdatedDate,
                 Address = item.Address != null ? new AddressResponseDTO()
                 {
@@ -318,7 +318,7 @@ Empowering learners, shaping futures.
                 Gender = ((Gender)updatedData.Gender).ToString(),
                 Phone = updatedData.Phone,
                 ImageUrl = updatedData.ImageUrl!,
-                CteatedDate = updatedData.CteatedDate,
+                CreatedDate = updatedData.CreatedDate,
                 UpdatedDate = updatedData.UpdatedDate,
             };
 
@@ -373,7 +373,7 @@ Empowering learners, shaping futures.
                 Gender = ((Gender)item.Gender).ToString(),
                 Phone = item.Phone,
                 ImageUrl = item.ImageUrl!,
-                CteatedDate = item.CteatedDate,
+                CreatedDate = item.CreatedDate,
                 UpdatedDate = item.UpdatedDate
 
             };
@@ -493,7 +493,7 @@ Empowering learners, shaping futures.
                 Gender = ((Gender)updatedData.Gender).ToString(),
                 Phone = updatedData.Phone,
                 ImageUrl = updatedData.ImageUrl!,
-                CteatedDate = updatedData.CteatedDate,
+                CreatedDate = updatedData.CreatedDate,
                 UpdatedDate = updatedData.UpdatedDate,
             };
 

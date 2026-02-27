@@ -85,7 +85,7 @@ namespace MS3_Back_End.Service
                     Gender = ((Gender)data.Student.Gender).ToString(),
                     Phone = data.Student.Phone,
                     ImageUrl = data.Student.ImageUrl!,
-                    CteatedDate = data.Student.CteatedDate,
+                    CreatedDate = data.Student.CreatedDate,
                     UpdatedDate = data.Student.UpdatedDate,
                 } : new StudentResponseDTO()
             }).ToList();
@@ -147,7 +147,7 @@ namespace MS3_Back_End.Service
                     Gender = ((Gender)data.Student.Gender).ToString(),
                     Phone = data.Student.Phone,
                     ImageUrl = data.Student.ImageUrl!,
-                    CteatedDate = data.Student.CteatedDate,
+                    CreatedDate = data.Student.CreatedDate,
                     UpdatedDate = data.Student.UpdatedDate,
                 } : new StudentResponseDTO()
             }).ToList();

@@ -1,9 +1,9 @@
-﻿using MS3_Back_End.DTOs.RequestDTOs.Ènrollment;
+using MS3_Back_End.DTOs.RequestDTOs.Enrollment;
 using MS3_Back_End.DTOs.ResponseDTOs.Enrollment;
 
 namespace MS3_Back_End.IService
 {
-    public interface IEnrollementService
+    public interface IEnrollmentService
     {
         Task<EnrollmentResponseDTO> AddEnrollment(EnrollmentRequestDTO EnrollmentReq);
         Task<ICollection<EnrollmentResponseDTO>> GetEnrollmentsByStudentId(Guid studentId);

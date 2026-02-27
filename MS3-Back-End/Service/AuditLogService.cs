@@ -9,121 +9,144 @@ using MS3_Back_End.Repository;
 
 namespace MS3_Back_End.Service
 {
-    public class AuditLogService: IAuditLogService
+    public class AuditLogService : IAuditLogService
     {
         private readonly IAuditLogRepository _auditLogRepository;
         private readonly IAdminRepository _adminRepository;
+        private readonly ILogger<AuditLogService> _logger;
 
-        public AuditLogService(IAuditLogRepository auditLogRepository, IAdminRepository adminRepository)
+        public AuditLogService(IAuditLogRepository auditLogRepository, IAdminRepository adminRepository, ILogger<AuditLogService> logger)
         {
             _auditLogRepository = auditLogRepository;
             _adminRepository = adminRepository;
+            _logger = logger;
         }
 
-        public async Task<AuditLogResponceDTO> AddAuditLog(AuditLogRequestDTO auditLog)
+        public async Task<string> AddAuditLog(AuditLogRequestDTO auditLog)
         {
+            if (auditLog == null)
+            {
+                throw new ArgumentNullException(nameof(auditLog));
+            }
+
             var adminData = await _adminRepository.GetAdminById(auditLog.AdminId);
             if (adminData == null)
             {
-                throw new Exception("Admin not found");
+                _logger.LogWarning("Admin not found for Id: {AdminId}", auditLog.AdminId);
+                throw new KeyNotFoundException("Admin not found");
             }
 
-            var AuditLog = new AuditLog()
+            var newAuditLog = new AuditLog
             {
-                Action= auditLog.Action,
-                Details= auditLog.Details,
-                ActionDate= DateTime.Now,
-                AdminId= auditLog.AdminId,
+                Action = auditLog.Action,
+                Details = auditLog.Details,
+                ActionDate = DateTime.Now,
+                AdminId = auditLog.AdminId,
             };
 
-            var data = await _auditLogRepository.AddAuditLog(AuditLog);
+            var data = await _auditLogRepository.AddAuditLog(newAuditLog);
 
-            var returndata = new AuditLogResponceDTO()
-            {
-                Id = data.Id,
-                AdminId = data.AdminId,
-                ActionDate = data.ActionDate,
-                Details = data.Details,
-                Action = data.Action,
-            };
+            _logger.LogInformation("Audit log added successfully with Id: {Id}", data.Id);
 
-            return returndata;
+            return "Audit log added successfully";
         }
-        public async Task<ICollection<AuditLogResponceDTO>> GetAllAuditlogs()
+
+        public async Task<ICollection<AuditLogResponseDTO>> GetAllAuditlogs()
         {
-             var datas= await _auditLogRepository.GetAllAuditlogs();
-            var returndatas=datas.Select(x => new AuditLogResponceDTO()
+            var data = await _auditLogRepository.GetAllAuditlogs();
+            if (data == null || !data.Any())
             {
-                Action= x.Action,
-                Details= x.Details,
-                Id= x.Id,
-                ActionDate= x.ActionDate,
-                AdminId= x.AdminId,
-                AdminResponse = new AdminResponseDTO()
+                _logger.LogWarning("No audit logs found");
+                throw new KeyNotFoundException("No audit logs found");
+            }
+
+            var returnData = data.Select(x => new AuditLogResponseDTO
+            {
+                Action = x.Action,
+                Details = x.Details,
+                Id = x.Id,
+                ActionDate = x.ActionDate,
+                AdminId = x.AdminId,
+                AdminResponse = new AdminResponseDTO
                 {
                     Id = x.Admin!.Id,
                     Nic = x.Admin.Nic,
                     FirstName = x.Admin.FirstName,
                     LastName = x.Admin.LastName,
                     Phone = x.Admin.Phone,
-                    CteatedDate = x.Admin.CteatedDate,
-                    UpdatedDate = x.Admin.CteatedDate,
+                    CreatedDate = x.Admin.CreatedDate,
+                    UpdatedDate = x.Admin.UpdatedDate,
                     IsActive = x.Admin.IsActive,
                 }
             }).ToList();
-            return returndatas;
-        }
-        public async Task<ICollection<AuditLogResponceDTO>> GetAuditLogsbyAdminId(Guid id)
-        {
-            var data =await _auditLogRepository.GetAuditLogsbyAdminId(id);
 
-            var returndata = data.Select(x => new AuditLogResponceDTO()
+            return returnData;
+        }
+
+        public async Task<ICollection<AuditLogResponseDTO>> GetAuditLogsbyAdminId(Guid id)
+        {
+            var data = await _auditLogRepository.GetAuditLogsbyAdminId(id);
+            if (data == null || !data.Any())
+            {
+                _logger.LogWarning("No audit logs found for AdminId: {AdminId}", id);
+                throw new KeyNotFoundException("No audit logs found for the specified AdminId");
+            }
+
+            var returnData = data.Select(x => new AuditLogResponseDTO
             {
                 Details = x.Details,
                 Id = x.Id,
                 ActionDate = x.ActionDate,
                 AdminId = x.AdminId,
                 Action = x.Action,
-                AdminResponse = new AdminResponseDTO()
+                AdminResponse = new AdminResponseDTO
                 {
                     Id = x.Admin!.Id,
                     Nic = x.Admin.Nic,
                     FirstName = x.Admin.FirstName,
                     LastName = x.Admin.LastName,
                     Phone = x.Admin.Phone,
-                    CteatedDate = x.Admin.CteatedDate,
-                    UpdatedDate = x.Admin.CteatedDate,
+                    CreatedDate = x.Admin.CreatedDate,
+                    UpdatedDate = x.Admin.UpdatedDate,
                     IsActive = x.Admin.IsActive,
                 }
             }).ToList();
 
-            return returndata;  
+            return returnData;
         }
 
-        public async Task<AuditLogResponceDTO> GetAuditLogByID(Guid id)
+        public async Task<AuditLogResponseDTO> GetAuditLogByID(Guid id)
         {
-             var data= await _auditLogRepository.GetAuditLogByID(id);
-            var returndata = new AuditLogResponceDTO()
+            var data = await _auditLogRepository.GetAuditLogByID(id);
+            if (data == null)
             {
-                Action =data.Action,
+                _logger.LogWarning("Audit log not found for Id: {Id}", id);
+                throw new KeyNotFoundException("Audit log not found");
+            }
+
+            var returnData = new AuditLogResponseDTO
+            {
+                Action = data.Action,
                 Details = data.Details,
                 Id = data.Id,
                 ActionDate = data.ActionDate,
                 AdminId = data.AdminId,
-                AdminResponse = new AdminResponseDTO()
+                AdminResponse = new AdminResponseDTO
                 {
                     Id = data.Admin!.Id,
                     Nic = data.Admin.Nic,
                     FirstName = data.Admin.FirstName,
                     LastName = data.Admin.LastName,
                     Phone = data.Admin.Phone,
-                    CteatedDate = data.Admin.CteatedDate,
-                    UpdatedDate = data.Admin.CteatedDate,
+                    CreatedDate = data.Admin.CreatedDate,
+                    UpdatedDate = data.Admin.UpdatedDate,
                     IsActive = data.Admin.IsActive,
                 }
             };
 
-            return returndata;
+            _logger.LogInformation("Audit log retrieved successfully with Id: {Id}", id);
+
+            return returnData;
         }
     }
 }

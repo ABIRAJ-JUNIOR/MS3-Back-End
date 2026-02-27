@@ -10,7 +10,7 @@ namespace MS3_Back_End.IService
     public interface IAdminService
     {
         Task<AdminResponseDTO> AddAdmin(AdminRequestDTO request);
-        Task<AdminAllDataResponseDTO> GetAdminFulldetailsById(Guid id);
+        Task<AdminAllDataResponseDTO> GetAdminFullDetailsById(Guid id);
         Task<ICollection<AdminResponseDTO>> GetAllAdmins();
         Task<AdminResponseDTO> UpdateAdminFullDetails(Guid id, AdminFullUpdateDTO request);
         Task<string> UploadImage(Guid adminId, IFormFile? ImageFile, bool isCoverImage);

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using MS3_Back_End.DBContext;
 using MS3_Back_End.DTOs.ResponseDTOs.Course;
 using MS3_Back_End.Entities;
@@ -6,10 +6,10 @@ using MS3_Back_End.IRepository;
 
 namespace MS3_Back_End.Repository
 {
-    public class CourseRepositoy : ICourseRepository
+    public class CourseRepository : ICourseRepository
     {
         private readonly AppDBContext _Db;
-        public CourseRepositoy(AppDBContext db)
+        public CourseRepository(AppDBContext db)
         {
             _Db = db;
         }

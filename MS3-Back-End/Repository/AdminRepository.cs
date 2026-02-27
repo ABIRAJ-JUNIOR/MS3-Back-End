@@ -36,7 +36,7 @@ namespace MS3_Back_End.Repository
             return adminData!;
         }
 
-        public async Task<AdminAllDataResponseDTO> GetAdminFulldetailsById(Guid id)
+        public async Task<AdminAllDataResponseDTO> GetAdminFullDetailsById(Guid id)
         {
             var adminData = await (
                 from admin in _dbContext.Admins
@@ -67,10 +67,10 @@ namespace MS3_Back_End.Repository
                     Email = user.Email,
                     ImageUrl = admin.ImageUrl,
                     CoverImageUrl = admin.CoverImageUrl,
-                    CteatedDate = admin.CteatedDate,
+                    CreatedDate = admin.CreatedDate,
                     UpdatedDate = admin.UpdatedDate,
                     IsActive = admin.IsActive,
-                    AuditLogs = admin.AuditLogs!.Select(a => new AuditLogResponceDTO
+                    AuditLogs = admin.AuditLogs!.Select(a => new AuditLogResponseDTO
                     {
                         Id = a.Id,
                         AdminId = a.AdminId,
@@ -114,7 +114,7 @@ namespace MS3_Back_End.Repository
                                     on userRole.RoleId equals role.Id into roleGroup
                                 from role in roleGroup.DefaultIfEmpty() 
                                 where admin.IsActive != false
-                                orderby admin.CteatedDate descending
+                                orderby admin.CreatedDate descending
                                 select new AdminWithRoleDTO
                                 {
                                     Id = admin.Id,
@@ -125,10 +125,10 @@ namespace MS3_Back_End.Repository
                                     Phone = admin.Phone,
                                     Email = user.Email,
                                     ImageUrl = admin.ImageUrl,
-                                    CteatedDate = admin.CteatedDate,
+                                    CreatedDate = admin.CreatedDate,
                                     UpdatedDate = admin.UpdatedDate,
                                     IsActive = admin.IsActive,
-                                    AuditLogs = admin.AuditLogs!.Select(a => new AuditLogResponceDTO
+                                    AuditLogs = admin.AuditLogs!.Select(a => new AuditLogResponseDTO
                                     {
                                         Id = a.Id,
                                         AdminId = a.AdminId,

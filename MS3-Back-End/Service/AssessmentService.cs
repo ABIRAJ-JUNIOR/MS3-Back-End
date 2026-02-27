@@ -23,7 +23,7 @@ namespace MS3_Back_End.Service
             _repository = repository;
         }
 
-        public async Task<AssessmentResponseDTO> AddAssessment(AssessmentRequestDTO request)
+        public async Task<string> AddAssessment(AssessmentRequestDTO request)
         {
             if (request.StartDate < DateTime.Now)
             {
@@ -52,23 +52,7 @@ namespace MS3_Back_End.Service
 
             var assessmentData = await _repository.AddAssessment(assessment);
 
-            var response = new AssessmentResponseDTO()
-            {
-                Id = assessmentData.Id,
-                CourseId = assessmentData.CourseId,
-                AssessmentTitle = assessmentData.AssessmentTitle,
-                AssessmentType = ((AssessmentType)assessmentData.AssessmentType).ToString(),
-                StartDate = assessmentData.StartDate,
-                EndDate = assessmentData.EndDate,
-                TotalMarks = assessmentData.TotalMarks,
-                PassMarks = assessmentData.PassMarks,
-                AssessmentLink = assessmentData.AssessmentLink,
-                CreatedDate = assessmentData.CreatedDate,
-                UpdateDate = assessmentData.UpdateDate,
-                AssessmentStatus = ((AssessmentStatus)assessmentData.Status).ToString(),
-            };
-
-            return response;
+            return "Assessment Aded Successfully";
         }
 
         public async Task<ICollection<AssessmentResponseDTO>> GetAllAssessment()
@@ -184,6 +168,7 @@ namespace MS3_Back_End.Service
                     StudentId = sa.StudentId,
                     AssessmentId = sa.AssessmentId,
                     AssessmentResponse = null!,
+                    StudentResponse = null!
                 }).ToList() : new List<StudentAssessmentResponseDTO>()
 
             }).ToList(); ;

@@ -6,6 +6,7 @@ using MS3_Back_End.DTOs.RequestDTOs.password_student;
 using MS3_Back_End.DTOs.RequestDTOs.Student;
 using MS3_Back_End.DTOs.ResponseDTOs.Student;
 using MS3_Back_End.IService;
+using NLog;
 
 namespace MS3_Back_End.Controllers
 {
@@ -14,6 +15,8 @@ namespace MS3_Back_End.Controllers
     public class StudentController : ControllerBase
     {
         private readonly IStudentService _studentService;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
         public StudentController(IStudentService studentService)
         {
             _studentService = studentService;
@@ -21,7 +24,7 @@ namespace MS3_Back_End.Controllers
 
         [Authorize]
         [HttpPost("student")]
-        public async Task<IActionResult> AddStudent(StudentRequestDTO studentRequest)
+        public async Task<ActionResult<StudentResponseDTO>> AddStudent(StudentRequestDTO studentRequest)
         {
             if (studentRequest == null)
             {
@@ -35,12 +38,13 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error adding student");
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("getall")]
-        public async Task<IActionResult> GetAllStudents()
+        public async Task<ActionResult<IEnumerable<StudentResponseDTO>>> GetAllStudents()
         {
             try
             {
@@ -49,13 +53,14 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error getting all students");
                 return BadRequest(ex.Message);
             }
         }
 
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetStudentFullDetailsById(Guid id)
+        public async Task<ActionResult<StudentFullDetailsResponseDTO>> GetStudentFullDetailsById(Guid id)
         {
             try
             {
@@ -64,14 +69,20 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, $"Error getting student full details by id {id}");
                 return BadRequest(ex.Message);
             }
         }
 
         [Authorize]
         [HttpPut("Update-Full-Details/{id}")]
-        public async Task<IActionResult> UpdateStudentFullDetails(Guid id, StudentFullUpdateDTO request)
+        public async Task<ActionResult<StudentResponseDTO>> UpdateStudentFullDetails(Guid id, StudentFullUpdateDTO request)
         {
+            if (request == null)
+            {
+                return BadRequest("Update data is required");
+            }
+
             try
             {
                 var updatedData = await _studentService.UpdateStudentFullDetails(id, request);
@@ -79,13 +90,14 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, $"Error updating student full details with id {id}");
                 return BadRequest(ex.Message);
             }
         }
 
         [Authorize]
         [HttpPut("Update-Personal-Details")]
-        public async Task<IActionResult> UpdateStudent(StudentUpdateDTO studentUpdate)
+        public async Task<ActionResult<StudentResponseDTO>> UpdateStudent(StudentUpdateDTO studentUpdate)
         {
             if (studentUpdate == null)
             {
@@ -99,13 +111,14 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error updating student");
                 return BadRequest(ex.Message);
             }
         }
 
         [Authorize]
         [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> DeleteStudent(Guid id)
+        public async Task<ActionResult<string>> DeleteStudent(Guid id)
         {
             try
             {
@@ -114,13 +127,14 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, $"Error deleting student with id {id}");
                 return BadRequest(ex.Message);
             }
         }
 
         [Authorize]
         [HttpPost("Image/{studentId}")]
-        public async Task<IActionResult> UploadImage(Guid studentId, IFormFile? image)
+        public async Task<ActionResult<string>> UploadImage(Guid studentId, IFormFile? image)
         {
             try
             {
@@ -129,13 +143,14 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, $"Error uploading image for student id {studentId}");
                 return BadRequest(ex.Message);
             }
         }
 
         [Authorize]
         [HttpGet("Pagination/{pageNumber}/{pageSize}")]
-        public async Task<IActionResult> GetStudentByPagination(int pageNumber, int pageSize)
+        public async Task<ActionResult<PaginationResponseDTO<StudentWithUserResponseDTO>>> GetStudentByPagination(int pageNumber, int pageSize)
         {
             try
             {
@@ -144,15 +159,20 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error getting paginated students");
                 return BadRequest(ex.Message);
             }
-
         }
 
         [Authorize]
         [HttpPut("Update-info-Details/{id}")]
-        public async Task<IActionResult> UpdateStudentInfoDetails(Guid id, StudentFullUpdateDTO request)
+        public async Task<ActionResult<StudentResponseDTO>> UpdateStudentInfoDetails(Guid id, StudentFullUpdateDTO request)
         {
+            if (request == null)
+            {
+                return BadRequest("Update data is required");
+            }
+
             try
             {
                 var updatedData = await _studentService.UpdateStudentInfoDetails(id, request);
@@ -160,14 +180,20 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, $"Error updating student info details with id {id}");
                 return BadRequest(ex.Message);
             }
         }
 
         [Authorize]
         [HttpPut("changeStudentPassword/{id}")]
-        public async Task<IActionResult> UpdateStudentInfoDetails(Guid id, PasswordRequest auth)
+        public async Task<ActionResult<string>> UpdateStudentPassword(Guid id, PasswordRequest auth)
         {
+            if (auth == null)
+            {
+                return BadRequest("Password data is required");
+            }
+
             try
             {
                 var updatedData = await _studentService.UpdateStudentPassword(id, auth);
@@ -175,11 +201,9 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, $"Error changing student password for id {id}");
                 return BadRequest(ex.Message);
             }
         }
-      
-
-
     }
 }

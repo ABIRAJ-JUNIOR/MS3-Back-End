@@ -6,6 +6,7 @@ using MS3_Back_End.DTOs.RequestDTOs.ContactUs;
 using MS3_Back_End.DTOs.ResponseDTOs.ContactUs;
 using MS3_Back_End.Entities;
 using MS3_Back_End.IService;
+using NLog;
 
 namespace MS3_Back_End.Controllers
 {
@@ -14,6 +15,7 @@ namespace MS3_Back_End.Controllers
     public class ContactUsController : ControllerBase
     {
         private readonly IContactUsService _contactUsService;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public ContactUsController(IContactUsService contactUsService)
         {
@@ -21,8 +23,13 @@ namespace MS3_Back_End.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddMessage(ContactUsRequestDTO contactUsRequestDTO)
+        public async Task<ActionResult<ContactUsResponseDTO>> AddMessage(ContactUsRequestDTO contactUsRequestDTO)
         {
+            if (contactUsRequestDTO == null)
+            {
+                return BadRequest("Contact us data is required.");
+            }
+
             try
             {
                 var message = await _contactUsService.AddMessage(contactUsRequestDTO);
@@ -30,13 +37,14 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error adding message");
                 return BadRequest(ex.Message);
             }
         }
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetAllMessages()
+        public async Task<ActionResult<IEnumerable<ContactUsResponseDTO>>> GetAllMessages()
         {
             try
             {
@@ -45,14 +53,20 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error getting all messages");
                 return BadRequest(ex.Message);
             }
         }
 
         [Authorize]
         [HttpPut]
-        public async Task<IActionResult> UpdateMessage(UpdateResponseRequestDTO request)
+        public async Task<ActionResult<ContactUsResponseDTO>> UpdateMessage(UpdateResponseRequestDTO request)
         {
+            if (request == null)
+            {
+                return BadRequest("Update data is required.");
+            }
+
             try
             {
                 var updateMessage = await _contactUsService.UpdateMessage(request);
@@ -60,13 +74,14 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error updating message");
                 return BadRequest(ex.Message);
             }
         }
 
         [Authorize]
-        [HttpDelete("Delete/{Id}")]
-        public async Task<IActionResult> DeleteMessage(Guid id)
+        [HttpDelete("Delete/{id}")]
+        public async Task<ActionResult<ContactUsResponseDTO>> DeleteMessage(Guid id)
         {
             try
             {
@@ -75,9 +90,9 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, $"Error deleting message with id {id}");
                 return BadRequest(ex.Message);
             }
         }
-
     }
 }

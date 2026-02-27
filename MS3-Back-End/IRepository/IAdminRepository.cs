@@ -7,7 +7,7 @@ namespace MS3_Back_End.IRepository
     {
         Task<Admin> AddAdmin(Admin admin);
         Task<Admin> GetAdminByNic(string nic);
-        Task<AdminAllDataResponseDTO> GetAdminFulldetailsById(Guid id);
+        Task<AdminAllDataResponseDTO> GetAdminFullDetailsById(Guid id);
         Task<Admin> GetAdminById(Guid id);
         Task<ICollection<Admin>> GetAllAdmins();
         Task<Admin> UpdateAdmin(Admin admin);

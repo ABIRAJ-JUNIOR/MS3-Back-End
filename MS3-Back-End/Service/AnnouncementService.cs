@@ -14,29 +14,35 @@ namespace MS3_Back_End.Service
 {
     public class AnnouncementService : IAnnouncementService
     {
-        private readonly IAnnouncementRepository _AnnouncementRepo;
-        public AnnouncementService(IAnnouncementRepository Announcement)
+        private readonly IAnnouncementRepository _announcementRepo;
+        private readonly ILogger<AnnouncementService> _logger;
+
+        public AnnouncementService(IAnnouncementRepository announcementRepo, ILogger<AnnouncementService> logger)
         {
-            _AnnouncementRepo = Announcement;
+            _announcementRepo = announcementRepo;
+            _logger = logger;
         }
 
-
-        public async Task<AnnouncementResponseDTO> AddAnnouncement(AnnouncementRequestDTO AnnouncementReq)
+        public async Task<AnnouncementResponseDTO> AddAnnouncement(AnnouncementRequestDTO announcementReq)
         {
-
-            var Announcement = new Announcement
+            if (announcementReq == null)
             {
-                Title = AnnouncementReq.Title,
-                Description = AnnouncementReq.Description,
+                throw new ArgumentNullException(nameof(announcementReq));
+            }
+
+            var announcement = new Announcement
+            {
+                Title = announcementReq.Title,
+                Description = announcementReq.Description,
                 DatePosted = DateTime.Now,
-                ExpirationDate = AnnouncementReq.ExpirationDate,
-                AudienceType = AnnouncementReq.AudienceType,
+                ExpirationDate = announcementReq.ExpirationDate,
+                AudienceType = announcementReq.AudienceType,
                 IsActive = true
             };
 
-            var data = await _AnnouncementRepo.AddAnnouncement(Announcement);
+            var data = await _announcementRepo.AddAnnouncement(announcement);
 
-            var AnnouncementReponse = new AnnouncementResponseDTO
+            var announcementResponse = new AnnouncementResponseDTO
             {
                 Id = data.Id,
                 Title = data.Title,
@@ -47,19 +53,26 @@ namespace MS3_Back_End.Service
                 IsActive = data.IsActive
             };
 
-            return AnnouncementReponse;
+            _logger.LogInformation("Announcement added successfully with Id: {Id}", data.Id);
 
+            return announcementResponse;
         }
 
-        public async Task<ICollection<AnnouncementResponseDTO>> SearchAnnouncement(string SearchText)
+        public async Task<ICollection<AnnouncementResponseDTO>> SearchAnnouncement(string searchText)
         {
-            var data = await _AnnouncementRepo.SearchAnnouncements(SearchText);
-            if (data == null)
+            if (string.IsNullOrWhiteSpace(searchText))
             {
-                throw new Exception("Search Not Found");
+                throw new ArgumentException("Search text cannot be null or empty", nameof(searchText));
             }
 
-            var AnnouncementResponse = data.Select(item => new AnnouncementResponseDTO()
+            var data = await _announcementRepo.SearchAnnouncements(searchText);
+            if (data == null || !data.Any())
+            {
+                _logger.LogWarning("No announcements found for search text: {SearchText}", searchText);
+                throw new KeyNotFoundException("Search not found");
+            }
+
+            var announcementResponse = data.Select(item => new AnnouncementResponseDTO
             {
                 Id = item.Id,
                 Title = item.Title,
@@ -70,18 +83,19 @@ namespace MS3_Back_End.Service
                 IsActive = item.IsActive
             }).ToList();
 
-            return AnnouncementResponse;
+            return announcementResponse;
         }
-
 
         public async Task<ICollection<AnnouncementResponseDTO>> GetAllAnnouncement()
         {
-            var data = await _AnnouncementRepo.GetAllAnnouncement();
-            if (data == null)
+            var data = await _announcementRepo.GetAllAnnouncement();
+            if (data == null || !data.Any())
             {
-                throw new Exception("Announcement Not Available");
+                _logger.LogWarning("No announcements available");
+                throw new KeyNotFoundException("Announcement not available");
             }
-            var AnnouncementResponse = data.Select(item => new AnnouncementResponseDTO()
+
+            var announcementResponse = data.Select(item => new AnnouncementResponseDTO
             {
                 Id = item.Id,
                 Title = item.Title,
@@ -92,18 +106,19 @@ namespace MS3_Back_End.Service
                 IsActive = item.IsActive
             }).ToList();
 
-            return AnnouncementResponse;
+            return announcementResponse;
         }
-
 
         public async Task<AnnouncementResponseDTO> GetAnnouncementById(Guid id)
         {
-            var data = await _AnnouncementRepo.GetAnnouncemenntByID(id);
+            var data = await _announcementRepo.GetAnnouncemenntByID(id);
             if (data == null)
             {
-                throw new Exception("Announcement Not Found");
+                _logger.LogWarning("Announcement not found for Id: {Id}", id);
+                throw new KeyNotFoundException("Announcement not found");
             }
-            var AnnouncementReponse = new AnnouncementResponseDTO
+
+            var announcementResponse = new AnnouncementResponseDTO
             {
                 Id = data.Id,
                 Title = data.Title,
@@ -113,18 +128,15 @@ namespace MS3_Back_End.Service
                 ExpirationDate = data.ExpirationDate,
                 IsActive = data.IsActive
             };
-            return AnnouncementReponse;
+
+            return announcementResponse;
         }
 
-
-
-        public async Task<ICollection<AnnouncementResponseDTO>> RecentAnnouncement(AudienceType Type)
+        public async Task<ICollection<AnnouncementResponseDTO>> RecentAnnouncement(AudienceType type)
         {
+            var data = await _announcementRepo.RecentAnnouncement(type);
 
-            var GetData = await _AnnouncementRepo.RecentAnnouncement(Type);
-
-
-            return GetData.Select(a => new AnnouncementResponseDTO()
+            var announcementResponse = data.Select(a => new AnnouncementResponseDTO
             {
                 Id = a.Id,
                 Title = a.Title,
@@ -135,35 +147,41 @@ namespace MS3_Back_End.Service
                 IsActive = a.IsActive
             }).ToList();
 
+            return announcementResponse;
         }
 
-
-        public async Task<string> DeleteAnnouncement(Guid Id)
+        public async Task<string> DeleteAnnouncement(Guid id)
         {
-            var GetData = await _AnnouncementRepo.GetAnnouncemenntByID(Id);
-            if (GetData == null)
+            var data = await _announcementRepo.GetAnnouncemenntByID(id);
+            if (data == null)
             {
-                throw new Exception("Announcement Not Found");
+                _logger.LogWarning("Announcement not found for Id: {Id}", id);
+                throw new KeyNotFoundException("Announcement not found");
             }
-            GetData.IsActive = false;
-            var data = await _AnnouncementRepo.DeleteAnnouncement(GetData);
-            return data;
-        }
-        public async Task<PaginationResponseDTO<AnnouncementResponseDTO>> GetPaginatedAnnouncement(int pageNumber, int pageSize ,string? role)
-        {
-            ICollection<Announcement> AllAnouncements;
 
-            if (role == null)
+            data.IsActive = false;
+            await _announcementRepo.DeleteAnnouncement(data);
+
+            _logger.LogInformation("Announcement deleted successfully with Id: {Id}", id);
+
+            return "Announcement deleted successfully";
+        }
+
+        public async Task<PaginationResponseDTO<AnnouncementResponseDTO>> GetPaginatedAnnouncement(int pageNumber, int pageSize, string? role)
+        {
+            ICollection<Announcement> allAnnouncements;
+
+            if (string.IsNullOrWhiteSpace(role))
             {
-                AllAnouncements = await _AnnouncementRepo.GetAllAnnouncement();
+                allAnnouncements = await _announcementRepo.GetAllAnnouncement();
             }
             else
             {
-                AllAnouncements = await _AnnouncementRepo.GetAnnouncementsByRole(role);
+                allAnnouncements = await _announcementRepo.GetAnnouncementsByRole(role);
             }
 
-            var data = await _AnnouncementRepo.GetPaginatedAnnouncement(pageNumber, pageSize, role!);
-            var returndata = data.Select(x => new AnnouncementResponseDTO
+            var data = await _announcementRepo.GetPaginatedAnnouncement(pageNumber, pageSize, role!);
+            var returnData = data.Select(x => new AnnouncementResponseDTO
             {
                 Id = x.Id,
                 Title = x.Title,
@@ -174,15 +192,16 @@ namespace MS3_Back_End.Service
                 IsActive = x.IsActive
             }).ToList();
 
-            var PaginationResponseDTO = new PaginationResponseDTO<AnnouncementResponseDTO>
+            var paginationResponseDTO = new PaginationResponseDTO<AnnouncementResponseDTO>
             {
-                Items = returndata,
+                Items = returnData,
                 PageSize = pageSize,
-                CurrentPage = pageNumber,  
-                TotalPages = (int)Math.Ceiling(AllAnouncements.Count / (double)pageSize),
-                TotalItem = AllAnouncements.Count,
+                CurrentPage = pageNumber,
+                TotalPages = (int)Math.Ceiling(allAnnouncements.Count / (double)pageSize),
+                TotalItem = allAnnouncements.Count,
             };
-            return PaginationResponseDTO;
+
+            return paginationResponseDTO;
         }
 
         public async Task<string> AnnouncementValidCheck()
@@ -197,8 +216,9 @@ namespace MS3_Back_End.Service
                 }
             }
 
-            return "Announcement validation Successfull.";
-        }
+            _logger.LogInformation("Announcement validation completed successfully");
 
+            return "Announcement validation successful";
+        }
     }
 }

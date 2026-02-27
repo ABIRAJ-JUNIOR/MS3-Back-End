@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MS3_Back_End.DTOs.Pagination;
 using MS3_Back_End.DTOs.RequestDTOs.Assessment;
 using MS3_Back_End.DTOs.ResponseDTOs.Assessment;
 using MS3_Back_End.IService;
 using MS3_Back_End.Service;
+using NLog;
 
 namespace MS3_Back_End.Controllers
 {
@@ -14,16 +16,21 @@ namespace MS3_Back_End.Controllers
     public class AssessmentController : ControllerBase
     {
         private readonly IAssessmentService _service;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         public AssessmentController(IAssessmentService service)
         {
             _service = service;
         }
 
-
         [HttpPost("Add")]
-        public async Task<IActionResult> AddAssessment(AssessmentRequestDTO request)
+        public async Task<ActionResult<AssessmentResponseDTO>> AddAssessment(AssessmentRequestDTO request)
         {
+            if (request == null)
+            {
+                return BadRequest("Assessment data is required.");
+            }
+
             try
             {
                 var assessmentData = await _service.AddAssessment(request);
@@ -31,20 +38,34 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error adding assessment");
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAllAssessment()
+        public async Task<ActionResult<IEnumerable<AssessmentResponseDTO>>> GetAllAssessments()
         {
-            var assessmentList = await _service.GetAllAssessment();
-            return Ok(assessmentList);
+            try
+            {
+                var assessmentList = await _service.GetAllAssessment();
+                return Ok(assessmentList);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error getting all assessments");
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("Update/{id}")]
-        public async Task<IActionResult> UpdateAssessment(Guid id, UpdateAssessmentRequestDTO request)
+        public async Task<ActionResult<AssessmentResponseDTO>> UpdateAssessment(Guid id, UpdateAssessmentRequestDTO request)
         {
+            if (request == null)
+            {
+                return BadRequest("Update data is required.");
+            }
+
             try
             {
                 var updatedData = await _service.UpdateAssessment(id, request);
@@ -52,12 +73,13 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, $"Error updating assessment with id {id}");
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("Pagination/{pageNumber}/{pageSize}")]
-        public async Task<IActionResult> GetPaginatedAssessment(int pageNumber, int pageSize)
+        public async Task<ActionResult<PaginationResponseDTO<AssessmentResponseDTO>>> GetPaginatedAssessment(int pageNumber, int pageSize)
         {
             try
             {
@@ -66,6 +88,7 @@ namespace MS3_Back_End.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error(ex, "Error getting paginated assessments");
                 return BadRequest(ex.Message);
             }
         }
